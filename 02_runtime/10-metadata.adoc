@@ -556,12 +556,13 @@ types:
 
 NOTE: This might be incorrect and has to be reviewed.
 
-The storage entry modifier indicates how the storage entry is returned and how
-it behaves if the entry is not present.
+The storage entry modifier is a varying datatype (<<defn-varrying-data-type>>)
+and indicates how the storage entry is returned and how it behaves if the entry
+is not present.
 
 [stem]
 ++++
-{
+m = {
 	(0,"optional"),
 	(1,"default")
 :}
@@ -569,18 +570,19 @@ it behaves if the entry is not present.
 
 where _0_ indicates that the entry returns an _Option_ type and therefore _None_
 if the storage entry is not present. _1_ indicates that the entry returns the
-type stem:[y] with default value stem:[D] (in
+type stem:[y] with default value stem:[d] (in
 <<defn-rtm-storage-entry-metadata>>) if the entry is not present.
 ====
 
 [#defn-rtm-storage-entry-type]
 .<<defn-rtm-storage-entry-type,Storage Entry Type>>
 ====
-The type of the storage value that indicates how the entry is stored.
+The type of the storage value is a varying datatype
+(<<defn-varrying-data-type>>) that indicates how the entry is stored.
 
 [stem]
 ++++
-{
+y = {
 	(0,->,t,"plain type"),
 	(1,->,(H, k, v),"storage map")
 :}
