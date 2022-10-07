@@ -97,6 +97,8 @@ jobs:
       BUNDLE_WITH: test
     steps:
     - uses: actions/checkout@v2
+      with:
+        lfs: true
     - name: Install deb dependencies
       run: |
         sudo apt-get update
