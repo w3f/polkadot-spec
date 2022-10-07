@@ -91,7 +91,11 @@ jobs:
       if: github.event_name == 'release'
 
   build-kaitai:
-    name: Compile kaitai specification
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [ block, metadata ]
+    name: "Compile kaitai struct ${{ matrix.target }} spec"
     runs-on: ubuntu-20.04
     env:
       BUNDLE_WITH: test
@@ -109,38 +113,25 @@ jobs:
       with:
         bundler-cache: true
         cache-version: kaitai
-    - name: Build kaitai specification
-      run: bundle exec make kaitai
-    - name: Test kaitai specification
-      run: bundle exec make test
-    - name: Upload kaitai specification
+    - name: Build kaitai struct ${{ matrix.target }} spec
+      run: bundle exec make ${{ matrix.target }}.ksy
+    - name: Test kaitai struct ${{ matrix.target }} spec
+      run: bundle exec make test-${{ matrix.target }}
+    - name: Upload kaitai struct ${{ matrix.target }} spec
       uses: actions/upload-artifact@v2
       with:
-        name: metadata.ksy
-        path: | 
-          block.ksy
-          metadata.ksy
-    - name: Release kaitai struct block specification
+        name: ${{ matrix.target }}.ksy
+        path: ${{ matrix.target }}.ksy 
+    - name: Release kaitai struct ${{ matrix.target }} spec
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: block.ksy
-        asset_name: polkadot_block_${{ github.event.release.tag_name }}.ksy
+        asset_path: ${{ matrix.target }}.ksy
+        asset_name: polkadot_${{ matrix.target }}_${{ github.event.release.tag_name }}.ksy
         asset_content_type: text/yaml
       if: github.event_name == 'release'
-    - name: Release kaitai struct metadata specification
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: metadata.ksy
-        asset_name: polkadot_metadata_${{ github.event.release.tag_name }}.ksy
-        asset_content_type: text/yaml
-      if: github.event_name == 'release'
-
 
   release-pages:
     needs: [ build-html, build-pdf ]
