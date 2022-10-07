@@ -38,7 +38,7 @@ jobs:
     - name: Build html specification
       run: bundle exec make html
     - name: Upload html specification
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: polkadot-spec.html
         path: polkadot-spec.html
@@ -75,7 +75,7 @@ jobs:
     - name: Build pdf specification
       run: bundle exec make pdf
     - name: Upload pdf specification
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: polkadot-spec.pdf
         path: polkadot-spec.pdf
@@ -118,7 +118,7 @@ jobs:
     - name: Test kaitai struct ${{ matrix.target }} spec
       run: bundle exec make test-${{ matrix.target }}
     - name: Upload kaitai struct ${{ matrix.target }} spec
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.target }}.ksy
         path: ${{ matrix.target }}.ksy 
