@@ -6,9 +6,11 @@ KAITAI_EXPORTS := block metadata
 YAML_EXPORTS := $(patsubst %,%.ksy,$(KAITAI_EXPORTS))
 RUBY_EXPORTS := $(patsubst %,test/%.rb,$(KAITAI_EXPORTS))
 
+KAITAI_TESTS := $(patsubst %,test-%,$(KAITAI_EXPORTS))
+
 CACHEDIR := cache/
 
-.PHONY: default html pdf tex kaitai test test-block_header test-metadata check clean
+.PHONY: default html pdf tex kaitai test $(KAITAI_TESTS) check clean
 
 
 default: html
@@ -43,20 +45,17 @@ $(RUBY_EXPORTS): test/%.rb: %.ksy
 	ksc --target ruby --outdir ./test/ $<
 
 
-test/blocks.bin:
+test/block.bin:
 	polkadot export-blocks --to 10 --pruning archive --binary $@
 
 test/metadata.bin:
 	curl -X POST -H 'Content-Type: application/json' -d '{"id":"1", "jsonrpc":"2.0", "method":"state_getMetadata"}' 'https://rpc.polkadot.io' | jq .result | xxd -r -p > $@
 
 
-test: test-blocks test-metadata
+test: $(KAITAI_TESTS)
 
-test-blocks: test/test-blocks.rb test/block.rb test/scale.fixed.rb test/blocks.bin
-	ruby ./test/test-blocks.rb
-
-test-metadata: test/test-metadata.rb test/metadata.rb test/scale.fixed.rb test/metadata.bin
-	ruby ./test/test-metadata.rb
+$(KAITAI_TESTS): test-%: test/test-%.rb test/%.rb test/scale.fixed.rb test/%.bin
+	ruby ./$<
 
 
 check: 
