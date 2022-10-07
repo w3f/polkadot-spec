@@ -93,6 +93,8 @@ jobs:
   build-kaitai:
     name: Compile kaitai specification
     runs-on: ubuntu-20.04
+    env:
+      BUNDLE_WITH: test
     steps:
     - uses: actions/checkout@v2
     - name: Install deb dependencies
@@ -113,17 +115,30 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: metadata.ksy
-        path: metadata.ksy
-    - name: Release kaitai specification
+        path: | 
+          block.ksy
+          metadata.ksy
+    - name: Release kaitai struct block specification
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: block.ksy
+        asset_name: polkadot_block_${{ github.event.release.tag_name }}.ksy
+        asset_content_type: text/yaml
+      if: github.event_name == 'release'
+    - name: Release kaitai struct metadata specification
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: metadata.ksy
-        asset_name: metadata_${{ github.event.release.tag_name }}.ksy
+        asset_name: polkadot_metadata_${{ github.event.release.tag_name }}.ksy
         asset_content_type: text/yaml
       if: github.event_name == 'release'
+
 
   release-pages:
     needs: [ build-html, build-pdf ]
