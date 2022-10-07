@@ -10,10 +10,6 @@ polkadot-spec.tex
 block.ksy
 metadata.ksy
 
-# Test inputs
-test/blocks.bin
-test/metadata.bin
-
 # Test outputs
 test/block.rb
 test/metadata.rb

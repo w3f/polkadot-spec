@@ -55,7 +55,7 @@ test: test-blocks test-metadata
 test-blocks: test/test-blocks.rb test/block.rb test/scale.fixed.rb test/blocks.bin
 	ruby ./test/test-blocks.rb
 
-test-metadata: test/test-metadata.rb test/metadata.rb test/scale.fixed.rb  test/metadata.bin
+test-metadata: test/test-metadata.rb test/metadata.rb test/scale.fixed.rb test/metadata.bin
 	ruby ./test/test-metadata.rb
 
 
