@@ -99,7 +99,7 @@ The `BlockRequest` message is a Protobuf serialized structure of the following f
 
 |_Direction_
 |5
-|Sequence direction
+|Sequence direction, interpreted as Id _0_ (ascending) if missing.
 |
 
 |`uint32`
@@ -127,7 +127,7 @@ _Justification_ is _0001 0001_ (17).
 |0001 0000
 |===
 * stem:[B_s] is a Protobuf structure indicating a varying data
-type of the following values:
+type (enum) of the following values:
 +
 [cols="2,2,4"]
 |===
@@ -145,8 +145,8 @@ type of the following values:
 on the value of stem:[B_s]. an implementation-defined maximum is
 used when unspecified.
 * _Direction_ is a Protobuf structure indicating the sequence direction of the
-requested blocks. The structure is a varying data type
-(<<defn-varrying-data-type>>) of the following format:
+requested blocks. The structure is a varying data type (enum) of the following
+format:
 +
 [cols="1,4"]
 |===
