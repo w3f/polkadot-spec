@@ -55,7 +55,7 @@ GEM
     mathematical (1.6.14)
       ruby-enum (~> 0.4)
     matrix (0.4.2)
-    mini_racer (0.6.2)
+    mini_racer (0.6.3)
       libv8-node (~> 16.10.0.0)
     namae (1.1.1)
     pdf-core (0.9.0)
