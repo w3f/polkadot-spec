@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 EXPOSE 8080/tcp
 
-# [Optional] Uncomment this section to install additional OS packages.
+# Install dependencies
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends \
     curl make cmake gcc g++ ruby-dev python3-pydot graphviz
