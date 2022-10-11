@@ -24,11 +24,11 @@ You will have to install `bundler` to use the `Gemfile`. On a Debian based syste
 
 ```bash
 sudo apt-get install -y curl make cmake gcc g++ ruby-dev python3-pydot graphviz
+# Install Bundler
+gem install bundler
 # Install Kaitai
 curl -LO https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
 sudo apt-get install -y ./kaitai-struct-compiler_0.10_all.deb
-# (Optional) On some systems this might be required
-gem install bundler
 ```
 
 Furthermore you will also need to have `graphviz` and the `kaitai-struct-compiler` installed.
