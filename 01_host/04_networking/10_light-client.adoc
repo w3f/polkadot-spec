@@ -38,17 +38,9 @@ Where the `request` can be one of the following fields:
 |2
 |A remote read request (<<sect-light-remote-read-request>>)
 
-|`RemoteHeaderRequest`
-|3
-|A remote header request (<<sect-light-remote-header-request>>)
-
 |`RemoteReadChildRequest`
 |4
 |A remote read child request (<<sect-light-remote-read-child-request>>)
-
-|`RemoteChangesRequest`
-|5
-|A remote changes request (<<sect-light-remote-changes-request>>)
 |===
 
 ==== Response
@@ -78,14 +70,6 @@ Where the `response` can be one of the following fields:
 |`RemoteReadResponse`
 |2
 |A remote read response (<<sect-light-remote-read-response>>)
-
-|`RemoteHeaderResponse`
-|3
-|A remote header response (<<sect-light-remote-header-response>>)
-
-|`RemoteChangesResponse`
-|4
-|A remote changes response (<<sect-light-remote-changes-response>>)
 |===
 
 ==== Remote Call Messages
@@ -197,122 +181,3 @@ Remote read child request.
 
 The response is the same as for the _Remote Read Request_ message, respectively
 <<sect-light-remote-read-response>>.
-
-==== Remote Header Messages
-
-Request a block header at the given block.
-
-[#sect-light-remote-header-request]
-.<<sect-light-remote-header-request, Remote Header Request>>
-====
-Remote header request.
-
-[cols="1,1,5"]
-|===
-|Type |Id |Description
-
-|`bytes`
-|2
-|Block number to request header for
-|===
-====
-
-[#sect-light-remote-header-response]
-.<<sect-light-remote-header-response, Remote Header Response>>
-====
-Remote header response.
-
-[cols="1,1,5"]
-|===
-|Type |Id |Description
-
-|`bytes`
-|2
-|An _Option_ type (<<defn-option-type>>) containing the header or _None_ if the header is not available.
-|===
-====
-
-==== Remote Changes Message
-
-Remote changes messages.
-
-[#sect-light-remote-changes-request]
-.<<sect-light-remote-changes-request, Remote Changes Request>>
-====
-Remote changes request.
-
-[cols="1,1,5"]
-|===
-|Type |Id |Description
-
-|`bytes`
-|2
-|Hash of the first block of the range (including first) where changes are
-requested
-
-|`bytes`
-|3
-|Hash of the last block of the range (including last) where changes are
-requested
-
-|`bytes`
-|4
-|Affected roots must be proved
-
-|`bytes`
-|5
-|Hash of the last block that we can use when querying changes
-
-|`bytes`
-|6
-|(Optional) storage child node key which changes are requested
-(<<defn-option-type>>)
-
-|`bytes`
-|7
-|Storage key which changes are requested
-|===
-====
-
-[#sect-light-remote-changes-response]
-.<<sect-light-remote-changes-response, Remote Changes Response>>
-====
-
-Remote changes response.
-
-[cols="1,1,5"]
-|===
-|Type |Id |Description
-
-|`bytes`
-|2
-|Proof has been generated using block with this number as a max block.
-
-|`repeated bytes`
-|3
-|Changes proof
-
-|`repeated Pair`
-|4
-|Changes tries roots missing on the requester node
-
-|`bytes`
-|5
-|Missing changes tries roots proof.
-|===
-
-Where `Pair` is a protobuf datastructure of the following format:
-
-[cols="1,1,5"]
-|===
-|Type |Id |Description
-
-|`bytes`
-|1
-|The first element of the pair
-
-|`bytes`
-|2
-|The second element of the pair
-|===
-====
