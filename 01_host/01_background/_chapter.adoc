@@ -5,3 +5,6 @@ include::00_intro.adoc[]
 include::01_bootstrapping.adoc[]
 
 include::02_definitions.adoc[]
+
+include::03_types_of_nodes.adoc[]
+
