@@ -18,9 +18,9 @@ COPY . .
 # Build the spec
 RUN bundle install
 RUN make
-
 RUN mv polkadot-spec.html index.html
 
+# Run HTTP server
 RUN echo "echo 'Expose port 8080 and open it in the browser!'" >> startup.sh
 run echo "python3 -m http.server 8080" >> startup.sh
 
