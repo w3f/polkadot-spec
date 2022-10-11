@@ -92,11 +92,6 @@ The `BlockRequest` message is a Protobuf serialized structure of the following f
 |Start from this block
 |stem:[B_S]
 
-|`bytes``
-|4
-|End at this block (_optional_)
-|stem:[B_e]
-
 |_Direction_
 |5
 |Sequence direction, interpreted as Id _0_ (ascending) if missing.
