@@ -1,0 +1,23 @@
+[#sect-types-of-client]
+=== Types of Clients
+
+In this section we provide an overview of differences bertween full nodes and light clients from an implementers perspective. We classify the components that are necessary for each type of client to achieve their basic functionality. This spec will mainly focus on Full Nodes and Authoring Nodes, but also elaborate on key implementation differences specific to Light Nodes. 
+
+
+==== Base Libraries necessary for any client
+// Create a venn digram of components and heirarchy of nodes. 
+
+
+==== Full Nodes
+Full nodes handle network activity such as peer discovery, managing transaction requests, reaching consensus with peers, and responding to RPC call. It also provides a runtime that contains all of the business logic for execuing the state transition function of the blockchain.
+
+==== Light Clients
+Objectives: Lighter in terms of memory consumption, number of threads, and code size, in order to compile it to WebAssembly and maintain consistent performance on non native runtimes, like wasmtime. 
+
+A light client or light node is a simplified version of a Substrate node that only provides the runtime and current state. Light nodes enable users to connect to a Substrate runtime directly using a browser, browser extension, mobile device, or desktop computer. Technically, though a runtime execution environment is not necessary to build a light client, most clients require interacting with the Runtime and the state of the blockchain for integrity checks at the minimum. [TODO: add a usecase where runtime is not needed]. Current implementations of Light Nodes (for e.g. Smoldot) uses the wasmtime as its runtime environment to drastically simplify the code. The performance of wasmtime is satisfying enough to not require an native runtime. 
+
+
+==== Authoring Nodes
+
+Authoring nodes provide functionalities to participate in the consesnus and block production mechanisms. They are built modularly to provide flexibility of various components. Authoring nodes implement full-fledged network interaction channels and execution environments required for authoring block including specific crypto primitives for signing and authenticating produced blocks. 
+// -> How the interaction with GRANDPA/ BABE/ and other layers  changes for authoring node and light node 
