@@ -62,3 +62,7 @@ We also provide full nix flake integration, e.g. you can run `nix build github:w
 To test some of the machine readable definition in the spec, just run `bundle exec make test`.
 
 The test requires `curl`, `jq` and `xxd` to download required data via JSON RPC.
+
+## License
+
+Any code in this repository is licensed under the [GPL](https://www.gnu.org/licenses/gpl-3.0.en.html) and any documentation and specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
