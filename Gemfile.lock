@@ -5,7 +5,7 @@ GEM
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     afm (0.2.2)
-    asciidoctor (2.0.17)
+    asciidoctor (2.0.18)
     asciidoctor-bibtex (0.8.0)
       asciidoctor (~> 2.0)
       bibtex-ruby (~> 5.1)
