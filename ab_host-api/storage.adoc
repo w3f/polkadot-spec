@@ -3,6 +3,12 @@
 
 Interface for accessing the storage from within the runtime.
 
+IMPORTANT: As of now, the storage API should silently ignore any keys that start
+with the `:child_storage:default:` prefix. This applies to reading and writing.
+If the function expects a return value, then _None_ (<<defn-option-type>>)
+should be returned. See
+https://github.com/paritytech/substrate/issues/12461[substrate issue #12461].
+
 [#defn-state-version]
 .<<defn-state-version, State Version>>
 ====
