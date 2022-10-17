@@ -90,12 +90,7 @@ The `BlockRequest` message is a Protobuf serialized structure of the following f
 |`oneof`
 |
 |Start from this block
-|stem:[B_S]
-
-|`bytes``
-|4
-|End at this block (_optional_)
-|stem:[B_e]
+|stem:[B_s]
 
 |_Direction_
 |5
@@ -141,9 +136,6 @@ type (enum) of the following values:
 |3
 |The block number
 |===
-* stem:[B_e] is either the block hash or block number depending
-on the value of stem:[B_s]. an implementation-defined maximum is
-used when unspecified.
 * _Direction_ is a Protobuf structure indicating the sequence direction of the
 requested blocks. The structure is a varying data type (enum) of the following
 format:
