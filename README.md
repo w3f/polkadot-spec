@@ -65,4 +65,4 @@ The test requires `curl`, `jq` and `xxd` to download required data via JSON RPC.
 
 ## License
 
-Any code in this repository is licensed under the [GPL](https://www.gnu.org/licenses/gpl-3.0.en.html) and any documentation and specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
+Any code in this repository is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) and any documentation or specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
