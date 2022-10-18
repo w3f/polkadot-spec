@@ -14,7 +14,7 @@ Formally, it is a tuple of
 ++++
 where
 
-* stem:[\Sigma] is the countable set of all possible transitions.
+* stem:[\Sigma] is the countable set of all possible inputs.
 * stem:[S] is a countable set of all possible states.
 * stem:[s_0 in S] is the initial state.
 * stem:[\delta] is the state-transition function, known as *Runtime* in the
