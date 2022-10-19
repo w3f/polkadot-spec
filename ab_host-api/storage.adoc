@@ -244,7 +244,8 @@ changes that are made after this call. For every transaction there must be a
 matching call to either `ext_storage_rollback_transaction`
 (<<sect-ext-storage-rollback-transaction>>) or `ext_storage_commit_transaction`
 (<<sect-ext-storage-commit-transaction>>). This is also effective for all values
-manipulated using the child storage API (<<sect-child-storage-api>>).
+manipulated using the child storage API (<<sect-child-storage-api>>). It's legal
+to call this function multiple times in a row.
 
 WARNING: This is a low level API that is potentially dangerous as it can easily
 result in unbalanced transactions. Runtimes should use high level storage
@@ -263,7 +264,8 @@ Arguments::
 
 Rollback the last transaction started by `ext_storage_start_transaction`
 (<<sect-ext-storage-start-transaction>>). Any changes made during that
-transaction are discarded.
+transaction are discarded. It's legal to call this function multiple times in a
+row.
 
 WARNING: Panics if `ext_storage_start_transaction`
 (<<sect-ext-storage-start-transaction>>) was not called.
@@ -280,7 +282,8 @@ Arguments::
 ==== `ext_storage_commit_transaction`
 Commit the last transaction started by `ext_storage_start_transaction`
 (<<sect-ext-storage-start-transaction>>). Any changes made during that
-transaction are committed to the main state.
+transaction are committed to the main state. It's legal to call this function
+multiple times in a row.
 
 WARNING: Panics if `ext_storage_start_transaction`
 (<<sect-ext-storage-start-transaction>>) was not called.
