@@ -218,7 +218,7 @@ descendants defined formally as:
 
 [stem]
 ++++
-V_("obs"(v))^(r,"stage")(B) := uuu_(v_i in bbb V, B >= B') "VD"_("obs"(v))^(r,"stage")(B')
+V_("obs"(v))^(r,"stage")(B) := uuu_(v_i in bbb V, B < B') "VD"_("obs"(v))^(r,"stage")(B')
 ++++
 
 The *total number of observed votes for Block stem:[B] in round stem:[r]* is
