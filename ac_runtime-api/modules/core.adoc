@@ -33,7 +33,7 @@ Return::
 | `impl_version` | Unsigned 32-bit integer | Version of the Runtime implementation
 | `apis` | ApiVersions (<<defn-rt-apisvec>>) | List of supported APIs along with their version
 | `transaction_version` | Unsigned 32-bit integer | Version of the transaction format
-| `state_version` | Unsigned 32-bit integer | Version of the trie format
+| `state_version` | Unsigned 8-bit integer | Version of the trie format
 |===
 
 .ApiVersions
