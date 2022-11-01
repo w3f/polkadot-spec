@@ -226,7 +226,7 @@ When receiving state entries from the state response messages
 proof (id _1_ in _KeyValueStorage_) against the merkle root in the block header
 (of the block specified in <<defn-msg-state-request>>). Once the state response
 message claims that all entries have been sent (id _3_ in _KeyValueStorage_),
-the node can use all collected entry proofs and validate it against the merkel
+the node can use all collected entry proofs and validate it against the merkle
 root to confirm that claim.
 
 See the the synchronization section for more information (<<sect-network-sync>>).
