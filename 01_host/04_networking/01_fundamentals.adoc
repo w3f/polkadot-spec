@@ -51,12 +51,12 @@ Each Polkadot Host node maintains an ED25519 key pair which is used to
 identify the node. The public key is shared with the rest of the network
 allowing the nodes to establish secure communication channels.
 
-Each node must have its own unique ED25519 key pair. When two or more nodes use
+Each node must have its own unique ED25519 key pair. If two or more nodes use
 the same key, the network will interpret those nodes as a single node, which
-will result in undefined behavior and can result in equivocation. Furthermore,
-the node’s _PeerId_ as defined in <<defn-peer-id>> is derived from its public
-key. _PeerId_ is used to identify each node when they are discovered in the
-course of the discovery mechanism described in <<sect-discovery-mechanism>>.
+will result in unspecified behavior. Furthermore, the node’s _PeerId_ as
+defined in <<defn-peer-id>> is derived from its public key. _PeerId_ is used
+to identify each node when they are discovered in the course of the discovery
+mechanism described in <<sect-discovery-mechanism>>.
 
 [#defn-peer-id]
 .<<defn-peer-id,PeerId>>
