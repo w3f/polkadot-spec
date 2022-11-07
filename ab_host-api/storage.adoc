@@ -23,7 +23,7 @@ the key `:child_storage:default:some_child:some_key` is equivalent to calling
 key `some_key`.
 
 Importantly, the storage API can only _read_ child storage entries, but must
-implement write protection. Any function that modifies data must silently ignore
+implement write protection. Any function that modifies data must **silently ignore**
 any keys that start with the `:child_storage:` prefix. For
 `ext_storage_clear_prefix` (<<sect-ext-storage-clear-prefix>>) specifically,
 this also applies to any key that is a substring of `:child_storage:` prefix,
@@ -34,8 +34,8 @@ Additionally, calling `ext_storage_get_version_1` on a child storage key
 directly (without a key within the child storage), such as
 `:child_storage:defaut:some_child`, the function returns the root of the child
 storage from when `ext_default_child_storage_root`
-(<<ext-default-child-storage-root>>) _has been last called_ or _None_
-(<<defn-option-type>>) if it has never been called yet. Respectively, that root
+(<<ext-default-child-storage-root>>) has been **last called** or _None_
+(<<defn-option-type>>) if it has never been called. Respectively, that root
 value is cached. Calling `ext_default_child_storage_root` directly always
 recomputes the current root value.
 
