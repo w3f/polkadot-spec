@@ -4,10 +4,13 @@
 Interface for accessing the storage from within the runtime.
 
 IMPORTANT: As of now, the storage API should silently ignore any keys that start
-with the `:child_storage:default:` prefix. This applies to reading and writing.
-If the function expects a return value, then _None_ (<<defn-option-type>>)
-should be returned. See
-https://github.com/paritytech/substrate/issues/12461[substrate issue #12461].
+with the `:child_storage:` prefix or any keys that are a substring of that
+prefix, such as `:child_sto` (but not `:other`, for example). This applies to
+reading and writing. If the function expects a return value, then _None_
+(<<defn-option-type>>) should be returned. See the
+https://github.com/w3f/polkadot-spec/issues/575[polkadot-spec issue #575] and
+the https://github.com/paritytech/substrate/issues/12461[substrate issue #12461]
+for more info.
 
 [#defn-state-version]
 .<<defn-state-version, State Version>>
@@ -29,6 +32,9 @@ merkle proof (<<defn-hashed-subvalue>>).
 ==== `ext_storage_set`
 Sets the value under a given key into storage.
 
+IMPORTANT: Please note the section disclaimer (<<sect-storage-api>>) regarding
+child storage keys.
+
 ===== Version 1 - Prototype
 ----
 (func $ext_storage_set_version_1
@@ -42,6 +48,9 @@ value.
 
 ==== `ext_storage_get`
 Retrieves the value associated with the given key from storage.
+
+IMPORTANT: Please note the section disclaimer (<<sect-storage-api>>) regarding
+child storage keys.
 
 ===== Version 1 - Prototype
 ----
@@ -111,6 +120,9 @@ to _0_ if otherwise.
 
 Clear the storage of each key/value pair where the key starts with the given
 prefix.
+
+IMPORTANT: Please note the section disclaimer (<<sect-storage-api>>) regarding
+child storage keys.
 
 ===== Version 1 - Prototype
 ----
