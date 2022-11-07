@@ -4,16 +4,16 @@
 Interface for accessing the storage from within the runtime.
 
 ==== Implementation Assumptions
-The storage and child storage (<<sect-child-storage-api>>) functionality in the
-Substrate implementation is based on a couple of assumptions in order for the
-Runtime to behave deterministically. While Polkadot Host implementers can decide
-for themselves on how those APIs are implemented - as long as the interface is
-corerct - those behaviors must be replicated. In Substrate, child storages are
-namespaces respectively segregated by attaching the `:child_storage:default:`
-prefix to every child storage keys "<CHILD-STORAGE>", followed by `:<KEY>` for
-the key within that child storage. However, the storage API described in this
-section and the child storage API share the same database. This means that the
-storage API can retrieve child storage entries.
+The storage and child storage (<<sect-child-storage-api>>) API in the Substrate
+implementation makes some behavioral assumptions on the underlying storage
+architecture. While Polkadot Host implementers can decide for themselves on how
+those APIs are implemented, those behaviors must be replicated in order for the
+Runtime to be executed deterministically. In Substrate, child storages are
+namespaced respectively segregated by attaching the `:child_storage:default:`
+prefix to every child storage keys, followed by `:<KEY>` for the key within that
+child storage. However, the storage API described in this section and the child
+storage API share the same database. This means that the storage API can
+retrieve child storage entries.
 
 For example, calling `ext_storage_get_version_1` with the key
 `:child_storage:default:some_child:some_key` is equivalent to calling
