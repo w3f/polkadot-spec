@@ -3,14 +3,38 @@
 
 Interface for accessing the storage from within the runtime.
 
-IMPORTANT: As of now, the storage API should silently ignore any keys that start
-with the `:child_storage:` prefix or any keys that are a substring of that
-prefix, such as `:child_sto` (but not `:other`, for example). This applies to
-reading and writing. If the function expects a return value, then _None_
-(<<defn-option-type>>) should be returned. See the
-https://github.com/w3f/polkadot-spec/issues/575[polkadot-spec issue #575] and
-the https://github.com/paritytech/substrate/issues/12461[substrate issue #12461]
-for more info.
+==== Implementation Assumptions
+The storage and child storage (<<sect-child-storage-api>>) functionality in the
+Substrate implementation is based on a couple of assumptions in order for the
+Runtime to behave deterministically. While Polkadot Host implementers can decide
+for themselves on how those APIs are implemented - as long as the interface is
+corerct - those behaviors must be replicated. In Substrate, child storages are
+namespaces respectively segregated by attaching the `:child_storage:default:`
+prefix to every child storage keys "<CHILD-STORAGE>", followed by `:<KEY>` for
+the key within that child storage. However, the storage API described in this
+section and the child storage API share the same database. This means that the
+storage API can retrieve child storage entries.
+
+For example, calling `ext_storage_get_version_1` with the key
+`:child_storage:default:some_child:some_key` is equivalent to calling
+`ext_default_child_storage_get_version_1` with child storage key `some_child`
+and key `some_key`.
+
+Importantly, the storage API can only _read_ child storage entries, but must
+implement write protection. Any function that modifies data must silently ignore
+any keys that start with the `:child_storage:` prefix or any keys that are a
+substring of that prefix, such as `:child_sto` (but not `:other`, for example).
+If the function expects a return value, then _None_ (<<defn-option-type>>)
+should be returned.
+
+Additionally, calling `ext_storage_get_version_1` on a child storage key
+directly (without a key within the child storage), such as
+`:child_storage:defaut:some_child`, retuns the root of the child storage. This
+is described in TODO.
+
+See the https://github.com/w3f/polkadot-spec/issues/575[polkadot-spec issue
+#575] and the https://github.com/paritytech/substrate/issues/12461[substrate
+issue #12461] for more info.
 
 [#defn-state-version]
 .<<defn-state-version, State Version>>
