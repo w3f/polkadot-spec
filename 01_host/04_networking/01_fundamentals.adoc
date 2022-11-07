@@ -28,17 +28,10 @@ Kademlia for peer discovery.
 * https://noiseprotocol.org/[Noise] - The _Noise_ protocol is a framework for
 building cryptographic protocols. The Polkadot Host uses Noise to establish the
 encryption layer to remote peers.
-* https://docs.libp2p.io/concepts/stream-multiplexing/#mplex[mplex] - _mplex_ is
-a multiplexing protocol developed by _libp2p_. The protocol allows dividing a
-connection to a peer into multiple substreams, each substream serving a specific
-purpose. Generally, Polkadot Host implementers are encouraged to prioritize
-implementing , since it is the de-facto standard in Polkadot._mplex_ is only
-required to communicate with https://github.com/libp2p/js-libp2p[js-lip2p].
 * https://docs.libp2p.io/concepts/stream-multiplexing/#yamux[yamux] - _yamux_ is
-a multiplexing protocol like _mplex_ and developed by HashiCorp. It is the
-de-facto standard for the Polkadot Host. This protocol should be prioritized
-over _mplex_. <<sect-protocols-substreams>> describes the subprotocol in more
-detail.
+a multiplexing protocol developed by HashiCorp. It is the de-facto standard for
+the Polkadot Host. <<sect-protocols-substreams>> describes the subprotocol in
+more detail.
 * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec[Protocol
 Buffers] - Protocol Buffers is a language-neutral, platform-neutral mechanism
 for serializing structured data and is developed by Google. The Polkadot Host
@@ -152,8 +145,8 @@ Connections are established by using the following protocols:
 established.
 * `/multistream/1.0.0` - a protocol that is announced when negotiating an
 encryption protocol or a substream.
-* `/yamux/1.0.0` - a protocol used during the _mplex_ or _yamux_ negotiation.
-See <<sect-protocols-substreams>> for more information.
+* `/yamux/1.0.0` - a protocol used during _yamux_ negotiation. See
+<<sect-protocols-substreams>> for more information.
 
 The Polkadot Host can establish a connection with any peer of which it
 knows the address. The Polkadot Host supports multiple networking
@@ -209,9 +202,8 @@ encrypt all further communication.
 
 After the node establishes a connection with a peer, the use of multiplexing
 allows the Polkadot Host to open substreams. _libp2p_ uses the
-https://docs.libp2p.io/concepts/stream-multiplexing/#mplex[_mplex protocol_] or
-the https://docs.libp2p.io/concepts/stream-multiplexing/#yamux[_yamux protocol_]
-to manage substreams and to allow the negotiation of _application-specific
+https://docs.libp2p.io/concepts/stream-multiplexing/#yamux[_yamux protocol_] to
+manage substreams and to allow the negotiation of _application-specific
 protocols_, where each protocol serves a specific utility.
 
 The Polkadot Host uses multiple substreams whose usage depends on a specific
