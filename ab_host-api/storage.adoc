@@ -26,7 +26,7 @@ Importantly, the storage API can only _read_ child storage entries, but must
 implement write protection. Any function that modifies data must **silently ignore**
 any keys that start with the `:child_storage:` prefix. For
 `ext_storage_clear_prefix` (<<sect-ext-storage-clear-prefix>>) specifically,
-this also applies to any key that is a substring of `:child_storage:` prefix,
+this also applies to any key that is a substring of the `:child_storage:` prefix,
 such as `:child_sto` (but not `:other`, for example). If the function expects a
 return value, then _None_ (<<defn-option-type>>) should be returned.
 
@@ -40,6 +40,7 @@ value is cached. Calling `ext_default_child_storage_root` directly always
 recomputes the current root value.
 
 See the following issues for more information:
+
 * https://github.com/w3f/polkadot-spec/issues/575
 * https://github.com/w3f/polkadot-spec/issues/577
 * https://github.com/paritytech/substrate/issues/12461
