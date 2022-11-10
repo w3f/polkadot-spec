@@ -35,6 +35,24 @@ stem:[C].
 
 The authorities and their corresponding weights can be retrieved from the
 Runtime (<<sect-rte-grandpa-auth>>).
+
+[kaitai#authority_set]
+++++
+seq:
+  - id: num_items
+    type: scale::compact_int
+  - id: items
+    type: authority_item
+    repeat: expr
+    repeat-expr: num_items.value
+types:
+  authority_item:
+    seq:
+      - id: key
+        type: scale::bytes
+      - id: weight
+        type: u8
+++++
 ====
 
 [#sect-consensus-message-digest]
@@ -122,6 +140,65 @@ s_"2nd" = {
 	(2,->,"secondary slot with VRF output")
 :}
 ++++
+
+[kaitai#babe_message, kaitai-dependencies=authority_set]
+++++
+seq:
+  - id: type_id
+    type: u1
+    enum: message_type
+  - id: message
+    type:
+      switch-on: type_id
+      cases:
+        'message_type::next_epoch_data': next_epoch_data
+        'message_type::on_disabled': on_disabled
+        'message_type::next_epoch_descriptor': next_epoch_descriptor
+enums:
+  message_type:
+    1: next_epoch_data
+    2: on_disabled
+    3: next_epoch_descriptor
+types:
+  next_epoch_data:
+    seq:
+      - id: authority_set
+        type: authority_set
+      - id: randomness
+        size: 32
+  on_disabled:
+    seq:
+      - id: authority_id
+        type: u4
+  next_epoch_descriptor:
+    seq:
+      - id: type_id
+        type: u1
+        enum: descriptor_type
+      - id: content
+        type:
+          switch-on: type_id
+          cases:
+            'descriptor_type::default': default_descriptor
+    enums:
+      descriptor_type:
+        1: default
+    types:
+      default_descriptor:
+        seq:
+          - id: nominator
+            type: u8
+          - id: denominator
+            type: u8
+          - id: secondary_slot
+            type: u1
+            enum: secondary_type
+        enums:
+          secondary_type:
+            0: no_slot
+            1: plain_slot
+            2: vrf_slot
+++++
 ====
 
 [#defn-consensus-message-grandpa]
@@ -169,6 +246,57 @@ voting.
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] is the
 block where the change is applied. Once applied, the authorities should resume
 voting.
+
+[kaitai#grandpa_message]
+++++
+seq:
+  - id: type_id
+    type: u1
+    enum: message_type
+  - id: message
+    type:
+      switch-on: type_id
+      cases:
+        'message_type::scheduled_change': scheduled_change
+        'message_type::forced_change': forced_change
+        'message_type::on_disabled': on_disabled
+        'message_type::pause': pause
+        'message_type::resume': resume
+enums:
+  message_type:
+    1: scheduled_change
+    2: forced_change
+    3: on_disabled
+    4: pause
+    5: resume
+types:
+  scheduled_change:
+    seq:
+      - id: authority_list
+        type: scale::bytes
+      - id: delay_of
+        type: u4
+  forced_change:
+    seq:
+      - id: starting_at
+        type: u4
+      - id: authority_list
+        type: scale::bytes
+      - id: delay
+        type: u4
+  on_disabled:
+    seq:
+      - id: to_disable
+        type: u4
+  pause:
+    seq:
+      - id: delay_of
+        type: u4
+  resume:
+    seq:
+      - id: delay_of
+        type: u4
+++++
 ====
 
 [#defn-consensus-message-beefy]
@@ -193,4 +321,39 @@ identifier of the remote validator set.
 2:: implies **on disabled**: an index to the individual authorty in stem:[V_B]
 that should be immediately disabled until the next authority change.
 3:: implies **MMR root**: a 32-byte array containing the MMR root.
+
+[kaitai#beefy_message]
+++++
+seq:
+  - id: type
+    type: u1
+    enum: message_type
+  - id: message
+    type:
+      switch-on: type
+      cases:
+        'message_type::authority_change': authority_change
+        'message_type::on_disabled': on_disabled
+        'message_type::mmr_root': mmr_root
+enums:
+  message_type:
+    1: authority_change
+    2: on_disabled
+    3: mmr_root
+types:
+  authority_change:
+    seq:
+      - id: authorities
+        type: scale::bytes
+      - id: set_id
+        type: u4
+  on_disabled:
+    seq:
+      - id: authority_id
+        type: u4
+  mmr_root:
+    seq:
+      - id: root
+        size: 32
+++++
 ====
