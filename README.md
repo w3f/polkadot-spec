@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/github/license/w3f/polkadot-spec.svg)](https://github.com/w3f/polkadot-spec/blob/main/LICENSE)
 [![Latest Release](https://img.shields.io/github/release/w3f/polkadot-spec.svg)](https://github.com/w3f/polkadot-spec/releases/latest)
 [![Specification Publication](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.deb.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.deb.yml)
-[![Cachix Cache](https://img.shields.io/badge/cachix-w3fpkgs-blue.svg)](https://w3fpkgs.cachix.org)
+[![Cachix Cache](https://img.shields.io/badge/cachix-polkadot--spec-blue.svg)](https://polkadot-spec.cachix.org)
 [![Nix Integration](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.nix.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.nix.yml)
 
 Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository contains the official specification for the Polkadot Protocol.
