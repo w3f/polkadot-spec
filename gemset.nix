@@ -405,10 +405,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1dnfkrk8xx2m8r3r9m2p5xcq57viznyc09k7r3i4jbm758i57lx3";
+      sha256 = "066w2wf3mwkzynz9h7qqvvr0w6rq6q45ngjfh9z0s08ny2gpdbmq";
       type = "gem";
     };
-    version = "3.30.0";
+    version = "4.0.0";
   };
   ruby-enum = {
     dependencies = ["i18n"];
