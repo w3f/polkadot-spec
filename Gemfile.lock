@@ -2,8 +2,8 @@ GEM
   remote: https://rubygems.org/
   specs:
     Ascii85 (1.1.0)
-    addressable (2.8.0)
-      public_suffix (>= 2.0.2, < 5.0)
+    addressable (2.8.1)
+      public_suffix (>= 2.0.2, < 6.0)
     afm (0.2.2)
     asciidoctor (2.0.18)
     asciidoctor-bibtex (0.8.0)
@@ -16,7 +16,7 @@ GEM
       asciidoctor (~> 2.0)
       asciimath (~> 2.0)
       mathematical (~> 1.6.0)
-    asciidoctor-pdf (2.2.0)
+    asciidoctor-pdf (2.3.4)
       asciidoctor (~> 2.0)
       concurrent-ruby (~> 1.1)
       matrix (~> 0.4)
@@ -41,7 +41,7 @@ GEM
       rexml
     csl-styles (1.0.1.11)
       csl (~> 1.0)
-    css_parser (1.11.0)
+    css_parser (1.12.0)
       addressable
     execjs (2.8.1)
     hashery (2.1.2)
@@ -59,7 +59,7 @@ GEM
       libv8-node (~> 16.10.0.0)
     namae (1.1.1)
     pdf-core (0.9.0)
-    pdf-reader (2.10.0)
+    pdf-reader (2.11.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -83,7 +83,7 @@ GEM
     pseudocode (0.1.1)
       execjs (~> 2.8)
       katex (~> 0.8)
-    public_suffix (4.0.7)
+    public_suffix (5.0.0)
     rexml (3.2.5)
     rghost (0.9.7)
     rouge (3.30.0)
