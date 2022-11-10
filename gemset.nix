@@ -94,6 +94,16 @@
     };
     version = "5.1.6";
   };
+  blake2b = {
+    groups = ["test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1i7kxnnvv2lqglc1crhkqp0s9hybx20wgrl04jqkk7y2sawyb6hg";
+      type = "gem";
+    };
+    version = "0.10.0";
+  };
   citeproc = {
     dependencies = ["namae"];
     groups = ["default"];
