@@ -5,8 +5,7 @@ In this section we provide an overview of differences bertween full nodes and li
 
 
 ==== Base Libraries necessary for any client
-// Create a venn digram of components and heirarchy of nodes. 
-
+Just list the libraries required without having any comparisons.
 
 ==== Full Nodes
 Full nodes handle network activity such as peer discovery, managing transaction requests, reaching consensus with peers, and responding to RPC call. It also provides a runtime that contains all of the business logic for execuing the state transition function of the blockchain.
@@ -16,11 +15,12 @@ Authoring nodes provide functionalities to participate in the consesnus and bloc
 // -> How the interaction with GRANDPA/ BABE/ and other layers  changes for authoring node and light node 
 
 ==== Light Clients
-Objectives: Lighter in terms of memory consumption, number of threads, and code size, in order to compile it to WebAssembly and maintain consistent performance on non native runtimes, like wasmtime. 
+*Objectives*: Lighter in terms of memory consumption, number of threads, and code size, in order to compile it to WebAssembly and maintain consistent performance on non native runtimes, like wasmtime. 
 
 A light client or light node is a simplified node that only provides the runtime and current state. Light nodes enable users to connect to a Substrate runtime directly using a browser, browser extension, mobile device, or desktop computer. Technically, though a runtime execution environment is not necessary to build a light client, most clients require interacting with the Runtime and the state of the blockchain for integrity checks at the minimum. [TODO: add a usecase where runtime is not needed]. Current implementations of Light Nodes (for e.g. Smoldot) uses the wasmtime as its runtime environment to drastically simplify the code. The performance of wasmtime is satisfying enough to not require an native runtime. 
 
-We categorize the requirements of light clients in 3 main dimensions: Functionality, Efficiency, and Security. 
+We categorize the requirements of light clients in 3 main dimensions: Functionality, Efficiency, and Security.
+
 * *Functional Requirements:* 
     . Update state to reflect the latest view of the blockchain via synchronization with full nodes. Details of warp sync
     . Verify validity of runime transitions
@@ -34,8 +34,14 @@ We categorize the requirements of light clients in 3 main dimensions: Functional
     . Secure bootstrapping and Synchronising: Probability that an adversarial full node convincing a light client of a forged blockchain state is negligible. 
     . Secure querying: Probability that an adversary convinces  light client to acceot a forged account state os negligible.
     . Secure Execution: Light client should not submit an invalid transaction given the current state. 
-// Is this necessary as a requirement?
     . Assure that the submitted extrinsics are appended in a successor block or inform the use incase of failure.
+
+
+==== Warp Sync
+Warp sync only downloads block hesaders where the authority set changes (so called fragments), and by verifying GRANDPA justifications. For light clients, it is not necessary to download the state (approx. 550MB) everytime a warp-sync is initiated. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. 
+
+Specifications for Warp Sync for a full node can be found in <<sect-warp-sync>>. We outline only the distinguishing components of warp sync for light clients here. Request for warp sync are performed using the `/dot/sync/warp` _Request-Response_ substream. 
+
 
 
 
