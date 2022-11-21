@@ -42,7 +42,7 @@ Warp sync only downloads block hesaders where the authority set changes (so call
 
 Specifications for Warp Sync for a full node can be found in <<sect-warp-sync>>. We outline only the distinguishing components of warp sync for light clients here. Request for warp sync are performed using the `/dot/sync/warp` _Request-Response_ substream. 
 
-At the core, the `warp sync` process takes the Genesis Block as input, and outputs the hash of the state trie root at the latest finalised block. This root hash acts as a proof to further validate the resposese to queries by the full node. 
+At the core, the `warp sync` process takes the Genesis Block as input, and outputs the hash of the state trie root at the latest finalised block. This root hash acts as a proof to further validate the resposese to queries by the full node. The `warp sync` works by starting from the Genesis Hash and verifyng the block headers only at the authority set changes. 
 
 Eventually, the light client verifies the finality of the block returned by a full node to ensure that the block is indeed the latest finalised block. This entails two things: 
 1) check the authenticity of GRANDPA Justification messages all the way from Genesis to the last finalised block, 
@@ -61,9 +61,43 @@ syncs, it can be tricked to consider this alternative block N' as the finalized 
 A way to mitigate this attack is to have the starting point of the warp syncing not too far in the past. How
 far exactly depends on the logic of the runtime of the chain.
 
+*TECHNICAL SPECIFICATIONS*
 
-*The*
-The `warp sync` works by starting from the Genesis Hash and verifyng the block headers only at the authority set changes. 
+`struct ClientState`
+
+`struct AuthoritySet`
+
+`struct ConsensusState`
+
+`struct Header`
+
+`struct Justiifcations`
+
+`struct commit`
+
+`struct misbehaviour`
+
+`function initialise(identifier, height, consensusState)`
+
+`function initialise (height: uint64, consensusState: ConsensusState): ClientState`
+
+`function latestClientHeight(clientState: ClientState): uint64`
+
+`function checkValidityAndUpdateState (clientState: ClientState, header: Header)`
+
+`function verifyPredicate (authoritySet: AuthoritySet, header: Header): boolean`
+
+TODO: GRANDPA client state verification functions to check a Merkle proof against a previously validated commitment root.
+
+
+
+
+
+
+
+
+
+
 
 
 
