@@ -77,8 +77,6 @@ far exactly depends on the logic of the runtime of the chain.
 
 `struct misbehaviour`
 
-`function initialise(identifier, height, consensusState)`
-
 `function initialise (height: uint64, consensusState: ConsensusState): ClientState`
 
 `function latestClientHeight(clientState: ClientState): uint64`
