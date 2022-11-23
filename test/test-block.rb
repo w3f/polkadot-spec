@@ -7,9 +7,10 @@ require 'blake2b'
 
 
 GENESIS_HASH = "91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3"
+BLOCK_1_HASH = "c0096358534ec8d21d01d34b836eed476a1c343f8724fa2153dc0725ad797a90"
 
 # Parse binary block export
-stream = Kaitai::Struct::Stream.open './test/block.bin'
+stream = Kaitai::Struct::Stream.open './test/block1.bin'
 
 # Exports are prefixed with 64-bit block count (TODO: Documentation)
 num_blocks = stream.read_u8le
