@@ -37,8 +37,44 @@ We categorize the requirements of light clients in 3 main dimensions: Functional
     . Assure that the submitted extrinsics are appended in a successor block or inform the use incase of failure.
 
 
+==== Abstraction for Sync
+
+Synchronisation is the process of catching up with the latest state of the blockchain for a non-participating node of the network. There are typically two approaches for syncing dependeing on the client type and its functionality:
+* *Full Node Sync:*
+
+****
+.Initiate-Grandpa
+[pseudocode#algo-initiate-grandpa]
+++++
+\input $r_{last}, B_{last}$
+
+\state \textsc{Last-Finalized-Block} $\leftarrow B_{last}$
+
+\state \textsc{Best-Final-Candidate}(0) $\leftarrow B_{last}$
+
+\state \textsc{GRANDPA-GHOST}$(0) \leftarrow B_{last}$
+
+\state \textsc{Last-Completed-Round} $\leftarrow 0$
+
+\state $r_n \leftarrow 1$
+
+\state \textsc{Play-Grandpa-round}$(r_n)$
+++++
+
+where stem:[B_("last")] is the last block which has been finalized on the chain
+(<<defn-finalized-block>>). stem:[r_("last")] is equal to the latest round the
+voter has observed that other voters are voting on. The voter obtains this
+information through various gossiped messages including those mentioned in
+<<defn-finalized-block>>. stem:[r_("last")] is set to _0_ if the GRANDPA node is
+initiating the GRANDPA voting process as a part of a new authority set. This is
+because the GRANDPA round number resets to _0_ for every authority set change.
+****
+
+
+* *Light Client Sync:*
+
 ==== Warp Sync
-Warp sync only downloads block hesaders where the authority set changes (so called fragments), and by verifying GRANDPA justifications. For light clients, it is not necessary to download the state (approx. 550MB) everytime a warp-sync is initiated. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. 
+Warp sync only downloads block headers where the authority set changes (so called fragments), and by verifying GRANDPA justifications. For light clients, it is not necessary to download the state (approx. 550MB) everytime a warp-sync is initiated. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. 
 
 Specifications for Warp Sync for a full node can be found in <<sect-warp-sync>>. We outline only the distinguishing components of warp sync for light clients here. Request for warp sync are performed using the `/dot/sync/warp` _Request-Response_ substream. 
 
@@ -61,6 +97,8 @@ syncs, it can be tricked to consider this alternative block N' as the finalized 
 A way to mitigate this attack is to have the starting point of the warp syncing not too far in the past. How
 far exactly depends on the logic of the runtime of the chain.
 
+
+
 *TECHNICAL SPECIFICATIONS*
 
 `struct ClientState`
@@ -69,9 +107,11 @@ far exactly depends on the logic of the runtime of the chain.
 
 `struct ConsensusState`
 
-`struct Header`
+`struct Header`: The GRANDPA client headers include the height, the commitment root, a justification of block and authority set. 
 
-`struct Justiifcations`
+
+`struct Justiifcations`: 
+A GRANDPA justification for block finality, it includes a commit message and an ancestry proof including all headers routing all precommit target blocks to the commit target block. For example, the latest blocks are A - B - C - D - E - F, where A is the last finalised block, F is the point where a majority for vote (they may on B, C, D, E, F) can be collected. Then the proof need to include all headers from F back to A.
 
 `struct commit`
 
@@ -81,7 +121,9 @@ far exactly depends on the logic of the runtime of the chain.
 
 `function latestClientHeight(clientState: ClientState): uint64`
 
+Validity checking verifies a header is signed by the current authority set and verifies the authority set proof to determine if there is a expected change to the authority set. If the provided header is valid, the client state is updated & the newly verified commitment written to the store.
 `function checkValidityAndUpdateState (clientState: ClientState, header: Header)`
+
 
 `function verifyPredicate (authoritySet: AuthoritySet, header: Header): boolean`
 
