@@ -48,7 +48,7 @@ Where the `request` can be one of the following fields:
 
 |`RemoteReadChildRequestV2`
 |7
-|A remote read child request (TODO)
+|A remote read child request (<<sect-light-remote-read-child-request-v2>>)
 |===
 
 ==== Response
@@ -220,9 +220,6 @@ Remote read child request message.
 |6
 |Storage keys
 |===
-
-The response is the same as for the _Remote Read Request_ message, respectively
-<<sect-light-remote-read-response>>.
 ====
 
 [#sect-light-remote-read-child-request-v2]
@@ -250,3 +247,5 @@ Version 2 of the remote read child request message.
 where `Key` is of the same structure as the `Key` in
 <<sect-light-remote-read-request>>
 ====
+
+The response is the same as for the _Remote Read Request_ message, respectively <<sect-light-remote-read-response>>.
