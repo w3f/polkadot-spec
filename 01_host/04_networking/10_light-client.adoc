@@ -149,7 +149,9 @@ Remote read request message.
 .<<sect-light-remote-read-response,Remote Read Response>>
 ====
 Remote read response message to a read request message
-(<<sect-light-remote-read-request>>).
+(<<sect-light-remote-read-request>>). If the client indicated to skip the value
+and instead use the hash of the value, this proof is generated as a hashed
+subvalue (<<defn-hashed-subvalue>>).
 
 [cols="1,1,5"]
 |===
@@ -164,7 +166,11 @@ Remote read response message to a read request message
 [#sect-light-remote-read-request-v2]
 .<<sect-light-remote-read-request-v2,Remote Read Request Version 2>>
 ====
-Version 2 of a remote read request message.
+Version 2 of a remote read request message. If the Id `2` of type `Key` is set
+to true, the responder creates a Merkle proof using the hashes of the storage
+values instead of the values themselves, as described in
+<<defn-hashed-subvalue>>. This is useful if the light client wants to verify
+whether a specific value is present in the state storage.
 
 [cols="1,1,5"]
 |===
@@ -187,11 +193,11 @@ Where `Key` is:
 
 |`bytes`
 |1
-|TODO
+|Storage key
 
 |`bool`
 |2
-|(Optional) TODO
+|(Optional) Whether the value should be skipped, false by default.
 |===
 ====
 
@@ -245,7 +251,7 @@ Version 2 of the remote read child request message.
 |===
 
 where `Key` is of the same structure as the `Key` in
-<<sect-light-remote-read-request>>
+<<sect-light-remote-read-request-v2>>
 ====
 
 The response is the same as for the _Remote Read Request_ message, respectively <<sect-light-remote-read-response>>.
