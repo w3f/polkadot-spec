@@ -145,22 +145,6 @@ Remote read request message.
 |===
 ====
 
-[#sect-light-remote-read-response]
-.<<sect-light-remote-read-response,Remote Read Response>>
-====
-Remote read response message to a read request message
-(<<sect-light-remote-read-request>>).
-
-[cols="1,1,5"]
-|===
-|Type |Id |Description
-
-|`bytes`
-|2
-|An _Option_ type (<<defn-option-type>>) containing the read proof or _None_ if proof generation failed.
-|===
-====
-
 [#sect-light-remote-read-request-v2]
 .<<sect-light-remote-read-request-v2,Remote Read Request Version 2>>
 ====
@@ -196,6 +180,23 @@ Where `Key` is:
 |`bool`
 |2
 |(Optional) Whether the value should be skipped, false by default.
+|===
+====
+
+[#sect-light-remote-read-response]
+.<<sect-light-remote-read-response,Remote Read Response>>
+====
+Remote read response message to a read request message
+(<<sect-light-remote-read-request>>) and read request message version 2
+(<<sect-light-remote-read-request-v2>>).
+
+[cols="1,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|An _Option_ type (<<defn-option-type>>) containing the read proof or _None_ if proof generation failed.
 |===
 ====
 
