@@ -149,9 +149,7 @@ Remote read request message.
 .<<sect-light-remote-read-response,Remote Read Response>>
 ====
 Remote read response message to a read request message
-(<<sect-light-remote-read-request>>). If the client indicated to skip the value
-and instead use the hash of the value, this proof is generated as a hashed
-subvalue (<<defn-hashed-subvalue>>).
+(<<sect-light-remote-read-request>>).
 
 [cols="1,1,5"]
 |===
@@ -231,7 +229,9 @@ Remote read child request message.
 [#sect-light-remote-read-child-request-v2]
 .<<sect-light-remote-read-child-request-v2,Remote Read Child Request Version 2>>
 ====
-Version 2 of the remote read child request message.
+Version 2 of the remote read child request message. The behavior of the `Key`
+type is the same as the `Key` type described in
+<<sect-light-remote-read-request-v2>>.
 
 [cols="1,1,5"]
 |===
@@ -249,9 +249,6 @@ Version 2 of the remote read child request message.
 |6
 |Storage keys
 |===
-
-where `Key` is of the same structure as the `Key` in
-<<sect-light-remote-read-request-v2>>
 ====
 
 The response is the same as for the _Remote Read Request_ message, respectively <<sect-light-remote-read-response>>.
