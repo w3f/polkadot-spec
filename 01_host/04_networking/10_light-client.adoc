@@ -38,9 +38,17 @@ Where the `request` can be one of the following fields:
 |2
 |A remote read request (<<sect-light-remote-read-request>>)
 
+|`RemoteReadRequestV2`
+|6
+|A version 2 remote read request (<<sect-light-remote-read-request-v2>>)
+
 |`RemoteReadChildRequest`
 |4
 |A remote read child request (<<sect-light-remote-read-child-request>>)
+
+|`RemoteReadChildRequestV2`
+|7
+|A remote read child request (TODO)
 |===
 
 ==== Response
@@ -121,7 +129,7 @@ Read a storage value at the given block.
 [#sect-light-remote-read-request]
 .<<sect-light-remote-read-request,Remote Read Request>>
 ====
-Remote read request.
+Remote read request message.
 
 [cols="1,1,5"]
 |===
@@ -140,7 +148,8 @@ Remote read request.
 [#sect-light-remote-read-response]
 .<<sect-light-remote-read-response,Remote Read Response>>
 ====
-Remote read response.
+Remote read response message to a read request message
+(<<sect-light-remote-read-request>>).
 
 [cols="1,1,5"]
 |===
@@ -149,6 +158,40 @@ Remote read response.
 |`bytes`
 |2
 |An _Option_ type (<<defn-option-type>>) containing the read proof or _None_ if proof generation failed.
+|===
+====
+
+[#sect-light-remote-read-request-v2]
+.<<sect-light-remote-read-request-v2,Remote Read Request Version 2>>
+====
+Version 2 of a remote read request message.
+
+[cols="1,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Block at which to perform call
+
+|`repeated Key`
+|3
+|Storage keys
+|===
+
+Where `Key` is:
+
+[cols="1,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|1
+|TODO
+
+|`bool`
+|2
+|(Optional) TODO
 |===
 ====
 
