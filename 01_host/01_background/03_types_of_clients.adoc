@@ -39,26 +39,22 @@ We categorize the requirements of light clients in 3 main dimensions: Functional
 
 ==== Abstraction for Sync
 
-Synchronisation is the process of catching up with the latest state of the blockchain for a non-participating node of the network. There are typically two approaches for syncing dependeing on the client type and its functionality:
-* *Full Node Sync:*
+Synchronisation is the process of catching up with the latest state of the blockchain for a non-participating node of the network. There are typically two approaches for syncing depending on the client type and its functionality: 
 
 ****
-.Initiate-Grandpa
-[pseudocode#algo-initiate-grandpa]
+.Querying-State-Light-Clients
+[pseudocode#algo-light-clients-query-state]
 ++++
-\input $r_{last}, B_{last}$
+\INPUT Query q, BlockHeight h, commitmentRootProof $\pi$
+\OUTPUT Maybe Result res
 
-\state \textsc{Last-Finalized-Block} $\leftarrow B_{last}$
+\STATE \textsc{res} $\leftarrow QueryFullNode (q, h)$
 
-\state \textsc{Best-Final-Candidate}(0) $\leftarrow B_{last}$
+\IF{$validityCheck_{\pi}(res)$}
+    \STATE $return$ $Some$ $res$
+\ENDIF
+\STATE {$return$ $NONE$}
 
-\state \textsc{GRANDPA-GHOST}$(0) \leftarrow B_{last}$
-
-\state \textsc{Last-Completed-Round} $\leftarrow 0$
-
-\state $r_n \leftarrow 1$
-
-\state \textsc{Play-Grandpa-round}$(r_n)$
 ++++
 
 where stem:[B_("last")] is the last block which has been finalized on the chain
@@ -70,8 +66,6 @@ initiating the GRANDPA voting process as a part of a new authority set. This is
 because the GRANDPA round number resets to _0_ for every authority set change.
 ****
 
-
-* *Light Client Sync:*
 
 ==== Warp Sync
 Warp sync only downloads block headers where the authority set changes (so called fragments), and by verifying GRANDPA justifications. For light clients, it is not necessary to download the state (approx. 550MB) everytime a warp-sync is initiated. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. 
