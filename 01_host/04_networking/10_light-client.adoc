@@ -202,7 +202,7 @@ Read a child storage value at the given block.
 [#sect-light-remote-read-child-request]
 .<<sect-light-remote-read-child-request,Remote Read Child Request>>
 ====
-Remote read child request.
+Remote read child request message.
 
 [cols="1,1,5"]
 |===
@@ -216,11 +216,37 @@ Remote read child request.
 |3
 |Child storage key, this is relative to the child type storage location
 
-|`bytes`
+|`repeated bytes`
 |6
 |Storage keys
 |===
-====
 
 The response is the same as for the _Remote Read Request_ message, respectively
 <<sect-light-remote-read-response>>.
+====
+
+[#sect-light-remote-read-child-request-v2]
+.<<sect-light-remote-read-child-request-v2,Remote Read Child Request Version 2>>
+====
+Version 2 of the remote read child request message.
+
+[cols="1,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Block at which to perform call
+
+|`bytes`
+|3
+|Child storage key, this is relative to the child type storage location
+
+|`repeated Key`
+|6
+|Storage keys
+|===
+
+where `Key` is of the same structure as the `Key` in
+<<sect-light-remote-read-request>>
+====
