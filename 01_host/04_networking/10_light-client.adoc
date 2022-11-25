@@ -38,9 +38,17 @@ Where the `request` can be one of the following fields:
 |2
 |A remote read request (<<sect-light-remote-read-request>>)
 
+|`RemoteReadRequestV2`
+|6
+|A version 2 remote read request (<<sect-light-remote-read-request-v2>>)
+
 |`RemoteReadChildRequest`
 |4
 |A remote read child request (<<sect-light-remote-read-child-request>>)
+
+|`RemoteReadChildRequestV2`
+|7
+|A remote read child request (<<sect-light-remote-read-child-request-v2>>)
 |===
 
 ==== Response
@@ -121,7 +129,7 @@ Read a storage value at the given block.
 [#sect-light-remote-read-request]
 .<<sect-light-remote-read-request,Remote Read Request>>
 ====
-Remote read request.
+Remote read request message.
 
 [cols="1,1,5"]
 |===
@@ -137,10 +145,50 @@ Remote read request.
 |===
 ====
 
+[#sect-light-remote-read-request-v2]
+.<<sect-light-remote-read-request-v2,Remote Read Request Version 2>>
+====
+Version 2 of a remote read request message. If the Id `2` of type `Key` is set
+to true, the responder creates a Merkle proof using the hashes of the storage
+values instead of the values themselves, as described in
+<<defn-hashed-subvalue>>. This is useful if the light client wants to verify
+whether a specific value is present in the state storage.
+
+[cols="1,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Block at which to perform call
+
+|`repeated Key`
+|3
+|Storage keys
+|===
+
+Where `Key` is:
+
+[cols="1,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|1
+|Storage key
+
+|`bool`
+|2
+|(Optional) Whether the value should be skipped, false by default.
+|===
+====
+
 [#sect-light-remote-read-response]
 .<<sect-light-remote-read-response,Remote Read Response>>
 ====
-Remote read response.
+Remote read response message to a read request message
+(<<sect-light-remote-read-request>>) and read request message version 2
+(<<sect-light-remote-read-request-v2>>).
 
 [cols="1,1,5"]
 |===
@@ -159,7 +207,7 @@ Read a child storage value at the given block.
 [#sect-light-remote-read-child-request]
 .<<sect-light-remote-read-child-request,Remote Read Child Request>>
 ====
-Remote read child request.
+Remote read child request message.
 
 [cols="1,1,5"]
 |===
@@ -173,11 +221,35 @@ Remote read child request.
 |3
 |Child storage key, this is relative to the child type storage location
 
-|`bytes`
+|`repeated bytes`
 |6
 |Storage keys
 |===
 ====
 
-The response is the same as for the _Remote Read Request_ message, respectively
-<<sect-light-remote-read-response>>.
+[#sect-light-remote-read-child-request-v2]
+.<<sect-light-remote-read-child-request-v2,Remote Read Child Request Version 2>>
+====
+Version 2 of the remote read child request message. The behavior of the `Key`
+type is the same as the `Key` type described in
+<<sect-light-remote-read-request-v2>>.
+
+[cols="1,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Block at which to perform call
+
+|`bytes`
+|3
+|Child storage key, this is relative to the child type storage location
+
+|`repeated Key`
+|6
+|Storage keys
+|===
+====
+
+The response is the same as for the _Remote Read Request_ message, respectively <<sect-light-remote-read-response>>.
