@@ -144,13 +144,14 @@ limit.
 k = {(0,-> c),(1,-> c):}
 ++++
 +
-where _0_ indicates that all keys of the child storage have been removed,
-followed by the number of removed keys, stem:[c]. The variant _1_ indicates that
-there are remaining keys, followed by the number of removed keys.
+where _0_ indicates that all keys of the storage have been removed, followed by
+the unsigned 32-bit number of removed keys, stem:[c]. The variant _1_ indicates
+that there are remaining keys, followed by the unsigned 32-bit number of removed
+keys.
 
 ===== Version 3 - Prototype
 ----
-(func $ext_storage_clear_prefix_version_3
+(func $ext_default_child_storage_clear_prefix_version_3
 	(param $prefix i64) (param $maybe_limit i64) (param $maybe_cursor i64)
 	(return i64))
 ----

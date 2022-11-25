@@ -209,8 +209,54 @@ k = {(0,-> c),(1,-> c):}
 ++++
 +
 where _0_ indicates that all keys of the child storage have been removed,
-followed by the number of removed keys, stem:[c]. The variant _1_ indicates that
-there are remaining keys, followed by the number of removed keys.
+followed by the unsigned 32-bit number of removed keys, stem:[c]. The variant
+_1_ indicates that there are remaining keys, followed by the unsigned 32-bit
+number of removed keys.
+
+===== Version 3 - Prototype
+----
+(func $ext_storage_clear_prefix_version_3
+	(param $prefix i64) (param $maybe_limit i64) (param $maybe_cursor i64)
+	(return i64))
+----
+
+Arguments::
+* `prefix`: a pointer-size (<<defn-runtime-pointer-size>>) containing
+the prefix.
+* `limit`: a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
+(<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is _None_.
+Any keys created during the current block execution do not count towards the
+limit.
+* `maybe_cursor` a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_
+type (<<defn-option-type>>) containing an byte array indicating the key
+("cursor") at which or after which the clear operation should be applied. If the
+key does not exist, then the clear operation starts at the next key matching the
+`prefix` in lexicographic order (<<defn-lexicographic-ordering>>).
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) returning a SCALE
+encoded structure stem:[R] of the following format:
++
+[stem]
+++++
+R = (C, s, u, l)
+++++
++
+where
++
+* stem:[C] is a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
+(<<defn-option-type>>) containing the byte array indicating the next cursor
+which must be provided to a subsequent call to this function, which might be the
+needed depending on the defined `limit`. This value is _None_ if all the matching
+keys were deleted and no further subsequent calls are needed.
+* stem:[s] is an unsigned 32-bit integer indicating the number of keys that were
+deleted by the operation. Any deleted keys that were created during the current
+block execution do not count towards this number.
+* stem:[u] is an unsigned 32-bit integer indicating the number of keys that were
+deleted by the operations. This does include the deleted keys that were created
+during the current block execution.
+* stem:[l] is an unsigned 32-bit integer indicating the number of keys that were
+deleted from the state but were not created during the current block execution.
+
 
 ==== `ext_default_child_storage_root`
 
