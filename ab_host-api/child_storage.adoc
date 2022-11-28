@@ -169,28 +169,7 @@ type (<<defn-option-type>>) containing an byte array indicating the key
 key does not exist, then the clear operation starts at the next key matching the
 `prefix` in lexicographic order (<<defn-lexicographic-ordering>>).
 * `result`: a pointer-size (<<defn-runtime-pointer-size>>) returning a SCALE
-encoded structure stem:[R] of the following format:
-+
-[stem]
-++++
-R = (C, s, u, l)
-++++
-+
-where
-+
-* stem:[C] is a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
-(<<defn-option-type>>) containing the byte array indicating the next cursor
-which must be provided to a subsequent call to this function, which might be the
-needed depending on the defined `limit`. This value is _None_ if all the matching
-keys were deleted and no further subsequent calls are needed.
-* stem:[s] is an unsigned 32-bit integer indicating the number of keys that were
-deleted by the operation. Any deleted keys that were created during the current
-block execution do not count towards this number.
-* stem:[u] is an unsigned 32-bit integer indicating the number of keys that were
-deleted by the operations. This does include the deleted keys that were created
-during the current block execution.
-* stem:[l] is an unsigned 32-bit integer indicating the number of keys that were
-deleted from the state but were not created during the current block execution.
+encoded _multi removal results_ structure (<<defn-multi-removal-results>>).
 
 ==== `ext_default_child_storage_exists`
 
@@ -283,28 +262,7 @@ type (<<defn-option-type>>) containing an byte array indicating the key
 key does not exist, then the clear operation starts at the next key matching the
 `prefix` in lexicographic order (<<defn-lexicographic-ordering>>).
 * `result`: a pointer-size (<<defn-runtime-pointer-size>>) returning a SCALE
-encoded structure stem:[R] of the following format:
-+
-[stem]
-++++
-R = (C, s, u, l)
-++++
-+
-where
-+
-* stem:[C] is a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
-(<<defn-option-type>>) containing the byte array indicating the next cursor
-which must be provided to a subsequent call to this function, which might be the
-needed depending on the defined `limit`. This value is _None_ if all the matching
-keys were deleted and no further subsequent calls are needed.
-* stem:[s] is an unsigned 32-bit integer indicating the number of keys that were
-deleted by the operation. Any deleted keys that were created during the current
-block execution do not count towards this number.
-* stem:[u] is an unsigned 32-bit integer indicating the number of keys that were
-deleted by the operations. This does include the deleted keys that were created
-during the current block execution.
-* stem:[l] is an unsigned 32-bit integer indicating the number of keys that were
-deleted from the state but were not created during the current block execution.
+encoded _multi removal results_ structure (<<defn-multi-removal-results>>).
 
 ==== `ext_default_child_storage_root`
 
