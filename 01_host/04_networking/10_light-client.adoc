@@ -95,7 +95,8 @@ Remote call request.
 
 |`bytes`
 |4
-|Call data, corresponding to `A` in Algorithm 2 of section 3.1.
+|Call data, corresponding to `A` in the algorithm of
+<<sect-entrypoints-into-runtime>>
 |===
 ====
 
@@ -110,7 +111,9 @@ Remote call response.
 
 |`bytes`
 |2
-|Merkle proof of the storage items accessed by the call, as defined in section 2.1.4. The field is missing if the request can't be answered because the call failed or the block is inaccessible.
+|Merkle proof of the storage items accessed by the call, as defined in
+<<sect-merkl-proof>>. The field is missing if the request can't be answered
+because the call failed or the block is inaccessible.
 |===
 ====
 
@@ -148,7 +151,9 @@ Remote read response.
 
 |`bytes`
 |2
-|Merkle proof of the requested storage items, as defined in section 2.1.4. The field is missing if the request can't be answered because the block is inaccessible.
+|Merkle proof of the requested storage items, as defined in
+<<sect-merkl-proof>>. The field is missing if the request can't be answered
+because the block is inaccessible.
 |===
 ====
 
