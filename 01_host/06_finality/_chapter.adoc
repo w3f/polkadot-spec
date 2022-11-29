@@ -1,0 +1,20 @@
+[#sect-finality]
+== Finality
+
+:leveloffset: +2
+
+include::01_introduction.adoc[]
+
+include::02_initialization.adoc[]
+
+include::03_rejoining.adoc[]
+
+include::04_voting.adoc[]
+
+include::05_forced-changes.adoc[]
+
+include::06_block-finalization.adoc[]
+
+include::07_bridge-proofs.adoc[]
+
+:leveloffset: 0

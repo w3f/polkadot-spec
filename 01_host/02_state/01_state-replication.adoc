@@ -1,5 +1,152 @@
+= Introduction
+
+[#defn-state-machine]
+.<<defn-state-machine, Discrete State Machine (DSM)>>
+====
+A *Discrete State Machine (DSM)* is a state transition system that admits a
+starting state and whose set of states and set of transitions are countable.
+Formally, it is a tuple of
+
+[stem]
+++++
+(\Sigma, S, s_0, \delta)
+++++
+where
+
+* stem:[\Sigma] is the countable set of all possible inputs.
+* stem:[S] is a countable set of all possible states.
+* stem:[s_0 in S] is the initial state.
+* stem:[\delta] is the state-transition function, known as *Runtime* in the
+Polkadot vocabulary, such that
+
+[stem]
+++++
+\delta : S \times \Sigma \rightarrow S
+++++
+====
+
+[#defn-path-graph]
+.<<defn-path-graph, Path Graph>>
+====
+A *path graph* or a *path* of stem:[n] nodes formally referred to as *stem:[P_n]*,
+is a tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex
+degree 2. Therefore, stem:[P_n] can be represented by sequences of stem:[(v_1,
+\ldots, v_n)] where stem:[e_i = (v_i, v_{i + 1})] for stem:[1 <= i <= n - 1] is
+the edge which connect stem:[v_i] and stem:[v_{i + 1}].
+====
+
+[#defn-blockchain]
+.<<defn-blockchain, Blockchain>>
+====
+A *blockchain* stem:[C] is a
+https://en.wikipedia.org/wiki/Directed_graph[directed path graph]. Each node of
+the graph is called *Block* and indicated by *stem:[B]*. The unique sink of
+stem:[C] is called *Genesis Block*, and the source is called the stem:["Head"]
+of stem:[C]. For any vertex stem:[(B_1, B_2)] where stem:[B_1 -> B_2] we say
+stem:[B_2] is the *parent* of stem:[B_1], which is the *child* of stem:[B_2],
+respectively. We indicate that by:
+
+[stem]
+++++
+B_2 := P(B_1)
+++++
+
+The parent refers to the child by its hash value (<<defn-block-header>>), making
+the path graph tamper proof since any modifications to the child would result in
+its hash value being changed.
+
+NOTE: The term "blockchain" can also be used as a way to refer to the network or
+system that interacts or maintains the directed path graph.
+====
+
+== Block Tree
+
+In the course of formation of a (distributed) blockchain, it is possible
+that the chain forks into multiple subchains in various block positions.
+We refer to this structure as a _block tree_:
+
+[#defn-block-tree]
+.<<defn-block-tree, Block >>
+====
+The *block tree* of a blockchain, denoted by stem:[BT] is the union of all
+different versions of the blockchain observed by the Polkadot Host such that
+every block is a node in the graph and stem:[B_1] is connected to stem:[B_2] if
+stem:[B_1] is a parent of stem:[B_2].
+====
+
+When a block in the block tree gets finalized, there is an opportunity to prune
+the block tree to free up resources into branches of blocks that do not contain
+all of the finalized blocks or those that can never be finalized in the
+blockchain (<<sect-finality>>).
+
+[#defn-pruned-tree]
+.<<defn-pruned-tree, Pruned Block Tree>>
+====
+By *Pruned Block Tree*, denoted by stem:["PBT"], we refer to a subtree of the block
+tree obtained by eliminating all branches which do not contain the most recent
+finalized blocks (<<defn-finalized-block>>). By *pruning*, we refer to the
+procedure of stem:[BT larr "PBT"]. When there is no risk of ambiguity and is safe
+to prune BT, we use stem:["BT"] to refer to stem:["PBT"].
+====
+
+<<defn-chain-subchain>> gives the means to highlight various branches of the
+block tree.
+
+[#defn-chain-subchain]
+.<<defn-chain-subchain, Subchain>>
+====
+Let stem:[G] be the root of the block tree and stem:[B] be one of its nodes. By
+stem:["Chain"(B)], we refer to the path graph from stem:[G] to stem:[B] in
+stem:["BT"]. Conversely, for a chain stem:[C = "Chain"(B)], we define *the
+head of stem:[C]* to be stem:[B], formally noted as stem:[B := bar C]. We define
+stem:[|C|], the length of stem:[C] as a path graph.
+
+If stem:[B'] is another node on stem:["Chain"(B)], then by stem:["SubChain"(B',
+B)] we refer to the subgraph of stem:["Chain"(B)] path graph which contains
+stem:[B] and ends at stem:[B'] and by stem:[|"SubChain"(B', B)|] we refer to its
+length.
+
+Accordingly, stem:[bbb C_(B')(BT)] is the set of all subchains of stem:[BT]
+rooted at stem:[B']. The set of all chains of stem:[BT], stem:[bbb C_G(BT))] is
+denoted by stem:[bbb C(BT)] or simply stem:[bbb C], for the sake of brevity.
+====
+
+[#defn-longest-chain]
+.<<defn-longest-chain, Longest Chain>>
+====
+We define the following complete order over stem:[bbb C] as follows. For chains
+stem:[C_1, C_2 in bbb C] we have that stem:[C_1 > C_2] if either stem:[|C_1| >
+|C_2|] or stem:[|C_1| = |C_2|].
+
+If stem:[|C_1| =| C_2|] we say stem:[C_1 > C_2] if and only if the block arrival
+time (<<defn-block-time>>) of stem:[bar C_1] is less than the block arrival time
+of stem:[bar C_2], from the _subjective perspective_ of the Host. We define the
+stem:["Longest-Chain"(BT)] to be the maximum chain given by this order.
+====
+
+[#defn-longest-path]
+.<<defn-longest-path, Longest Path>>
+====
+stem:["Longest-Path"(BT)] returns the path graph of stem:[BT] which is the
+longest among all paths in stem:[BT] and has the earliest block arrival time
+(<<defn-block-time>>). stem:["Deepest-Leaf"(BT)] returns the head of stem:["Longest-Path"(BT)] chain.
+====
+
+Because every block in the blockchain contains a reference to its parent, it is
+easy to see that the block tree is de facto a tree. A block tree naturally
+imposes partial order relationships on the blocks as follows:
+
+[#defn-descendant-ancestor]
+.<<defn-descendant-ancestor, Descendant and Ancestor>>
+====
+We say stem:[B] is *descendant* of stem:[B'], formally noted as stem:[B > B'],
+if stem:[(|B| > |B'|) in C]. Respectively, we say that stem:[B'] is an
+*ancestor* of stem:[B], formally noted as stem:[B < B'], if stem:[(|B| < |B'|)
+in C].
+====
+
 [#sect-state-replication]
-=== State Replication
+= State Replication
 
 Polkadot nodes replicate each other’s state by syncing the history of the
 extrinsics. This, however, is only practical if a large set of transactions are
@@ -11,7 +158,7 @@ inconsistency can occure between Polkadot replicas.
 node manages multiple variants of the state.
 
 [#sect-block-format]
-==== Block Format
+== Block Format
 :kaitai-imports: scale
 
 A Polkadot block consists a _block header_ (<<defn-block-header>>) and a _block
@@ -177,21 +324,6 @@ H_h(B) := "Blake2b"("Enc"_(SC)("Head"(B)))
 ++++
 ====
 
-[#sect-justified-block-header]
-===== Justified Block Header
-
-The Justified Block Header is provided by the consensus engine and
-presented to the Polkadot Host, for the block to be appended to the
-blockchain. It contains the following parts:
-
-* *block_header* the complete block header (<<defn-block-header>>) and denoted
-by stem:["Head"(B)].
-* *justification*: as defined by the consensus specification indicated by
-stem:["Just"(B)] as defined in <<defn-grandpa-justification>>.
-* *authority Ids*: This is the list of the Ids of authorities, which have voted
-for the block to be stored and is formally referred to as stem:[A(B)]. An
-authority Id is 256-bit.
-
 [#defn-block-body]
 .<<defn-block-body,Block Body>>
 ====
@@ -226,113 +358,4 @@ types:
         size: len_data.value
 ++++
 
-====
-
-[#sect-block-validation]
-==== Importing and Validating Block
-
-Block validation is the process by which a node asserts that a block is fit to
-be added to the blockchain. This means that the block is consistent with the
-current state of the system and transitions to a new valid state.
-
-New blocks can be received by the Polkadot Host via other peers
-(<<sect-msg-block-request>>) or from the Host’s own consensus engine
-(<<sect-block-production>>). Both the Runtime and the Polkadot Host then need to
-work together to assure block validity. A block is deemed valid if the block
-author had authorship rights for the slot in which the block was produce as well
-as if the transactions in the block constitute a valid transition of states. The
-former criterion is validated by the Polkadot Host according to the block
-production consensus protocol. The latter can be verified by the Polkadot Host
-invoking entry into the Runtime as (<<sect-rte-core-execute-block>>) as a part
-of the validation process. Any state changes created by this function on
-successful execution are persisted.
-
-The Polkadot Host implements <<algo-import-and-validate-block>> to assure the
-validity of the block.
-
-****
-.Import-and-Validate-Block
-[pseudocode#algo-import-and-validate-block]
-++++
-\require $B, \text{Just}(B)$
-
-\state \textsc{Set-Storage-State-At}$(P(B))$
-
-\if{$\text{Just}(B) \neq \emptyset$}
-
-    \state \textsc{Verify-Block-Justification}$(B, Just(B))$
-
-    \if{$B~\textbf{is}~\text{Finalized}~\textbf{and}~P(B)~\textbf{is not}~\text{Finalized}$}
-
-        \state \textsc{Mark-as-Final}$(P(B))$
-
-     \endif
-
-\endif
-
-\if{$H_p(B) \notin PBT$}
-
-    \return
-
-\endif
-
-\state \textsc{Verify-Authorship-Right}$(Head(B))$
-
-\state $B \leftarrow$ \textsc{Remove-Seal}$(B)$
-
-\state $R \leftarrow$ \textsc{Call-Runtime-Entry}$\left(\texttt{Core\_execute\_block}, B \right)$
-
-\state $B \leftarrow$ \textsc{Add-Seal}$(B)$
-
-\if{$R =$ \textsc{True}}
-
-    \state \textsc{Persist-State}$()$
-
-\endif
-++++
-
-where::
-* stem:["Remove-Seal"] removes the Seal digest from the block (<<defn-digest>>)
-before submitting it to the Runtime.
-* stem:["Add-Seal"] adds the Seal digest back to the block (<<defn-digest>>) for
-later propagation.
-* stem:["Persist-State"] implies the persistence of any state changes created by
-stem:[tt "Core_execute_block"] (<<sect-rte-core-execute-block>>) on successful
-execution.
-* stem:["PBT"] is the pruned block tree (<<defn-block-tree>>).
-* stem:["Verify-Authorship-Right"] is part of the block production consensus
-protocol and is described in <<algo-verify-authorship-right>>.
-* _Finalized block_ and _finality_ are defined in <<sect-finality>>.
-****
-
-[#sect-managing-multiple-states]
-==== Managaing Multiple Variants of State
-
-Unless a node is committed to only update its state according to the finalized
-block (<<defn-finalized-block>>), it is inevitable for the node to store
-multiple variants of the state (one for each block). This is, for example,
-necessary for nodes participating in the block production and finalization.
-
-While the state trie structure (<<sect-state-storage-trie-structure>>)
-facilitates and optimizes storing and switching between multiple variants of the
-state storage, the Polkadot Host does not specify how a node is required to
-accomplish this task. Instead, the Polkadot Host is required to implement
-stem:["Set-State-At"] (<<defn-set-state-at>>):
-
-[#defn-set-state-at]
-.<<defn-set-state-at,Set State At Block>>
-====
-The function:
-
-[stem]
-++++
-"Set-State-At"(B)
-++++
-
-in which stem:[B] is a block in the block tree (<<defn-block-tree>>), sets the
-content of state storage equal to the resulting state of executing all
-extrinsics contained in the branch of the block tree from genesis till block B
-including those recorded in Block stem:[B].
-
-For the definition of the state storage see <<sect-state-storage>>.
 ====

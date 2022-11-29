@@ -1,5 +1,5 @@
 = Polkadot Protocol Specification
-Web 3.0 Technologies Foundation; Fabio Lama; Florian Franzen; Syed Hosseini
+Web 3.0 Technologies Foundation
 v0.2.1
 :compress:
 :description: The Official Polkadot and Kusama Protocol Specification
@@ -11,11 +11,14 @@ v0.2.1
 :icons: font
 :keywords: babe, blockchain, consensus, finality, grandpa, kusama, parachain, polkadot, relay-chain, runtime, spec, web3, w3f
 :mathematical-format: svg
+:idprefix: id-
+:idseparator: -
 :imagesdir: figures
 :optimize:
 :sectlinks:
 :sectnums:
 :sectnumlevels: 4
+:sectanchors:
 :source-highlighter: rouge
 :stem:
 :stylesheet: style.css
@@ -24,8 +27,8 @@ v0.2.1
 :webfonts: Work+Sans:ital,wght@0,300;1,700
 :xrefstyle: short
 
-WARNING: This specification is *Work-In-Progress* and any content, structure,
-design and/or hyper/anchor-link *is subject to change*.
+// Preface of the document
+include::00_preface.adoc[]
 
 // Main parts of the spec
 include::01_host/_part.adoc[]

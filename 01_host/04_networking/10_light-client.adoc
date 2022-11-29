@@ -1,5 +1,5 @@
 [#sect-light-msg]
-=== Light Client Messages
+= Light Client Messages
 
 Light clients are applications that fetch the required data that they need from
 a Polkadot node with an associated proof to validate the data. This makes it
@@ -10,7 +10,7 @@ functionality possible.
 All light client messages are protobuf encoded and are sent over the
 `/dot/light/2` substream.
 
-==== Request
+== Request
 
 A message with all possible request messages. All message are sent as part of
 this message.
@@ -43,7 +43,7 @@ Where the `request` can be one of the following fields:
 |A remote read child request (<<sect-light-remote-read-child-request>>)
 |===
 
-==== Response
+== Response
 
 A message with all possible response messages. All message are sent as part of
 this message.
@@ -72,7 +72,7 @@ Where the `response` can be one of the following fields:
 |A remote read response (<<sect-light-remote-read-response>>)
 |===
 
-==== Remote Call Messages
+== Remote Call Messages
 
 Execute a call to a contract at the given block.
 
@@ -114,7 +114,7 @@ Remote call response.
 |===
 ====
 
-==== Remote Read Messages
+== Remote Read Messages
 
 Read a storage value at the given block.
 
@@ -152,7 +152,7 @@ Remote read response.
 |===
 ====
 
-==== Remote Read Child Messages
+== Remote Read Child Messages
 
 Read a child storage value at the given block.
 

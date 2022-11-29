@@ -1,0 +1,49 @@
+[#chap-overview]
+= Overview
+The Polkadot Protocol differentiates between different classes of Polkadot Hosts. Each class differs in their trust roots and how active or passivly the interact with the network.
+
+Light clients base their trust in provided snapshots and the ability to slash grandpa votes for equivocation for the period they are syncing via warp sync. Full nodes and above in contrast verify each block indvidually.
+
+[#sect-client-light]
+== Light Client
+
+The light client is a mostly passive participant in the protocol. It does not execute blocks, but relies on snapshots and warp sync to reach the head of the chain.
+
+[#sect-node-full]
+== Full Node
+
+While the full node is still a mostly passive participant of the protocol, it receives and verifies every block in the chain.
+
+The following steps should be taken to bootstrap a full node:
+
+. The node must populate the state storage with the official genesis state,
+clarified further in <<chapter-genesis>>.
+. The node should maintain a set of around 50 active peers at any time. New
+peers can be found using the discovery protocols (<<sect-discovery-mechanism>>)
+. The node should open and maintain the various required streams
+(<<sect-protocols-substreams>>) with each of its active peers.
+. Furthermore, the node should send block requests (<<sect-msg-block-request>>)
+to these peers to receive all blocks in the chain and execute each of them.
+. The node should exchange neighbor packets (<<sect-grandpa-neighbor-msg>>).
+
+[#sect-node-authoring]
+== Authoring Node
+
+The authoring node covers all the features of the full node but instead of just passivly following the protocol, it is an active participant, producing blocks and voting in Grandpa.
+
+In detail it executes the following steps:
+
+. Verify that the Host’s session key is included in the current Epoch’s
+authority set (<<sect-authority-set>>).
+. Run the BABE lottery (<<sect-block-production>>) and wait for the next
+assigned slot in order to produce a block.
+. Gossip any produced blocks to all connected peers
+(<<sect-msg-block-announce>>).
+. Run the catch-up protocol (<<sect-grandpa-catchup>>) to make sure that the
+node is participating in the current round and not a past round.
+. Run the GRANDPA rounds protocol (<<sect-finality>>).
+
+[#sect-node-relaying]
+== Relaying Node
+
+The relaying node covers all the features of the authoring node, but also participants in the availability and validity process to process new parachain blocks as described in <<chapter-anv>>.
