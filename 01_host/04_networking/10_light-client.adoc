@@ -8,7 +8,7 @@ node or having to trust the remote peers. The light client messages make this
 functionality possible.
 
 All light client messages are protobuf encoded and are sent over the
-`/dot/light/2` substream.
+`/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/light/2` substream.
 
 ==== Request
 
@@ -87,7 +87,7 @@ Remote call request.
 
 |`bytes`
 |2
-|Block at which to perform call
+|Hash of the header of the block at which to perform call
 
 |`string`
 |3
@@ -95,7 +95,7 @@ Remote call request.
 
 |`bytes`
 |4
-|Call data
+|Call data, corresponding to `A` in Algorithm 2 of section 3.1.
 |===
 ====
 
@@ -110,7 +110,7 @@ Remote call response.
 
 |`bytes`
 |2
-|An _Option_ type (<<defn-option-type>>) containing the call proof or _None_ if proof generation failed.
+|Merkle proof of the storage items accessed by the call, as defined in section 2.1.4. The field is missing if the request can't be answered because the call failed or the block is inaccessible.
 |===
 ====
 
@@ -129,11 +129,11 @@ Remote read request.
 
 |`bytes`
 |2
-|Block at which to perform call
+|Hash of the header of the block at which to read the storage
 
 |`repeated bytes`
 |3
-|Storage keys
+|List of storage keys to query
 |===
 ====
 
@@ -148,7 +148,7 @@ Remote read response.
 
 |`bytes`
 |2
-|An _Option_ type (<<defn-option-type>>) containing the read proof or _None_ if proof generation failed.
+|Merkle proof of the requested storage items, as defined in section 2.1.4. The field is missing if the request can't be answered because the block is inaccessible.
 |===
 ====
 
@@ -167,15 +167,15 @@ Remote read child request.
 
 |`bytes`
 |2
-|Block at which to perform call
+|Hash of the header of the block at which to read the storage
 
 |`bytes`
 |3
 |Child storage key, this is relative to the child type storage location
 
-|`bytes`
+|`repeated bytes`
 |6
-|Storage keys
+|List of storage keys to query
 |===
 ====
 
