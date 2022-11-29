@@ -1,5 +1,5 @@
 [appendix]
-= Additional information
+= Cryptography & Encoding
 Appendix chapter containing various protocol details
 
 include::01_crypto-algos.adoc[]

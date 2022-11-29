@@ -1,4 +1,5 @@
-= Runtime Specification
+[#part-polkadot-runtime]
+= Polkadot Runtime
 Description of various useful Runtime internals
 
 include::07-extrinsics.adoc[]

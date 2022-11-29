@@ -1,5 +1,5 @@
 [#sect-network-messages]
-=== Network Messages
+= Network Messages
 
 The Polkadot Host must actively communicate with the network in order to
 participate in the validation process or act as a full node.
@@ -10,7 +10,7 @@ of each listed message is always SCALE encoded unless Protobuf is explicitly
 mentioned. Encoding and message formats are subject to change.
 
 [#sect-msg-block-announce]
-==== Announcing blocks
+== Announcing blocks
 
 When the node creates or receives a new block, it must be announced to the
 network. Other nodes within the network will track this announcement and can
@@ -69,7 +69,7 @@ b = {(0,"Is not part of the best chain"),(1,"Is the best block according to the 
 ====
 
 [#sect-msg-block-request]
-==== Requesting Blocks
+== Requesting Blocks
 Block requests can be used to retrieve a range of blocks from peers. Those
 messages are sent over the `/dot/sync/2` substream.
 
@@ -216,7 +216,7 @@ requested fields (bitmask value). The structure has the following format:
 ====
 
 [#sect-msg-state-request]
-==== Requesting States
+== Requesting States
 
 The Polkadot Host can request the state in form of a key/value list at a
 specified block.
@@ -229,7 +229,7 @@ message claims that all entries have been sent (id _3_ in _KeyValueStorage_),
 the node can use all collected entry proofs and validate it against the merkle
 root to confirm that claim.
 
-See the the synchronization section for more information (<<sect-network-sync>>).
+See the the synchronization chapter for more information (<<chap-sync>>).
 
 [#defn-msg-state-request]
 .<<defn-msg-state-request, State Request>>
@@ -300,13 +300,13 @@ and _StateEntry_:
 ====
 
 [#sect-msg-warp-sync]
-==== Warp Sync
+== Warp Sync
 
 The warp sync protocols allows nodes to retrieve blocks from remote peers where
 authority set changes occurred. This can be used to speed up synchronization to
 the latest state.
 
-See the the synchronization section for more information (<<sect-network-sync>>).
+See the the synchronization chapter for more information (<<chap-sync>>).
 
 [#defn-warp-sync-proof]
 .<<defn-warp-sync-proof,Warp Sync Proof>>
@@ -337,7 +337,7 @@ indicates whether the warp sync has been completed.
 ====
 
 [#sect-msg-transactions]
-==== Transactions
+== Transactions
 
 Transactions (<<sect-extrinsics>>) are sent directly to peers with which the
 Polkadot Host has an open transaction substream (<<defn-transactions-message>>).
@@ -375,7 +375,7 @@ Transactions are sent over the `/dot/transactions/1` substream.
 ====
 
 [#sect-msg-grandpa]
-==== GRANDPA Messages
+== GRANDPA Messages
 
 The exchange of GRANDPA messages is conducted on the substream. The process for
 the creation and distributing these messages is described in <<sect-finality>>.
@@ -475,7 +475,7 @@ This message is the sub-component of the GRANDPA gossip message
 ====
 
 [#sect-grandpa-neighbor-msg]
-===== GRANDPA Neighbor Messages
+=== GRANDPA Neighbor Messages
 
 Neighbor messages are sent to all connected peers but they are not
 repropagated on reception. A message should be send whenever the
@@ -507,7 +507,7 @@ This message is the sub-component of the GRANDPA gossip message
 ====
 
 [#sect-grandpa-catchup-messages]
-===== GRANDPA Catch-up Messages
+=== GRANDPA Catch-up Messages
 
 Whenever a Polkadot node detects that it is lagging behind the finality
 procedure, it needs to initiate a _catch-up_ procedure. GRANDPA Neighbor
@@ -564,7 +564,7 @@ This message is the sub-component of the GRANDPA Gossip message
 ====
 
 [#sect-msg-grandpa-beefy]
-==== GRANDPA BEEFY
+== GRANDPA BEEFY
 WARNING: The BEEFY protocol is currently in early development and subject to
 change.
 
@@ -669,54 +669,3 @@ map public keys to their corresponding boolean indicators.
 * stem:[R_("sig")] is the MMR root of the signatures in the original signed
 BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>).
 ====
-
-[#sect-network-sync]
-=== Synchronization
-
-IMPORTANT: Synchronization is mostly application specific and the protocol does not
-mandate how synchronization must be conducted. The network messages are
-specified in <<sect-network-messages>>. This section makes some recommendations
-how a synchronization mechanism can be constructed.
-
-Many applications that interact with the Polkadot network to some extent must be
-able to retrieve certain information about the network. Depending on the
-utility, this includes validators that interact with Polkadot's consensus and
-need access to the full state, either from the past or just the most up-to-date
-state, or light clients that are only interest in the minimum information
-required in order to verify some claims about the state of the network, such as
-the balance of a specific account. To allow implemenations to quickly retrieve
-the required information, different types of synchronization protocols are
-available, respectivel Full, Fast and Warp sync suited for different needs.
-
-==== Full Sync
-
-The full sync protocols is the "default" protocol that's suited for many types
-of implementations, such as archive nodes (nodes that store everything),
-validators that participate in Polkadots consensus and light clients that only
-verify claims about the state of the network. Full sync works by listening to
-announced blocks (<<sect-msg-block-announce>>) and requesting the blocks from
-the announcing peers, or just the block headers in case of light clients.
-
-The full sync protocol usually downloads the entire chain, but no such
-requirements must be met. If an implemenation only wants the latest, finalized
-state, it can combine it with protocols such as fast sync (<<sect-fast-sync>>)
-and/or warp sync (<<sect-warp-sync>>) to make synchronization as fast as
-possible.
-
-[#sect-fast-sync]
-==== Fast Sync
-
-Fast sync works by downloading the block header history and validating the
-auhtority set changes (<<sect-authority-set>>) in order to arrive at a specific
-(usually the most recent) header. After the desired header has been reached and
-verified, the state can be downloaded and imported (<<sect-msg-state-request>>).
-Once this process has been completed, the node can proceed with a full sync.
-
-[#sect-warp-sync]
-==== Warp Sync
-
-Warp sync (<<sect-msg-warp-sync>>) only downloads the block headers where
-authority set changes occurred, so called fragments (<<defn-warp-sync-proof>>),
-and by verifying the GRANDPA justifications (<<defn-grandpa-justification>>).
-This protocols allows nodes to arrive at the desired state much faster than fast
-sync.

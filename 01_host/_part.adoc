@@ -1,14 +1,18 @@
-= Host Specification
-Description of the Host-side of the Polkadot Protocol
+[#part-polkadot-host]
+= Polkadot Host
 
-include::01_background/_chapter.adoc[]
+include::00_preface.adoc[]
+
+include::01_overview.adoc[leveloffset=1]
 
 include::02_state/_chapter.adoc[]
 
-include::03_transition/_chapter.adoc[]
+include::03_sync/_chapter.adoc[]
 
 include::04_networking/_chapter.adoc[]
 
-include::05_consensus/_chapter.adoc[]
+include::05_authorship/_chapter.adoc[]
 
-include::06_anv/_chapter.adoc[]
+include::06_finality/_chapter.adoc[]
+
+include::07_anv/_chapter.adoc[]

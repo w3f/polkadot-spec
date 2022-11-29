@@ -1,12 +1,12 @@
 [#sect-extrinsics]
-=== Extrinsics
+= Extrinsics
 
 The block body consists of an array of extrinsics. In a broad sense,
 extrinsics are data from outside of the state which can trigger state
 transitions. This section describes extrinsics and their inclusion into
 blocks.
 
-==== Preliminaries
+== Preliminaries
 
 The extrinsics are divided into two main categories defined as follows:
 
@@ -21,7 +21,7 @@ those are defined and dealt with by the Runtime (<<defn-state-machine>>). From t
 Polkadot Host point of view, each extrinsics is simply a SCALE-encoded blob
 (<<sect-scale-codec>>).
 
-==== Transactions
+== Transactions
 
 Transaction are submitted and exchanged through _Transactions_ network messages
 (<<sect-msg-transactions>>). Upon receiving a Transactions message, the Polkadot
@@ -140,7 +140,7 @@ NOTE: This has not been defined yet.
 ****
 
 [#sect-inherents]
-==== Inherents
+== Inherents
 
 Inherents are unsigned extrinsics inserted into a block by the block author and
 as a result are not stored in the transaction pool or gossiped across the

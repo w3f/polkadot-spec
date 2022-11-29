@@ -1,3 +1,9 @@
+[preface]
+= Polkadot Protocol
+
+WARNING: This specification is *Work-In-Progress* and any content, structure,
+design and/or hyper/anchor-link *is subject to change*.
+
 Formally, Polkadot is a replicated sharded state machine designed to
 resolve the scalability and interoperability among blockchains. In
 Polkadot vocabulary, shards are called _parachains_ and Polkadot _relay
@@ -8,7 +14,7 @@ machine on its own. As such, the protocol can be specified by
 identifying the state machine and the replication strategy.
 
 From a more technical point of view, the Polkadot protocol has been divided into
-two parts, the _Runtime_ and the _Host_. The Runtime comprises the state
+two parts, the <<part-polkadot-runtime>> and the <<part-polkadot-host>>. The Runtime comprises the state
 transition logic for the Polkadot protocol and is designed and be upgradable via
 the consensus engine without requiring hard forks of the blockchain. The
 Polkadot Host provides the necessary functionality for the Runtime to execute
@@ -18,20 +24,3 @@ stable and mostly static for the lifetime duration of the Polkadot protocol, the
 goal being that most changes to the protocol are primarily conducted by applying
 Runtime updates and not having to coordinate with network participants on manual
 software updates.
-
-With the current document, we aim to specify the Polkadot Host part of the
-Polkadot protocol as a replicated state machine. After defining the basic terms
-in Chapter 1, we proceed to specify the representation of a valid state of the
-Protocol in <<chap-state-spec>>. In <<chap-state-transit>>, we identify the
-protocol states, by explaining the Polkadot state transition and discussing the
-detail based on which the Polkadot Host interacts with the state transition
-function, i.e. Runtime. Following, we specify the input messages triggering the
-state transition and the system behavior. In <<chap-networking>>, we specify
-the communication protocols and network messages required for the Polkadot Host
-to communicate with other nodes in the network, such as exchanging blocks and
-consensus messages. In <<chap-consensus>>, we specify the consensus protocol,
-which is responsible for keeping all the replica in the same state. Finally, the
-initial state of the machine is identified and discussed in <<chapter-genesis>>.
-A Polkadot Host implementation which conforms with this part of the
-specification should successfully be able to sync its states with the Polkadot
-network.

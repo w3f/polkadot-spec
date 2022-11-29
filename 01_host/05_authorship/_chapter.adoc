@@ -1,0 +1,20 @@
+[#sect-block-production]
+== Block Production
+
+:leveloffset: +2
+
+include::01_introduction.adoc[]
+
+include::02_lottery.adoc[]
+
+include::03_slot-number.adoc[]
+
+include::04_production.adoc[]
+
+include::05_randomness.adoc[]
+
+include::06_verification.adoc[]
+
+include::07_process.adoc[]
+
+:leveloffset: 0
