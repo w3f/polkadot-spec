@@ -1,5 +1,5 @@
 [#sect-state-storage]
-=== State Storage and Storage Trie
+= State Storage Trie
 
 For storing the state of the system, Polkadot Host implements a hash table
 storage where the keys are used to access each data entry. There is no
@@ -9,7 +9,7 @@ limits on their length. The limit is imposed by the encoding algorithms to store
 the key and the value in the storage trie
 (<<sect-sc-length-and-compact-encoding>>).
 
-==== Accessing System Storage 
+== Accessing System Storage 
 
 The Polkadot Host implements various functions to facilitate access to the
 system storage for the Runtime (<<sect-entrypoints-into-runtime>>). Here we
@@ -32,7 +32,7 @@ where stem:[cc K sub bbb B] and stem:[cc V sub bbb B] are respectively the set o
 keys and values stored in the state storage. stem:[cc V] can be an empty value.
 ====
 
-==== The General Tree Structure
+== General Structure
 
 In order to ensure the integrity of the state of the system, the stored data
 needs to be re-arranged and hashed in a _radix tree_, which
@@ -112,7 +112,7 @@ By looking at stem:[k_("enc")] as a sequence of nibbles, one can walk the radix
 tree to reach the node identifying the storage value of stem:[k].
 
 [#sect-state-storage-trie-structure]
-==== Trie Structure
+== Trie Structure
 
 In this subsection, we specify the structure of the nodes in the trie as
 well as the trie structure:
@@ -299,7 +299,7 @@ that stem:[p_l] can hold.
 ====
 
 [#sect-merkl-proof]
-==== Merkle Proof
+== Merkle Proof
 
 To prove the consistency of the state storage across the network and its
 modifications both efficiently and effectively, the trie implements a
@@ -399,4 +399,36 @@ H(N): {(v_N,||v_N|| < 32 " and " N != R),("Blake2b"(v_n),||v_N|| >= 32 " or " N 
 Where stem:[v_N] is the node value of stem:[N] (<<defn-node-value>>) and
 stem:[R] is the root of the trie. The *Merkle hash* of the trie is defined to be
 latexmath:[H(R)].
+====
+
+[#sect-managing-multiple-states]
+== Managing Multiple Variants of State
+
+Unless a node is committed to only update its state according to the finalized
+block (<<defn-finalized-block>>), it is inevitable for the node to store
+multiple variants of the state (one for each block). This is, for example,
+necessary for nodes participating in the block production and finalization.
+
+While the state trie structure (<<sect-state-storage-trie-structure>>)
+facilitates and optimizes storing and switching between multiple variants of the
+state storage, the Polkadot Host does not specify how a node is required to
+accomplish this task. Instead, the Polkadot Host is required to implement
+stem:["Set-State-At"] (<<defn-set-state-at>>):
+
+[#defn-set-state-at]
+.<<defn-set-state-at,Set State At Block>>
+====
+The function:
+
+[stem]
+++++
+"Set-State-At"(B)
+++++
+
+in which stem:[B] is a block in the block tree (<<defn-block-tree>>), sets the
+content of state storage equal to the resulting state of executing all
+extrinsics contained in the branch of the block tree from genesis till block B
+including those recorded in Block stem:[B].
+
+For the definition of the state storage see <<sect-state-storage>>.
 ====

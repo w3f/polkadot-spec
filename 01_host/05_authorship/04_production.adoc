@@ -1,0 +1,98 @@
+[#block-production]
+= Production Algorithm
+Throughout each epoch, each block producer should run <<algo-block-production>>
+to produce blocks during the slots it has been awarded during that epoch. The
+produced block needs to carry the _Pre-Digest_ (<<defn-babe-header>>) as well
+as the _block signature_ (<<defn-block-signature>>) as Pre-Runtime and Seal
+digest items.
+
+[#defn-babe-header]
+.<<defn-babe-header, Pre-Digest>>
+====
+The *Pre-Digest*, or BABE header, stem:[P], is a varying datatype of the
+following format:
+
+[stem]
+++++
+P = {(1,->,(a_"id",s,o,p)),(2,->,(a_"id",s)),(3,->,(a_"id",s,o,p)):}
+++++
+
+where::
+* _1_ indicates a primary slot with VRF outputs, _2_ a secondary slot with plain
+outputs and _3_ a secondary slot with VRF outputs
+(<<sect-block-production-lottery>>). Plain outputs are no longer actively used
+and only exist for backwards compatibility reasons, respectively to sync old
+blocks.
+* stem:[a_"id"] is the unsigned 32-bit integer indicating the index of the
+authority in the authority set (<<sect-authority-set>>) who authored the
+block.
+* stem:[s] is the slot number (<<defn-epoch-slot>>).
+* stem:[o] is VRF output (<<algo-block-production-lottery>> respectively
+<<defn-babe-secondary-slots>>).
+* stem:[p] is VRF proof (<<algo-block-production-lottery>> respectively
+<<defn-babe-secondary-slots>>).
+
+The Pre-Digest must be included as a digest item of Pre-Runtime type in the
+header digest (<<defn-digest>>) stem:[H_d(B)].
+====
+
+****
+[pseudocode#algo-block-production]
+.Invoke-Block-Authoring
+++++
+\require $sk, pk, n, BT$
+
+\state $A \leftarrow$ \textsc{Block-production-lottery}$(sk, n)$
+
+\for{$s \leftarrow 1 ~\textbf{to}~ sc_n$}
+
+    \state \textsc{Wait-Until}$($\textsc{Slot-Time}$(s))$
+
+    \state $(d, \pi) \leftarrow A[s]$
+
+    \if{$d < \tau$}
+
+       \state $C_{Best} \leftarrow$ \textsc{Longest-Chain}$(BT)$
+
+       \state $B_s \leftarrow$ \textsc{Build-Block}$(C_{Best})$
+
+       \state \textsc{Add-Digest-Item}$(B_s,\text{Pre-Runtime}, E_{id}(\text{BABE}), H_\text{BABE}(B_s))$
+
+       \state \textsc{Add-Digest-Item}$(B_s, \text{Seal}, S_B)$
+
+       \state \textsc{Broadcast-Block}$(B_s)$
+
+    \endif
+
+\endfor
+++++
+
+where stem:["BT"] is the current block tree, stem:["Block-Production-Lottery"]
+is defined in <<algo-block-production-lottery>> and stem:["Add-Digest-Item"]
+appends a digest item to the end of the header digest stem:[H_d(B)]
+(<<defn-digest>>).
+****
+
+[#defn-block-signature]
+.<<defn-block-signature, Block Signature>>
+====
+The *Block Signature* stem:[S_B] is a signature of the block header hash
+(<<defn-block-header-hash>>) and defined as
+
+[stem]
+++++
+"Sig"_("SR25519","sk"_j^s)(H_h(B))
+++++
+
+stem:[S_B] should be included in stem:[H_d(B)] as the Seal digest item
+(<<defn-digest>>) of value:
+
+[stem]
+++++
+(E_"id"("BABE"),S_B)
+++++
+
+in which, stem:[E_"id"("BABE")] is the BABE consensus engine unique identifier
+(<<defn-consensus-message-digest>>). The Seal digest item is referred to as the
+*BABE Seal*.
+====

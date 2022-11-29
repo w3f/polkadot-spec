@@ -1,0 +1,8 @@
+[#sect-sync-fast]
+= Fast Sync
+
+Fast sync works by downloading the block header history and validating the
+auhtority set changes (<<sect-authority-set>>) in order to arrive at a specific
+(usually the most recent) header. After the desired header has been reached and
+verified, the state can be downloaded and imported (<<sect-msg-state-request>>).
+Once this process has been completed, the node can proceed with a full sync.

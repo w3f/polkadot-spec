@@ -1,0 +1,56 @@
+= Initiating the GRANDPA State
+
+In order to participate coherently in the voting process, a validator must
+initiate its state and sync it with other active validators. In particular,
+considering that voting is happening in different distinct rounds where each
+round of voting is assigned a unique sequential round number stem:[r_v], it
+needs to determine and set its round counter stem:[r] equal to the voting round
+stem:[r_n] currently undergoing in the network. The mandated initialization
+procedure for the GRANDPA protocol for a joining validator is described in
+detail in <<algo-initiate-grandpa>>.
+
+The process of joining a new voter set is different from the one of rejoining
+the current voter set after a network disconnect. The details of this
+distinction are described further in this section.
+
+== Voter Set Changes
+
+A GRANDPA voter node which is initiating GRANDPA protocol as part of joining a
+new authority set is required to execute <<algo-initiate-grandpa>>. The
+algorithm mandates the initialization procedure for GRANDPA protocol.
+
+NOTE: The GRANDPA round number reset to 0 for every authority set change.
+
+Voter set changes are signaled by Runtime via a consensus engine message
+(<<sect-consensus-message-digest>>). When Authorities process such messages they
+must not vote on any block with a higher number than the block at which the
+change is supposed to happen. The new authority set should reinitiate GRANDPA
+protocol by executing <<algo-initiate-grandpa>>.
+
+****
+.Initiate-Grandpa
+[pseudocode#algo-initiate-grandpa]
+++++
+\input $r_{last}, B_{last}$
+
+\state \textsc{Last-Finalized-Block} $\leftarrow B_{last}$
+
+\state \textsc{Best-Final-Candidate}(0) $\leftarrow B_{last}$
+
+\state \textsc{GRANDPA-GHOST}$(0) \leftarrow B_{last}$
+
+\state \textsc{Last-Completed-Round} $\leftarrow 0$
+
+\state $r_n \leftarrow 1$
+
+\state \textsc{Play-Grandpa-round}$(r_n)$
+++++
+
+where stem:[B_("last")] is the last block which has been finalized on the chain
+(<<defn-finalized-block>>). stem:[r_("last")] is equal to the latest round the
+voter has observed that other voters are voting on. The voter obtains this
+information through various gossiped messages including those mentioned in
+<<defn-finalized-block>>. stem:[r_("last")] is set to _0_ if the GRANDPA node is
+initiating the GRANDPA voting process as a part of a new authority set. This is
+because the GRANDPA round number resets to _0_ for every authority set change.
+****

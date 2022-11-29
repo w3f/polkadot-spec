@@ -1,0 +1,126 @@
+= Introduction
+
+The Polkadot Host uses BABE protocol for block production. It is designed based
+on Ouroboros praos . BABE execution happens in sequential non-overlapping phases
+known as an *_epoch_*. Each epoch on its turn is divided into a predefined
+number of slots. All slots in each epoch are sequentially indexed starting from
+0. At the beginning of each epoch, the BABE node needs to run
+<<algo-block-production-lottery>> to find out in which slots it
+should produce a block and gossip to the other block producers. In turn, the
+block producer node should keep a copy of the block tree and grow it as it
+receives valid blocks from other block producers. A block producer prunes the
+tree in parallel by eliminating branches that do not include the most recent
+finalized blocks (<<defn-pruned-tree>>).
+
+== Block Producer
+A *block producer*, noted by stem:[cc P_j], is a node running the Polkadot
+Host which is authorized to keep a transaction queue and which it gets a turn in
+producing blocks.
+
+== Block Authoring Session Key Pair
+*Block authoring session key pair* stem:[(sk_j^s,pk_j^s)] is an SR25519 key pair
+which the block producer stem:[cc P_j] signs by their account key
+(<<defn-account-key>>) and is used to sign the produced block as well as to
+compute its lottery values in <<algo-block-production-lottery>>.
+
+[#defn-epoch-slot]
+.<<defn-epoch-slot, Epoch and Slot>>
+====
+A block production *epoch*, formally referred to as stem:[cc E], is a
+period with a pre-known starting time and fixed-length during which the set of
+block producers stays constant. Epochs are indexed sequentially, and we refer to
+the stem:[n^(th)] epoch since genesis by stem:[cc E_n]. Each epoch is divided
+into equal-length periods known as block production *slots*, sequentially
+indexed in each epoch. The index of each slot is called a *slot number*. The
+equal length duration of each slot is called the *slot duration* and indicated
+by stem:[cc T]. Each slot is awarded to a subset of block producers during
+which they are allowed to generate a block.
+
+NOTE: Substrate refers to an epoch as "session" in some places, however,
+epoch should be the preferred and official name for these periods.
+====
+
+[#defn-epoch-duration]
+.<<defn-epoch-duration, Epoch and Slot Duration>>
+====
+We refer to the number of slots in epoch stem:[cc E_n] by stem:[sc_n].
+stem:[sc_n] is set to the `duration` field in the returned data from the call of
+the Runtime entry `BabeApi_configuration` (<<sect-rte-babeapi-epoch>>) at
+genesis. For a given block stem:[B], we use the notation *latexmath:[$s_B$]* to
+refer to the slot during which stem:[B] has been produced. Conversely, for slot
+stem:[s], stem:[cc B_c] is the set of Blocks generated at slot stem:[s].
+
+<<defn-epoch-subchain>> provides an iterator over the blocks produced during a
+specific epoch.
+====
+
+[#defn-epoch-subchain]
+.<<defn-epoch-subchain, Epoch Subchain>>
+====
+By stem:["SubChain"(cc E_n]) for epoch stem:[cc E_n], we refer to the path
+graph of stem:[BT] containing all the blocks generated during the slots of epoch
+stem:[cc E_n]. When there is more than one block generated at a slot, we
+choose the one which is also on stem:["Longest-Chain"(BT)].
+====
+
+[#defn-equivovation]
+.<<defn-equivocation, Equivocation>>
+====
+A block producer *equivocates* if they produce more than one block at the same
+slot. The proof of equivocation are the given distinct headers that were signed
+by the validator and which include the slot number.
+
+The Polkadot Host must detect equivocations committed by other validators and
+submit those to the Runtime as described in
+<<sect-babeapi_submit_report_equivocation_unsigned_extrinsic>>.
+====
+
+[#defn-consensus-message-babe]
+.<<defn-consensus-message-babe, BABE Consensus Message>>
+====
+stem:["CM"_b], the consensus message for BABE, is of the following format:
+
+[stem]
+++++
+"CM"_b = {(1,("Auth"_C, r)),(2,A_i),(3,D):}
+++++
+
+where::
+[horizontal]
+1:: implies *next epoch data*: The Runtime issues this message on every first
+block of an epoch. The supplied authority set (<<defn-authority-list>>),
+stem:["Auth"_C], and randomness (<<defn-epoch-randomness>>), stem:[r], are used
+in the next epoch stem:[cc E_n + 1].
+2:: implies *on disabled*: A 32-bit integer, stem:[A_i], indicating the
+individual authority in the current authority list that should be immediately
+disabled until the next authority set changes. This message initial intension
+was to cause an immediate suspension of all authority functionality with the
+specified authority.
+3:: implies *next epoch descriptor*: These messages are only issued on
+configuration change and in the first block of an epoch. The supplied
+configuration data are intended to be used from the next epoch onwards.
++
+* stem:[D] is a varying datatype of the following format:
++
+[stem]
+++++
+D = {(1, (c,2_("nd"))):}
+++++
++
+where stem:[c] is the probability that a slot will not be empty
+(<<defn-babe-constant>>). It is encoded as a tuple of two unsigned 64-bit
+integers stem:[(c_("nominator"),c_("denominator"))] which are used to compute
+the rational stem:[c = c_("nominator")/c_("denominator")].
+
+* stem:[2_("nd")] describes what secondary slot (<<defn-babe-secondary-slots>>),
+if any, is to be used. It is encoded as one-byte varying datatype:
++
+[stem]
+++++
+s_"2nd" = {
+	(0,->,"no secondary slot"),
+	(1,->,"plain secondary slot"),
+	(2,->,"secondary slot with VRF output")
+:}
+++++
+====

@@ -7,8 +7,12 @@ deviation from the current Polkadot network protocol. This can be done through
 filing an issue in https://github.com/w3f/polkadot-spec[Polkadot Specification
 repository].
 
+:leveloffset: +2
+
 include::01_fundamentals.adoc[]
 
 include::08_messages.adoc[]
 
 include::10_light-client.adoc[]
+
+:leveloffset: 0

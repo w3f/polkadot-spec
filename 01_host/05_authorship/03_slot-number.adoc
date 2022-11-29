@@ -1,0 +1,144 @@
+[#sect-slot-number-calculation]
+= Slot Number Calculation
+
+It is imperative for the security of the network that each block producer
+correctly determines the current slot numbers at a given time by regularly
+estimating the local clock offset in relation to the network
+(<<defn-relative-synchronization>>).
+
+****
+IMPORTANT: *The calculation described in this section is still to be implemented and
+deployed*: For now, each block producer is required to synchronize its local
+clock using NTP instead. The current slot stem:[s] is then calculated by stem:[s
+= t_"unix"/cc T] where stem:[cc T] is defined in <<defn-epoch-slot>> and
+stem:[t_"unix"] is defined in <<defn-unix-time>>. That also entails that slot
+numbers are currently not reset at the beginning of each epoch.
+****
+
+Polkadot does this synchronization without relying on any external clock source
+(e.g. through the or the ). To stay in synchronization, each producer is
+therefore required to periodically estimate its local clock offset in relation
+to the rest of the network.
+
+This estimation depends on the two fixed parameters stem:[k]
+(<<defn-prunned-best>>) and stem:[s_(cq)] (<<defn-chain-quality>>). These are
+chosen based on the results of a
+https://research.web3.foundation/en/latest/polkadot/block-production/Babe.html#-5.-security-analysis[formal
+security analysis], currently assuming a stem:[1 s] clock drift per day and
+targeting a probability lower than stem:[0.5%] for an adversary to break BABE in
+3 years with resistance against a network delay up to stem:[1 / 3] of the slot
+time and a Babe constant (<<defn-babe-constant>>) of stem:[c = 0.38].
+
+All validators are then required to run <<algo-slot-time>> at the beginning of
+each sync period (<<defn-sync-period>>) to update their synchronization using
+all block arrival times of the previous period. The algorithm should only be
+run once all the blocks in this period have been finalized, even if only
+probabilistically (<<defn-prunned-best>>). The target slot to which to
+synchronize should be the first slot in the new sync period.
+
+[#defn-slot-offset]
+.<<defn-slot-offset, Slot Offset>>
+====
+Let stem:[s_i] and stem:[s_j] be two slots belonging to epochs stem:[cc E_k]
+and stem:[cc E_l]. By *Slot-Offset*stem:[(s_i,s_j)] we refer to the function
+whose value is equal to the number of slots between stem:[s_i] and stem:[s_j]
+(counting stem:[s_j]) on the time continuum. As such, we have
+*Slot-Offset*stem:[(s_i, s_i) = 0].
+====
+
+It is imperative for the security of the network that each block producer
+correctly determines the current slot numbers at a given time by regularly
+estimating the local clock offset in relation to the network
+(<<defn-relative-synchronization>>).
+
+[#defn-relative-synchronization]
+.<<defn-relative-synchronization, Relative Time Synchronization>>
+====
+The *relative time synchronization* is a tuple of a slot number and a local
+clock timestamp stem:[(s_"sync",t_"sync")] describing the last point at
+which the slot numbers have been synchronized with the local clock.
+====
+
+
+****
+.Slot-Time
+[pseudocode#algo-slot-offset]
+++++
+\require $s$
+\return{$t_\text{sync} +$ \textsc{Slot-Offset}$(s_{sync}, s) \times \mathcal{T}$}
+++++
+
+where stem:[s] is the slot number.
+****
+
+****
+.Median-Algorithm
+[pseudocode#algo-slot-time]
+++++
+\require $\mathfrak{E}, s_{sync}$
+
+\state $T_s \leftarrow \{ \}$
+
+\for{$B ~\textbf{in}~ \mathfrak{E}_j$}
+
+    \state $t_{est}^{B} \leftarrow T_B +$ \textsc{Slot-Offset}$(s_B, s_{sync}) \times \mathcal{T}$
+
+    \state $T_s \leftarrow T_s \cup t_{est}^{B}$
+
+\endfor
+
+\return \textsc{Median}$(T_s)$
+++++
+
+where::
+* latexmath:[\mathfrak{E}] is the sync period used for the estimate.
+* stem:[s_"sync"] is the slot time to estimate.
+* stem:["Slot-Offset"] is defined in <<algo-slot-offset>>.
+* latexmath:[\mathcal{T}] is the slot duration defined in <<defn-epoch-slot>>.
+****
+
+[#defn-prunned-best]
+.<<defn-prunned-best, Pruned Best Chain>>
+====
+The *pruned best chain* stem:[C^(r^k)] is the longest selected chain
+(<<defn-longest-chain>>) with the last stem:[k] Blocks pruned. We chose
+stem:[k= 140]. The *last (probabilistic) finalized block* describes the last block in
+this pruned best chain.
+====
+
+[#defn-chain-quality]
+.<<defn-chain-quality, Chain Quality>>
+====
+The *chain quality* stem:[s_(cq)] represents the number of slots that are used
+to estimate the local clock offset. Currently, it is set to stem:[s_(cq) =
+3000].
+
+The prerequisite for such a calculation is that each producer stores the arrival
+time of each block (<<defn-block-time>>) measured by a clock that is otherwise
+not adjusted by any external protocol.
+====
+
+[#defn-block-time]
+.<<defn-block-time, Block Arrival Time>>
+====
+The *block arrival time* of block stem:[B] for node stem:[j] formally
+represented by stem:[T_B^j] is the local time of node stem:[j] when node
+stem:[j] has received block stem:[B] for the first time. If the node stem:[j]
+itself is the producer of stem:[B], stem:[T_B^j] is set equal to the time that
+the block is produced. The index stem:[j] in stem:[T_B^j] notation may be
+dropped and B’s arrival time is referred to by stem:[T_B] when there is no
+ambiguity about the underlying node.
+====
+
+[#defn-sync-period]
+.<<defn-sync-period, Sync Period>>
+====
+A is an interval at which each validator (re-)evaluates its local clock offsets.
+The first sync period stem:[fr E_1] starts just after the genesis block is
+released. Consequently, each sync period stem:[fr E_i] starts after stem:[fr
+E_(i - 1)]. The length of the sync period (<<defn-chain-quality>>) is equal to
+stem:[s_(qc)]and expressed in the number of slots.
+====
+
+.An exemplary result of Median Algorithm in first sync epoch with stem:[s_"cq" = 9] and stem:[k = 1].
+image::c01-s05_babe-time-sync.svg["Median Algorithm Example", opts=inline]

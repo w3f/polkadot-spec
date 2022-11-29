@@ -16,7 +16,7 @@ specification of the Polkadot block as well as the process of verifying its
 validity are both explained in <<sect-state-replication>>.
 
 [#sect-entrypoints-into-runtime]
-=== Interacting with the Runtime
+= Interacting with the Runtime
 
 The Runtime (<<defn-state-machine>>) is the code implementing the logic of the chain.
 This code is decoupled from the Polkadot Host to make the the logic of the chain
@@ -51,7 +51,7 @@ stem:[S_B], as described in <<defn-runtime-code-at-state>>, and stem:[RE_B] is
 the Polkadot Host API, as described in <<defn-host-api-at-state>>.
 
 [#sect-loading-runtime-code]
-==== Loading the Runtime Code
+== Loading the Runtime Code
 
 The Polkadot Host expects to receive the code for the Runtime of the
 chain as a compiled WebAssembly (Wasm) Blob. The current runtime is
@@ -85,7 +85,7 @@ end of the execution of block stem:[B].
 ====
 
 [#sect-code-executor]
-==== Code Executor
+== Code Executor
 
 The Polkadot Host executes the calls of Runtime entrypoints inside a Wasm
 Virtual Machine (VM), which in turn provides the Runtime with access to
@@ -120,7 +120,7 @@ stem:[A_1, ..., A_n] argument to it and using the encoding described in
 ====
 
 [#sect-memory-management]
-===== Memory Management
+=== Memory Management
 
 The Polkadot Host is responsible for managing the WASM heap memory starting at
 the exported symbol as a part of implementing the allocator Host API
@@ -133,7 +133,7 @@ of 64KB. This memory should be made available to the Polkadot Runtime
 for import under the symbol name `memory`.
 
 [#sect-runtime-send-args-to-runtime-enteries]
-===== Sending Data to a Runtime Entrypoint
+=== Sending Data to a Runtime Entrypoint
 
 In general, all data exchanged between the Polkadot Host and the Runtime is
 encoded using SCALE codec described in <<sect-scale-codec>>. Therefore all
@@ -156,7 +156,7 @@ second argument sets the length of the encoded data stored in
 stem:[B].
 
 [#sect-runtime-return-value]
-===== Receiving Data from a Runtime Entrypoint
+=== Receiving Data from a Runtime Entrypoint
 
 The value which is returned from the invocation is an integer,
 representing two consecutive integers in which the least significant one
@@ -165,7 +165,7 @@ encoded in SCALE codec in the memory buffer. The most significant one
 provides the size of the blob.
 
 [#sect-runtime-version-custom-section]
-===== Runtime Version Custom Section
+=== Runtime Version Custom Section
 
 For newer Runtimes, the Runtime version (<<defn-rt-core-version>>) can be read
 directly from the

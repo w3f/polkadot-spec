@@ -1,0 +1,10 @@
+= Rejoining the Same Voter Set
+
+When a voter node rejoins the network after a disconnect from the voter set and
+with the condition that there has been no change to the voter set at the time of
+the disconnect, the node must continue performing the GRANDPA protocol at the
+same state as before getting disconnected from the network, ignoring any
+possible progress in GRANDPA finalization. Following reconnection, the node
+eventually gets updated to the current GRANDPA round and synchronizes its state
+with the rest of the voting set through the process called Catchup
+(<<sect-grandpa-catchup>>).
