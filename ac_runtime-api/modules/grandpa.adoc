@@ -42,7 +42,7 @@ Arguments::
 ++++
 +
 where:::
-** latexmath:[\mathrm{id}_{\mathbb{V}}] is the authority set as defined in <<defn-authority-set-id>>.
+** latexmath:[\mathrm{id}_{\mathbb{V}}] is the authority set id as defined in <<defn-authority-set-id>>.
 ** latexmath:[e] indicates the stage at which the equivocation occurred.
 ** latexmath:[r] is the round number the equivocation occurred.
 ** latexmath:[A_{\mathrm{id}}] is the public key of the equivocator.
