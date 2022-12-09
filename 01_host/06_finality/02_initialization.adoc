@@ -35,15 +35,15 @@ protocol by executing <<algo-initiate-grandpa>>.
 
 \state \textsc{Last-Finalized-Block} $\leftarrow B_{last}$
 
-\state \textsc{Best-Final-Candidate}(0) $\leftarrow B_{last}$
+\state \textsc{Best-Final-Candidate}$(0) \leftarrow B_{last}$
 
 \state \textsc{GRANDPA-GHOST}$(0) \leftarrow B_{last}$
 
-\state \textsc{Last-Completed-Round} $\leftarrow 0$
+\state \textsc{Last-Completed-Round}$ \leftarrow 0$
 
 \state $r_n \leftarrow 1$
 
-\state \textsc{Play-Grandpa-round}$(r_n)$
+\state \call{Play-Grandpa-round}{$r_n$}
 ++++
 
 where stem:[B_("last")] is the last block which has been finalized on the chain

@@ -264,8 +264,8 @@ to zero.
 ++++
 \Require{$M_{per}, M_{pha}$}
 \Return $0 \enspace \textbf{if} \enspace \textit{extrinsic is immortal}$
-\State \textbf{init} $factor =$ \textsc{Limit}$(M_{per} >> 12,\ 1,\ \phi)$
-\State \textbf{init} $left =$ \textsc{Limit}$($\textsc{TZ}$(M_{per})-1,\ 1,\ 15)$
+\State \textbf{init} $factor = $\call{Limit}{$M_{per} >> 12, 1, \phi$}
+\State \textbf{init} $left = $\call{Limit}{\call{TZ}{$M_{per}$}$ - 1, 1, 15$}
 \State \textbf{init} $right = \frac{M_{pha}}{factor} << 4$
 \Return $left|right$
 ++++
@@ -277,7 +277,7 @@ to zero.
 \Return $\textit{Immortal} \enspace \textbf{if} \enspace T^{b0}_{mor} = 0$
 \State \textbf{init} $enc = T^{b0}_{mor} + (T^{b1}_{mor} << 8)$
 \State \textbf{init} $M_{per} = 2 << (enc\ mod\ (1 << 4))$
-\State \textbf{init} $factor =$ \textsc{Limit}$(M_{per} >> 12, 1, \phi)$
+\State \textbf{init} $factor =$ \call{Limit}{$M_{per} >> 12, 1, \phi$}
 \State \textbf{init} $M_{pha} = (enc >> 4) * factor$
 \Return $(M_{per}, M_{pha})$
 ++++

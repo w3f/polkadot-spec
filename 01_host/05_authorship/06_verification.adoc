@@ -12,9 +12,9 @@ when a node is importing a block.
 ++++
 \require $\text{Head}_{s(B)}$
 
-\state $s \leftarrow$ \textsc{Slot-Number-At-Given-Time}$(T_B)$
+\state $s \leftarrow$ \call{Slot-Number-At-Given-Time}{$T_B$}
 
-\state $\mathcal{E}_c \leftarrow$ \textsc{Current-Epoch}$()$
+\state $\mathcal{E}_c \leftarrow$ \call{Current-Epoch}{}
 
 \state $(D_1, \ldots, D_{|H_d(B)|}) \leftarrow H_d(B)$
 
@@ -33,7 +33,7 @@ when a node is importing a block.
 
 \state $\text{AuthorID} \leftarrow \text{AuthorityDirectory}^{\mathcal{E}_c}[H_{BABE}(B).\text{SingerIndex}]$
 
-\state \textsc{Verify-Signature}$(\text{AuthorID}, H_h (B),\text{Sig}_B)$
+\state \call{Verify-Signature}{$\text{AuthorID}, H_h(B),\text{Sig}_B$}
 
 \if{$\exists B' \in BT : H_h(B) \neq H_h (B)$ \and $s_B = s_B'$ \and $\text{SignerIndex}_B = \text{SignerIndex}_{B'}$}
 
@@ -41,7 +41,7 @@ when a node is importing a block.
 
 \endif
 
-\state \textsc{Verify-Slot-Winner}$\left((d_B, \pi_B), s_B, \text{AuthorID}\right)$
+\state \call{Verify-Slot-Winner}{$(d_B, \pi_B), s_B, \text{AuthorID}$}
 ++++
 
 where::
@@ -68,9 +68,9 @@ producers of epoch stem:[cc E_c].
 
 \state $\mathcal{E}_c \leftarrow$ \textsc{Current-Epoch}
 
-\state $\rho \leftarrow$ \textsc{Epoch-Randomness}$(c)$
+\state $\rho \leftarrow$ \call{Epoch-Randomness}{$c$}
 
-\state \textsc{Verify-VRF}$(\rho, H_{BABE}(B).(d_B, \pi_B), H_{BABE}(B).s, c)$
+\state \call{Verify-VRF}{$\rho, H_{BABE}(B).(d_B, \pi_B), H_{BABE}(B).s, c$}
 
 \if{$d_B \geqslant \tau$}
 

@@ -66,11 +66,11 @@ the lottery.
 ++++
 \require sk
 
-\state $r \leftarrow$ \textsc{Epoch-Randomness}$(n)$
+\state $r \leftarrow$ \call{Epoch-Randomness}{$n$}
 
 \for{$i := 1 ~\textbf{to}~ sc_n$}
 
-    \state $(\pi, d) \leftarrow$ \textsc{VRF}$(r, i, sk)$
+    \state $(\pi, d) \leftarrow$ \call{VRF}{$r, i, sk$}
 
     \state $A[i] \leftarrow (d, \pi)$
 

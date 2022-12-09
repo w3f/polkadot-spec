@@ -24,10 +24,10 @@ latexmath:[s_B].
 ++++
 \Require $n > 2$
 \State \textbf{init} $\rho \leftarrow \phi$
-\For{$B$ in \textsc{SubChain}($\mathcal{E}_{n-2}$)}
+\For{$B$ in \call{SubChain}{$\mathcal{E}_{n-2}$}}
   \State $\rho \leftarrow \rho || d_B$
 \EndFor
-\Return \textsc{Blake2b}$($\textsc{Epoch-Randomness}$(n-1)||n||\rho)$
+\Return \call{Blake2b}{\call{Epoch-Randomness}{$n-1$}$||n||\rho$}
 ++++
 where stem:[n] is the epoch index.
 ****

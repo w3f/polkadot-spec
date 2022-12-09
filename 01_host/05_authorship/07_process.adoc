@@ -9,41 +9,41 @@ consensus engine which in turn runs <<algo-build-block>>.
 [pseudocode#algo-build-block]
 ++++
 
-\state $P_B \leftarrow$ \textsc{Head}$(C_{Best})$
+\state $P_B \leftarrow $\call{Head}{$C_{Best}$}
 
 \state $\text{Head}(B) \leftarrow \left(H_p \leftarrow H_h(P_B), H_i \leftarrow H_i(P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow \phi \right)$
 
-\state \textsc{Call-Runtime-Entry}$\left(\texttt{Core\_initialize\_block}, \text{Head}(B)\right)$
+\state \call{Call-Runtime-Entry}{$\texttt{Core\_initialize\_block}, \text{Head}(B)$}
 
-\state \textsc{I-D} $\leftarrow$ \textsc{Call-Runtime-Entry}$(\texttt{BlockBuilder\_inherent\_extrinsics},$ \textsc{Inherent-Data}$)$
+\state \textsc{I-D}$ \leftarrow $\call{Call-Runtime-Entry}{$\texttt{BlockBuilder\_inherent\_extrinsics}, $\textsc{Inherent-Data}}
 
-\for{$E~\textbf{in}$ \textsc{I-D}}
+\for{$E~\textbf{in} $\textsc{I-D}}
 
-    \state \textsc{Call-Runtime-Entry}$(\texttt{BlockBuilder\_apply\_extrinsics}, E)$
+    \state \call{Call-Runtime-Entry}{$\texttt{BlockBuilder\_apply\_extrinsics}, E$}
 
 \endfor
 
-\while{\not \textsc{End-Of-Slot}$(s)$}
+\while{\not \call{End-Of-Slot}{$s$}}
 
-    \state $E \leftarrow$ \textsc{Next-Ready-Extrinsic}$()$
+    \state $E \leftarrow$ \call{Next-Ready-Extrinsic}{}
 
-    \state $R \leftarrow$ \textsc{Call-Runtime-Entry}$(\texttt{BlockBuilder\_apply\_extrinsics}, E)$
+    \state $R \leftarrow$ \call{Call-Runtime-Entry}{$\texttt{BlockBuilder\_apply\_extrinsics}, E$}
 
-    \if{\textsc{Block-Is-Full}$(R)$}
+    \if{\call{Block-Is-Full}{$R$}}
 
         \break
 
     \endif
 
-    \if{\textsc{Should-Drop}$(R)$}
+    \if{\call{Should-Drop}{$R$}}
 
-        \state \textsc{Drop}$(E)$
+        \state \call{Drop}{$E$}
 
     \endif
 
-    \state $\text{Head}(B) \leftarrow$ \textsc{Call-Runtime-Entry}$(\texttt{BlockBuilder\_finalize\_block}, B)$
+    \state $\text{Head}(B) \leftarrow$ \call{Call-Runtime-Entry}{$\texttt{BlockBuilder\_finalize\_block}, B$}
 
-    \state $B \leftarrow$ \textsc{Add-Seal}$(B)$
+    \state $B \leftarrow$ \call{Add-Seal}{$B$}
 
 \endwhile
 ++++

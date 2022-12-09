@@ -71,29 +71,29 @@ the transaction queue according to the received message:
 
 \forall{$\{T \in L \mid T \notin TQ \mid T \notin TP\}$}
 
-    \state $B_d \leftarrow$ \textsc{Head}$($\textsc{Longest-Chain}$(BT))$
+    \state $B_d \leftarrow$ \call{Head}{\call{Longest-Chain}{$BT$}}
 
     \state $N \leftarrow H_n(B_d)$
 
-    \state $R \leftarrow$ \textsc{Call-Runtime-Entry}$\left(\texttt{TaggedTransactionQueue\_validate\_transaction}, N, T\right)$
+    \state $R \leftarrow$ \call{Call-Runtime-Entry}{$\texttt{TaggedTransactionQueue\_validate\_transaction}, N, T$}
 
-    \if{\textsc{Valid}$(R)$}
+    \if{\call{Valid}{$R$}}
 
-        \if{\textsc{Requires}$(R) \subset \bigcup_{\forall T \in (TQ~\cup~B_i \mid \exists i < d)}$ \textsc{Provided-Tags}$(T)$}
+        \if{\call{Requires}{$R$}$ \subset \bigcup_{\forall T \in (TQ~\cup~B_i \mid \exists i < d)}$ \call{Provided-Tags}{$T$}}
 
-            \state \textsc{Insert-At}$(TQ, T,$ \textsc{Requires}$(R),$ \textsc{Priority}$(R))$
+            \state \call{Insert-At}{$TQ, T, $\call{Requires}{$R$}$, $\call{Priority}{$R$}}
 
         \else
 
-            \state \textsc{Add-To}$(TP,T)$
+            \state \call{Add-To}{$TP,T$}
 
         \endif
 
-        \state \textsc{Maintain-Transaction-Pool}$()$
+        \state \call{Maintain-Transaction-Pool}{}
 
-        \if{\textsc{ShouldPropagate}$(R)$}
+        \if{\call{ShouldPropagate}{$R$}}
 
-            \state \textsc{Propagate}$(T)$
+            \state \call{Propagate}{$T$}
 
         \endif
 
