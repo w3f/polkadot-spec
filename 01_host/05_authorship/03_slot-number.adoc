@@ -65,7 +65,7 @@ which the slot numbers have been synchronized with the local clock.
 [pseudocode#algo-slot-offset]
 ++++
 \require $s$
-\return{$t_\text{sync} +$ \textsc{Slot-Offset}$(s_{sync}, s) \times \mathcal{T}$}
+\return{$t_\text{sync} + $\call{Slot-Offset}{$s_{sync}, s$}$ \times \mathcal{T}$}
 ++++
 
 where stem:[s] is the slot number.
@@ -81,13 +81,13 @@ where stem:[s] is the slot number.
 
 \for{$B ~\textbf{in}~ \mathfrak{E}_j$}
 
-    \state $t_{est}^{B} \leftarrow T_B +$ \textsc{Slot-Offset}$(s_B, s_{sync}) \times \mathcal{T}$
+    \state $t_{est}^{B} \leftarrow T_B + $\call{Slot-Offset}{$s_B, s_{sync}$}$ \times \mathcal{T}$
 
     \state $T_s \leftarrow T_s \cup t_{est}^{B}$
 
 \endfor
 
-\return \textsc{Median}$(T_s)$
+\return \call{Median}{$T_s$}
 ++++
 
 where::

@@ -533,13 +533,13 @@ latexmath:[request\_judgement] can be defined as follows:
 \Ensure $\mathcal{W}$
 \State \textbf{init} $collection = \{\}$
 \For{$amount \leftarrow 1,MaxRegistrars$}
-  \State \textsc{Generate-Registrars}$(amount)$
-  \State $caller \leftarrow$ \textsc{Create-Account}$("caller", 1)$
-  \State \textsc{Set-Balance}$(caller, 100)$
-  \State $time \leftarrow$ \textsc{Timer}$($\textsc{Request-Judgement}$($\textsc{Random}$(amount), 100))$
-  \State \textsc{Add-To}$(collection, time)$
+  \State \call{Generate-Registrars}{$amount$}
+  \State $caller \leftarrow$ \call{Create-Account}{$caller, 1$}
+  \State \call{Set-Balance}{$caller, 100$}
+  \State $time \leftarrow$ \call{Timer}{\call{Request-Judgement}{\call{Random}{$amount$}$, 100$}}
+  \State \call{Add-To}{$collection, time$}
 \EndFor
-\State $\mathcal{W} \leftarrow$ \textsc{Compute-Weight}$(collection)$
+\State $\mathcal{W} \leftarrow$ \call{Compute-Weight}{$collection$}
 \Return $\mathcal{W}$
 ++++
 
@@ -720,18 +720,18 @@ latexmath:[payout\_stakers] can be defined as follows:
 \State \textbf{init} $collection = \{\}$
 \For{$amount \leftarrow 1,MaxNominatorRewardedPerValidator$}
   \For{$era\_depth \leftarrow 1,HistoryDepth$}
-    \State $validator \leftarrow$ \textsc{Generate-Validator}$()$
-    \State \textsc{Validate}$(validator)$
-    \State $nominators \leftarrow$ \textsc{Generate-Nominators}$(amount)$
+    \State $validator \leftarrow$ \call{Generate-Validator}{}
+    \State \call{Validate}{$validator$}
+    \State $nominators \leftarrow$ \call{Generate-Nominators}{$amount$}
     \For{$nominator \in nominators$}
-      \State \textsc{Nominate}$(validator, nominator)$
+      \State \call{Nominate}{$validator, nominator$}
     \EndFor
-    \State $era\_index \leftarrow$ \textsc{Create-Rewards}$(validator, nominators, era\_depth)$
-    \State $time \leftarrow$ \textsc{Timer}$($\textsc{Payout-Stakers}$(validator), era\_index)$
-    \State \textsc{Add-To($collection$, $time$)}
+    \State $era\_index \leftarrow$ \call{Create-Rewards}{$validator, nominators, era\_depth$}
+    \State $time \leftarrow$ \call{Timer}{\call{Payout-Stakers}{$validator$}$, era\_index$}
+    \State \call{Add-To}{$collection, time$}
   \EndFor
 \EndFor
-\State $\mathcal{W} \leftarrow$ \textsc{Compute-Weight}$(collection)$
+\State $\mathcal{W} \leftarrow$ \call{Compute-Weight}{$collection$}
 \Return $\mathcal{W}$
 ++++
 
@@ -856,22 +856,22 @@ function):
   \State \textbf{init} $collection = \{ \}$
   \State \textbf{init} $balance = 1'000$
   \For{$index \gets 1,1'000$}
-    \State $time \leftarrow$ \textsc{Run-Benchmark}$(index, balance)$
-    \State \textsc{Add-To}$(collection, time)$
+    \State $time \leftarrow$ \call{Run-Benchmark}{$index, balance$}
+    \State \call{Add-To}{$collection, time$}
   \EndFor
   \State \textbf{init} $index = 1'000$
   \For{$balance \gets 2,1'000$}
-    \State $time \leftarrow$ \textsc{Run-Benchmark}$(index, balance)$
-    \State \textsc{Add-To}$(collection, time)$
+    \State $time \leftarrow$ \call{Run-Benchmark}{$index, balance$}
+    \State \call{Add-To}{$collection, time$}
   \EndFor
-  \State $\mathcal{W} \leftarrow$ \textsc{Compute-Weight}$(collection)$
+  \State $\mathcal{W} \leftarrow$ \call{Compute-Weight}{$collection$}
   \Return $\mathcal{W}$
 \EndFunction
 \Function{Run-Benchmark}{$index$, $balance$}
-  \State $sender \leftarrow$ \textsc{Create-Account}$(\textit{"caller"}, index)$
-  \State $recipient \leftarrow$ \textsc{Create-Accouny}$(\textit{"recipient"}, index)$
-  \State \textsc{Set-Balance}$(sender, balance)$
-  \State $time \leftarrow$ \textsc{Timer}$($\textsc{Transfer}$(sender, recipient, balance))$
+  \State $sender \leftarrow$ \call{Create-Account}{$caller, index$}
+  \State $recipient \leftarrow$ \call{Create-Accouny}{$recipient, index$}
+  \State \call{Set-Balance}{$sender, balance$}
+  \State $time \leftarrow$ \call{Timer}{\call{Transfer}{$sender, recipient, balance$}}
   \Return $time$ 
 \EndFunction
 ++++
@@ -1026,18 +1026,18 @@ The benchmarking implementation for the Polkadot Runtime function
 \Function{Main}{}
 \State \textbf{init} $collection = \{\}$
   \For{$balance \gets 1,100$}
-    \State $stash \leftarrow$ \textsc{Create-Account}$(\textit{"stash"}, 1)$
-    \State $controller \leftarrow$ \textsc{Create-Account}$(\textit{"controller"}, 1)$
-    \State \textsc{Set-Balance}$(stash, 100)$
-    \State \textsc{Set-Balance}$(controller, 1)$
-    \State \textsc{Bond}$(stash, controller, balance)$
-    \State \textsc{Pass-Era}()
-    \State \textsc{UnBond}$(controller, balance)$
-    \State \textsc{Pass-Era}()
-    \State $time \leftarrow$ \textsc{Timer}$($\textsc{Withdraw-Unbonded}$(controller))$
-    \State \textsc{Add-To}$(collection, time)$
+    \State $stash \leftarrow$ \call{Create-Account}{$stash, 1$}
+    \State $controller \leftarrow$ \call{Create-Account}{$controller, 1$}
+    \State \call{Set-Balance}{$stash, 100$}
+    \State \call{Set-Balance}{$controller, 1$}
+    \State \call{Bond}{$stash, controller, balance$}
+    \State \call{Pass-Era}{}
+    \State \call{UnBond}{$controller, balance$}
+    \State \call{Pass-Era}{}
+    \State $time \leftarrow$ \call{Timer}{\call{Withdraw-Unbonded}{$controller$}}
+    \State \call{Add-To}{$collection, time$}
   \EndFor
-  \State $\mathcal{W} \leftarrow$ \textsc{Compute-Weight}$(collection)$
+  \State $\mathcal{W} \leftarrow$ \call{Compute-Weight}{$collection$}
   \Return $\mathcal{W}$
 \EndFunction
 ++++

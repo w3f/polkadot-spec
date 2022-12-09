@@ -8,31 +8,31 @@ process by following <<algo-grandpa-round>>.
 ++++
 \REQUIRE($r$)
 \STATE $t_{r, v} \leftarrow$ Current local time
-\STATE $\textrm{primary} \leftarrow$ \textsc{Derive-Primary}($r$)
+\STATE $\textrm{primary} \leftarrow$ \call{Derive-Primary}{$r$}
 \IF{$v = \textrm{primary}$}
-  \STATE \textsc{Broadcast}$(M_{v}^{r - 1, \textrm{Fin}}$({\textsc{Best-Final-Candidate}}($r$-1))
-  \IF{\textsc{Best-Final-Candidate}$(r - 1)$ $\geqslant$ \textsc{Last-Finalized-Block}}
-    \STATE \textsc{Broadcast(}$M_{v}^{r - 1, \textrm{Prim}}$({\textsc{Best-Final-Candidate}}($r$-1)))
+  \STATE \call{Broadcast}{$M_{v}^{r - 1, \textrm{Fin}}($\call{Best-Final-Candidate}{$r - 1$}$)$}
+  \IF{\call{Best-Final-Candidate}{$r - 1$} $\geqslant$ \textsc{Last-Finalized-Block}}
+    \STATE \call{Broadcast}{$M_{v}^{r - 1, \textrm{Prim}}($\call{Best-Final-Candidate}{$r - 1$}$)$}
   \ENDIF
 \ENDIF
-\STATE {\textsc{Receive-Messages}}({\textbf{until}} Time $\geqslant t_{r_,v} + 2 \times T$ {\textbf{or}} $r$ {\textbf{is}} completable)
-\STATE $L \leftarrow$ \textsc{Best-Final-Candidate}($r$-1)
-\STATE $N \leftarrow$ \textsc{Best-PreVote-Candidate}($r$)
-\STATE \textsc{Broadcast}($M_v^{r, \textrm{pv}} (N)$)
-\STATE{{\textsc{Receive-Messages}}({\textbf{until}} $B^{r,\textrm{pv}}_v \geqslant L$ {\textbf{and}} (Time $\geqslant t_{r_,v} + 4 \times T${\textbf{ or }}$r$ {\textbf{is}} completable))}
-\STATE{{\textsc{Broadcast($M_v^{r, \textrm{pc}}$($B_v^{r, \textrm{pv}}$))}}}
+\STATE \call{Receive-Messages}{\textbf{until} Time $\geqslant t_{r_,v} + 2 \times T$ \or $r$ \textbf{is} completable}
+\STATE $L \leftarrow$ \call{Best-Final-Candidate}{$r - 1$}
+\STATE $N \leftarrow$ \call{Best-PreVote-Candidate}{$r$}
+\STATE \call{Broadcast}{$M_v^{r, \textrm{pv}} (N)$}
+\STATE \call{Receive-Messages}{\textbf{until} $B^{r,\textrm{pv}}_v \geqslant L$ \and $($ Time $\geqslant t_{r_,v} + 4 \times T$ \or $r$ \textbf{is} completable $)$}
+\STATE \call{Broadcast}{$M_v^{r, \textrm{pc}}(B_v^{r, \textrm{pv}})$}
 
 \REPEAT
-  \STATE \textsc{Receive-Messages}
-  \STATE \textsc{Attempt-To-Finalize-At-Round}($r$)
-\UNTIL{$r$ \textbf{is} completable \textbf{and} \textsc{Finalizable}($r$) \textbf{and} \textsc{Last-Finalized-Block} $\geqslant$ \textsc{Best-Final-Candidate}($r - 1$)}
+  \STATE \call{Receive-Messages}{}
+  \STATE \call{Attempt-To-Finalize-At-Round}{$r$}
+\UNTIL{$r$ \textbf{is} completable \and \call{Finalizable}{$r$} \and \textsc{Last-Finalized-Block} $\geqslant$ \call{Best-Final-Candidate}{$r - 1$}}
 
-\STATE \textsc{Play-Grandpa-round}($r + 1$)
+\STATE \call{Play-Grandpa-round}{$r + 1$}
 
 \REPEAT
-  \STATE \textsc{Receive-Messages}
-  \STATE \textsc{Attempt-To-Finalize-At-Round}($r$)
-\UNTIL{\textsc{Last-Finalized-Block} $\geqslant$ \textsc{Best-Final-Candidate}($r$)}
+  \STATE \call{Receive-Messages}{}
+  \STATE \call{Attempt-To-Finalize-At-Round}{$r$}
+\UNTIL{\textsc{Last-Finalized-Block} $\geqslant$ \call{Best-Final-Candidate}{$r$}}
 
 \IF{\textsc{Last-Completed-Round} $ < r $}
   \STATE \textsc{Last-Completed-Round} $\leftarrow r$
@@ -68,7 +68,7 @@ where stem:[r] is the GRANDPA round whose primary is to be determined.
 ++++
 \input $r$
 
-\state $B_v^{r, pv} \leftarrow$ \textsc{GRANDPA-GHOST}$(r)$
+\state $B_v^{r, pv} \leftarrow$ \call{GRANDPA-GHOST}{$r$}
 
 \if{$r = 0$}
 
@@ -106,7 +106,7 @@ where stem:[#V_("obv"(v),pot)^(r,pc)] is defined in <<defn-total-potential-votes
 
 \else
 
-    \state $L \leftarrow$ \textsc{Best-Final-Candidate}$(r - 1)$
+    \state $L \leftarrow$ \call{Best-Final-Candidate}{$r - 1$}
 
     \state $\mathcal{G} = \{ \forall B > L | \#V_{\operatorname{obs}(v)}^{r, pv}(B) \geqslant \frac{2}{3} |\mathbb{V}| \}$
 
@@ -137,9 +137,9 @@ where::
 ++++
 \input $r$
 
-\state $B^{r, pv}_v \leftarrow$ \textsc{GRANDPA-GHOST}$(r)$
+\state $B^{r, pv}_v \leftarrow$ \call{GRANDPA-GHOST}{$r$}
 
-\if{\textsc{Received} $(M_{v_{primary}}^{r, prim}(B))$ \and $B^{r, pv}_v \geqslant B > L$}
+\if{\call{Received}{$M_{v_{primary}}^{r, prim}(B))$ \and $B^{r, pv}_v \geqslant B > L$}}
 
     \state $N \leftarrow B$
 
@@ -156,12 +156,12 @@ where::
 [pseudocode#algo-attempt-to–finalize]
 ++++
 \REQUIRE($r$)
-\STATE $L \leftarrow$ {\textsc{Last-Finalized-Block}}
-\STATE{$E \leftarrow${\textsc{Best-Final-Candidate}}($r$)}
-\IF{$E \geqslant L$ {\textbf{and}} ${V^{r, \textrm{pc}}_{\textrm{obs}(v)}}(E) > 2 / 3 |\mathbb{V}|$}
-  \STATE{{\textsc{Last-Finalized-Block}}$\leftarrow E$}
-  \IF{$M_v^{r, \textrm{Fin}} (E) \notin${\textsc{Received-Messages}}}
-    \STATE{{\textsc{Broadcast}}($M_v^{r, \textrm{Fin}} (E)$)}
+\STATE $L \leftarrow$ \textsc{Last-Finalized-Block}
+\STATE $E \leftarrow$ \call{Best-Final-Candidate}{$r$}
+\IF{$E \geqslant L$ \and ${V^{r, \textrm{pc}}_{\textrm{obs}(v)}}(E) > 2 / 3 |\mathbb{V}|$}
+  \STATE{\textsc{Last-Finalized-Block}$\leftarrow E$}
+  \IF{$M_v^{r, \textrm{Fin}} (E) \notin $\textsc{Received-Messages}}
+    \STATE \call{Broadcast}{$M_v^{r, \textrm{Fin}}(E)$}
     \RETURN
   \ENDIF
 \ENDIF
@@ -176,12 +176,12 @@ where::
 \IF{$r$ \textbf{is not} Completable}
   \RETURN \textbf{False}
 \ENDIF
-\STATE $G \leftarrow${\textsc{GRANDPA-GHOST}}($J^{r, pv} (B)$)
+\STATE $G \leftarrow$ \call{GRANDPA-GHOST}{$J^{r, pv}(B)$}
 \IF{$G = \phi$}
   \RETURN \textbf{False}
 \ENDIF
-\STATE $E_r \leftarrow$ \textsc{Best-Final-Candidate}($r$)
-\IF{$E_r \neq \phi$ \textbf{and} \textsc{Best-Final-Candidate}($r - 1$) $\leqslant E_r \leqslant G$}
+\STATE $E_r \leftarrow$ \call{Best-Final-Candidate}{$r$}
+\IF{$E_r \neq \phi$ \and \call{Best-Final-Candidate}{$r - 1$} $\leqslant E_r \leqslant G$}
   \RETURN \textbf{True}
 \ELSE
   \RETURN \textbf{False}
