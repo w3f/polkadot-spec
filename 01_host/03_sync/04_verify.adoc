@@ -26,15 +26,15 @@ validity of the block.
 ++++
 \require $B, \text{Just}(B)$
 
-\state \textsc{Set-Storage-State-At}$(P(B))$
+\state \call{Set-Storage-State-At}{$P(B)$}
 
 \if{$\text{Just}(B) \neq \emptyset$}
 
-    \state \textsc{Verify-Block-Justification}$(B, Just(B))$
+    \state \call{Verify-Block-Justification}{$B, \text{Just}(B)$}
 
     \if{$B~\textbf{is}~\text{Finalized}~\textbf{and}~P(B)~\textbf{is not}~\text{Finalized}$}
 
-        \state \textsc{Mark-as-Final}$(P(B))$
+        \state \call{Mark-as-Final}{$P(B)$}
 
      \endif
 
@@ -46,17 +46,17 @@ validity of the block.
 
 \endif
 
-\state \textsc{Verify-Authorship-Right}$(Head(B))$
+\state \call{Verify-Authorship-Right}{$\text{Head}(B)$}
 
-\state $B \leftarrow$ \textsc{Remove-Seal}$(B)$
+\state $B \leftarrow$ \call{Remove-Seal}{$B$}
 
-\state $R \leftarrow$ \textsc{Call-Runtime-Entry}$\left(\texttt{Core\_execute\_block}, B \right)$
+\state $R \leftarrow$ \call{Call-Runtime-Entry}{$\texttt{Core\_execute\_block}, B$}
 
-\state $B \leftarrow$ \textsc{Add-Seal}$(B)$
+\state $B \leftarrow$ \call{Add-Seal}{$B$}
 
 \if{$R =$ \textsc{True}}
 
-    \state \textsc{Persist-State}$()$
+    \state \call{Persist-State}{}
 
 \endif
 ++++

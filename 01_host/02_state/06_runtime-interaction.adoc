@@ -29,11 +29,11 @@ general procedure to interact with the Runtime is described by <<algo-runtime-in
 ++++
 \require $F, H_b(B),(A_1,\ldots,A_n)$
 
-\state $\mathcal{S}_B \leftarrow$ \textsc{Set-State-At}$(H_b(B))$
+\state $\mathcal{S}_B \leftarrow$ \call{Set-State-At}{$H_b(B)$}
 
 \state $A \leftarrow Enc_{SC}((A_1, \ldots, A_n))$
 
-\state \textsc{Call-Runtime-Entrypoint}$(R_B, \mathcal{RE}_B, F, A, A_{len})$
+\state \call{Call-Runtime-Entrypoint}{$R_B, \mathcal{RE}_B, F, A, A_{len}$}
 ++++
 
 where::

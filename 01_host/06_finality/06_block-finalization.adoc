@@ -84,7 +84,7 @@ Only GRANDPA voter nodes are required to respond to the catch-up requests. Addit
 
 \endif
 
-\state \textsc{Send}$\left(i, M_{v, i}^\text{Cat-s}(\text{id}_\mathbb{V}, r)\right)$
+\state \call{Send}{$i, M_{v, i}^\text{Cat-s}(\text{id}_\mathbb{V}, r)$}
 ++++
 
 where::
@@ -139,7 +139,7 @@ of the Relay chain according to <<algo-process-catchup-response>>.
 
 \endif
 
-\state $G \leftarrow$ \textsc{GRANDPA-GHOST}$(J^{r, pv}(B))$
+\state $G \leftarrow$ \call{GRANDPA-GHOST}{$J^{r, pv}(B)$}
 
 \if{$G = \phi$}
 
@@ -163,7 +163,7 @@ of the Relay chain according to <<algo-process-catchup-response>>.
 
 \if{$i \in \mathbb{V}$}
 
-    \state \textsc{Play-Grandpa-round}$(r + 1)$
+    \state \call{Play-Grandpa-round}{$r + 1$}
 
 \endif
 ++++
