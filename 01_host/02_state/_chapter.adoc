@@ -5,14 +5,12 @@
 
 include::01_state-replication.adoc[]
 
-include::02_digest.adoc[]
+include::02_extrinsics.adoc[]
 
-include::03_extrinsics.adoc[]
+include::03_state-storage-trie.adoc[]
 
-include::04_state-storage-trie.adoc[]
+include::04_child-storage.adoc[]
 
-include::05_child-storage.adoc[]
-
-include::06_runtime-interaction.adoc[]
+include::05_runtime-interaction.adoc[]
 
 :leveloffset: 0

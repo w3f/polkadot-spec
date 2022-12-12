@@ -12,3 +12,52 @@ requirements must be met. If an implemenation only wants the latest, finalized
 state, it can combine it with protocols such as fast sync (<<sect-sync-fast>>)
 and/or warp sync (<<sect-sync-warp>>) to make synchronization as fast as
 possible.
+
+[#sect-authority-set]
+== Consensus Authority Set
+
+Because Polkadot is a proof-of-stake protocol, each of its consensus engines has
+its own set of nodes represented by known public keys, which have the authority
+to influence the protocol in pre-defined ways explained in this Section. To
+verify the validity of each block, the Polkadot node must track the current list
+of authorities (<<defn-authority-list>>) for that block.
+
+[#defn-authority-list]
+.<<defn-authority-list, Authority List>>
+====
+The *authority list* of block stem:[B] for consensus engine stem:[C] noted as
+stem:["Auth"_C(B)] is an array that contains the following pair of types for
+each of its authorities stem:[A in "Auth"_C(B)]:
+
+[stem]
+++++
+(pk_A,w_A)
+++++
+
+stem:[pk_A] is the session public key (<<defn-session-key>>) of authority
+stem:[A]. And stem:[w_A] is an unsigned 64-bit integer indicating the authority
+weight. The value of stem:["Auth"_C(B)] is part of the Polkadot state. The value
+for stem:["Auth"_C(B_0)] is set in the genesis state (<<chapter-genesis>>) and
+can be retrieved using a runtime entrypoint corresponding to consensus engine
+stem:[C].
+
+The authorities and their corresponding weights can be retrieved from the
+Runtime (<<sect-rte-grandpa-auth>>).
+====
+
+[#sect-consensus-message-digest]
+== Runtime-to-Consensus Engine Message
+
+The authority list (<<defn-authority-list>>) is part of the Polkadot state and
+the Runtime has the authority to update this list in the course of any state
+transitions. The Runtime informs the corresponding consensus engine about the
+changes in the authority set by adding the appropriate consensus message in the
+form of a digest item (<<defn-digest>>) to the block header of block stem:[B]
+which caused the transition in the authority set.
+
+The Polkadot Host must inspect the digest header of each block and delegate
+consensus messages to their consensus engines. The BABE and GRANDPA consensus
+engine must react based on the type of consensus messages it receives. The
+active GRANDPA authorities can only vote for blocks that occurred after the
+finalized block in which they were selected. Any votes for blocks before the
+came into effect would get rejected.

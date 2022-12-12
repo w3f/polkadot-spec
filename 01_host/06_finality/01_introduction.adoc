@@ -40,7 +40,7 @@ stem:[bbb V_B].
 ====
 The *authority set Id* (stem:["id"_(bbb V)]) is an incremental counter which
 tracks the amount of authority list changes that occurred
-(<<defn-consensus-message-digest>>). Starting with the value of zero at genesis,
+(<<defn-consensus-message-grandpa>>). Starting with the value of zero at genesis,
 the Polkadot Host increments this value by one every time a *Scheduled Change*
 or a *Forced Change* occurs. The authority set Id is an unsigned 64-bit integer.
 ====

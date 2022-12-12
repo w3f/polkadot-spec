@@ -84,15 +84,15 @@ The *Block Signature* stem:[S_B] is a signature of the block header hash
 "Sig"_("SR25519","sk"_j^s)(H_h(B))
 ++++
 
-stem:[S_B] should be included in stem:[H_d(B)] as the Seal digest item
+stem:[m] should be included in stem:[H_d(B)] as the Seal digest item
 (<<defn-digest>>) of value:
 
 [stem]
 ++++
-(E_"id"("BABE"),S_B)
+(t, "id"("BABE"), m)
 ++++
 
-in which, stem:[E_"id"("BABE")] is the BABE consensus engine unique identifier
-(<<defn-consensus-message-digest>>). The Seal digest item is referred to as the
+in which, stem:[t = 5] is the seal digest identifier and stem:["id"("BABE")] is the BABE consensus engine unique identifier
+(<<defn-digest>>). The Seal digest item is referred to as the
 *BABE Seal*.
 ====

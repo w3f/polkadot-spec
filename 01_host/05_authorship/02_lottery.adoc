@@ -4,7 +4,7 @@
 The babe constant (<<defn-babe-constant>>) is initialized at genesis to the
 value returned by calling `BabeApi_configuration` (<<sect-rte-babeapi-epoch>>).
 For efficiency reasons, it is generally updated by the Runtime through the _next
-config data_ consensus message (<<defn-consensus-message-digest>>) in the digest
+config data_ consensus message in the digest (<<defn-digest>>)
 of the first block of an epoch for the next epoch.
 
 A block producer aiming to produce a block during stem:[cc E_n] should run
