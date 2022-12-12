@@ -2,9 +2,7 @@
 = Extrinsics
 
 The block body consists of an array of extrinsics. In a broad sense,
-extrinsics are data from outside of the state which can trigger state
-transitions. This section describes extrinsics and their inclusion into
-blocks.
+extrinsics are data from outside of the state which can trigger state transitions. This section describes extrinsics and their inclusion into blocks.
 
 == Preliminaries
 
