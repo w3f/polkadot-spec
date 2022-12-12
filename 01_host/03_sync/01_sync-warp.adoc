@@ -2,7 +2,26 @@
 = Warp Sync
 
 Warp sync (<<sect-msg-warp-sync>>) only downloads the block headers where
-authority set changes occurred, so called fragments (<<defn-warp-sync-proof>>),
+authority set changes occurred, so-called fragments (<<defn-warp-sync-proof>>),
 and by verifying the GRANDPA justifications (<<defn-grandpa-justification>>).
-This protocols allows nodes to arrive at the desired state much faster than fast
+This protocol allows nodes to arrive at the desired state much faster than fast
 sync.
+
+== Warp Sync for Light Clients
+
+Warp sync only downloads block headers where the authority set changes (so-called fragments <<defn-warp-sync-proof,Warp Sync Proof>>), and syncs by verifying GRANDPA justifications. For light clients, it is not necessary to download the state (approx. 550MB) every time a warp-sync is initiated. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. 
+
+Specifications for Warp Sync for a full node can be found in <<sect-warp-sync>>. We outline only the distinguishing components of warp sync for light clients here. Requests for warp sync are performed using the `/dot/sync/warp` _Request-Response_ substream. 
+
+In theory, the `warp sync` process takes the Genesis Block as input and outputs the hash of the state trie root at the latest finalised block. This root hash acts as proof to further validate the responses to queries by the full node. The `warp sync` works by starting from the Genesis Hash and verifying the block headers only at the authority set changes. 
+
+Eventually, the light client verifies the finality of the block returned by a full node to ensure that the block is indeed the latest finalised block. This entails two things: 
+    . check the authenticity of GRANDPA Justification messages from Genesis to the last finalised block, 
+    . Check the timestamp of the last finalised block to ensure that no other blocks might have been finalised at a later timestamp. 
+
+
+WARNING: *Long-Range Attack Vulnerabilities*: Warp syncing is particularly vulnerable to what is called long-range attacks. The authorities allowed to finalize blocks can generate multiple proofs of finality for
+multiple different blocks of the same height, hence, they can finalize more than one chain at a time.
+It is possible for two-thirds of the validators that were active at a certain
+past block N to collude and decide to finalize a different block N', even when N has been
+finalized for the first time several weeks or months in the past. When a client then warp syncs, it can be tricked to consider this alternative block N' as the finalized one. However, in practice, to mitigate Long-Range Attacks, the starting point of the warp syncing is not too far in the past. How far exactly depends on the logic of the runtime of the chain. For example, in Polkadot, the starting block for the sync should be at max 28 days old, to be within the purview of the slashing period for misbehaving nodes. Hence, even though in theory warp sync can start from Genesis Block, it is not advised to implement the same in practice.   
