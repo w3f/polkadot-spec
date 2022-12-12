@@ -239,26 +239,29 @@ where each digest item can hold one of the following type identifiers:
 [stem]
 ++++
 H_d^i = {
-	(0, to, (E_"id", m)),
-	(4, to, (E_"id", "CM")),
-	(5, to, (E_"id", S_B)),
-	(6, to, (E_"id", P)),
-	(8, to, (E_id))
+	(4, to, (t, "id", m)),
+	(5, to, (t, "id", m)),
+	(6, to, (t, "id", m)),
+	(8, to, (t))
 :}
 ++++
+where::
+* stem:["id"] is a 4-byte ASCII encoded consensus engine identifier
+* stem:["m"] is a scale encoded byte array containing the message payload
 
 [horizontal]
-asciimath:[E_"id" = 0]:: *Non-System* digest, which is opaque to the native code. stem:[m] is an opaque byte array.
-asciimath:[E_"id" = 4]:: *Consensus Message*, contains messages from the Runtime to the consensus engine stem:["CM"] (<<defn-consensus-message-digest>>).
-asciimath:[E_"id" = 5]:: *Seal*, is produced by the consensus engine and proving
-the authorship of the block producer. Respectively, stem:[S_B] is the
-signature (<<defn-block-signature>>) of the block producer. In particular, the
+asciimath:[t = 4]:: *Consensus Message*, contains scale-encoded message  stem:[m] from the Runtime to the consensus engine. The receiving engine is determined by the stem:["id"] identifier:
+stem:["id" = tt "BABE"]::: a message to BABE engine (<<defn-consensus-message-babe>>)
+stem:["id" = tt "FRNK"]::: a message to GRANDPA engine (<<defn-consensus-message-grandpa>>)
+stem:["id" = tt "BEEF"]::: a message to BEEFY engine (<<defn-consensus-message-beefy>>)
+asciimath:[t = 5]:: *Seal*, is produced by the consensus engine and proves
+the authorship of the block producer. The engine used for this is provided through stem:["id"] (at the moment `BABE`), while stem:[m] contains the scale-encoded signature (<<defn-block-signature>>) of the block producer. In particular, the
 Seal digest item must be the last item in the digest array and must be stripped
 off by the Polkadot Host before the block is submitted to any Runtime function
 including for validation. The Seal must be added back to the digest afterward.
-asciimath:[E_"id" = 6]:: *Pre-Runtime* digest, contains the BABE Pre-Digest item
-stem:[P] (<<defn-babe-header>>).
-asciimath:[E_"id" = 8]:: *Runtime Environment Updated* digest, indicates that
+asciimath:[t = 6]:: *Pre-Runtime* digest, contains messages from the consensus engines to the runtime.
+Currently only used by BABE to pass the scale encoded BABE Header (<<defn-babe-header>>) in stem:[m] with stem:["id" = tt "BABE"]
+asciimath:[t = 8]:: *Runtime Environment Updated* digest, indicates that
 changes regarding the Runtime code or heap pages (<<sect-memory-management>>)
 occurred. No additional data is provided.
 ====

@@ -46,7 +46,7 @@ type at genesis will be used. Dynamic slot duration may be supported in the futu
 |_SecondarySlot_
 |Whether this chain should run with round-robin-style secondary slot and if this secondary slot
 requires the inclusion of an auxiliary VRF output (<<sect-block-production-lottery>>).
-|A one-byte enum as defined in <<defn-consensus-message-digest>> as stem:[2_("nd")]. 
+|A one-byte enum as defined in <<defn-consensus-message-babe>> as stem:[2_("nd")]. 
 |===
 
 ==== `BabeApi_current_epoch_start`
