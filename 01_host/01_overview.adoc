@@ -41,7 +41,7 @@ The light client is a mostly passive participant in the protocol. Light clients 
 While the full node is still a mostly passive participant of the protocol, it receives and verifies every block in the chain.
 
 * *Functional Requirements:* 
-
+ 
 . The node must populate the state storage with the official genesis state,
 clarified further in <<chapter-genesis>>.
 . The node should maintain a set of around 50 active peers at any time. New
