@@ -4,7 +4,7 @@ At the beginning of each epoch, stem:[cc E_n] the host will receive the
 randomness seed stem:[cc R_(cc E_(n+1))] (<<defn-epoch-randomness>>)
 necessary to participate in the block production lottery in the next epoch
 stem:[cc E_(n+1)] from the Runtime, through the consensus message
-(<<defn-consensus-message-digest>>) in the digest of the first block.
+(<<defn-consensus-message-babe>>) in the digest of the first block.
 
 [#defn-epoch-randomness]
 .<<defn-epoch-randomness, Randomness Seed>>
@@ -13,5 +13,5 @@ For epoch stem:[cc E], there is a 32-byte stem:[cc R_(cc E)] computed based on
 the previous epochs VRF outputs. For stem:[cc E_0] and stem:[cc E_1], the
 randomness seed is provided in the genesis state (<<sect-rte-babeapi-epoch>>).
 For any further epochs, the randomness is retrieved from the consensus message
-(<<defn-consensus-message-digest>>).
+(<<defn-consensus-message-babe>>).
 ====
