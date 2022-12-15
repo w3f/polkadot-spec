@@ -1,3 +1,5 @@
+/* Fetch Unbounded - Normal - Regular */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400&display=swap');
 /* Fetch Work Sans - Normal + Italic - Regular + Bold */
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 /* Fetch Asciidoctor Default Style Sheet */
@@ -5,7 +7,8 @@
 
 /* Base constants of theme */
 :root {
-	--font-family: 'Work Sans', sans-serif;
+	--font-header: 'Unbounded', cursive;
+	--font-text: 'Work Sans', sans-serif;
 
 	--black: #1E1E1E;
 	--white: #FFFFFF;
@@ -35,17 +38,19 @@ body {
 
 /* Set our custom font */
 body {
-	font-family: var(--font-family);
+	font-family: var(--font-text);
 }
 
 h1, h2, h3, h4, h5, h6,
 #toctitle,
+#toc ul.sectlevel0 > li > a,
 .sidebarblock > .content > .title {
-	font-family: var(--font-family);
+	font-family: var(--font-header);
+	font-weight: 400;
 }
 
 #toc ul{
-	font-family: var(--font-family);
+	font-family: var(--font-text);
 }
 
 /* Set base colors */

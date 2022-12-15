@@ -21,7 +21,6 @@ v0.2.1
 :stylesheet: style.css
 :toc: left
 :toclevels: 2
-:webfonts: Work+Sans:ital,wght@0,300;1,700
 :xrefstyle: short
 
 WARNING: This specification is *Work-In-Progress* and any content, structure,
