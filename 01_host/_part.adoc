@@ -15,4 +15,6 @@ include::05_authorship/_chapter.adoc[]
 
 include::06_finality/_chapter.adoc[]
 
-include::07_anv/_chapter.adoc[]
+include::07_lightclient/_chapter.adoc[]
+
+include::08_anv/_chapter.adoc[]
