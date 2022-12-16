@@ -1,4 +1,4 @@
 [#sect-sync-warp]
 = Warp Sync
 
-Warp sync (<<#sect-msg-warp-sync>>) only downloads the block headers where authority set changes occurred, so called fragments (Definition 41), and by verifying the GRANDPA justifications (Definition 91). This protocols allows nodes to arrive at the desired state much faster than fast sync.
+Warp sync (<<#sect-msg-warp-sync>>) only downloads the block headers where authority set changes occurred, so called fragments (<<defn-warp-sync-proof>>), and by verifying the GRANDPA justifications (<<defn-grandpa-justifications-compact>>). This protocols allows nodes to arrive at the desired state much faster than fast sync.
