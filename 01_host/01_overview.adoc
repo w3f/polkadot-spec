@@ -5,13 +5,13 @@ The Polkadot Protocol differentiates between different classes of Polkadot Hosts
 [#sect-client-light]
 == Light Client
 
-The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on recent state of the blockchain, and to add extrinsics (transactions). It does not maintain the full state, rather queries the full node on the latest finalised state and verifies the authenticity of the responses trustlessly. Details of specifications for Light Clients 
+The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on recent state of the blockchain, and to add extrinsics (transactions). It does not maintain the full state, rather queries the full node on the latest finalised state and verifies the authenticity of the responses trustlessly. Details of specifications focused for Light Clients can be found in <<sect-lightclient>>. 
 
 [#sect-node-full]
 == Full Node
 
-While the full node is still a mostly passive participant of the protocol, they follow the chain by receiving and verifying every block in the chain. It maintains full state of the blockchain by executing the extrinsics in blocks. They role in consesus mechanism is limited to following the chain and not producing the next blocks.
-// Do we change the 
+While the full node is still a mostly passive participant of the protocol, they follow the chain by receiving and verifying every block in the chain. It maintains full state of the blockchain by executing the extrinsics in blocks. Their role in consesus mechanism is limited to following the chain and not producing the blocks.
+// do we move the bootsrap/erquirements elsewhere for full nodes or it stays here?
 
 * *Functional Requirements:* 
  

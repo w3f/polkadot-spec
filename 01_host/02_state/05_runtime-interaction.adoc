@@ -1,3 +1,6 @@
+[#sect-runtime-interaction]
+= Runtime Interactions
+
 Like any transaction-based transition system, Polkadot’s state is changed by
 executing an ordered set of instructions. These instructions are known as
 _extrinsics_. In Polkadot, the execution logic of the state transition function
@@ -16,7 +19,7 @@ specification of the Polkadot block as well as the process of verifying its
 validity are both explained in <<sect-state-replication>>.
 
 [#sect-entrypoints-into-runtime]
-= Interacting with the Runtime
+== Interacting with the Runtime
 
 The Runtime (<<defn-state-machine>>) is the code implementing the logic of the chain.
 This code is decoupled from the Polkadot Host to make the the logic of the chain
