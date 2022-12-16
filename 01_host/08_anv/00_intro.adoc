@@ -1,0 +1,47 @@
+Polkadot serves as a replicated shared-state machine designed to resolve
+scalability issues and interoperability among blockchains. The validators of
+Polkadot execute transactions and participate in the consensus of Polkadots
+primary chain, the so called relay chain. Parachains are independent networks
+that maintain their own state and are connected to the relay chain. Those
+parachains can take advantage of the relay chain consensus mechanism, including
+sending and receiving messages to and from other parachains. Parachain nodes
+that send parachain blocks, known as candidates, to the validators in order to
+be included in relay chain are referred to as collators.
+
+The Polkadot relay chain validators are responsible for guaranteeing the
+validity of both relay chain and parachain blocks. Additionally, the validators
+are required to keep enough parachain blocks that should be included in the
+relay chain available in their local storage in order to make those retrievable
+by peers, who lack the information, to reliably confirm the issued validity
+statements about parachain blocks. The Availability & Validity (AnV) protocol
+consists of multiple steps for successfully upholding those responsibilities.
+
+Parachain blocks themselves are produced by collators (<<sect-collations>>),
+whereas the relay chain validators only verify their validity (and later, their
+availability). It is possible that the collators of a parachain  produces
+multiple parachain block candidates for a child of a specific block.
+Subsequently, they send the block candidates to the the relay chain validators
+who are assigned to the specific parachain. The assignment is determined by the
+Runtime (<<sect-candidate-backing>>). Those validators are then required to
+check the validity of submitted candidates (<<sect-candidate-validation>>), then
+issue and collect statements (<<sect-candidate-statements>>) about the validity
+of candidates to other validators. This process is known as candidate backing.
+Once a candidate meets a specified criteria for inclusion, the selected relay
+chain block author then choses any of the backed candidate for each parachain
+and includes those into the relay chain block (<<sect-candidate-inclusion>>).
+
+Every relay chain validator must fetch the proposed candidates and issue votes
+on whether they have the candidate saved in their local storage, so called
+availability votes (<<sect-availability-votes>>), then also collect the votes
+sent by other validators and include them in the relay chain state
+(<<sect-candidate-inclusion>>). This process ensures that only relay chain
+blocks get finalized where each candidate is available on enough nodes of
+validators.
+
+Parachain candidates contained in non-finalized relay chain blocks must then be
+retrieved by a secondary set of relay chain validators, unrelated from the
+candidate backing process, who are randomly assigned to determine the validity
+of specific parachains based on a VRF lottery and are then required to vote on
+the validity of those candidates. This process is known as approval voting
+(<<sect-approval-voting>>). If a validator does not have the candidate data, it
+must recover the candidate data (<<sect-candidate-recovery>>).
