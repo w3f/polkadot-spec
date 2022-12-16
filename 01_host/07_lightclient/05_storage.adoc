@@ -1,0 +1,4 @@
+[#sect-storage-lightclient]
+= Storage for Light Clients
+
+The light client requires a persistent storage for saving the state of the blockchain. In addition it requires efficient Serialisation/ Deserialisation methods to transform SCALE (<<sect-scale-codec>>) encoded network traffic for storing and reading from the persistent storage.
