@@ -1,0 +1,31 @@
+[#sect-requirements-lightclient]
+= Requirements for Light Clients
+
+We list requirements of a Light Client categorised along the the three dimensions of Functionality, Efficiency, and Security. 
+
+
+* *Functional Requirements:* 
+    . Update state (<<sect-state-storage>>) to reflect the latest view of the blockchain via synchronization with full nodes.
+    . (Optional) Verify validity of runime transitions. 
+    . Make queries for data at the latest block height or across a range of blocks.
+    . Append extrinsics (<<sect-extrinsics>>) to the blockchain via full nodes. 
+
+* *Efficiency Requirements:*
+    . Efficient bootstrapping and syncing: initializations and update functions of the state have tractable computation and communication complexity and grows at most linearly with the chain size. Generally, the complexity is proportional to the GRANDPA validator set change. 
+    . Querying operations happen by requesting athe key-value pair from a full node. 
+    . Further, verifying the validity of responses by the full node is logarithmic in the size of the state. 
+
+* *Security Requirements:*
+    . Secure bootstrapping and Synchronising: Probability that an adversarial full node convincing a light client of a forged blockchain state is negligible. 
+    . Secure querying: Probability that an adversary convinces  light client to accept a forged account state os negligible.
+//    . Secure Execution: Light client should not submit an invalid transaction given the current state. 
+    . Assure that the submitted extrinsics are appended in a successor block or inform the user incase of failure.
+
+* *Polkadot Specific Requirements:*
+    . The client MUST be able to connect to a relay chain using chain state.
+    . The client MUST be able to retrieve checkpoint state from a trusted source to speed up initialization.
+    . The client MUST be able to subscribe/unsubscribe to/from any polkadot-spec-conformant relay chain (Polkadot, Westend, Kusama)
+    . The client MUST be able to subscribe/unsubscribe to/from parachains that do not use custom protocols or cryptography methods other than those that Polkadot, Westend and Kusama use.
+    . The client MUST support the following https://github.com/paritytech/json-rpc-interface-spec[RPC methods]: `rpc_methods`,  `chainHead_unstable_follow`, `chainHead_unstable_unfollow`, `chainHead_unstable_unpin`, `chainHead_unstable_storage`, `chainHead_unstable_call` `chainHead_unstable_stopCall`. `transaction_unstable_submitAndWatch`, and `transaction_unstable_unwatch`
+    . The client MUST support the @substrate/connect https://github.com/paritytech/substrate-connect/tree/main/packages/connect-extension-protocol[connection extension protocol]:
+    `ToApplicationError`, `ToApplicationChainReady`, `ToApplicationRpc`, `ToExtensionAddChain`, `ToExtensionAddWellKnownChain`, `ToExtensionRpc`, `ToExtensionRemoveChain`.

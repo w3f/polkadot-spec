@@ -1,49 +1,22 @@
 [#chap-overview]
 = Overview
-The Polkadot Protocol differentiates between different classes of Polkadot Hosts. Each class differs in their trust roots and how active or passively the interact with the network.
-
-Light clients base their trust in provided snapshots and the ability to slash grandpa votes for equivocation for the period they are syncing via warp sync. Full nodes and above in contrast verify each block indvidually.
+The Polkadot Protocol differentiates between different classes of Polkadot Hosts. Each class differs in their trust roots and how active or passively they interact with the network.
 
 [#sect-client-light]
 == Light Client
 
-The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. It does not execute blocks, but relies on snapshots and warp sync to reach the head of the chain.
-
-* *Functional Requirements:* 
-    . Update state to reflect the latest view of the blockchain via synchronization with full nodes.
-    . (Optional) Verify validity of runime transitions 
-    . Make queries for data at the latest block height or across a range of blocks
-    . Append extrinsics to the blockchain via full nodes. 
-
-* *Efficiency Requirements:*
-    . Efficient bootstrapping and syncing: initializations and update functions of the state have tractable computation and communication complexity and grows at most linearly with the chain size. Generally, the complexity is proportional to the GRANDPA validator set change. 
-    . Querying operations happen by requesting athe key-value pair from a full node. 
-    . Further, verifying the validity of responses by the full node is logarithmic in the size of the state. 
-
-* *Security Requirements:*
-    . Secure bootstrapping and Synchronising: Probability that an adversarial full node convincing a light client of a forged blockchain state is negligible. 
-    . Secure querying: Probability that an adversary convinces  light client to accept a forged account state os negligible.
-//    . Secure Execution: Light client should not submit an invalid transaction given the current state. 
-    . Assure that the submitted extrinsics are appended in a successor block or inform the user incase of failure.
-
-* *Substrate Specific Requirements:*
-    . The client MUST be able to connect to a relay chain using chain state.
-    . The client MUST be able to retrieve checkpoint state from a trusted source to speed up initialization.
-    . The client MUST be able to subscribe/unsubscribe to/from any polkadot-spec-conformant relay chain (Polkadot, Westend, Kusama)
-    . The client MUST be able to subscribe/unsubscribe to/from parachains that do not use custom protocols or cryptography methods other than those that Polkadot, Westend and Kusama use.
-    . The client MUST support the following https://github.com/paritytech/json-rpc-interface-spec[RPC methods]: `rpc_methods`,  `chainHead_unstable_follow`, `chainHead_unstable_unfollow`, `chainHead_unstable_unpin`, `chainHead_unstable_storage`, `chainHead_unstable_call` `chainHead_unstable_stopCall`. `transaction_unstable_submitAndWatch`, and `transaction_unstable_unwatch`
-    . The client MUST support the @substrate/connect https://github.com/paritytech/substrate-connect/tree/main/packages/connect-extension-protocol[connection extension protocol]:
-    `ToApplicationError`, `ToApplicationChainReady`, `ToApplicationRpc`, `ToExtensionAddChain`, `ToExtensionAddWellKnownChain`, `ToExtensionRpc`, `ToExtensionRemoveChain`.
+The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on recent state of the blockchain, and to add extrinsics (transactions). It does not maintain the full state, rather queries the full node on the latest finalised state and verifies the authenticity of the responses trustlessly. Details of specifications for Light Clients 
 
 [#sect-node-full]
 == Full Node
 
-While the full node is still a mostly passive participant of the protocol, it receives and verifies every block in the chain.
+While the full node is still a mostly passive participant of the protocol, they follow the chain by receiving and verifying every block in the chain. It maintains full state of the blockchain by executing the extrinsics in blocks. They role in consesus mechanism is limited to following the chain and not producing the next blocks.
+// Do we change the 
 
 * *Functional Requirements:* 
  
 . The node must populate the state storage with the official genesis state,
-clarified further in <<chapter-genesis>>.
+elaborated further in <<chapter-genesis>>.
 . The node should maintain a set of around 50 active peers at any time. New
 peers can be found using the discovery protocols (<<sect-discovery-mechanism>>)
 . The node should open and maintain the various required streams
