@@ -10,7 +10,7 @@ The light client is a mostly passive participant in the protocol. Light clients 
 [#sect-node-full]
 == Full Node
 
-While the full node is still a mostly passive participant of the protocol, they follow the chain by receiving and verifying every block in the chain. It maintains full state of the blockchain by executing the extrinsics in blocks. They role in consesus mechanism is limited to following the chain and not producing the next blocks.
+While the full node is still a mostly passive participant of the protocol, they follow the chain by receiving and verifying every block in the chain. It maintains full state of the blockchain by executing the extrinsics in blocks. Their role in consesus mechanism is limited to following the chain and not producing the blocks.
 // do we move the bootsrap/erquirements elsewhere for full nodes or it stays here?
 
 * *Functional Requirements:* 
