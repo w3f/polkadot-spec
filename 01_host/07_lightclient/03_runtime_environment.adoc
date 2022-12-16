@@ -1,0 +1,5 @@
+[#sect-runtime-environment-lightclient]
+= Runtime Environment for Light Clients
+
+Technically, though a runtime execution environment is not necessary to build a light client, most clients require interacting with the Runtime and the state of the blockchain for integrity checks at the minimum. One can imagine an application scenarios like an on-chain light client which only listens to the latest state without ever adding extrinsics. Current implementations of Light Nodes (for e.g. Smoldot) uses the wasmtime as its runtime environment to drastically simplify the code. The performance of wasmtime is satisfying enough to not require a native runtime. 
+The details of runtime API that the environment needs to suppport can be found in Appendix C (<<chap-runtime-api>>).
