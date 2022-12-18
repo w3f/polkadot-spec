@@ -1,5 +1,6 @@
 [#sect-state-replication]
 === State Replication
+:kaitai-imports: scale
 
 Polkadot nodes replicate each other’s state by syncing the history of the
 extrinsics. This, however, is only practical if a large set of transactions are
