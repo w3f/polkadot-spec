@@ -46,7 +46,7 @@ Abstraction of Warp Sync and verification of latest block's finality.
 SelectFullNode: determines the full node that the light client syncs with. 
 SyncSithNode: Returns the header of latest finalized block and a list of Grandpa Justifications by the full node.
 verifyAuthoritySetChange: verification algorithm which checks the authenticity of the header only at the end of an era where the authority set changes iteratively until reaching the latest era.
-verifyFinalty: verifies the finalty of the latest block using the Grandpa Jusitfication messages.
+verifyFinalty: verifies the finalty of the latest block using the Grandpa Justifications messages.
 ****
 
 

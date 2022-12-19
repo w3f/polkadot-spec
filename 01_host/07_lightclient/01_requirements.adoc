@@ -1,7 +1,7 @@
 [#sect-requirements-lightclient]
 = Requirements for Light Clients
 
-We list requirements of a Light Client categorised along the the three dimensions of Functionality, Efficiency, and Security. 
+We list requirements of a Light Client categorized along the the three dimensions of Functionality, Efficiency, and Security. 
 
 
 * *Functional Requirements:* 
