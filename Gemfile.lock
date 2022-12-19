@@ -86,7 +86,7 @@ GEM
     public_suffix (5.0.0)
     rexml (3.2.5)
     rghost (0.9.7)
-    rouge (4.0.0)
+    rouge (4.0.1)
     ruby-enum (0.9.0)
       i18n
     ruby-rc4 (0.1.5)
