@@ -11,11 +11,11 @@ For light clients, it is too expensive to download the state (approx. 550MB) to 
 
 Light clients base their trust in provided snapshots and the ability to slash grandpa votes for equivocation for the period they are syncing via warp sync. Full nodes and above in contrast verify each block indvidually.
 
-In theory, the `warp sync` process takes the Genesis Block as input and outputs the hash of the state trie root at the latest finalised block. This root hash acts as proof to further validate the responses to queries by the full node. The `warp sync` works by starting from a trusted specified block (for e.g. from a snapshot) and verifying the block headers only at the authority set changes. 
+In theory, the `warp sync` process takes the Genesis Block as input and outputs the hash of the state trie root at the latest finalized block. This root hash acts as proof to further validate the responses to queries by the full node. The `warp sync` works by starting from a trusted specified block (for e.g. from a snapshot) and verifying the block headers only at the authority set changes. 
 
-Eventually, the light client verifies the finality of the block returned by a full node to ensure that the block is indeed the latest finalised block. This entails two things: 
-    . check the authenticity of GRANDPA Justification messages from Genesis to the last finalised block, 
-    . Check the timestamp of the last finalised block to ensure that no other blocks might have been finalised at a later timestamp. 
+Eventually, the light client verifies the finality of the block returned by a full node to ensure that the block is indeed the latest finalized block. This entails two things: 
+    . check the authenticity of GRANDPA Justifications messages from Genesis to the last finalized block, 
+    . Check the timestamp of the last finalized block to ensure that no other blocks might have been finalized at a later timestamp. 
 
 WARNING: *Long-Range Attack Vulnerabilities*: Warp syncing is particularly vulnerable to what is called long-range attacks. The authorities allowed to finalize blocks can generate multiple proofs of finality for
 multiple different blocks of the same height, hence, they can finalize more than one chain at a time.
@@ -30,7 +30,7 @@ We outline the warp sync process, abstracting out details of verifying the final
 [pseudocode#warp-sync]
 ++++
 \INPUT BlockHeader startblock, the initial block to start the sync. May not be the Genesis Block. 
-\OUTPUT CommitmentRootHash $root$, State Tries Root hash of the latest finalised Block. 
+\OUTPUT CommitmentRootHash $root$, State Tries Root hash of the latest finalized Block. 
 
 \STATE \textsc{fullnode} $\leftarrow$ SelectFullNode  
 \STATE \textsc{latestBlockHeader, grandpaJustifications} $\leftarrow$ SyncWithNode(\textsc{fullnode})
@@ -44,7 +44,7 @@ We outline the warp sync process, abstracting out details of verifying the final
 ++++
 Abstraction of Warp Sync and verification of latest block's finality. 
 SelectFullNode: determines the full node that the light client syncs with. 
-SyncSithNode: Returns the header of latest finalised block and a list of Grandpa Justifications by the full node.
+SyncSithNode: Returns the header of latest finalized block and a list of Grandpa Justifications by the full node.
 verifyAuthoritySetChange: verification algorithm which checks the authenticity of the header only at the end of an era where the authority set changes iteratively until reaching the latest era.
 verifyFinalty: verifies the finalty of the latest block using the Grandpa Jusitfication messages.
 ****
