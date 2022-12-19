@@ -16,7 +16,7 @@ We list requirements of a Light Client categorised along the the three dimension
     . Further, verifying the validity of responses by the full node is logarithmic in the size of the state. 
 
 * *Security Requirements:*
-    . Secure bootstrapping and Synchronising: Probability that an adversarial full node convincing a light client of a forged blockchain state is negligible. 
+    . Secure bootstrapping and Synchronizing: Probability that an adversarial full node convincing a light client of a forged blockchain state is negligible. 
     . Secure querying: Probability that an adversary convinces  light client to accept a forged account state os negligible.
 //    . Secure Execution: Light client should not submit an invalid transaction given the current state. 
     . Assure that the submitted extrinsics are appended in a successor block or inform the user incase of failure.
