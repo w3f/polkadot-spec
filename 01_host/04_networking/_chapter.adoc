@@ -13,6 +13,4 @@ include::01_fundamentals.adoc[]
 
 include::08_messages.adoc[]
 
-include::10_light-client.adoc[]
-
 :leveloffset: 0
