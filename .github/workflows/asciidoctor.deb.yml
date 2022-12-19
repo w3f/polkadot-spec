@@ -23,7 +23,7 @@ jobs:
     name: Compile html specification
     runs-on: ubuntu-20.04
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.2.0
     - name: Install deb dependencies
       run: |
         sudo apt-get update
@@ -59,7 +59,7 @@ jobs:
     env:
       BUNDLE_WITH: pdf
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.2.0
     - name: Install deb dependencies
       run: |
         sudo apt-get update
@@ -100,7 +100,7 @@ jobs:
     env:
       BUNDLE_WITH: test
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.2.0
       with:
         lfs: true
     - name: Install deb dependencies
@@ -139,7 +139,7 @@ jobs:
     runs-on: ubuntu-20.04
     if: github.event_name == 'release'
     steps:
-    - uses: actions/checkout@v3.1.0
+    - uses: actions/checkout@v3.2.0
       with:
         ref: gh-pages
     - uses: actions/download-artifact@v3
