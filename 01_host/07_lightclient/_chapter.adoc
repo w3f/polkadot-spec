@@ -7,6 +7,10 @@ include::01_requirements.adoc[]
 
 include::02_warpsync.adoc[]
 
+include::03_runtime_environment.adoc[]
+
 include::04_networking_messages.adoc[]
+
+include::05_storage.adoc[]
 
 :leveloffset: 0
