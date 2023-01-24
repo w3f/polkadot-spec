@@ -26,7 +26,7 @@ finalized for the first time several weeks or months in the past. When a client 
 We outline the warp sync process, abstracting out details of verifying the finality and how the full node to sync with is selected.
 
 ****
-.Querying-State-Light-Clients
+.Warp-Sync-Light-Clients
 [pseudocode#warp-sync]
 ++++
 \INPUT BlockHeader startblock, the initial block to start the sync. May not be the Genesis Block. 
