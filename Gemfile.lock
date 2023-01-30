@@ -85,7 +85,7 @@ GEM
       katex (~> 0.8)
     public_suffix (5.0.0)
     rexml (3.2.5)
-    rghost (0.9.7)
+    rghost (0.9.8)
     rouge (4.0.0)
     ruby-enum (0.9.0)
       i18n
