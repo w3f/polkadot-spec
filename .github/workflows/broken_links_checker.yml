@@ -1,10 +1,7 @@
+# on new issue
 on:
-  schedule:
-    - cron: '0 0 * * *' # run daily
-  repository_dispatch: # run manually
-    types: [check-link]
-  # push:
-  # ...
+  issues:
+    types: [opened, edited]
 
 name: Broken Link Check
 jobs:
