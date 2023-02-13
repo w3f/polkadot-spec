@@ -1,8 +1,10 @@
-# run this workflow every day at 07 am utc, using https://github.com/marketplace/actions/broken-link-checker-action
 on:
   schedule:
-    - cron: '0 7 * * *'
-  workflow_dispatch:
+    - cron: 0 1 0 * * # run daily
+  repository_dispatch: # run manually
+    types: [check-link]
+  # push:
+  # ...
 
 name: Broken Link Check
 jobs:
