@@ -118,7 +118,7 @@ or have higher priority than stem:[T] are ahead of
 stem:[T].
 * stem:["Maintain-Transaction-Pool"] is described in <<algo-maintain-transaction-pool>>.
 * stem:["ShouldPropagate"] indictes whether the transaction should be propagated
-based on the `Propagate` field in the `ValidTransaction`` type as defined in 
+based on the `Propagate` field in the `ValidTransaction` type as defined in 
 <<defn-valid-transaction>>, which is returned by stem:[tt
 "TaggedTransactionQueue_validate_transaction"].
 * stem:["Propagate"(T)] sends stem:[T] to all connected
