@@ -216,13 +216,3 @@ where:::
 ** latexmath:[f_e] is a boolean indicating whether a fatal error was encountered.
 ** latexmath:[e] is a Inherents-Data structure as defined in <<defn-inherent-data>>
 containing any errors created by this Runtime function.
-
-==== `BlockBuilder_random_seed`
-
-Generates a random seed.
-
-Arguments::
-* None
-
-Return::
-* A 32-byte array containing the random seed.

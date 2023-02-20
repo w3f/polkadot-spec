@@ -1,3 +1,4 @@
+[#sect-runtime-grandpaapi-module]
 === Module GrandpaApi
 
 IMPORTANT: This section describes *Version 2* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
@@ -20,7 +21,7 @@ Return::
 * An authority list as defined in <<defn-authority-list>>.
 
 [#sect-grandpa-current-set-id]
-==== `GrandpaApi_current_set_id`
+==== `GrandpaApi_current_set_id`ac
 
 This entry fetches the list of GRANDPA authority set ID (<<defn-authority-set-id>>).
 Any future authority changes get tracked via Runtime-to-consensus engine

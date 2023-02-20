@@ -1,0 +1,16 @@
+[#sect-runtime-nomination-pools-module]
+=== Module Nomination Pools
+
+IMPORTANT: This section describes *Version 2* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility. Currently supports only one RPC endpoint. 
+
+
+[#sect-rte-pending-rewards]
+==== `NominationPools_pending_rewards`
+
+Runtime API for accessing information about the nomination pools. Returns the pending rewards for the member that the Account ID was given for.
+
+Arguments::
+* The account ID as a SCALE encoded 32-byte address of the sender (<<defn-extrinsic-address>>).
+
+Return::
+* the SCALE encoded balance of type `u128` representing the pending reward of the account ID. The default value is Zero incase of errors in fetching the rewards. 

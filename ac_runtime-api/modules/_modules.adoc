@@ -21,3 +21,5 @@ include::sessionkeys.adoc[]
 include::accountnonce.adoc[]
 
 include::txpayment.adoc[]
+
+include::nominationpools.adoc[]
