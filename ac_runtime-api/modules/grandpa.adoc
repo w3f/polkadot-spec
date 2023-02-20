@@ -19,6 +19,19 @@ Arguments::
 Return::
 * An authority list as defined in <<defn-authority-list>>.
 
+[#sect-grandpa-current-set-id]
+==== `GrandpaApi_current_set_id`
+
+This entry fetches the list of GRANDPA authority set ID (<<defn-authority-set-id>>).
+Any future authority changes get tracked via Runtime-to-consensus engine
+messages, as described in <<sect-consensus-message-digest>>.
+
+Arguments::
+* None.
+
+Return::
+* An authority set ID as defined in <<defn-authority-set-id>>.
+
 [#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic]
 ==== `GrandpaApi_submit_report_equivocation_unsigned_extrinsic`
 
