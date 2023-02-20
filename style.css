@@ -36,6 +36,14 @@ body {
 	margin-bottom: 1.25rem;
 }
 
+/* Render part intros just like other text */
+.partintro div.content {
+	line-height: 1.6;
+	font-size: 1.0625rem;
+	letter-spacing: -.01em;
+	text-rendering: optimizeLegibility;
+}
+
 /* Set our custom font */
 body {
 	font-family: var(--font-text);
