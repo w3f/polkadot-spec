@@ -5,7 +5,7 @@ Warp sync (<<sect-msg-warp-sync>>) only downloads the block headers where
 authority set changes occurred, so-called fragments (<<defn-warp-sync-proof>>),
 and by verifying the GRANDPA justifications (<<defn-grandpa-justification>>).
 This protocol allows nodes to arrive at the desired state much faster than fast
-sync. Warp sync is primarily designed for Light Clients. Although, warp sync could be used by full nodes, the sync process mahy lack information to cater to complete functionality set of full nodes. 
+sync. Warp sync is primarily designed for Light Clients. Although, warp sync could be used by full nodes, the sync process may lack information to cater to complete functionality set of full nodes. 
 
 For light clients, it is too expensive to download the state (approx. 550MB) to respond to queries. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root.   Requests for warp sync are performed using the `/dot/sync/warp` _Request-Response_ substream, the corresponding network messages are detailed in <<sect-protocols-substreams>>. 
 
@@ -14,7 +14,8 @@ Light clients base their trust in provided snapshots and the ability to slash gr
 In theory, the `warp sync` process takes the Genesis Block as input and outputs the hash of the state trie root at the latest finalized block. This root hash acts as proof to further validate the responses to queries by the full node. The `warp sync` works by starting from a trusted specified block (for e.g. from a snapshot) and verifying the block headers only at the authority set changes. 
 
 Eventually, the light client verifies the finality of the block returned by a full node to ensure that the block is indeed the latest finalized block. This entails two things: 
-    . check the authenticity of GRANDPA Justifications messages from Genesis to the last finalized block, 
+
+    . Check the authenticity of GRANDPA Justifications messages from Genesis to the last finalized block. 
     . Check the timestamp of the last finalized block to ensure that no other blocks might have been finalized at a later timestamp. 
 
 WARNING: *Long-Range Attack Vulnerabilities*: Warp syncing is particularly vulnerable to what is called long-range attacks. The authorities allowed to finalize blocks can generate multiple proofs of finality for
@@ -43,10 +44,14 @@ We outline the warp sync process, abstracting out details of verifying the final
 
 ++++
 Abstraction of Warp Sync and verification of latest block's finality. 
-SelectFullNode: determines the full node that the light client syncs with. 
-SyncSithNode: Returns the header of latest finalized block and a list of Grandpa Justifications by the full node.
-verifyAuthoritySetChange: verification algorithm which checks the authenticity of the header only at the end of an era where the authority set changes iteratively until reaching the latest era.
-verifyFinalty: verifies the finalty of the latest block using the Grandpa Justifications messages.
+
+latexmath:[SelectFullNode]: Determines the full node that the light client syncs with. 
+
+latexmath:[SyncSithNode]: Returns the header of latest finalized block and a list of Grandpa Justifications by the full node.
+
+latexmath:[verifyAuthoritySetChange]: Verification algorithm which checks the authenticity of the header only at the end of an era where the authority set changes iteratively until reaching the latest era.
+
+latexmath:[verifyFinalty]: Verifies the finalty of the latest block using the Grandpa Justifications messages.
 ****
 
 
@@ -67,8 +72,10 @@ The warp syncing process is closely coupled with the state querying procedure us
 
 ++++
 
-Querying State Algorithm. 
-latexmath:[QueryFullNode]: returns the response to the query requested from the Full Node for the query latexmath:[q] at block height latexmath:[h]. 
-latexmath:[validityCheck_{root}]: predicate that checks the validity of response latexmath:[res] and associated merkle proof latexmath:[\pi] by matching it against the Commit Root Hash latexmath:[root] obtained as a result of warp sync.  
+Querying State Algorithm.
+
+latexmath:[QueryFullNode]: Returns the response to the query requested from the Full Node for the query latexmath:[q] at block height latexmath:[h]. 
+
+latexmath:[validityCheck_{root}]: Predicate that checks the validity of response latexmath:[res] and associated merkle proof latexmath:[\pi] by matching it against the Commit Root Hash latexmath:[root] obtained as a result of warp sync.  
 
 ****
