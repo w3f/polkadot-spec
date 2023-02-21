@@ -342,14 +342,14 @@ Arguments::
 * None
 
 Return::
-* An _Option_ type which can contain the Scraped OnChainVotes data (<<defn-scraped-on-chain-vote>>). 
+* An _Option_ (<<defn-option-type>>) type which can contain the scraped on-chain votes data (<<defn-scraped-on-chain-vote>>). 
 
 [#defn-scraped-on-chain-vote]
 .<<defn-scraped-on-chain-vote, Scraped On Chain Vote>>
 ====
 Contains the scraped runtime backing votes and resolved disputes.
 
-The ScrapedOnChainVotes, stem:[SOCV], is a datastructure of the following format:
+The scraped on-chain votes data, stem:[SOCV], is a datastructure of the following format:
 
 [stem]
 ++++
@@ -359,7 +359,7 @@ BV = [C_r, [(i,a)]]
 
 where::
 * stem:[S_i] is the u32 integer representing the session index in which block was introduced.
-* stem:[BV] is the set of backing validators for each candidate, represented by its candidate receipt (<<defn-candidate-receipt>>). Each candidate stem:[C_r] has the list [stem:[(i,a)]], the pair of validator index and validation attestations (<<defn-parachain-inherent-data>>).
+* stem:[BV] is the set of backing validators for each candidate, represented by its candidate receipt (<<defn-candidate-receipt>>). Each candidate stem:[C_r] has a list of stem:[(i,a)], the pair of validator index and validation attestations (<<defn-parachain-inherent-data>>).
 * stem:[d] is a set of dispute statements (<<net-msg-dispute-request>>). Note that the above stem:[BV] is are unrelated to the backers of the dispute candidates. 
 ====
 
@@ -395,7 +395,7 @@ Return::
 [#defn-pvf-check-statement]
 .<<defn-pvf-check-statement, PVF Check Statement>>
 ====
-This is a statement by the validator who ran the pre-checking process for a PVF. A PVF is identified by the `ValidationCodeHash`. The statement is valid only during a single session, specified in the `session_index`.
+This is a statement by the validator who ran the pre-checking process for a PVF. A PVF is identified by the _ValidationCodeHash_. The statement is valid only during a single session, specified in the `session_index`.
 
 The PVF Check Statement stem:[S_{pvf}], is a datastructure of the following format:
 
