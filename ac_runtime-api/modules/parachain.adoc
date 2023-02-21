@@ -378,7 +378,7 @@ Arguments::
 Return::
 * A list of validation code hashes that require prechecking of votes by validator in the active set. 
 
-[#sect-rt-api-submit-pvf-check-statment]
+[#sect-rt-api-submit-pvf-check-statement]
 ==== `ParachainHost_submit_pvf_check_statement`
 
 This runtime API submits the judgement for a PVF, whether it is approved or not. The voting process uses unsigned transactions. The check is circulated through the network via gossip similar to a normal transaction. At some point the validator
