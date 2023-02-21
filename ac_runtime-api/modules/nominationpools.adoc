@@ -1,7 +1,7 @@
 [#sect-runtime-nomination-pools-module]
 === Module Nomination Pools
 
-IMPORTANT: This section describes *Version 2* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility. Currently supports only one RPC endpoint. 
+IMPORTANT: This section describes *Version 1* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility. Currently supports only one RPC endpoint. 
 
 
 [#sect-rte-pending-rewards]

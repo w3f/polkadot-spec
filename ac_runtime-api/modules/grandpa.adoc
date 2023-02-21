@@ -21,7 +21,7 @@ Return::
 * An authority list as defined in <<defn-authority-list>>.
 
 [#sect-grandpa-current-set-id]
-==== `GrandpaApi_current_set_id`ac
+==== `GrandpaApi_current_set_id`
 
 This entry fetches the list of GRANDPA authority set ID (<<defn-authority-set-id>>).
 Any future authority changes get tracked via Runtime-to-consensus engine

@@ -155,7 +155,7 @@ Arguments::
 
 Return::
 * An _Option_ value (<<defn-option-type>>) which can contain the pair of persisted
-validation data (<<defn-persisted-validation-data>>) and Validation Code Hash. The value is empty if the
+validation data (<<defn-persisted-validation-data>>) and Validation Code Hash. The value is `None` if the
 parachain Id is not registered or the validation data hash does not match the expected one.
 
 

@@ -1,6 +1,6 @@
 ==== Module TransactionPaymentApi
 
-IMPORTANT: This section describes *Version 1* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
+IMPORTANT: This section describes *Version 2* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
 
 All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
@@ -71,5 +71,67 @@ where:::
 where::::
 *** latexmath:[f_b] is the minimum required fee for an extrinsic.
 *** latexmath:[f_l] is the length fee, the amount paid for the encoded length (in bytes) of the extrinsic.
+*** latexmath:[f_a] is the "`adjusted weight fee`", which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
+** latexmath:[t] is the tip for the block author.
+
+
+===== `TransactionPaymentApi_query_call_info`
+
+Query information of a dispatch class, weight, and fee of a given encoded `Call`.
+
+Arguments::
+* A byte array of varying sizes containing the `Call`.
+* The length of the Call. 
+
+Return::
+* A data structure of the following format:
++
+[latexmath]
+++++
+(w, c, f)
+++++
++
+where:::
+** latexmath:[w] is the weight of the call.
+** latexmath:[c] is the "class" of the call, where class is a  varying data (<<defn-varrying-data-type>>) type defined as:
++
+[latexmath]
+++++
+c = \left\{\begin{array}{l}
+       0 \quad \textrm{Normal dispatch}\\
+       1 \quad \textrm{Operational dispatch}\\
+       2 \quad \textrm{Mandatory dispatch, which is always included regardless of their weight}
+     \end{array}\right.
+++++
+** latexmath:[f] is the partial-fee of the call. This does not
+include a tip or anything else that depends on the signature.
+
+===== `TransactionPaymentApi_query_call_fee_details`
+
+Query the fee details of a given encoded `Call` including tip. 
+
+Arguments::
+* A byte array of varying sizes containing the `Call`.
+* The length of the `Call`.
+
+Return::
+* A data structure of the following format:
++
+[latexmath]
+++++
+(f, t)
+++++
++
+where:::
+** latexmath:[f] is a SCALE encoded as defined in <<defn-option-type>> containing the following data structure:
++
+[latexmath]
+++++
+ f = (f_b, f_l, f_a)
+++++
++
+where::::
+*** latexmath:[f_b] is the minimum required fee for the `Call`.
+*** latexmath:[f_l] is the length fee, the amount paid for the encoded length (in bytes) of the `Call`.
 *** latexmath:[f_a] is the "`adjusted weight fee`", which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
 ** latexmath:[t] is the tip for the block author.
