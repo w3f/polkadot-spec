@@ -1,11 +1,12 @@
-==== Module TransactionPaymentApi
+[#sect-runtime-transactionpaymentapi-module]
+=== Module TransactionPaymentApi
 
 IMPORTANT: This section describes *Version 2* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
-
 All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 
-===== `TransactionPaymentApi_query_info`
+[#sect-rte-transactionpaymentapi-query-info]
+==== `TransactionPaymentApi_query_info`
 
 Returns information of a given extrinsic. This function is not aware of
 the internals of an extrinsic, but only interprets the extrinsic as some
@@ -42,7 +43,8 @@ c = \left\{\begin{array}{l}
 ** latexmath:[f] is the inclusion fee of the extrinsic. This does not
 include a tip or anything else that depends on the signature.
 
-===== `TransactionPaymentApi_query_fee_details`
+[#sect-rte-transactionpaymentapi-query-fee-details]
+==== `TransactionPaymentApi_query_fee_details`
 
 Query the detailed fee of a given extrinsic. This function can be used
 by the Polkadot Host implementation when it seems appropriate, such as
@@ -74,8 +76,8 @@ where::::
 *** latexmath:[f_a] is the "`adjusted weight fee`", which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
 ** latexmath:[t] is the tip for the block author.
 
-
-===== `TransactionPaymentApi_query_call_info`
+[#sect-rte-transactionpaymentapi-query-call-info]
+==== `TransactionPaymentApi_query_call_info`
 
 Query information of a dispatch class, weight, and fee of a given encoded `Call`.
 
@@ -106,7 +108,8 @@ c = \left\{\begin{array}{l}
 ** latexmath:[f] is the partial-fee of the call. This does not
 include a tip or anything else that depends on the signature.
 
-===== `TransactionPaymentApi_query_call_fee_details`
+[#sect-rte-transactionpaymentapi-query-call-fee-details]
+==== `TransactionPaymentApi_query_call_fee_details`
 
 Query the fee details of a given encoded `Call` including tip. 
 
@@ -135,3 +138,4 @@ where::::
 *** latexmath:[f_l] is the length fee, the amount paid for the encoded length (in bytes) of the `Call`.
 *** latexmath:[f_a] is the "`adjusted weight fee`", which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
 ** latexmath:[t] is the tip for the block author.
+he 

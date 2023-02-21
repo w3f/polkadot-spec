@@ -1,3 +1,4 @@
+[#sect-runtime-babeapi-module]
 === Module BabeApi
 
 IMPORTANT: This section describes *Version 2* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
@@ -49,6 +50,7 @@ requires the inclusion of an auxiliary VRF output (<<sect-block-production-lotte
 |A one-byte enum as defined in <<defn-consensus-message-babe>> as stem:[2_("nd")]. 
 |===
 
+[#sect-babeapi_current_epoch_start]
 ==== `BabeApi_current_epoch_start`
 
 Finds the start slot of the current epoch.
@@ -81,6 +83,7 @@ where:::
 ** latexmath:[A] is an authority list as defined in <<defn-authority-list>>.
 ** latexmath:[r] is an 256-bit array containing the randomness for the epoch as defined in <<defn-epoch-randomness>>.
 
+[#sect-babeapi_next_epoch]
 ==== `BabeApi_next_epoch`
 
 Produces information about the next epoch.
