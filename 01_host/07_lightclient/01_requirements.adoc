@@ -6,7 +6,7 @@ We list requirements of a Light Client categorized along the the three dimension
 
 * *Functional Requirements:* 
     . Update state (<<sect-state-storage>>) to reflect the latest view of the blockchain via synchronization with full nodes.
-    . (Optional) Verify validity of runtime transitions (<<sec-runtime-interaction>>). 
+    . (Optional) Verify validity of runtime transitions (<<sect-runtime-interaction>>). 
     . Make queries for data at the latest block height or across a range of blocks.
     . Append extrinsics (<<sect-extrinsics>>) to the blockchain via full nodes. 
 
