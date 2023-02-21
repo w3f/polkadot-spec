@@ -5,7 +5,7 @@ IMPORTANT: This section describes *Version 1* of this API. Please check `Core_ve
 
 
 [#sect-rte-pending-rewards]
-==== `NominationPools_pending_rewards`
+==== `NominationPoolsApi_pending_rewards`
 
 Runtime API for accessing information about the nomination pools. Returns the pending rewards for the member that the Account ID was given for.
 
