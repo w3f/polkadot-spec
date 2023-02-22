@@ -321,14 +321,14 @@ and decode information stored in a branch node.
 .<<defn-children-bitmap, Children Bitmap>>
 ====
 Suppose stem:[N_b, N_c in cc N] and stem:[N_c] is a child of stem:[N_b]. We
-define bit stem:[b_i : = 1] if and only if stem:[N] has a child with partial key
+define bit stem:[b_i : = 1] if and only if stem:[N_b] has a child with index
 stem:[i], therefore we define *ChildrenBitmap* functions as follows:
 
 [stem]
 ++++
 "ChildrenBitmap:"\
 cc N_b -> bbb B_2\
-N -> (b_(15), ...,b_8,b_7,...,b_0)_2
+N_b -> (b_(15), ...,b_8,b_7,...,b_0)_2
 ++++
 
 where
