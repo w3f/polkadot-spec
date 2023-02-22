@@ -34,5 +34,5 @@ Arguments::
 * `target`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 string which contains the path, module or location from where the log was
 executed.
-* `message`: a pointer-size (<<defn-runtime-pointer-size>>) to the log
-message.
+* `message`: a pointer-size (<<defn-runtime-pointer-size>>) to the UTF-8 encoded
+log message.

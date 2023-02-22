@@ -21,3 +21,5 @@ include::misc.adoc[]
 include::allocator.adoc[]
 
 include::logging.adoc[]
+
+include::panic_handler.adoc[]
