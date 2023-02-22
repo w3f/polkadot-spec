@@ -221,7 +221,7 @@ k_(N_c) = k_N || i || "pk"_(N_c)
 
 \endfor
 
-\state $pk^{Agr}_N \leftarrow pk^{Agr}_N || pk_{N_i}$
+\state $pk^{Agr}_N \leftarrow pk^{Agr}_N || pk_{N}$
 
 \return $pk^{Agr}_N$
 ++++
