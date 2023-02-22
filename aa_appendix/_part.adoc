@@ -9,3 +9,5 @@ include::02_encoding.adoc[]
 include::03_genesis.adoc[]
 
 include::04_erasure-encoding.adoc[]
+
+include::05_apk-proofs.adoc[]
