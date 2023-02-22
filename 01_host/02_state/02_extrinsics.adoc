@@ -157,6 +157,14 @@ be included in the current block as explained in <<algo-build-block>>.
 |timstap0
 |Unsigned 64-bit integer
 |Unix epoch time (<<defn-unix-time>>)
+
+|babeslot
+|Unsigned 64-bit integer
+|The babe slot (_DEPRECATED_) (<<defn-epoch-slot>>)
+
+|parachn0
+|Parachain inherent data (<<defn-parachain-inherent-data>>)
+|Parachain candidate inclusion (<<sect-candidate-inclusion>>)
 |===
 
 .<<defn-inherent-data, Inherent Data>>
