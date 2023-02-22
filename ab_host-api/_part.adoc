@@ -22,4 +22,4 @@ include::allocator.adoc[]
 
 include::logging.adoc[]
 
-include::abort_handler.adoc[]
+include::panic_handler.adoc[]

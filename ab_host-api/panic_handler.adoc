@@ -2,14 +2,14 @@
 
 Interface for aborting the execution of the runtime.
 
-==== `ext_abort_handler_abort`
+==== `ext_panic_handler_abort_on_panic`
 Aborts the execution of the runtime with a given message. Note that the message
 will be only displayed if the host is enabled to display those types of
 messages, which is implementation specific.
 
 ===== Version 1 - Prototype
 ----
-(func $ext_abort_handler_abort_version_1
+(func $ext_panic_handler_abort_on_panic_version_1
 	(param $message i64))
 ----
 
