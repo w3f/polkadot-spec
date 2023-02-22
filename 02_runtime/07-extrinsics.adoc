@@ -107,13 +107,19 @@ where::
 * latexmath:[M_i]: the module indicator (<<defn-module-indicator>>).
 * latexmath:[F_i(m)]: the function indicator of the module (<<defn-function-indicator>>).
 * latexmath:[E]: the extra data (<<defn-extra-data>>).
-* latexmath:[R_v]: a UINT32 containing the specification version of `14`.
-* latexmath:[F_v]: a UINT32 containing the format version of `2`.
+* latexmath:[R_v]: a UINT32 containing the specification version
+(`spec_version`) of the Runtime, which can be updated and is therefore subject
+to change.
+* latexmath:[F_v]: a UINT32 containing the transaction version
+(`transaction_version`) of the Runtime, which can be updated and is therefore
+subject to change.
 * latexmath:[H_h(G)]: a 32-byte array containing the genesis hash.
 * latexmath:[H_h(B)]: a 32-byte array containing the hash of the block
 which starts the mortality period, as described in <<defn-extrinsic-mortality>>.
-====
 
+NOTE: The runtime version can be fetched via the _system->version_ constant on
+https://polkadot.js.org/apps/#/chainstate/constants
+====
 
 .Extra Data
 [#defn-extra-data]
