@@ -9,12 +9,18 @@
 
   inputs = {
     utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
   };
 
   outputs = { self, utils, nixpkgs }: utils.lib.eachSystem [ "aarch64-linux" "i686-linux" "x86_64-linux"] (system:
   let
-    pkgs = nixpkgs.legacyPackages.${system};
+    pkgs = import nixpkgs {
+      inherit system;
+
+      config.permittedInsecurePackages = [
+        "qtwebkit-5.212.0-alpha4"
+      ];
+    };
     lib = nixpkgs.lib;
 
     ruby = pkgs.ruby_3_1;
@@ -36,7 +42,7 @@
     buildInputs = with pkgs; [ kaitai-struct-compiler graphviz polkadot ];
 
     # Needed by wkhtml to us QT offscreen render
-    QT_PLUGIN_PATH = with pkgs.qt514.qtbase; "${bin}/${qtPluginPrefix}";
+    QT_PLUGIN_PATH = with pkgs.qt5.qtbase; "${bin}/${qtPluginPrefix}";
     QT_QPA_PLATFORM = "offscreen";
 
     # Shared command line args
