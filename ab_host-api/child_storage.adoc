@@ -234,7 +234,7 @@ SCALE encoded storage root.
 ----
 (func $ext_default_child_storage_root_version_2
 	(param $child_storage_key i64) (param $version i32)
-	(return i32))
+	(return i64))
 ----
 
 Arguments::
