@@ -20,6 +20,7 @@ executing blocks with the runtime function as described in <<sect-rte-core-execu
 Arguments::
 * The source of the transaction as defined in <<defn-transaction-source>>.
 * A byte array that contains the transaction.
+* The hash of the parent of the block that the transaction is included in.
 +
 .TransactionSource
 [#defn-transaction-source]
