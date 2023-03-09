@@ -100,3 +100,9 @@ How those signed commitments are requested by the light client and delivered by
 the relayer varies among networks or implementations. On Ethereum, for example,
 the light client can request the signed commitments in form of a transaction,
 which results in a response in form of a transaction.
+
+[#sect-grandpa-apk-proof]
+=== Ultralight Finality Proof
+A plokadot APK prover node is responsible to generate succinct proof for aggregated validator public keys who has signed a particular BEEFY message in form of a SNARK.
+
+A light client node then can use these verified aggregated keys to verify the BLS signature in the BEEFY message.
