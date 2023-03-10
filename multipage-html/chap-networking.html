@@ -1,0 +1,1943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="description" content="The Official Polkadot and Kusama Protocol Specification">
+<meta name="keywords" content="babe, blockchain, consensus, finality, grandpa, kusama, parachain, polkadot, relay-chain, runtime, spec, web3, w3f">
+<meta name="author" content="Web 3.0 Technologies Foundation">
+<link rel="icon" type="image/png" href="./favicon.png">
+<title>Polkadot Protocol Specification</title>
+<style>
+/* Fetch Unbounded - Normal - Regular */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400&display=swap');
+/* Fetch Work Sans - Normal + Italic - Regular + Bold */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+/* Fetch Asciidoctor Default Style Sheet */
+@import url('https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css');
+
+/* Base constants of theme */
+:root {
+	--font-header: 'Unbounded', cursive;
+	--font-text: 'Work Sans', sans-serif;
+
+	--black: #1E1E1E;
+	--white: #FFFFFF;
+
+	--dark-blue: #172026;
+	--grey: #efefef;
+
+	--pink: #E6007A;
+	--purple: #670d35;
+}
+
+
+/* Apply some layout corrections */
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+  	display: flex;
+  	flex-direction: column;
+}
+
+.partintro {
+	margin-bottom: 1.25rem;
+}
+
+/* Render part intros just like other text */
+.partintro div.content {
+	line-height: 1.6;
+	font-size: 1.0625rem;
+	letter-spacing: -.01em;
+	text-rendering: optimizeLegibility;
+}
+
+/* Set our custom font */
+body {
+	font-family: var(--font-text);
+}
+
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+#toc ul.sectlevel0 > li > a,
+.sidebarblock > .content > .title {
+	font-family: var(--font-header);
+	font-weight: 400;
+}
+
+#toc ul{
+	font-family: var(--font-text);
+}
+
+/* Set base colors */
+body {
+	color: var(--black);
+	background-color: var(--white);
+}
+
+/* Style all titles */
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+.subheader,
+.title {
+	color: var(--pink);
+}
+
+/* - could be replaced by !important in previous block */
+.sidebarblock > .content > .title,
+.admonitionblock td.content > .title,
+.audioblock > .title,
+.exampleblock > .title,
+.imageblock > .title,
+.listingblock > .title,
+.literalblock > .title,
+.stemblock > .title,
+.openblock > .title,
+.paragraph > .title,
+.quoteblock > .title,
+table.tableblock > .title,
+.verseblock > .title,
+.videoblock > .title,
+.dlist > .title,
+.olist > .title,
+.ulist > .title,
+.qlist > .title,
+.hdlist > .title {
+	color: inherit;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    color: inherit;
+}
+
+/* Style all links */
+a {
+	color: var(--pink);
+}
+
+a:hover {
+	color: var(--purple);
+}
+
+/* - same here, next two blocks or important above */
+#content h1 > a.link,
+h2 > a.link,
+h3 > a.link, #toctitle > a.link,
+h4 > a.link,
+h5 > a.link,
+h6 > a.link,
+.sidebarblock > .content > .title > a.link {
+	color: inherit;
+}
+
+#content h1 > a.link:hover,
+h2 > a.link:hover,
+h3 > a.link:hover,
+h4 > a.link:hover,
+h5 > a.link:hover,
+h6 > a.link:hover,
+#toctitle > a.link:hover,
+.sidebarblock > .content > .title > a.link:hover {
+	color: var(--purple);
+}
+
+/* Style header like toc on small screens */
+@media screen and (max-width:768px) {
+	#header {
+		background-color: var(--dark-blue);
+		max-width: none;
+	}
+
+	#header > h1:first-child {
+  		color: var(--pink);
+	}
+
+	#header .details {
+  		color: var(--white);
+		border: none;
+	}
+}
+
+/* Style table of content */
+#toc.toc2 {
+	background-color: var(--dark-blue);
+	border: none;
+}
+
+#toc ul.sectlevel0 > li > a {
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: underline;
+}
+
+#toc a {
+	color: var(--white);
+}
+
+#toc a code {
+	color: inherit;
+	background-color: inherit;
+}
+
+#toc a .toc-current,
+#toc .tocify-focus a {
+	color: var(--pink);
+}
+
+/* Tame SVG images */
+.imageblock .content svg {
+  max-width: 100%;
+}
+
+/* Style boxes */
+.exampleblock > .content, 
+.sidebarblock {
+	background: var(--grey);
+}
+
+/* Style footer */
+#footer {
+	color: var(--white);
+	background-color: var(--dark-blue);
+}
+
+/* CSS Ribbon */
+.ribbon {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  z-index: 99999;
+  top: 0px;
+  right: 0px;
+}
+
+.ribbon a {
+  display: inline-block;
+  position: inherit;
+  transform: rotate(45deg);
+  width: 200px;
+  top: 45px; 
+  right: -40px;
+  padding: 6px 0px;
+  overflow: hidden;
+
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+
+  color: var(--white);
+  background-color: var(--pink);
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+  border: 2px dotted var(--white);
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 3px 0px;
+}
+
+/* MathJax v3 */
+.stemblock mjx-container {
+  text-align: center;
+  display: block;
+  width: 100%;
+  margin: 1em 0em;
+}
+
+/* Pseudocode.js */
+.ps-root {
+  font-size: 1.2em !important;
+}
+
+/* Fix inline svg with fixed width or height. */
+.imageblock .content svg {
+  widht: auto;
+  height: auto;
+}
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
+                       font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
+             .nav-footer{text-align: center; margin-top: auto;}
+             .nav-footer > p > a {white-space: nowrap;}</style>
+</head>
+<body id="chap-networking" class="book toc2 toc-left">
+<!-- Contribution Ribbon -->
+<div class="ribbon"><a target="_blank" href="https://github.com/w3f/polkadot-spec">Contributions welcome!</a></div>
+<div id="header">
+<h1>Polkadot Protocol Specification</h1>
+<div class="details">
+<span id="author" class="author">Web 3.0 Technologies Foundation</span><br>
+<span id="revnumber">version 0.2.1</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<p><span class="toc-root"><a href="polkadot-spec.html">Polkadot Protocol Specification</a></span></p><ul class="sectlevel1">
+<li><a href="id-polkadot-protocol.html">Polkadot Protocol</a>
+</li>
+<li><a href="part-polkadot-host.html">Polkadot Host</a>
+<ul class="sectlevel1">
+<li><a href="chap-overview.html">1. Overview</a>
+</li>
+<li><a href="chap-state.html">2. States and Transitions</a>
+</li>
+<li><a href="chap-sync.html">3. Synchronization</a>
+</li>
+<li><a href="chap-networking.html"><span class="toc-current">4. Networking</span></a>
+<ul class="sectlevel2">
+<li><a href="chap-networking.html#id-introduction-2">4.1. Introduction</a>
+</li>
+<li><a href="chap-networking.html#sect-networking-external-docs">4.2. External Documentation</a>
+</li>
+<li><a href="chap-networking.html#id-node-identities">4.3. Node Identities</a>
+</li>
+<li><a href="chap-networking.html#sect-discovery-mechanism">4.4. Discovery mechanism</a>
+</li>
+<li><a href="chap-networking.html#sect-connection-establishment">4.5. Connection establishment</a>
+</li>
+<li><a href="chap-networking.html#sect-encryption-layer">4.6. Encryption Layer</a>
+</li>
+<li><a href="chap-networking.html#sect-protocols-substreams">4.7. Protocols and Substreams</a>
+</li>
+<li><a href="chap-networking.html#sect-network-messages">4.8. Network Messages</a>
+</li>
+</ul>
+</li>
+<li><a href="sect-block-production.html">5. Block Production</a>
+</li>
+<li><a href="sect-finality.html">6. Finality</a>
+</li>
+<li><a href="sect-lightclient.html">7. Light Clients</a>
+</li>
+<li><a href="chapter-anv.html">8. Availability &amp; Validity</a>
+</li>
+</ul>
+</li>
+<li><a href="part-polkadot-runtime.html">Polkadot Runtime</a>
+</li>
+<li><a href="id-cryptography-encoding.html">Appendix D: Cryptography &amp; Encoding</a>
+</li>
+<li><a href="chap-host-api.html">Appendix E: Host API</a>
+</li>
+<li><a href="chap-runtime-api.html">Appendix F: Runtime API</a>
+</li>
+<li><a href="id-bibliography.html">Bibliography</a>
+</li>
+<li><a href="id-glossary.html">Glossary</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="chap-networking"><a class="anchor" href="#chap-networking"></a><a class="link" href="#chap-networking">4. Networking</a></h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This chapter in its current form is incomplete and considered work in progress.
+Authors appreciate receiving request for clarification or any reports regarding
+deviation from the current Polkadot network protocol. This can be done through
+filing an issue in <a href="https://github.com/w3f/polkadot-spec">Polkadot Specification
+repository</a>.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="id-introduction-2"><a class="anchor" href="#id-introduction-2"></a><a class="link" href="#id-introduction-2">4.1. Introduction</a></h3>
+<div class="paragraph">
+<p>The Polkadot network is decentralized and does not rely on any central authority
+or entity for achieving its fullest potential of provided functionality. The
+networking protocol is based on a family of open protocols, including protocol
+implemented <em>libp2p</em> e.g. the distributed Kademlia hash table which is used for
+peer discovery.</p>
+</div>
+<div class="paragraph">
+<p>This chapter walks through the behavior of the networking implementation of the
+Polkadot Host and defines the network messages. The implementation details of
+the <em>libp2p</em> protocols used are specified in external sources as described in
+<a href="chap-networking.html#sect-networking-external-docs">Section 4.2</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-networking-external-docs"><a class="anchor" href="#sect-networking-external-docs"></a><a class="link" href="#sect-networking-external-docs">4.2. External Documentation</a></h3>
+<div class="paragraph">
+<p>Complete specification of the Polkadot networking protocol relies on the
+following external protocols:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/libp2p/specs">libp2p</a> - <em>libp2p</em> is a modular peer-to-peer
+networking stack composed of many modules and different parts. includes the
+multiplexing protocols and .</p>
+</li>
+<li>
+<p><a href="https://docs.libp2p.io/concepts/addressing/">libp2p addressing</a> - The Polkadot
+Host uses the <em>libp2p</em> addressing system to identify and connect to peers.</p>
+</li>
+<li>
+<p><a href="https://en.wikipedia.org/wiki/Kademlia">Kademlia</a> - <em>Kademlia</em> is a distributed
+hash table for decentralized peer-to-peer networks. The Polkadot Host uses
+Kademlia for peer discovery.</p>
+</li>
+<li>
+<p><a href="https://noiseprotocol.org/">Noise</a> - The <em>Noise</em> protocol is a framework for
+building cryptographic protocols. The Polkadot Host uses Noise to establish the
+encryption layer to remote peers.</p>
+</li>
+<li>
+<p><a href="https://docs.libp2p.io/concepts/stream-multiplexing/#yamux">yamux</a> - <em>yamux</em> is
+a multiplexing protocol developed by HashiCorp. It is the de-facto standard for
+the Polkadot Host. <a href="chap-networking.html#sect-protocols-substreams">Section 4.7</a> describes the subprotocol in
+more detail.</p>
+</li>
+<li>
+<p><a href="https://developers.google.com/protocol-buffers/docs/reference/proto3-spec">Protocol
+Buffers</a> - Protocol Buffers is a language-neutral, platform-neutral mechanism
+for serializing structured data and is developed by Google. The Polkadot Host
+uses Protocol Buffers to serialize specific messages, as clarified in
+<a href="chap-networking.html#sect-network-messages">Section 4.8</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-node-identities"><a class="anchor" href="#id-node-identities"></a><a class="link" href="#id-node-identities">4.3. Node Identities</a></h3>
+<div class="paragraph">
+<p>Each Polkadot Host node maintains an ED25519 key pair which is used to
+identify the node. The public key is shared with the rest of the network
+allowing the nodes to establish secure communication channels.</p>
+</div>
+<div class="paragraph">
+<p>Each node must have its own unique ED25519 key pair. If two or more nodes use
+the same key, the network will interpret those nodes as a single node, which
+will result in unspecified behavior. Furthermore, the node’s <em>PeerId</em> as
+defined in <a href="chap-networking.html#defn-peer-id">Definition 34</a> is derived from its public key. <em>PeerId</em> is used
+to identify each node when they are discovered in the course of the discovery
+mechanism described in <a href="chap-networking.html#sect-discovery-mechanism">Section 4.4</a>.</p>
+</div>
+<div id="defn-peer-id" class="exampleblock">
+<div class="title">Definition 34. <a href="chap-networking.html#defn-peer-id">PeerId</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The Polkadot node’s PeerId, formally referred to as \$P_(id)\$, is derived
+from the ED25519 public key and is structured based on the
+<a href="https://docs.libp2p.io/concepts/peer-id/">libp2p specification</a>, but does not
+fully conform to the specification. Specifically, it does not support
+<a href="https://github.com/multiformats/cid">CID</a> and the only supported key type is
+ED25519.</p>
+</div>
+<div class="paragraph">
+<p>The byte representation of the PeerId is always of the following bytes in this
+exact order:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$b_0 = 0\$
+\$b_1 = 36\$
+\$b_2 = 8\$
+\$b_3 = 1\$
+\$b_4 = 18\$
+\$b_5 = 32\$
+\$b_(6..37) = ...\$
+</div>
+</div>
+<div class="paragraph">
+<p>where</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>\$b_0\$ is the <a href="https://github.com/multiformats/multihash#multihash">multihash prefix</a>
+of value \$0\$ (implying no hashing is used).</p>
+</li>
+<li>
+<p>\$b_1\$ the length of the PeerId (remaining bytes).</p>
+</li>
+<li>
+<p>\$b_2\$ and \$b_3\$ are a protobuf encoded field-value pair
+<a href="https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys">indicating
+the used key type</a> (field \$1\$ of value \$1\$ implies <em>ED25519</em>).</p>
+</li>
+<li>
+<p>\$b_4\$, \$b_5\$ and \$b_(6..37)\$ are a protobuf encoded field-value
+pair where \$b_5\$ indicates the length of the public key followed by the the
+raw ED25519 public key itself, which varies for each Polkadot Host and is always
+32 bytes (field \$2\$ contains the public key, which has a field value length prefix).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-discovery-mechanism"><a class="anchor" href="#sect-discovery-mechanism"></a><a class="link" href="#sect-discovery-mechanism">4.4. Discovery mechanism</a></h3>
+<div class="paragraph">
+<p>The Polkadot Host uses various mechanisms to find peers within the
+network, to establish and maintain a list of peers and to share that
+list with other peers from the network as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Bootstrap nodes</strong> are hard-coded node identities and addresses provided by the
+genesis state (<a href="id-cryptography-encoding.html#chapter-genesis">Section A.3</a>).</p>
+</li>
+<li>
+<p><strong>mDNS</strong> is a protocol that performs a broadcast to the local network. Nodes
+that might be listening can respond to the broadcast.
+<a href="https://github.com/libp2p/specs/blob/master/discovery/mdns.md">The libp2p mDNS
+specification</a> defines this process in more detail. This protocol is an optional
+implementation detail for Polkadot Host implementers and is not required to
+participate in the Polkadot network.</p>
+</li>
+<li>
+<p><strong>Kademlia requests</strong> invoking Kademlia requests, where nodes respond with their
+list of available peers. Kademlia requests are performed on a specific substream
+as described in <a href="chap-networking.html#sect-protocols-substreams">Section 4.7</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-connection-establishment"><a class="anchor" href="#sect-connection-establishment"></a><a class="link" href="#sect-connection-establishment">4.5. Connection establishment</a></h3>
+<div class="paragraph">
+<p>Polkadot nodes connect to peers by establishing a TCP connection. Once
+established, the node initiates a handshake with the remote peers on the
+encryption layer. An additional layer on top of the encryption layer, known as
+the multiplexing layer, allows a connection to be split into substreams, as
+described by the
+<a href="https://docs.libp2p.io/concepts/stream-multiplexing/#yamux">yamux specification</a>,
+either by the local or remote node.</p>
+</div>
+<div class="paragraph">
+<p>The Polkadot node supports two types of substream protocols.
+<a href="chap-networking.html#sect-protocols-substreams">Section 4.7</a> describes the usage of each type in more detail:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Request-Response substreams</strong>: After the protocol is negotiated by the
+multiplexing layer, the initiator sends a single message containing a request.
+The responder then sends a response, after which the substream is then
+immediately closed. The requests and responses are prefixed with their
+<a href="https://en.wikipedia.org/wiki/LEB128">LEB128</a> encoded length.</p>
+</li>
+<li>
+<p><strong>Notification substreams</strong>. After the protocol is negotiated, the initiator
+sends a single handshake message. The responder can then either accept the
+substream by sending its own handshake or reject it by closing the substream.
+After the substream has been accepted, the initiator can send an unbound number
+of individual messages. The responder keeps its sending side of the substream
+open, despite not sending anything anymore, and can later close it in order to
+signal to the initiator that it no longer wishes to communicate.</p>
+<div class="paragraph">
+<p>Handshakes and messages are prefixed with their
+<a href="https://en.wikipedia.org/wiki/LEB128">LEB128</a> encoded lengths. A handshake can be
+empty, in which case the length prefix would be <em>0</em>.</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Connections are established by using the following protocols:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/noise</code> - a protocol that is announced when a connection to a peer is
+established.</p>
+</li>
+<li>
+<p><code>/multistream/1.0.0</code> - a protocol that is announced when negotiating an
+encryption protocol or a substream.</p>
+</li>
+<li>
+<p><code>/yamux/1.0.0</code> - a protocol used during <em>yamux</em> negotiation. See
+<a href="chap-networking.html#sect-protocols-substreams">Section 4.7</a> for more information.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Polkadot Host can establish a connection with any peer of which it
+knows the address. The Polkadot Host supports multiple networking
+protocols:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>TCP/IP</strong> with addresses in the form of <code>/ip4/1.2.3.4/tcp/30333</code> to establish a TCP
+connection and negotiate encryption and a multiplexing layer.</p>
+</li>
+<li>
+<p><strong>WebSocket</strong> with addresses in the form of <code>/ip4/1.2.3.4/tcp/30333/ws</code> to establish a
+TCP connection and negotiate the WebSocket protocol within the connection.
+Additionally, encryption and multiplexing layer is negotiated within the
+WebSocket connection.</p>
+</li>
+<li>
+<p><strong>DNS</strong> addresses in form of <code>/dns/example.com/tcp/30333</code> and <code>/dns/example.com/tcp/30333/ws</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The addressing system is described in the
+<a href="https://docs.libp2p.io/concepts/addressing/">libp2p addressing</a> specification.
+After a base-layer protocol is established, the Polkadot Host will apply the
+Noise protocol to establish the encryption layer as described in
+<a href="chap-networking.html#sect-encryption-layer">Section 4.6</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-encryption-layer"><a class="anchor" href="#sect-encryption-layer"></a><a class="link" href="#sect-encryption-layer">4.6. Encryption Layer</a></h3>
+<div class="paragraph">
+<p>Polkadot protocol uses the <em>libp2p</em> Noise framework to build an encryption
+protocol. The Noise protocol is a framework for building encryption protocols.
+<em>libp2p</em> utilizes that protocol for establishing encrypted communication
+channels. Refer to the <a href="https://github.com/libp2p/specs/tree/master/noise">libp2p
+Secure Channel Handshake</a> specification for a detailed description.</p>
+</div>
+<div class="paragraph">
+<p>Polkadot nodes use the <a href="https://noiseexplorer.com/patterns/XX/">XX handshake
+pattern</a> to establish a connection between peers. The three following steps are
+required to complete the handshake process:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>The initiator generates a keypair and sends the public key to the responder.
+The <a href="https://github.com/libp2p/specs/tree/master/noise">Noise specification</a> and
+the <a href="https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md">libp2p
+PeerId specification</a> describe keypairs in more detail.</p>
+</li>
+<li>
+<p>The responder generates its own key pair and sends its public key back to the
+initiator. After that, the responder derives a shared secret and uses it to
+encrypt all further communication. The responder now sends its static Noise
+public key (which may change anytime and does not need to be persisted on disk),
+its <em>libp2p</em> public key and a signature of the static Noise public key signed
+with the <em>libp2p</em> public key.</p>
+</li>
+<li>
+<p>The initiator derives a shared secret and uses it to encrypt all further
+communication. It also sends its static Noise public key, <em>libp2p</em> public key
+and signature to the responder.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>After these three steps, both the initiator and responder derive a new shared
+secret using the static and session-defined Noise keys, which are used to
+encrypt all further communication.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-protocols-substreams"><a class="anchor" href="#sect-protocols-substreams"></a><a class="link" href="#sect-protocols-substreams">4.7. Protocols and Substreams</a></h3>
+<div class="paragraph">
+<p>After the node establishes a connection with a peer, the use of multiplexing
+allows the Polkadot Host to open substreams. <em>libp2p</em> uses the
+<a href="https://docs.libp2p.io/concepts/stream-multiplexing/#yamux"><em>yamux protocol</em></a> to
+manage substreams and to allow the negotiation of <em>application-specific
+protocols</em>, where each protocol serves a specific utility.</p>
+</div>
+<div class="paragraph">
+<p>The Polkadot Host uses multiple substreams whose usage depends on a specific
+purpose. Each substream is either a <em>Request-Response substream</em> or a
+<em>Notification substream</em>, as described in
+<a href="chap-networking.html#sect-connection-establishment">Section 4.5</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The prefixes on those substreams are known as protocol identifiers and are
+used to segregate communications to specific networks. This prevents any
+interference with other networks. <code>dot</code> is used exclusively for Polkadot.
+Kusama, for example, uses the protocol identifier <code>ksmcc3</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/ipfs/ping/1.0.0</code> - Open a standardized substream <em>libp2p</em> to a peer and
+initialize a ping to verify if a connection is still alive. If the peer does not
+respond, the connection is dropped. This is a <em>Request-Response substream</em>.</p>
+<div class="paragraph">
+<p>Further specification and reference implementation are available in the
+<a href="https://docs.libp2p.io/concepts/protocols/#ping">libp2p documentation</a>.</p>
+</div>
+</li>
+<li>
+<p><code>/ipfs/id/1.0.0</code> - Open a standardized <em>libp2p</em> substream to a peer to ask for
+information about that peer. This is a <em>Request-Response substream</em>, but the
+initiator does <strong>not</strong> send any message to the responder and only waits for the
+response.</p>
+<div class="paragraph">
+<p>Further specification and reference implementation are available in the
+<a href="https://docs.libp2p.io/concepts/protocols/#identify">libp2p documentation</a>.</p>
+</div>
+</li>
+<li>
+<p><code>/dot/kad</code> - Open a standardized substream for Kademlia <code>FIND_NODE</code> requests.
+This is a <em>Request-Response substream</em>, as defined by the <em>libp2p</em> standard.</p>
+<div class="paragraph">
+<p>Further specification and reference implementation are available on
+<a href="https://en.wikipedia.org/wiki/Kademlia">Wikipedia</a> respectively the
+<a href="https://github.com/libp2p/go-libp2p-kad-dht">golang Github repository</a>.</p>
+</div>
+</li>
+<li>
+<p><code>/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/light/2</code> - a request and response protocol that allows a light client to
+request information about the state. This is a <em>Request-Response substream</em>.</p>
+<div class="paragraph">
+<p>The messages are specified in <a href="sect-lightclient.html#sect-light-msg">Section 7.4</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For backwards compatibility reasons, <code>/dot/light/2</code> is also a valid substream for those messages.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/block-announces/1</code> - a substream/notification protocol which sends
+blocks to connected peers. This is a <em>Notification substream</em>.</p>
+<div class="paragraph">
+<p>The messages are specified in <a href="chap-networking.html#sect-msg-block-announce">Section 4.8.1</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For backwards compatibility reasons, <code>/dot/block-announces/1</code> is also a valid substream for those messages.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/sync/2</code> - a request and response protocol that allows the Polkadot Host
+to request information about blocks. This is a <em>Request-Response substream</em>.</p>
+<div class="paragraph">
+<p>The messages are specified in <a href="chap-networking.html#sect-msg-block-request">Section 4.8.2</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For backwards compatibility reasons, <code>/dot/sync/2</code> is also a valid substream for those messages.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/sync/warp</code> - a request and response protocol that allows the Polkadot Host
+to perform a warp sync request. This is a <em>Request-Response substream</em>.</p>
+<div class="paragraph">
+<p>The messages are specified in <a href="chap-networking.html#sect-msg-warp-sync">Section 4.8.4</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For backwards compatibility reasons, <code>/dot/sync/warp</code> is also a valid substream for those messages.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/transactions/1</code> - a substream/notification protocol which sends
+transactions to connected peers. This is a <em>Notification substream</em>.</p>
+<div class="paragraph">
+<p>The messages are specified in <a href="chap-networking.html#sect-msg-transactions">Section 4.8.5</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For backwards compatibility reasons, <code>/dot/transactions/1</code> is also a valid substream for those messages.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/grandpa/1</code> - a substream/notification protocol that sends GRANDPA
+votes to connected peers. This is a <em>Notification substream</em>.</p>
+<div class="paragraph">
+<p>The messages are specified in <a href="chap-networking.html#sect-msg-grandpa">Section 4.8.6</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For backwards compatibility reasons, <code>/paritytech/grandpa/1</code> is also a valid substream for those messages.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p><code>/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/beefy/1</code> - a substream/notification protocol which sends signed
+BEEFY statements, as described in <a href="sect-finality.html#sect-grandpa-beefy">Section 6.7</a>, to connected peers.
+This is a <em>Notification</em> substream.</p>
+<div class="paragraph">
+<p>The messages are specified in <a href="chap-networking.html#sect-msg-grandpa-beefy">Section 4.8.7</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+For backwards compatibility reasons, <code>/paritytech/beefy/1</code> is also a valid substream for those messages.
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-network-messages"><a class="anchor" href="#sect-network-messages"></a><a class="link" href="#sect-network-messages">4.8. Network Messages</a></h3>
+<div class="paragraph">
+<p>The Polkadot Host must actively communicate with the network in order to
+participate in the validation process or act as a full node.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The Polkadot network originally only used SCALE encoding for all message
+formats. Meanwhile, Protobuf has been adopted for certain messages. The encoding
+of each listed message is always SCALE encoded unless Protobuf is explicitly
+mentioned. Encoding and message formats are subject to change.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="sect-msg-block-announce"><a class="anchor" href="#sect-msg-block-announce"></a><a class="link" href="#sect-msg-block-announce">4.8.1. Announcing blocks</a></h4>
+<div class="paragraph">
+<p>When the node creates or receives a new block, it must be announced to the
+network. Other nodes within the network will track this announcement and can
+request information about this block. The mechanism for tracking announcements
+and requesting the required data is implementation-specific.</p>
+</div>
+<div class="paragraph">
+<p>Block announcements, requests and responses are sent over the substream as
+described in <a href="chap-networking.html#defn-block-announce-handshake">Definition 35</a>.</p>
+</div>
+<div id="defn-block-announce-handshake" class="exampleblock">
+<div class="title">Definition 35. <a href="chap-networking.html#defn-block-announce-handshake">Block Announce Handshake</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <code>BlockAnnounceHandshake</code> initializes a substream to a remote peer. Once
+established, all <code>BlockAnounce</code> messages (<a href="chap-networking.html#defn-block-announce">Definition 36</a>) created by
+the node are sent to the <code>/dot/block-announces/1</code> substream.</p>
+</div>
+<div class="paragraph">
+<p>The <code>BlockAnnounceHandshake</code> is a structure of the following
+format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$BA_h = "Enc"_("SC")(R, N_B, h_B, h_G)\$
+</div>
+</div>
+<div class="paragraph">
+<p>where:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$R = {(1,"The node is a full node"),(2,"The node is a light client"),(4,"The node is a validator"):}\$
+\$N_B = "Best block number according to the node"\$
+\$h_B = "Best block hash according to the node"\$
+\$h_G = "Genesis block hash according to the node"\$
+</div>
+</div>
+</div>
+</div>
+<div id="defn-block-announce" class="exampleblock">
+<div class="title">Definition 36. <a href="chap-networking.html#defn-block-announce">Block Announce</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <code>BlockAnnounce</code> message is sent to the specified substream and indicates to
+remote peers that the node has either created or received a new block.</p>
+</div>
+<div class="paragraph">
+<p>The message is a structure of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$BA = "Enc"_("SC")("Head"(B),b)\$
+</div>
+</div>
+<div class="paragraph">
+<p>where:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$"Head"(B) = "Header of the announced block"\$
+\$b = {(0,"Is not part of the best chain"),(1,"Is the best block according to the node"):}\$
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-msg-block-request"><a class="anchor" href="#sect-msg-block-request"></a><a class="link" href="#sect-msg-block-request">4.8.2. Requesting Blocks</a></h4>
+<div class="paragraph">
+<p>Block requests can be used to retrieve a range of blocks from peers. Those
+messages are sent over the <code>/dot/sync/2</code> substream.</p>
+</div>
+<div id="defn-msg-block-request" class="exampleblock">
+<div class="title">Definition 37. <a href="chap-networking.html#defn-msg-block-request">Block Request</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <code>BlockRequest</code> message is a Protobuf serialized structure of the following format:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 12.5%;">
+<col style="width: 50%;">
+<col style="width: 12.5%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uint32</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Bits of block data to request</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\$B_f\$</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>oneof</code></p></td>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Start from this block</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\$B_s\$</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Direction</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sequence direction, interpreted as Id <em>0</em> (ascending) if missing.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>uint32</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Maximum amount (<em>optional</em>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\$B_m\$</p></td>
+</tr>
+</tbody>
+</table>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$B_f\$ indicates all the fields that should be included in the request.
+its <strong>big-endian</strong> encoded bitmask that applies to all desired fields with bitwise
+OR operations. For example, the \$B_f\$ value to request <em>Header</em> and
+<em>Justification</em> is <em>0001 0001</em> (17).</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Field</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Header</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0000 0001</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Body</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0000 0010</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Justification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0001 0000</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>\$B_s\$ is a Protobuf structure indicating a varying data
+type (enum) of the following values:</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The block hash</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The block number</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><em>Direction</em> is a Protobuf structure indicating the sequence direction of the
+requested blocks. The structure is a varying data type (enum) of the following
+format:</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 80%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enumerate in ascending order (from child to parent)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enumerate in descending order (from parent to canonical child)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>\$B_m\$ is the number of blocks to be returned. An implementation defined
+maximum is used when unspecified.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="defn-msg-block-response" class="exampleblock">
+<div class="title">Definition 38. <a href="chap-networking.html#defn-msg-block-response">Block Response</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <code>BlockResponse</code> message is received after sending a <code>BlockRequest</code> message
+to a peer. The message is a Protobuf serialized structure of the following
+format:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 11.1111%;">
+<col style="width: 55.5556%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Repeated <em>BlockData</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Block data for the requested sequence</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>where <em>BlockData</em> is a Protobuf structure containing the requested blocks. Do
+note that the optional values are either present or absent depending on the
+requested fields (bitmask value). The structure has the following format:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 18.1818%;">
+<col style="width: 9.0909%;">
+<col style="width: 45.4545%;">
+<col style="width: 27.2728%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Block header hash</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="chap-state.html#defn-block-header-hash">Definition 12</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Block header (optional)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="chap-state.html#defn-block-header">Definition 10</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">repeated <code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Block body (optional)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="chap-state.html#defn-block-body">Definition 13</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Block receipt (optional)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Block message queue (optional)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Justification (optional)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="sect-finality.html#defn-grandpa-justification">Definition 78</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bool</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates whether the justification is empty (i.e. should be ignored)</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-msg-state-request"><a class="anchor" href="#sect-msg-state-request"></a><a class="link" href="#sect-msg-state-request">4.8.3. Requesting States</a></h4>
+<div class="paragraph">
+<p>The Polkadot Host can request the state in form of a key/value list at a
+specified block.</p>
+</div>
+<div class="paragraph">
+<p>When receiving state entries from the state response messages
+(<a href="chap-networking.html#defn-msg-state-response">Definition 40</a>), the node can verify the entries with the entry
+proof (id <em>1</em> in <em>KeyValueStorage</em>) against the merkle root in the block header
+(of the block specified in <a href="chap-networking.html#defn-msg-state-request">Definition 39</a>). Once the state response
+message claims that all entries have been sent (id <em>3</em> in <em>KeyValueStorage</em>),
+the node can use all collected entry proofs and validate it against the merkle
+root to confirm that claim.</p>
+</div>
+<div class="paragraph">
+<p>See the the synchronization chapter for more information (<a href="chap-sync.html">Chapter 3</a>).</p>
+</div>
+<div id="defn-msg-state-request" class="exampleblock">
+<div class="title">Definition 39. <a href="chap-networking.html#defn-msg-state-request">State Request</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>state request</strong> is sent to a peer to request the state at a specified block.
+The message is a single 32-byte Blake2 hash which indicates the block from which
+the sync should start.</p>
+</div>
+<div class="paragraph">
+<p>Depending on what substream is used, he remote peer either sends back a state
+response (<a href="chap-networking.html#defn-msg-state-response">Definition 40</a>) on the <code>/dot/sync/2</code> substream or a warp
+sync proof (<a href="chap-networking.html#defn-warp-sync-proof">Definition 41</a>) on the <code>/dot/sync/warp</code>.</p>
+</div>
+</div>
+</div>
+<div id="defn-msg-state-response" class="exampleblock">
+<div class="title">Definition 40. <a href="chap-networking.html#defn-msg-state-response">State Response</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>state response</strong> is sent to the peer that initialized the state request
+(<a href="chap-networking.html#defn-msg-state-request">Definition 39</a>) and contains a list of key/value entries with an
+associated proof. This response is sent continuously until all key/value pairs
+have been submitted.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 14.2857%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>repeated KeyValueStateEntry</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">State entries</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">State proof</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>where <em>KeyValueStateEntry</em> is of the following format:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 14.2857%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Root of the entry, empty if top level</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>repeated StateEntry</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Collection of key/values</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bool</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equal 'true' if there are no more keys to return.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>and <em>StateEntry</em>:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 28.5714%;">
+<col style="width: 14.2857%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The key of the entry</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bytes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The value of the entry</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-msg-warp-sync"><a class="anchor" href="#sect-msg-warp-sync"></a><a class="link" href="#sect-msg-warp-sync">4.8.4. Warp Sync</a></h4>
+<div class="paragraph">
+<p>The warp sync protocols allows nodes to retrieve blocks from remote peers where
+authority set changes occurred. This can be used to speed up synchronization to
+the latest state.</p>
+</div>
+<div class="paragraph">
+<p>See the the synchronization chapter for more information (<a href="chap-sync.html">Chapter 3</a>).</p>
+</div>
+<div id="defn-warp-sync-proof" class="exampleblock">
+<div class="title">Definition 41. <a href="chap-networking.html#defn-warp-sync-proof">Warp Sync Proof</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>warp sync proof</strong> message, \$P\$, is sent to the peer that initialized
+the state request (<a href="chap-networking.html#defn-msg-state-request">Definition 39</a>) on the <code>/dot/sync/warp</code> substream
+and contains accumulated proof of multiple authority set changes
+(<a href="chap-sync.html#sect-consensus-message-digest">Section 3.3.2</a>). It&#8217;s a datastructure of the following
+format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$P = (f_x...f_y, c)\$
+</div>
+</div>
+<div class="paragraph">
+<p>\$f_x...f_y\$ is an array consisting of warp sync fragments of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$f_x = (B_h, J^(r,"stage")(B))\$
+</div>
+</div>
+<div class="paragraph">
+<p>where \$B_h\$ is the last block header containing a digest item
+(<a href="chap-state.html#defn-digest">Definition 11</a>) signaling an authority set change from which the next
+authority set change can be fetched from. \$J^(r,"stage")(B)\$ is the GRANDPA
+justification (<a href="sect-finality.html#defn-grandpa-justification">Definition 78</a>) and \$c\$ is a boolean that
+indicates whether the warp sync has been completed.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-msg-transactions"><a class="anchor" href="#sect-msg-transactions"></a><a class="link" href="#sect-msg-transactions">4.8.5. Transactions</a></h4>
+<div class="paragraph">
+<p>Transactions (<a href="chap-state.html#sect-extrinsics">Section 2.3</a>) are sent directly to peers with which the
+Polkadot Host has an open transaction substream (<a href="chap-networking.html#defn-transactions-message">Definition 42</a>).
+Polkadot Host implementers should implement a mechanism that only sends a
+transaction once to each peer and avoids sending duplicates. Sending duplicate
+transactions might result in undefined consequences such as being blocked for
+bad behavior by peers.</p>
+</div>
+<div class="paragraph">
+<p>The mechanism for managing transactions is further described in Section
+<a href="chap-state.html#sect-extrinsics">Section 2.3</a>.</p>
+</div>
+<div id="defn-transactions-message" class="exampleblock">
+<div class="title">Definition 42. <a href="chap-networking.html#defn-transactions-message">Transaction Message</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>transactions message</strong> is the structure of how the transactions are sent
+over the network. It is represented by \$M_T\$ and is defined as follows:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M_T := "Enc"_("SC")(C_1,...,C_n)\$
+</div>
+</div>
+<div class="paragraph">
+<p>in which:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$C_i := "Enc"_("SC")(E_i)\$
+</div>
+</div>
+<div class="paragraph">
+<p>Where each \$E_i\$ is a byte array and represents a separate
+extrinsic. The Polkadot Host is agnostic about the content of an
+extrinsic and treats it as a blob of data.</p>
+</div>
+<div class="paragraph">
+<p>Transactions are sent over the <code>/dot/transactions/1</code> substream.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-msg-grandpa"><a class="anchor" href="#sect-msg-grandpa"></a><a class="link" href="#sect-msg-grandpa">4.8.6. GRANDPA Messages</a></h4>
+<div class="paragraph">
+<p>The exchange of GRANDPA messages is conducted on the substream. The process for
+the creation and distributing these messages is described in <a href="sect-finality.html">Chapter 6</a>.
+The underlying messages are specified in this section.</p>
+</div>
+<div id="defn-gossip-message" class="exampleblock">
+<div class="title">Definition 43. <a href="chap-networking.html#defn-gossip-message">Grandpa Gossip Message</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>GRANDPA gossip message</strong>, \$M\$, is a varying datatype
+(<a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>) which identifies the message type that is cast by
+a voter followed by the message itself.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M = {(0,"Vote message", V_m),(1,"Commit message", C_m),(2,"Neighbor message", N_m),(3,"Catch-up request message",R_m),(4,"Catch-up message",U_m):}\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$V_m\$ is defined in <a href="chap-networking.html#defn-grandpa-vote-msg">Definition 44</a>.</p>
+</li>
+<li>
+<p>\$C_m\$ is defined in <a href="chap-networking.html#defn-grandpa-commit-msg">Definition 46</a>.</p>
+</li>
+<li>
+<p>\$N_m\$ is defined in <a href="chap-networking.html#defn-grandpa-neighbor-msg">Definition 47</a>.</p>
+</li>
+<li>
+<p>\$R_m\$ is defined in <a href="chap-networking.html#defn-grandpa-catchup-request-msg">Definition 48</a>.</p>
+</li>
+<li>
+<p>\$U_M\$ is defined in <a href="chap-networking.html#defn-grandpa-catchup-response-msg">Definition 49</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-vote-msg" class="exampleblock">
+<div class="title">Definition 44. <a href="chap-networking.html#defn-grandpa-vote-msg">GRANDPA Vote Messages</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>GRANDPA vote message</strong> by voter \$v\$, \$M_v^(r,"stage")\$, is gossip to
+the network by voter \$v\$ with the following structure:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M_v^(r,"stage")(B) := "Enc"_("SC")(r,"id"_(bbb V),"SigMsg")\$
+\$"SigMsg" := ("msg","Sig"_(v_i)^(r,"stage"),v_("id"))\$
+\$"msg" := "Enc"_("SC")("stage",V_v^(r,"stage")(B))\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$r\$ is an unsigned 64-bit integer indicating the Grandpa round number
+(<a href="sect-finality.html#defn-voting-rounds">Definition 76</a>).</p>
+</li>
+<li>
+<p>\$"id"_(bbb V)\$ is an unsigned 64-bit integer indicating the authority Set Id (<a href="chap-sync.html#defn-authority-list">Definition 33</a>).</p>
+</li>
+<li>
+<p>\$"Sig"_(v_i)^(r,"stage")\$ is a 512-bit byte array containing the
+signature of the authority (<a href="sect-finality.html#defn-sign-round-vote">Definition 77</a>).</p>
+</li>
+<li>
+<p>\$v_(id)\$ is a 256-bit byte array containing the <em>ed25519</em> public key of the authority.</p>
+</li>
+<li>
+<p>\$"stage"\$ is a 8-bit integer of value <em>0</em> if it&#8217;s a pre-vote sub-round, <em>1</em> if it&#8217;s a pre-commit sub-round or <em>2</em> if it&#8217;s a primary proposal message.</p>
+</li>
+<li>
+<p>\$V_v^(r,"stage")(B)\$ is the GRANDPA vote for block \$B\$ (<a href="sect-finality.html#defn-voting-rounds">Definition 76</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>This message is the sub-component of the GRANDPA gossip message
+(<a href="chap-networking.html#defn-gossip-message">Definition 43</a>) of type Id 0.</p>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-justifications-compact" class="exampleblock">
+<div class="title">Definition 45. <a href="chap-networking.html#defn-grandpa-justifications-compact">GRANDPA Compact Justification Format</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>GRANDPA compact justification format</strong> is an optimized data structure to
+store a collection of pre-commits and their signatures to be submitted as part
+of a commit message. Instead of storing an array of justifications, it uses the
+following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$J_(v_(0,...n))^(r,"comp") := ({V_(v_0)^(r,pc),... V_(v_n)^(r,pc)},{("Sig"_(v_0)^(r,pc),v_("id"_0)), ... ("Sig"_(v_n)^(r,pc),v_("id"_n))})\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$V_(v_i)^(r,pc)\$ is a 256-bit byte array containing the pre-commit vote of authority \$v_i\$ (<a href="sect-finality.html#defn-voting-rounds">Definition 76</a>).</p>
+</li>
+<li>
+<p>\$"Sig"_(v_i)^(r,pc)\$ is a 512-bit byte array containing the pre-commit
+signature of authority \$v_i\$ (<a href="sect-finality.html#defn-sign-round-vote">Definition 77</a>).</p>
+</li>
+<li>
+<p>\$v_("id"_n)\$ is a 256-bit byte array containing the public key of authority \$v_i\$.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-commit-msg" class="exampleblock">
+<div class="title">Definition 46. <a href="chap-networking.html#defn-grandpa-commit-msg">GRANDPA Commit Message</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>GRANDPA commit message</strong> for block \$B\$ in round \$r\$,
+\$M_v^(r,"Fin")(B)\$, is a message broadcasted by voter \$v\$ to the
+network indicating that voter \$v\$ has finalized block \$B\$ in round
+\$r\$. It has the following structure:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M_v^(r,"Fin")(B) := "Enc"_("SC")(r,"id"_(bbb V),V_v^r(B),J_(v_(0,...n))^(r,"comp"))\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$r\$ is an unsigned 64-bit integer indicating the round number (<a href="sect-finality.html#defn-voting-rounds">Definition 76</a>).</p>
+</li>
+<li>
+<p>\$id_(bbb V)\$ is the authority set Id (<a href="chap-sync.html#defn-authority-list">Definition 33</a>).</p>
+</li>
+<li>
+<p>\$V_v^r(B)\$ is a 256-bit array containing the GRANDPA vote for block
+\$B\$ (<a href="sect-finality.html#defn-vote">Definition 75</a>).</p>
+</li>
+<li>
+<p>\$J_(v_(0,...n))^(r,"comp")\$ is the compacted GRANDPA justification
+containing observed pre-commit of authorities \$v_0\$ to \$v_n\$
+(<a href="chap-networking.html#defn-grandpa-justifications-compact">Definition 45</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>This message is the sub-component of the GRANDPA gossip message
+(<a href="chap-networking.html#defn-gossip-message">Definition 43</a>) of type Id <em>1</em>.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="sect-grandpa-neighbor-msg"><a class="anchor" href="#sect-grandpa-neighbor-msg"></a><a class="link" href="#sect-grandpa-neighbor-msg">4.8.6.1. GRANDPA Neighbor Messages</a></h5>
+<div class="paragraph">
+<p>Neighbor messages are sent to all connected peers but they are not
+repropagated on reception. A message should be send whenever the
+messages values change and at least every 5 minutes. The sender should
+take the recipients state into account and avoid sending messages to
+peers that are using a different voter sets or are in a different round.
+Messages received from a future voter set or round can be dropped and
+ignored.</p>
+</div>
+<div id="defn-grandpa-neighbor-msg" class="exampleblock">
+<div class="title">Definition 47. <a href="chap-networking.html#defn-grandpa-neighbor-msg">GRANDPA Neighbor Message</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>GRANDPA Neighbor Message</strong> is defined as:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M^("neigh") := "Enc"_("SC")(v,r,"id"_(bbb V),H_i(B_("last")))\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$v\$ is an unsigned 8-bit integer indicating the version of the neighbor message, currently <em>1</em>.</p>
+</li>
+<li>
+<p>\$r\$ is an unsigned 64-bit integer indicating the round number (<a href="sect-finality.html#defn-voting-rounds">Definition 76</a>).</p>
+</li>
+<li>
+<p>\$"id"_(bbb V)\$ is an unsigned 64-bit integer indicating the authority
+Id (<a href="chap-sync.html#defn-authority-list">Definition 33</a>).</p>
+</li>
+<li>
+<p>\$H_i(B_("last"))\$ is an unsigned 32-bit integer indicating the block number of the last finalized block \$B_("last")\$.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>This message is the sub-component of the GRANDPA gossip message
+(<a href="chap-networking.html#defn-gossip-message">Definition 43</a>) of type Id <em>2</em>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="sect-grandpa-catchup-messages"><a class="anchor" href="#sect-grandpa-catchup-messages"></a><a class="link" href="#sect-grandpa-catchup-messages">4.8.6.2. GRANDPA Catch-up Messages</a></h5>
+<div class="paragraph">
+<p>Whenever a Polkadot node detects that it is lagging behind the finality
+procedure, it needs to initiate a <em>catch-up</em> procedure. GRANDPA Neighbor
+messages (<a href="chap-networking.html#defn-grandpa-neighbor-msg">Definition 47</a>) reveal the round number for the last
+finalized GRANDPA round which the node’s peers have observed. This provides the
+means to identify a discrepancy in the latest finalized round number observed
+among the peers. If such a discrepancy is observed, the node needs to initiate
+the catch-up procedure explained in <a href="sect-finality.html#sect-grandpa-catchup">Section 6.6.1</a>).</p>
+</div>
+<div class="paragraph">
+<p>In particular, this procedure involves sending a <em>catch-up request</em> and
+processing <em>catch-up response</em> messages.</p>
+</div>
+<div id="defn-grandpa-catchup-request-msg" class="exampleblock">
+<div class="title">Definition 48. <a href="chap-networking.html#defn-grandpa-catchup-request-msg">Catch-Up Request Message</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>GRANDPA catch-up request message</strong> for round \$r\$,
+\$M_(i,v)^("Cat"-q)("id"_(bbb V),r)\$, is a message sent from node \$i\$
+to its voting peer node \$v\$ requesting the latest status of a GRANDPA round
+\$r' &gt;r\$ of the authority set \$bbb V_("id")\$ along with the
+justification of the status and has the following structure:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M_(i,v)^(r,"Cat"-q) := "Enc"_("SC")(r,"id"_(bbb V))\$
+</div>
+</div>
+<div class="paragraph">
+<p>This message is the sub-component of the GRANDPA Gossip message
+(<a href="chap-networking.html#defn-gossip-message">Definition 43</a>) of type Id <em>3</em>.</p>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-catchup-response-msg" class="exampleblock">
+<div class="title">Definition 49. <a href="chap-networking.html#defn-grandpa-catchup-response-msg">Catch-Up Response Message</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>GRANDPA catch-up response message</strong> for round \$r\$,
+\$M_(v,i)^("Cat"-s)("id"_(bbb V),r)\$, is a message sent by a node \$v\$
+to node \$i\$ in response of a catch-up request
+\$M_(v,i)^("Cat"-q)("id"_(bbb V),r')\$ in which \$r &gt;= r'\$ is the
+latest GRANDPA round which v has prove of its finalization and has the following
+structure:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M_(v,i)^("Cat"-s) := "Enc"_("SC")("id"_(bbb V), r, J_(0,...n)^(r,"pv")(B), J_(0,...m)^(r,"pc")(B),H_h(B'),H_i(B'))\$
+</div>
+</div>
+<div class="paragraph">
+<p>Where \$B\$ is the highest block which \$v\$ believes to be finalized in
+round \$r\$ (<a href="sect-finality.html#defn-voting-rounds">Definition 76</a>). \$B'\$ is the highest ancestor of
+all blocks voted on in the arrays of justifications \$J_(0,...n)^(r,"pv")(B)\$
+and \$J_(0,...m)^(r,"pc")(B)\$ (<a href="sect-finality.html#defn-grandpa-justification">Definition 78</a>) with the
+exception of the equivocatory votes.</p>
+</div>
+<div class="paragraph">
+<p>This message is the sub-component of the GRANDPA Gossip message
+(<a href="chap-networking.html#defn-gossip-message">Definition 43</a>) of type Id <em>4</em>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-msg-grandpa-beefy"><a class="anchor" href="#sect-msg-grandpa-beefy"></a><a class="link" href="#sect-msg-grandpa-beefy">4.8.7. GRANDPA BEEFY</a></h4>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The BEEFY protocol is currently in early development and subject to
+change.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>This section defines the messages required for the GRANDPA BEEFY protocol
+(<a href="sect-finality.html#sect-grandpa-beefy">Section 6.7</a>). Those messages are sent over the <code>/paritytech/beefy/1</code>
+substream.</p>
+</div>
+<div id="defn-grandpa-beefy-commitment" class="exampleblock">
+<div class="title">Definition 50. <a href="chap-networking.html#defn-grandpa-beefy-commitment">Commitment</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>commitment</strong>, \$C\$, contains the information extracted from the finalized
+block at height \$H_i(B_("last"))\$ as specified in the message body and a
+datastructure of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$C = (R_h,H_i(B_("last")),"id"_(bbb V))\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$R_h\$ is the MMR root of all the block header hashes leading up to the
+latest, finalized block.</p>
+</li>
+<li>
+<p>\$H_i(B_("last"))\$ is the block number this commitment is for. Namely the
+latest, finalized block.</p>
+</li>
+<li>
+<p>\$"id"_(bbb V)\$ is the current authority set Id (<a href="sect-finality.html#defn-authority-set-id">Definition 73</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="defn-msg-beefy-gossip" class="exampleblock">
+<div class="title">Definition 51. <a href="chap-networking.html#defn-msg-beefy-gossip">Vote Message</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>vote message</strong>, \$M_v\$, is direct vote created by the Polkadot Host on every
+BEEFY round and is gossiped to its peers. The message is a datastructure of the
+following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M_v = "Enc"_("SC")(C,A_("id")^("bfy"),A_("sig"))\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$C\$ is the BEEFY commitment (<a href="chap-networking.html#defn-grandpa-beefy-commitment">Definition 50</a>).</p>
+</li>
+<li>
+<p>\$A_("id")^("bfy")\$ is the ECDSA public key of the Polkadot Host.</p>
+</li>
+<li>
+<p>\$A_("sig")\$ is the signature created with \$A_("id")^("bfy")\$ by
+signing the statement \$R_h\$ in \$C\$.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-beefy-signed-commitment" class="exampleblock">
+<div class="title">Definition 52. <a href="chap-networking.html#defn-grandpa-beefy-signed-commitment">Signed Commitment</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>signed commitment</strong>, \$M_("sc")\$, is a datastructure of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M_("SC") = "Enc"_("SC")(C,S_n)\$
+\$S_n = (A_0^("sig"),... A_n^("sig"))\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$C\$ is the BEEFY commitment (<a href="chap-networking.html#defn-grandpa-beefy-commitment">Definition 50</a>).</p>
+</li>
+<li>
+<p>\$S_n\$ is an array where its exact size matches the number of validators
+in the current authority set as specified by \$"id"_(bbb V)\$
+(<a href="sect-finality.html#defn-authority-set-id">Definition 73</a>) in \$C\$. Individual items are of the type
+<em>Option</em> (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) which can contain a signature of a validator
+which signed the same statement (\$R_h\$ in \$C\$) and is active in the
+current authority set. It’s critical that the signatures are sorted based on
+their corresponding public key entry in the authority set.</p>
+<div class="paragraph">
+<p>For example, the signature of the validator at index 3 in the authority set must
+be placed at index <em>3</em> in \$S_n\$. If not signature is available for that
+validator, then the <em>Option</em> variant is <em>None</em> inserted (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>).
+This sorting allows clients to map public keys to their corresponding
+signatures.</p>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-beefy-signed-commitment-witness" class="exampleblock">
+<div class="title">Definition 53. <a href="chap-networking.html#defn-grandpa-beefy-signed-commitment-witness">Signed Commitment Witness</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>signed commitment witness</strong>, \$M_("SC")^w\$, is a light version of the signed
+BEEFY commitment (<a href="chap-networking.html#defn-grandpa-beefy-signed-commitment">Definition 52</a>). Instead of
+containing the entire list of signatures, it only claims which validator signed
+the statement.</p>
+</div>
+<div class="paragraph">
+<p>The message is a datastructure of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$M_("SC")^w = "Enc"_("SC")(C,V_(0,... n), R_("sig"))\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$C\$ is the BEEFY commitment (<a href="chap-networking.html#defn-grandpa-beefy-commitment">Definition 50</a>).</p>
+</li>
+<li>
+<p>\$V_(0,... n)\$ is an array where its exact size matches the number of
+validators in the current authority set as specified by \$"id"_(bbb V)\$ in
+\$C\$. Individual items are booleans which indicate whether the validator has
+signed the statement (<em>true</em>) or not (<em>false</em>). It’s critical that the boolean
+indicators are sorted based on their corresponding public key entry in the
+authority set.</p>
+<div class="paragraph">
+<p>For example, the boolean indicator of the validator at index 3 in the authority
+set must be placed at index <em>3</em> in \$V_n\$. This sorting allows clients to
+map public keys to their corresponding boolean indicators.</p>
+</div>
+</li>
+<li>
+<p>\$R_("sig")\$ is the MMR root of the signatures in the original signed
+BEEFY commitment (<a href="chap-networking.html#defn-grandpa-beefy-signed-commitment">Definition 52</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph nav-footer">
+<p>← Previous: <a href="chap-sync.html">Synchronization</a> | ↑ Up: <a href="part-polkadot-host.html">Polkadot Host</a> | ⌂ Home: <a href="polkadot-spec.html">Polkadot Protocol Specification</a> | Next: <a href="sect-block-production.html">Block Production</a> →</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 0.2.1<br>
+Last updated 2023-03-09 11:37:31 +0100
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>

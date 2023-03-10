@@ -1,0 +1,2641 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="generator" content="Asciidoctor 2.0.18">
+	<meta name="description" content="The Official Polkadot and Kusama Protocol Specification">
+	<meta name="keywords"
+		content="babe, blockchain, consensus, finality, grandpa, kusama, parachain, polkadot, relay-chain, runtime, spec, web3, w3f">
+	<meta name="author" content="Web 3.0 Technologies Foundation">
+	<link rel="icon" type="image/png" href="./favicon.png">
+	<title>Polkadot Protocol Specification</title>
+	<style>
+		/* Fetch Unbounded - Normal - Regular */
+		@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400&display=swap');
+		/* Fetch Work Sans - Normal + Italic - Regular + Bold */
+		@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+		/* Fetch Asciidoctor Default Style Sheet */
+		@import url('https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css');
+
+		/* Base constants of theme */
+		:root {
+			--font-header: 'Unbounded', cursive;
+			--font-text: 'Work Sans', sans-serif;
+
+			--black: #1E1E1E;
+			--white: #FFFFFF;
+
+			--dark-blue: #172026;
+			--grey: #efefef;
+
+			--pink: #E6007A;
+			--purple: #670d35;
+		}
+
+
+		/* Apply some layout corrections */
+		html {
+			height: 100%;
+		}
+
+		body {
+			min-height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.partintro {
+			margin-bottom: 1.25rem;
+		}
+
+		/* Render part intros just like other text */
+		.partintro div.content {
+			line-height: 1.6;
+			font-size: 1.0625rem;
+			letter-spacing: -.01em;
+			text-rendering: optimizeLegibility;
+		}
+
+		/* Set our custom font */
+		body {
+			font-family: var(--font-text);
+		}
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		#toctitle,
+		#toc ul.sectlevel0>li>a,
+		.sidebarblock>.content>.title {
+			font-family: var(--font-header);
+			font-weight: 400;
+		}
+
+		#toc ul {
+			font-family: var(--font-text);
+		}
+
+		/* Set base colors */
+		body {
+			color: var(--black);
+			background-color: var(--white);
+		}
+
+		/* Style all titles */
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		#toctitle,
+		.subheader,
+		.title {
+			color: var(--pink);
+		}
+
+		/* - could be replaced by !important in previous block */
+		.sidebarblock>.content>.title,
+		.admonitionblock td.content>.title,
+		.audioblock>.title,
+		.exampleblock>.title,
+		.imageblock>.title,
+		.listingblock>.title,
+		.literalblock>.title,
+		.stemblock>.title,
+		.openblock>.title,
+		.paragraph>.title,
+		.quoteblock>.title,
+		table.tableblock>.title,
+		.verseblock>.title,
+		.videoblock>.title,
+		.dlist>.title,
+		.olist>.title,
+		.ulist>.title,
+		.qlist>.title,
+		.hdlist>.title {
+			color: inherit;
+		}
+
+		h1 code,
+		h2 code,
+		h3 code,
+		h4 code,
+		h5 code,
+		h6 code {
+			color: inherit;
+		}
+
+		/* Style all links */
+		a {
+			color: var(--pink);
+		}
+
+		a:hover {
+			color: var(--purple);
+		}
+
+		/* - same here, next two blocks or important above */
+		#content h1>a.link,
+		h2>a.link,
+		h3>a.link,
+		#toctitle>a.link,
+		h4>a.link,
+		h5>a.link,
+		h6>a.link,
+		.sidebarblock>.content>.title>a.link {
+			color: inherit;
+		}
+
+		#content h1>a.link:hover,
+		h2>a.link:hover,
+		h3>a.link:hover,
+		h4>a.link:hover,
+		h5>a.link:hover,
+		h6>a.link:hover,
+		#toctitle>a.link:hover,
+		.sidebarblock>.content>.title>a.link:hover {
+			color: var(--purple);
+		}
+
+		/* Style header like toc on small screens */
+		@media screen and (max-width:768px) {
+			#header {
+				background-color: var(--dark-blue);
+				max-width: none;
+			}
+
+			#header>h1:first-child {
+				color: var(--pink);
+			}
+
+			#header .details {
+				color: var(--white);
+				border: none;
+			}
+		}
+
+		/* Style table of content */
+		#toc.toc2 {
+			background-color: var(--dark-blue);
+			border: none;
+		}
+
+		#toc ul.sectlevel0>li>a {
+			font-weight: bold;
+			font-style: normal;
+			text-decoration: underline;
+		}
+
+		#toc a {
+			color: var(--white);
+		}
+
+		#toc a code {
+			color: inherit;
+			background-color: inherit;
+		}
+
+		#toc a .toc-current,
+		#toc .tocify-focus a {
+			color: var(--pink);
+		}
+
+		/* Tame SVG images */
+		.imageblock .content svg {
+			max-width: 100%;
+		}
+
+		/* Style boxes */
+		.exampleblock>.content,
+		.sidebarblock {
+			background: var(--grey);
+		}
+
+		/* Style footer */
+		#footer {
+			color: var(--white);
+			background-color: var(--dark-blue);
+		}
+
+		/* CSS Ribbon */
+		.ribbon {
+			position: absolute;
+			width: 200px;
+			height: 200px;
+			overflow: hidden;
+			z-index: 99999;
+			top: 0px;
+			right: 0px;
+		}
+
+		.ribbon a {
+			display: inline-block;
+			position: inherit;
+			transform: rotate(45deg);
+			width: 200px;
+			top: 45px;
+			right: -40px;
+			padding: 6px 0px;
+			overflow: hidden;
+
+			text-align: center;
+			font-size: 12px;
+			font-weight: bold;
+			text-decoration: none;
+
+			color: var(--white);
+			background-color: var(--pink);
+			background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+			border: 2px dotted var(--white);
+			box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 3px 0px;
+		}
+
+		/* MathJax v3 */
+		.stemblock mjx-container {
+			text-align: center;
+			display: block;
+			width: 100%;
+			margin: 1em 0em;
+		}
+
+		/* Pseudocode.js */
+		.ps-root {
+			font-size: 1.2em !important;
+		}
+
+		/* Fix inline svg with fixed width or height. */
+		.imageblock .content svg {
+			widht: auto;
+			height: auto;
+		}
+	</style>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		.toc-current {
+			font-weight: bold;
+		}
+
+		.toc-root {
+			font-family: "Open Sans", "DejaVu Sans", sans-serif;
+			font-size: 0.9em;
+		}
+
+		#content {
+			display: flex;
+			flex-direction: column;
+			flex: 1 1 auto;
+		}
+
+		.nav-footer {
+			text-align: center;
+			margin-top: auto;
+		}
+
+		.nav-footer>p>a {
+			white-space: nowrap;
+		}
+	</style>
+</head>
+
+<body id="chapter-anv" class="book toc2 toc-left">
+	<!-- Contribution Ribbon -->
+	<div class="ribbon"><a target="_blank" href="https://github.com/w3f/polkadot-spec">Contributions welcome!</a></div>
+	<div id="header">
+		<h1>Polkadot Protocol Specification</h1>
+		<div class="details">
+			<span id="author" class="author">Web 3.0 Technologies Foundation</span><br>
+			<span id="revnumber">version 0.2.1</span>
+		</div>
+		<div id="toc" class="toc2">
+			<div id="toctitle">Table of Contents</div>
+			<p><span class="toc-root"><a href="polkadot-spec.html">Polkadot Protocol Specification</a></span></p>
+			<ul class="sectlevel1">
+				<li><a href="id-polkadot-protocol.html">Polkadot Protocol</a>
+				</li>
+				<li><a href="part-polkadot-host.html">Polkadot Host</a>
+					<ul class="sectlevel1">
+						<li><a href="chap-overview.html">1. Overview</a>
+						</li>
+						<li><a href="chap-state.html">2. States and Transitions</a>
+						</li>
+						<li><a href="chap-sync.html">3. Synchronization</a>
+						</li>
+						<li><a href="chap-networking.html">4. Networking</a>
+						</li>
+						<li><a href="sect-block-production.html">5. Block Production</a>
+						</li>
+						<li><a href="sect-finality.html">6. Finality</a>
+						</li>
+						<li><a href="sect-lightclient.html">7. Light Clients</a>
+						</li>
+						<li><a href="chapter-anv.html"><span class="toc-current">8. Availability &amp;
+									Validity</span></a>
+							<ul class="sectlevel2">
+								<li><a href="chapter-anv.html#sect-collations">8.1. Collations</a>
+								</li>
+								<li><a href="chapter-anv.html#sect-candidate-backing">8.2. Candidate Backing</a>
+								</li>
+								<li><a href="chapter-anv.html#sect-candidate-validation">8.3. Candidate Validation</a>
+								</li>
+								<li><a href="chapter-anv.html#sect-availability">8.4. Availability</a>
+								</li>
+								<li><a href="chapter-anv.html#sect-approval-voting">8.5. Approval Voting</a>
+								</li>
+								<li><a href="chapter-anv.html#sect-disputes">8.6. Disputes</a>
+								</li>
+								<li><a href="chapter-anv.html#sect-anv-network-messages">8.7. Network Messages</a>
+								</li>
+								<li><a href="chapter-anv.html#sect-anv-definitions">8.8. Definitions</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+				<li><a href="part-polkadot-runtime.html">Polkadot Runtime</a>
+				</li>
+				<li><a href="id-cryptography-encoding.html">Appendix D: Cryptography &amp; Encoding</a>
+				</li>
+				<li><a href="chap-host-api.html">Appendix E: Host API</a>
+				</li>
+				<li><a href="chap-runtime-api.html">Appendix F: Runtime API</a>
+				</li>
+				<li><a href="id-bibliography.html">Bibliography</a>
+				</li>
+				<li><a href="id-glossary.html">Glossary</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div id="content">
+		<div class="sect1">
+			<h2 id="chapter-anv"><a class="anchor" href="#chapter-anv"></a><a class="link" href="#chapter-anv">8.
+					Availability
+					&amp; Validity</a></h2>
+			<div class="sectionbody">
+				<div class="paragraph">
+					<p>Polkadot serves as a replicated shared-state machine designed to resolve
+						scalability issues and interoperability among blockchains. The validators of
+						Polkadot execute transactions and participate in the consensus of Polkadots
+						primary chain, the so called relay chain. Parachains are independent networks
+						that maintain their own state and are connected to the relay chain. Those
+						parachains can take advantage of the relay chain consensus mechanism, including
+						sending and receiving messages to and from other parachains. Parachain nodes
+						that send parachain blocks, known as candidates, to the validators in order to
+						be included in relay chain are referred to as collators.</p>
+				</div>
+				<div class="paragraph">
+					<p>The Polkadot relay chain validators are responsible for guaranteeing the
+						validity of both relay chain and parachain blocks. Additionally, the validators
+						are required to keep enough parachain blocks that should be included in the
+						relay chain available in their local storage in order to make those retrievable
+						by peers, who lack the information, to reliably confirm the issued validity
+						statements about parachain blocks. The Availability &amp; Validity (AnV) protocol
+						consists of multiple steps for successfully upholding those responsibilities.</p>
+				</div>
+				<div class="paragraph">
+					<p>Parachain blocks themselves are produced by collators (<a
+							href="chapter-anv.html#sect-collations">Section
+							8.1</a>),
+						whereas the relay chain validators only verify their validity (and later, their
+						availability). It is possible that the collators of a parachain produces
+						multiple parachain block candidates for a child of a specific block.
+						Subsequently, they send the block candidates to the the relay chain validators
+						who are assigned to the specific parachain. The assignment is determined by the
+						Runtime (<a href="chapter-anv.html#sect-candidate-backing">Section 8.2</a>). Those validators
+						are then
+						required to
+						check the validity of submitted candidates (<a
+							href="chapter-anv.html#sect-candidate-validation">Section
+							8.3</a>), then
+						issue and collect statements (<a href="chapter-anv.html#sect-candidate-statements">Section
+							8.2.1</a>) about
+						the validity
+						of candidates to other validators. This process is known as candidate backing.
+						Once a candidate meets a specified criteria for inclusion, the selected relay
+						chain block author then choses any of the backed candidate for each parachain
+						and includes those into the relay chain block (<a
+							href="chapter-anv.html#sect-candidate-inclusion">Section
+							8.2.2</a>).</p>
+				</div>
+				<div class="paragraph">
+					<p>Every relay chain validator must fetch the proposed candidates and issue votes
+						on whether they have the candidate saved in their local storage, so called
+						availability votes (<a href="chapter-anv.html#sect-availability-votes">Section 8.4.1</a>), then
+						also collect
+						the votes
+						sent by other validators and include them in the relay chain state
+						(<a href="chapter-anv.html#sect-candidate-inclusion">Section 8.2.2</a>). This process ensures
+						that only
+						relay chain
+						blocks get finalized where each candidate is available on enough nodes of
+						validators.</p>
+				</div>
+				<div class="paragraph">
+					<p>Parachain candidates contained in non-finalized relay chain blocks must then be
+						retrieved by a secondary set of relay chain validators, unrelated from the
+						candidate backing process, who are randomly assigned to determine the validity
+						of specific parachains based on a VRF lottery and are then required to vote on
+						the validity of those candidates. This process is known as approval voting
+						(<a href="chapter-anv.html#sect-approval-voting">Section 8.5</a>). If a validator does not have
+						the
+						candidate data, it
+						must recover the candidate data (<a href="chapter-anv.html#sect-candidate-recovery">Section
+							8.4.2</a>).</p>
+				</div>
+				<div class="sect2">
+					<h3 id="sect-collations"><a class="anchor" href="#sect-collations"></a><a class="link"
+							href="#sect-collations">8.1. Collations</a></h3>
+					<div class="paragraph">
+						<p>Collations are proposed candidates <a href="chapter-anv.html#defn-candidate">Definition
+								131</a> to the
+							Polkadot relay
+							chain validators. The Polkodat network protocol is agnostic on what candidate
+							productionis mechanism each parachain uses and does not specify or mandate any
+							of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the
+							relay chain validator host implementation itself does not directly interpret or
+							process the internal transactions of the candidate, but rather rely on the
+							parachain Runtime to validate the candidate (<a
+								href="chapter-anv.html#sect-candidate-validation">Section
+								8.3</a>).
+							Collators, which are parachain nodes which produce candidate proposals and send
+							them to the relay chain validator, must prepare pieces of data
+							(<a href="chapter-anv.html#defn-collation">Definition 101</a>) in order to correctly comply
+							with the
+							requirements of the
+							parachain protocol.</p>
+					</div>
+					<div id="defn-collation" class="exampleblock">
+						<div class="title">Definition 101. <a href="chapter-anv.html#defn-collation">Collation</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>A collation is a datastructure which contains the proposed parachain candidate,
+									including an optional validation parachain Runtime update and upward messages.
+									The collation datastructure, C, is a datastructure of the following format:</p>
+							</div>
+							<div class="stemblock">
+								<div class="content">
+									\$C = (M,H,R,h,P,p,w)\$
+									\$M = (u_n,…u_m)\$
+									\$H = (z_n,…z_m)\$
+								</div>
+							</div>
+							<div class="dlist">
+								<dl>
+									<dt class="hdlist1">where</dt>
+									<dd>
+										<div class="ulist">
+											<ul>
+												<li>
+													<p>\$M\$ is an array of upward messages (<a
+															href="chapter-anv.html#defn-upward-message">Definition
+															137</a>), \$u\$,
+														interpreted by the relay chain itself.</p>
+												</li>
+												<li>
+													<p>\$H\$ is an array of outbound horizontal messages
+														(<a href="chapter-anv.html#defn-outbound-hrmp-message">Definition
+															139</a>), \$z\$,
+														interpreted by other parachains.</p>
+												</li>
+												<li>
+													<p>\$R\$ is an <em>Option</em> type (<a
+															href="id-cryptography-encoding.html#defn-option-type">Definition
+															190</a>) which can
+														contain a
+														parachain Runtime update. The new Runtime code is an array of
+														bytes.</p>
+												</li>
+												<li>
+													<p>\$h\$ is the head data (<a
+															href="chapter-anv.html#defn-head-data">Definition 133</a>)
+														produced as a result of
+														execution of the parachain specific logic.</p>
+												</li>
+												<li>
+													<p>\$P\$ is the PoV block (<a
+															href="chapter-anv.html#defn-para-block">Definition 132</a>).
+													</p>
+												</li>
+												<li>
+													<p>\$p\$ is an unsigned 32-bit integer indicating the number of
+														processed
+														downward messages (<a
+															href="chapter-anv.html#defn-downward-message">Definition
+															138</a>).</p>
+												</li>
+												<li>
+													<p>\$w\$ is an unsigned 32-bit integer indicating the mark up to
+														which all
+														inbound HRMP messages have been processed by the parachain.</p>
+												</li>
+											</ul>
+										</div>
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="sect2">
+					<h3 id="sect-candidate-backing"><a class="anchor" href="#sect-candidate-backing"></a><a class="link"
+							href="#sect-candidate-backing">8.2. Candidate Backing</a></h3>
+					<div class="paragraph">
+						<p>The Polkadot validator receives an arbitrary number of parachain candidates with
+							associated proofs from untrusted collators. The assigned validators of each
+							parachain (<a href="chapter-anv.html#defn-validator-groups">Definition 136</a>) must verify
+							and select a
+							specific quantity
+							of the proposed candidates and issue those as backable candidates to its peers.
+							A candidate is considered backable when at least 2/3 of all assigned validators
+							have issued a <em>Valid</em> statement about that candidate, as described in
+							<a href="chapter-anv.html#sect-candidate-statements">Section 8.2.1</a>. Validators can
+							retrieve
+							information about
+							assignments via the Runtime APIs <a
+								href="chap-runtime-api.html#sect-rt-api-validator-groups">Section
+								C.9.2</a> respectively
+							<a href="chap-runtime-api.html#sect-rt-api-availability-cores">Section C.9.3</a>.
+						</p>
+					</div>
+					<div class="sect3">
+						<h4 id="sect-candidate-statements"><a class="anchor" href="#sect-candidate-statements"></a><a
+								class="link" href="#sect-candidate-statements">8.2.1. Statements</a></h4>
+						<div class="paragraph">
+							<p>The assigned validator checks the validity of the proposed parachains blocks
+								(<a href="chapter-anv.html#sect-candidate-validation">Section 8.3</a>) and issues
+								<em>Valid</em>
+								statements
+								(<a href="chapter-anv.html#defn-statement">Definition 102</a>) to its peers if the
+								verification
+								succeeded.
+								Broadcasting failed verification as <em>Valid</em> statements is a slashable offense.
+								The
+								validator must only issue one <em>Seconded</em> statement, based on an arbitrary metric,
+								which implies an explicit vote for a candidate to be included in the relay
+								chain.</p>
+						</div>
+						<div class="paragraph">
+							<p>This protocol attempts to produce as many backable candidates as possible, but
+								does not attempt to determine a final candidate for inclusion. Once a parachain
+								candidate has been seconded by at least one other validator and enough Valid
+								statements have been issued about that candidate to meet the 2/3 quorum, the
+								candidate is ready to be included in the relay chain
+								(<a href="chapter-anv.html#sect-candidate-inclusion">Section 8.2.2</a>).</p>
+						</div>
+						<div class="paragraph">
+							<p>The validator issues validity statements votes in form of a validator protocol
+								message (<a href="chapter-anv.html#net-msg-validator-protocol-message">Definition
+									114</a>).</p>
+						</div>
+						<div id="defn-statement" class="exampleblock">
+							<div class="title">Definition 102. <a href="chapter-anv.html#defn-statement">Statement</a>
+							</div>
+							<div class="content">
+								<div class="paragraph">
+									<p>A statement, \$S\$, is a datastructure of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$S = (d,A_i,A_s)\$
+										\$d = {(1,-&gt;,C_r),(2,-&gt;,C_h):}\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$d\$ is a varying datatype where <em>1</em> indicates that
+															the validator
+															“seconds” a candidate, meaning that the candidate should be
+															included in the
+															relay chain, followed by the committed candidate receipt
+															(<a
+																href="chapter-anv.html#defn-committed-candidate-receipt">Definition
+																105</a>), \$C_r\$.
+															<em>2</em> indicates that the
+															validator has deemed the candidate valid, followed by the
+															candidate hash.
+														</p>
+													</li>
+													<li>
+														<p>\$C_h\$ is the candidate hash.</p>
+													</li>
+													<li>
+														<p>\$A_i\$ is the validator index in the authority set that
+															signed this statement.</p>
+													</li>
+													<li>
+														<p>\$A_s\$ is the signature of the validator.</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="sect3">
+						<h4 id="sect-candidate-inclusion"><a class="anchor" href="#sect-candidate-inclusion"></a><a
+								class="link" href="#sect-candidate-inclusion">8.2.2. Inclusion</a></h4>
+						<div class="paragraph">
+							<p>The Polkadot validator includes the backed candidates as parachain inherent data
+								(<a href="chapter-anv.html#defn-parachain-inherent-data">Definition 103</a>) into a
+								block as described
+								<a href="chap-state.html#sect-inherents">Section 2.3.3</a>.
+								The relay chain block author decides on whatever metric which candidate should
+								be selected for inclusion, as long as that candidate is valid and meets the
+								validity quorum of 2/3+ as described in <a
+									href="chapter-anv.html#sect-candidate-statements">Section
+									8.2.1</a>. The
+								candidate approval process (<a href="chapter-anv.html#sect-approval-voting">Section
+									8.5</a>) ensures
+								that only relay
+								chain blocks are finalized where each candidate for each availability core meets
+								the requirement of 2/3+ availability votes.
+							</p>
+						</div>
+						<div id="defn-parachain-inherent-data" class="exampleblock">
+							<div class="title">Definition 103. <a
+									href="chapter-anv.html#defn-parachain-inherent-data">Parachain
+									Inherent Data</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The parachain inherent data contains backed candidates and is included when
+										authoring a relay chain block. The datastructure, \$I\$, is of the following
+										format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$I = (A,T,D,P_h)\$
+										\$T = (C_0,…C_n)\$
+										\$D = (*d_n,…d_m)\$
+										\$C = (R,V,i)\$
+										\$V = (a_n,…a_m)\$
+										\$a = {(1,-&gt;,s),(2,-&gt;,s):}\$
+										\$A = (L_n,…L_m)\$
+										\$L = (b,v_i,s)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$A\$ is an array of signed bitfields by validators claiming
+															the candidate
+															is available (or not). The array must be sorted by validator
+															index corresponding
+															to the authority set (<a
+																href="chap-sync.html#defn-authority-list">Definition
+																33</a>).</p>
+													</li>
+													<li>
+														<p>\$T\$ is an array of backed candidates for inclusing in the
+															current block.</p>
+													</li>
+													<li>
+														<p>\$D\$ is an array of disputes.</p>
+													</li>
+													<li>
+														<p>\$P_h\$ is the parachain parent head data (<a
+																href="chapter-anv.html#defn-head-data">Definition
+																133</a>).</p>
+													</li>
+													<li>
+														<p>\$d\$ is a dispute statement (<a
+																href="chapter-anv.html#net-msg-dispute-request">Section
+																8.7.2.1</a>).</p>
+													</li>
+													<li>
+														<p>\$R\$ is a committed candidate receipt (<a
+																href="chapter-anv.html#defn-committed-candidate-receipt">Definition
+																105</a>).</p>
+													</li>
+													<li>
+														<p>\$V\$ is an array of validity votes themselves, expressed as
+															signatures.</p>
+													</li>
+													<li>
+														<p>\$i\$ is a bitfield of indices of the validators within the
+															validator
+															group (<a
+																href="chapter-anv.html#defn-validator-groups">Definition
+																136</a>).</p>
+													</li>
+													<li>
+														<p>\$a\$ is either an implicit or explicit attestation of the
+															validity of a
+															parachain candidate, where <em>1</em> implies an implicit
+															vote (in correspondence of a
+															<em>Seconded</em> statement) and <em>2</em> implies an
+															explicit attestation (in
+															correspondence
+															of a <em>Valid</em> statement). Both variants are followed
+															by the signature of the
+															validator.
+														</p>
+													</li>
+													<li>
+														<p>\$s\$ is the signature of the validator.</p>
+													</li>
+													<li>
+														<p>\$b\$ the availability bitfield (<a
+																href="chapter-anv.html#sect-availability-votes">Section
+																8.4.1</a>).</p>
+													</li>
+													<li>
+														<p>\$v_i\$ is the validator index of the authority set (<a
+																href="chap-sync.html#defn-authority-list">Definition
+																33</a>).</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div id="defn-candidate-receipt" class="exampleblock">
+							<div class="title">Definition 104. <a
+									href="chapter-anv.html#defn-candidate-receipt">Candidate Receipt</a>
+							</div>
+							<div class="content">
+								<div class="paragraph">
+									<p>A candidate receipt, \$R\$, contains information about the candidate and a
+										proof of the results of its execution. It&#8217;s a datastructure of the
+										following
+										format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$R = (D,C_h)\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$D\$ is the candidate descriptor (<a
+											href="chapter-anv.html#defn-candidate-descriptor">Definition 106</a>) and
+										\$C_h\$ is the hash of candidate commitments
+										(<a href="chapter-anv.html#defn-candidate-commitments">Definition 107</a>).</p>
+								</div>
+							</div>
+						</div>
+						<div id="defn-committed-candidate-receipt" class="exampleblock">
+							<div class="title">Definition 105. <a
+									href="chapter-anv.html#defn-committed-candidate-receipt">Committed
+									Candidate Receipt</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The committed candidate receipt, \$R\$, contains information about the
+										candidate and the the result of its execution that is included in the relay
+										chain. This type is similar to the candidate receipt
+										(<a href="chapter-anv.html#defn-candidate-receipt">Definition 104</a>), but
+										actually contains the
+										execution results rather
+										than just a hash of it. It&#8217;s a datastructure of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$R = (D,C)\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$D\$ is the candidate descriptor (<a
+											href="chapter-anv.html#defn-candidate-descriptor">Definition 106</a>) and
+										\$C\$ is the candidate commitments (<a
+											href="chapter-anv.html#defn-candidate-commitments">Definition
+											107</a>).</p>
+								</div>
+							</div>
+						</div>
+						<div id="defn-candidate-descriptor" class="exampleblock">
+							<div class="title">Definition 106. <a
+									href="chapter-anv.html#defn-candidate-descriptor">Candidate
+									Descriptor</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The candidate descriptor, \$D\$, is a unique descriptor of a candidate
+										receipt. It&#8217;s a datastructure of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$D = (p,H,C_i,V,B,r,s,p_h,R_h)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$p\$ is the parachain Id (<a
+																href="chapter-anv.html#defn-para-id">Definition
+																134</a>).
+														</p>
+													</li>
+													<li>
+														<p>\$H\$ is the hash of the relay chain block the candidate is
+															executed in the context of.
+														</p>
+													</li>
+													<li>
+														<p>\$C_i\$ is the collators public key.</p>
+													</li>
+													<li>
+														<p>\$V\$ is the hash of the persisted validation data (<a
+																href="chap-runtime-api.html#defn-persisted-validation-data">Definition
+																227</a>).</p>
+													</li>
+													<li>
+														<p>\$B\$ is the hash of the PoV block.</p>
+													</li>
+													<li>
+														<p>\$r\$ is the root of the block&#8217;s erasure encoding
+															Merkle tree.</p>
+													</li>
+													<li>
+														<p>\$s\$ the collator signature of the concatenated components
+															\$p\$,
+															\$H\$, \$R_h\$ and \$B\$.</p>
+													</li>
+													<li>
+														<p>\$p_h\$ is the hash of the parachain head data (<a
+																href="chapter-anv.html#defn-head-data">Definition
+																133</a>) of this candidate.</p>
+													</li>
+													<li>
+														<p>\$R_h\$ is the hash of the parachain Runtime.</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div id="defn-candidate-commitments" class="exampleblock">
+							<div class="title">Definition 107. <a
+									href="chapter-anv.html#defn-candidate-commitments">Candidate
+									Commitments</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The candidate commitments, \$C\$, is the result of the execution and
+										validation of a parachain (or parathread) candidate whose produced values must
+										be committed to the relay chain. Those values are retrieved from the validation
+										result (<a href="chapter-anv.html#defn-validation-result">Definition 109</a>). A
+										candidate
+										commitment is a datastructure
+										of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$C =(M_u,M_h,R,h,p,w)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$M_u\$ is an array of upward messages sent by the parachain.
+															Each
+															individual message, m, is an array of bytes.</p>
+													</li>
+													<li>
+														<p>\$M_h\$ is an array of individual outbound horizontal
+															messages
+															(<a href="chapter-anv.html#defn-outbound-hrmp-message">Definition
+																139</a>) sent by the
+															parachain.</p>
+													</li>
+													<li>
+														<p>\$R\$ is an <em>Option</em> value (<a
+																href="id-cryptography-encoding.html#defn-option-type">Definition
+																190</a>) that can
+															contain a new
+															parachain Runtime in case of an update.</p>
+													</li>
+													<li>
+														<p>\$h\$ is the parachain head data (<a
+																href="chapter-anv.html#defn-head-data">Definition
+																133</a>).</p>
+													</li>
+													<li>
+														<p>\$p\$ is a unsigned 32-bit integer indicating the number of
+															downward
+															messages that were processed by the parachain. It is
+															expected that the parachain
+															processes the messages from first to last.</p>
+													</li>
+													<li>
+														<p>\$w\$ is a unsigned 32-bit integer indicating the watermark
+															which specifies
+															the relay chain block number up to which all inbound
+															horizontal messages have
+															been processed.</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="sect2">
+					<h3 id="sect-candidate-validation"><a class="anchor" href="#sect-candidate-validation"></a><a
+							class="link" href="#sect-candidate-validation">8.3. Candidate Validation</a></h3>
+					<div class="paragraph">
+						<p>Received candidates submitted by collators and must have its validity verified
+							by the assigned Polkadot validators. For each candidate to be valid, the
+							validator must successfully verify the following conditions in the following
+							order:</p>
+					</div>
+					<div class="olist arabic">
+						<ol class="arabic">
+							<li>
+								<p>The candidate does not exceed any parameters in the persisted validation data
+									(<a href="chap-runtime-api.html#defn-persisted-validation-data">Definition 227</a>).
+								</p>
+							</li>
+							<li>
+								<p>The signature of the collator is valid.</p>
+							</li>
+							<li>
+								<p>Validate the candidate by executing the parachain Runtime (<a
+										href="chapter-anv.html#sect-parachain-runtime">Section 8.3.1</a>).</p>
+							</li>
+						</ol>
+					</div>
+					<div class="paragraph">
+						<p>If all steps are valid, the Polkadot validator must create the necessary
+							candidate commitments (<a href="chapter-anv.html#defn-candidate-commitments">Definition
+								107</a>) and
+							submit the
+							appropriate statement for each candidate
+							(<a href="chapter-anv.html#sect-candidate-statements">Section 8.2.1</a>).</p>
+					</div>
+					<div class="sect3">
+						<h4 id="sect-parachain-runtime"><a class="anchor" href="#sect-parachain-runtime"></a><a
+								class="link" href="#sect-parachain-runtime">8.3.1. Parachain Runtime</a></h4>
+						<div class="paragraph">
+							<p>Parachain Runtimes are stored in the relay chain state, and can either be
+								fetched by the parachain Id or the Runtime hash via the relay chain Runtime API
+								as described in <a href="chap-runtime-api.html#sect-rt-api-validation-code">Section
+									C.9.7</a> and
+								<a href="chap-runtime-api.html#sect-rt-api-validation-code-by-hash">Section C.9.8</a>
+								respectively. The
+								retrieved parachain
+								Runtime might need to be decompressed based on the magic identifier as described
+								in <a href="chapter-anv.html#sect-runtime-compression">Section 8.3.2</a>.
+							</p>
+						</div>
+						<div class="paragraph">
+							<p>In order to validate a parachain block, the Polkadot validator must prepare the
+								validation parameters (<a href="chapter-anv.html#defn-validation-parameters">Definition
+									108</a>), then
+								use its local Wasm
+								execution environment (<a href="chap-state.html#sect-code-executor">Section 2.6.3</a>)
+								to execute the
+								validate_block
+								parachain Runtime API by passing on the validation parameters as an argument.
+								The parachain Runtime function returns the validation result
+								(<a href="chapter-anv.html#defn-validation-result">Definition 109</a>).</p>
+						</div>
+						<div id="defn-validation-parameters" class="exampleblock">
+							<div class="title">Definition 108. <a
+									href="chapter-anv.html#defn-validation-parameters">Validation
+									Parameters</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The validation parameters structure, \$P\$, is required to validate a
+										candidate against a parachain Runtime. It&#8217;s a datastructure of the
+										following
+										format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$P = (h,b,B_i,S_r)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$h\$ is the parachain head data (<a
+																href="chapter-anv.html#defn-head-data">Definition
+																133</a>).</p>
+													</li>
+													<li>
+														<p>\$b\$ is the block body (<a
+																href="chapter-anv.html#defn-para-block">Definition
+																132</a>).
+														</p>
+													</li>
+													<li>
+														<p>\$B_i\$ is the latest relay chain block number.</p>
+													</li>
+													<li>
+														<p>\$S_r\$ is the relay chain block storage root (<a
+																href="chap-state.html#sect-merkl-proof">Section
+																2.4.4</a>).</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div id="defn-validation-result" class="exampleblock">
+							<div class="title">Definition 109. <a
+									href="chapter-anv.html#defn-validation-result">Validation Result</a>
+							</div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The validation result is returned by the <code>validate_block</code> parachain
+										Runtime API
+										after attempting to validate a parachain block. Those results are then used in
+										candidate commitments (<a
+											href="chapter-anv.html#defn-candidate-commitments">Definition 107</a>),
+										which then will be
+										inserted into the relay chain via the parachain inherent data
+										(<a href="chapter-anv.html#defn-parachain-inherent-data">Definition 103</a>).
+										The validation result,
+										\$V\$, is a
+										datastructure of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$V = (h,R,M_u,M_h,p_,w)\$
+										\$M_u = (m_0,…m_n)\$
+										\$M_h = (t_0,…t_n)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$h\$ is the parachain head data (<a
+																href="chapter-anv.html#defn-head-data">Definition
+																133</a>).</p>
+													</li>
+													<li>
+														<p>\$R\$ is an <em>Option</em> value (<a
+																href="id-cryptography-encoding.html#defn-option-type">Definition
+																190</a>) that can
+															contain a new
+															parachain Runtime in case of an update.</p>
+													</li>
+													<li>
+														<p>\$M_u\$ is an array of upward messages sent by the parachain.
+															Each
+															individual message, m, is an array of bytes.</p>
+													</li>
+													<li>
+														<p>\$M_h\$ is an array of individual outbound horizontal
+															messages
+															(<a href="chapter-anv.html#defn-outbound-hrmp-message">Definition
+																139</a>) sent by the
+															parachain.</p>
+													</li>
+													<li>
+														<p>\$p\$ is a unsigned 32-bit integer indicating the number of
+															downward
+															messages that were processed by the parachain. It is
+															expected that the parachain
+															processes the messages from first to last.</p>
+													</li>
+													<li>
+														<p>\$w\$ is a unsigned 32-bit integer indicating the watermark
+															which specifies
+															the relay chain block number up to which all inbound
+															horizontal messages have
+															been processed.</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="sect3">
+						<h4 id="sect-runtime-compression"><a class="anchor" href="#sect-runtime-compression"></a><a
+								class="link" href="#sect-runtime-compression">8.3.2. Runtime Compression</a></h4>
+						<div class="admonitionblock note">
+							<table>
+								<tr>
+									<td class="icon">
+										<i class="fa icon-note" title="Note"></i>
+									</td>
+									<td class="content">
+										Runtime compression is not documented yet.
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="sect2">
+					<h3 id="sect-availability"><a class="anchor" href="#sect-availability"></a><a class="link"
+							href="#sect-availability">8.4. Availability</a></h3>
+					<div class="sect3">
+						<h4 id="sect-availability-votes"><a class="anchor" href="#sect-availability-votes"></a><a
+								class="link" href="#sect-availability-votes">8.4.1. Availability Votes</a></h4>
+						<div class="paragraph">
+							<p>The Polkadot validator must issue a bitfield (<a
+									href="chapter-anv.html#defn-bitfield-array">Definition
+									141</a>) which
+								indicates votes for the availability of candidates. Issued bitfields can be used
+								by the validator and other peers to determine which backed candidates meet the
+								2/3+ availability quorum.</p>
+						</div>
+						<div class="paragraph">
+							<p>Candidates are inserted into the relay chain in form of parachain inherent data
+								(<a href="chapter-anv.html#sect-candidate-inclusion">Section 8.2.2</a>) by a block
+								author. A validator
+								can retrieve that
+								data by calling the appropriate Runtime API entry
+								(<a href="chap-runtime-api.html#sect-rt-api-availability-cores">Section C.9.3</a>), then
+								create a
+								bitfield indicating for
+								which candidate the validator has availability data stored and broadcast it to
+								the network (<a href="chapter-anv.html#net-msg-bitfield-dist-msg">Definition 118</a>).
+								When sending the
+								bitfield
+								distrubtion message, the validator must ensure \$B_h\$ is set approriately,
+								therefore clarifying to which state the bitfield is referring to, given that
+								candidates can vary based on the chain fork.</p>
+						</div>
+						<div class="paragraph">
+							<p>Missing availability data of candidates must be recovered by the validator as
+								described in <a href="chapter-anv.html#sect-candidate-recovery">Section 8.4.2</a>. If
+								previously issued
+								bitfields are no
+								longer accurate, i.e. the availability data has been recovered or the candidate
+								of an availability core has changed, the validator must create a new bitfield and
+								broadcast it to the network. Candidates must be kept available by validators for
+								a specific amount of time. If a candidate does not receive any backing,
+								validators should keep it available for about one hour, in case the state of
+								backing does change. Backed and even approved candidates
+								(<a href="chapter-anv.html#sect-approval-voting">Section 8.5</a>) must be kept by
+								validators for about
+								25 hours, since
+								disputes (<a href="chapter-anv.html#sect-disputes">Section 8.6</a>) can occur and the
+								candidate needs to
+								be checked
+								again.</p>
+						</div>
+						<div class="paragraph">
+							<p>The validator issues availability votes in form of a validator protocol message
+								(<a href="chapter-anv.html#net-msg-collator-protocol-message">Definition 115</a>).</p>
+						</div>
+					</div>
+					<div class="sect3">
+						<h4 id="sect-candidate-recovery"><a class="anchor" href="#sect-candidate-recovery"></a><a
+								class="link" href="#sect-candidate-recovery">8.4.2. Candidate Recovery</a></h4>
+						<div class="paragraph">
+							<p>The availability distribution of the Polkadot validator must be able to recover
+								parachain candidates that the validator is assigned to, in order to determine
+								whether the candidate should be backed (<a
+									href="chapter-anv.html#sect-candidate-backing">Section
+									8.2</a>) respectively
+								whether the candidate should be approved (<a
+									href="chapter-anv.html#sect-approval-voting">Section
+									8.5</a>).
+								Additionally, peers can send availability requests as defined in
+								<a href="chapter-anv.html#net-msg-chunk-fetching-request">Definition 122</a> and <a
+									href="chapter-anv.html#net-msg-available-data-request">Definition 124</a> to the
+								validator, which the validator should be able to respond to.
+							</p>
+						</div>
+						<div class="paragraph">
+							<p>Candidates are recovered by sending requests for specific indices of erasure
+								encoded chunks (<a href="id-cryptography-encoding.html#sect-erasure-encoding">Section
+									A.4.1</a>). A
+								validator should request chunks by
+								picking peers randomly and must recover at least \$f+1\$ chunks, where
+								\$n=3f+k\$ and \$k in {1,2,3}\$. \$n\$ is the number of validators as
+								specified in the session info, which can be fetched by the Runtime API as
+								described in <a href="chap-runtime-api.html#sect-rt-api-session-info">Section
+									C.9.11</a>.</p>
+						</div>
+					</div>
+				</div>
+				<div class="sect2">
+					<h3 id="sect-approval-voting"><a class="anchor" href="#sect-approval-voting"></a><a class="link"
+							href="#sect-approval-voting">8.5. Approval Voting</a></h3>
+					<div class="paragraph">
+						<p>The approval voting process ensures that only valid parachain blocks are
+							finalized on the relay chain. After <em>backable</em> parachain candidates were
+							submitted to the relay chain (<a href="chapter-anv.html#sect-candidate-inclusion">Section
+								8.2.2</a>),
+							which can be
+							retrieved via the Runtime API (<a
+								href="chap-runtime-api.html#sect-rt-api-availability-cores">Section
+								C.9.3</a>), validators
+							need to determine their assignments for each parachain and issue approvals for
+							valid candidates, respectively disputes for invalid candidates. Since it cannot
+							be expected that each validator verifies every single parachain candidate, this
+							mechanism ensures that enough honest validators are selected to verify parachain
+							candidates in order prevent the finalization of invalid blocks. If an honest
+							validator detects an invalid block which was approved by one or more validators,
+							the honest validator must issue a disputes which wil cause escalations,
+							resulting in consequences for all malicious parties, i.e. slashing. This
+							mechanism is described more in <a
+								href="chapter-anv.html#sect-availability-assignment-criteria">Section
+								8.5.1</a>.</p>
+					</div>
+					<div class="sect3">
+						<h4 id="sect-availability-assignment-criteria"><a class="anchor"
+								href="#sect-availability-assignment-criteria"></a><a class="link"
+								href="#sect-availability-assignment-criteria">8.5.1. Assignment Criteria</a></h4>
+						<div class="paragraph">
+							<p>Validators determine their assignment based on a VRF mechanism, similar to the
+								BABE consensus mechanism. First, validators generate an availability core VRF
+								assignment (<a href="chapter-anv.html#defn-availability-core-vrf-assignment">Definition
+									111</a>), which
+								indicates which
+								availability core a validator is assigned to. Then a delayed availability core
+								VRF assignment is generated which indicates at what point a validator should
+								start the approval process. The delays are based on “tranches”
+								(<a href="chapter-anv.html#sect-tranches">Section 8.5.2</a>).</p>
+						</div>
+						<div class="paragraph">
+							<p>An assigned validator never broadcasts their assignment until relevant. Once the
+								assigned validator is ready to check a candidate, the validator broadcasts their
+								assignment by issuing an approval distribution message
+								(<a href="chapter-anv.html#net-msg-approval-distribution">Definition 119</a>), where
+								\$M\$ is of variant
+								<em>0</em>. Other
+								assigned validators that receive that network message must keep track of if,
+								expecting an approval vote following shortly after. Assigned validators can
+								retrieve the candidate by using the availability recovery
+								(<a href="chapter-anv.html#sect-candidate-recovery">Section 8.4.2</a>) and then validate
+								the candidate
+								(<a href="chapter-anv.html#sect-candidate-validation">Section 8.3</a>).
+							</p>
+						</div>
+						<div class="paragraph">
+							<p>The validator issues approval votes in form of a validator protocol message
+								(<a href="chapter-anv.html#net-msg-validator-protocol-message">Definition 114</a>)
+								respectively disputes
+								(<a href="chapter-anv.html#sect-disputes">Section 8.6</a>).</p>
+						</div>
+					</div>
+					<div class="sect3">
+						<h4 id="sect-tranches"><a class="anchor" href="#sect-tranches"></a><a class="link"
+								href="#sect-tranches">8.5.2. Tranches</a></h4>
+						<div class="paragraph">
+							<p>Validators use a subjective, tick-based system to determine when the approval
+								process should start. A validator starts the tick-based system when a new
+								availability core candidates have been proposed, which can be retrieved via the
+								Runtime API (<a href="chap-runtime-api.html#sect-rt-api-availability-cores">Section
+									C.9.3</a>) , and
+								increments the tick every
+								<em>500 milliseconds</em>. Each tick/increment is referred to as a “tranche”,
+								represented as an integer, starting at <em>0</em>.
+							</p>
+						</div>
+						<div class="paragraph">
+							<p>As described in <a href="chapter-anv.html#sect-availability-assignment-criteria">Section
+									8.5.1</a>, the
+								validator first
+								executes the VRF mechanism to determine which parachains (availability cores)
+								the validator is assigned to, then an additional VRF mechanism for each assigned
+								parachain to determine the <em>delayed assignment</em>. The delayed assignment
+								indicates the tranche at which the validator should start the approval process.
+								A tranche of value <em>0</em> implies that the assignment should be started immediately,
+								while later assignees of later tranches wait until it&#8217;s their term to issue
+								assignments, determined by their subjective, tick-based system.</p>
+						</div>
+						<div class="paragraph">
+							<p>Validators are required to track broadcasted assignments by other validators
+								assigned to the same parachain, including verifying the VRF output. Once a valid
+								assignment from a peer was received, the validator must wait for the following
+								approval vote within a certain period as described in
+								<a href="chap-runtime-api.html#sect-rt-api-session-info">Section C.9.11</a> by orienting
+								itself on its
+								local, tick-based
+								system. If the waiting time after a broadcasted assignment exceeds the specified
+								period, the validator interprets this behavior as a “no-show”, indicating that
+								more validators should commit on their tranche until enough approval votes have
+								been collected.
+							</p>
+						</div>
+						<div class="paragraph">
+							<p>If enough approval votes have been collected as described in
+								<a href="chap-runtime-api.html#sect-rt-api-session-info">Section C.9.11</a>, then
+								assignees of later
+								tranches do not have to
+								start the approval process. Therefore, this tranche system serves as a mechanism
+								to ensure that enough candidate approvals from a random set of validators are
+								created without requiring all assigned validators to check the candidate.
+							</p>
+						</div>
+						<div id="defn-relay-vrf-story" class="exampleblock">
+							<div class="title">Definition 110. <a href="chapter-anv.html#defn-relay-vrf-story">Relay VRF
+									Story</a>
+							</div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The relay VRF story is an array of random bytes derived from the VRF submitted
+										within the block by the block author. The relay VRF story, T, is used as input
+										to determine approval voting criteria and generated the following way:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$T = "Transcript"(b_r,b_s,e_i,A)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$"Transcript"\$ constructs a VRF transcript (<a
+																href="id-cryptography-encoding.html#defn-vrf-transcript">Definition
+																175</a>).</p>
+													</li>
+													<li>
+														<p>\$b_r\$ is the BABE randomness of the current epoch (<a
+																href="sect-block-production.html#defn-epoch-randomness">Definition
+																71</a>).</p>
+													</li>
+													<li>
+														<p>\$b_s\$ is the current BABE slot (<a
+																href="sect-block-production.html#defn-epoch-slot">Definition
+																54</a>).</p>
+													</li>
+													<li>
+														<p>\$e_i\$ is the current BABE epoch index (<a
+																href="sect-block-production.html#defn-epoch-slot">Definition
+																54</a>).</p>
+													</li>
+													<li>
+														<p>\$A\$ is the public key of the authority.</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div id="defn-availability-core-vrf-assignment" class="exampleblock">
+							<div class="title">Definition 111. <a
+									href="chapter-anv.html#defn-availability-core-vrf-assignment">Availability Core VRF
+									Assignment</a>
+							</div>
+							<div class="content">
+								<div class="paragraph">
+									<p>An availability core VRF assignment is computed by a relay chain validator to
+										determine which availability core (<a
+											href="chapter-anv.html#defn-availability-core">Definition
+											135</a>) a validator is
+										assigned to and should vote for approvals. Computing this assignement relies on
+										the VRF mechanism, transcripts and STROBE operations described further in
+										<a href="id-cryptography-encoding.html#sect-vrf">Section A.1.3</a>.
+									</p>
+								</div>
+								<div class="paragraph">
+									<p>The Runtime dictates how many assignments should be conducted by a validator, as
+										specified in the session index which can be retrieved via the Runtime API
+										(<a href="chap-runtime-api.html#sect-rt-api-session-info">Section C.9.11</a>).
+										The amount of
+										assignments is referred to as
+										“samples”. For each iteration of the number of samples, the validator calculates
+										an individual assignment, \$T\$, where the little-endian encoded sample
+										number, \$s\$, is incremented by one. At the beginning of the iteration,
+										\$S\$ starts at value <em>0</em>.</p>
+								</div>
+								<div class="paragraph">
+									<p>The validator executes the following steps to retrieve a (possibly valid) core
+										index:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$t_1 larr "Transcript"("'A&amp;V MOD'")\$
+										\$t_2 larr "append"(t_1, "'RC-VRF'", R_s)\$
+										\$t_3 larr "append"(t_2, "'sample'", s)\$
+										\$t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\$
+										\$t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\$
+										\$t_6 larr "meta-ad"(t_5, 64_("le"), "True")\$
+										\$i larr "prf"(t_6, "False")\$
+										\$o = s_k * i\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$s_k\$ is the secret key, \$p_k\$ is the public key and
+										\$64_("le")\$ is the integer <em>64</em> encoded as little endian. \$R_s\$ is
+										the
+										relay VRF story as defined in <a
+											href="chapter-anv.html#defn-relay-vrf-story">Definition 110</a>.
+										Following:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$t_1 larr "Transcript"("'VRFResult'")\$
+										\$t_2 larr "append"(t_1, "''", "'A&amp;V CORE'")\$
+										\$t_3 larr "append"(t_2, "'vrf-in'", i)\$
+										\$t_4 larr "append"(t_3, "'vrf-out'", o)\$
+										\$t_5 larr "meta-ad"(t_4, "''", "False")\$
+										\$t_6 larr "meta-ad"(t_5, 4_"le", "True")\$
+										\$r larr "prf"(t_6, "False")\$
+										\$c_i = r mod a_c\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$4_("le")\$ is the integer <em>4</em> encoded as little endian, \$r\$ is
+										the
+										4-byte challenge interpreted as a little endian encoded interger and \$a_c\$
+										is the number of availability cores used during the active session, as defined
+										in the session info retrieved by the Runtime API (<a
+											href="chap-runtime-api.html#sect-rt-api-session-info">Section C.9.11</a>).
+										The resulting integer, \$c_i\$, indicates the parachain Id
+										(<a href="chapter-anv.html#defn-para-id">Definition 134</a>). If the parachain
+										Id doesn&#8217;t
+										exist, as can be retrieved by the Runtime
+										API (<a href="chap-runtime-api.html#sect-rt-api-availability-cores">Section
+											C.9.3</a>), the
+										validator discards that value and
+										continues with the next iteration. If the Id does exist, the validators
+										continues with the following steps:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$t_1 larr "Transcript"("'A&amp;V ASSIGNED'")\$
+										\$t_2 larr "append"(t_1, "'core'", c_i)\$
+										\$p larr "dleq_prove"(t_2, i)\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$"dleq_prove"\$ is described in <a
+											href="id-cryptography-encoding.html#defn-vrf-dleq-prove">Definition 172</a>.
+										The resulting
+										values of \$o\$, \$p\$ and \$s\$ are used to construct an assignment
+										certificate (<a href="chapter-anv.html#defn-assignment-cert">Definition 113</a>)
+										of kind <em>0</em>.
+									</p>
+								</div>
+							</div>
+						</div>
+						<div id="delayed-availability-core-vrf-assignment" class="exampleblock">
+							<div class="title">Definition 112. <a
+									href="chapter-anv.html#delayed-availability-core-vrf-assignment">Delayed
+									Availability Core VRF
+									Assignment</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The <strong>delayed availability core VRF assignments</strong> determined at what
+										point a
+										validator should start the approval process as described in <a
+											href="chapter-anv.html#sect-tranches">Section 8.5.2</a>.
+										Computing this assignement relies on the VRF mechanism, transcripts and STROBE
+										operations described further in <a
+											href="id-cryptography-encoding.html#sect-vrf">Section A.1.3</a>.
+									</p>
+								</div>
+								<div class="paragraph">
+									<p>The validator executes the following steps:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$t_1 larr "Transcript"("'A&amp;V DELAY'")\$
+										\$t_2 larr "append"(t_1,"'RC-VRF'",R_s)\$
+										\$t_3 larr "append"(t_2, "'core'",c_i)\$
+										\$t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\$
+										\$t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\$
+										\$t_6 larr "meta-ad"(t_5, 64_("le"), "True")\$
+										\$i larr "prf"(t_6, "False")\$
+										\$o = s_k * i\$
+										\$p larr "dleq_prove"(t_6, i)\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>The resulting value \$p\$ is the VRF proof (<a
+											href="id-cryptography-encoding.html#defn-vrf-proof">Definition 171</a>).
+										\$"dleq_prove"\$ is described in <a
+											href="id-cryptography-encoding.html#defn-vrf-dleq-prove">Definition 172</a>.
+									</p>
+								</div>
+								<div class="paragraph">
+									<p>The tranche, \$d\$, is determined as:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$t_1 larr "Transcript"("'VRFResult'")\$
+										\$t_2 larr "append"(t_1, "''", "'A&amp;V TRANCHE'")\$
+										\$t_3 larr "append"(t_2, "'vrf-in'", i)\$
+										\$t_4 larr "append"(t_3, "'vrf-out'", o)\$
+										\$t_5 larr "meta-ad"(t_4, "''", "False")\$
+										\$t_6 larr "meta-ad"(t_5, 4_("le"), "True")\$
+										\$c larr "prf"(t_6, "False")\$
+										\$d = d mod (d_c+d_z) - d_z\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$d_c\$ is the number of delayed tranches by total as
+															specified by the
+															session info, retrieved via the Runtime API (<a
+																href="chap-runtime-api.html#sect-rt-api-session-info">Section
+																C.9.11</a>).</p>
+													</li>
+													<li>
+														<p>\$d_z\$ is the zeroth delay tranche width as specified by the
+															session info,
+															retrieved via the Runtime API (<a
+																href="chap-runtime-api.html#sect-rt-api-session-info">Section
+																C.9.11</a>)..</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+								<div class="paragraph">
+									<p>The resulting tranche, \$n\$, cannot be less than \$0\$. If the tranche is
+										less than \$0\$, then \$d=0\$. The resulting values \$o\$, \$p\$ and
+										\$c_i\$ are used to construct an assignment certificate
+										(&lt;<a href="chapter-anv.html#defn-assignment-cert">Definition 113</a>) of kind
+										<em>1</em>.</p>
+								</div>
+							</div>
+						</div>
+						<div id="defn-assignment-cert" class="exampleblock">
+							<div class="title">Definition 113. <a
+									href="chapter-anv.html#defn-assignment-cert">Assignment
+									Certificate</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The <strong>Assignment Certificate</strong> proves to the network that a Polkadot
+										validator is
+										assigned to an availability core and is therefore qualified for the approval of
+										candidates, as clarified in <a
+											href="chapter-anv.html#defn-availability-core-vrf-assignment">Definition
+											111</a>. This
+										certificate contains the computed VRF output and is a datastructure of the
+										following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$(k, o, p)\$
+										\$k = {(0,-&gt;,s),(1,-&gt;,c_i):}\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$k\$ indicates the kind of the certificate, respectively the value
+										<em>0</em>
+										proves the availability core assignment
+										(<a href="chapter-anv.html#defn-availability-core-vrf-assignment">Definition
+											111</a>), followed by
+										the sample number
+										\$s\$, and the value <em>1</em> proves the delayed availability core assignment
+										(<a href="chapter-anv.html#delayed-availability-core-vrf-assignment">Definition
+											112</a>), followed
+										by the core index
+										\$c_i\$ (<a href="chap-runtime-api.html#sect-rt-api-availability-cores">Section
+											C.9.3</a>). \$o\$ is
+										the VRF output and
+										\$p\$ is the VRF proof.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="sect2">
+					<h3 id="sect-disputes"><a class="anchor" href="#sect-disputes"></a><a class="link"
+							href="#sect-disputes">8.6.
+							Disputes</a></h3>
+					<div class="admonitionblock note">
+						<table>
+							<tr>
+								<td class="icon">
+									<i class="fa icon-note" title="Note"></i>
+								</td>
+								<td class="content">
+									Disputes are not documented yet.
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="sect2">
+					<h3 id="sect-anv-network-messages"><a class="anchor" href="#sect-anv-network-messages"></a><a
+							class="link" href="#sect-anv-network-messages">8.7. Network Messages</a></h3>
+					<div class="paragraph">
+						<p>The availability and validity process requires certain network messages to be exchanged
+							between
+							validators and collators.</p>
+					</div>
+					<div class="sect3">
+						<h4 id="id-notification-messges"><a class="anchor" href="#id-notification-messges"></a><a
+								class="link" href="#id-notification-messges">8.7.1. Notification Messges</a></h4>
+						<div class="paragraph">
+							<p>The notification messages are exchanged between validators, including messages
+								sent by collators to validators. The protocol messages are exchanged based on a
+								streaming notification substream (<a
+									href="chap-networking.html#sect-connection-establishment">Section
+									4.5</a>). The
+								messages are SCALE encoded (<a
+									href="id-cryptography-encoding.html#sect-scale-codec">Section A.2.2</a>).
+							</p>
+						</div>
+						<div id="net-msg-validator-protocol-message" class="exampleblock">
+							<div class="title">Definition 114. <a
+									href="chapter-anv.html#net-msg-validator-protocol-message">Validator
+									Protocol Message</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The validator protocol message is a varying datatype used by validators to
+										broadcast relevant information about certain steps in the A&amp;V process.
+										Specifically, this includes the backing process (<a
+											href="chapter-anv.html#sect-candidate-backing">Section 8.2</a>) and
+										the approval process (<a href="chapter-anv.html#sect-approval-voting">Section
+											8.5</a>). The
+										validator protocol message,
+										\$M\$, is a varying datatype of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$M = {(1,-&gt;,M_f),(3,-&gt;,M_s),(4,-&gt;,M_a):}\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$M_f\$ is a bitfield distribution message (<a
+																href="chapter-anv.html#net-msg-bitfield-dist-msg">Definition
+																118</a>).</p>
+													</li>
+													<li>
+														<p>\$M_s\$ is a statement distribution message (<a
+																href="chapter-anv.html#net-msg-statement-distribution">Definition
+																117</a>).</p>
+													</li>
+													<li>
+														<p>\$M_a\$ is a approval distribution message (<a
+																href="chapter-anv.html#net-msg-approval-distribution">Definition
+																119</a>).</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-collator-protocol-message" class="exampleblock">
+							<div class="title">Definition 115. <a
+									href="chapter-anv.html#net-msg-collator-protocol-message">Collation
+									Protocol Message</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The collation protocol message, M, is a varying datatype of the following format:
+									</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$M = {(0,-&gt;,M_c):}\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$M_c\$ is the collator message (<a
+											href="chapter-anv.html#net-msg-collator-message">Definition 116</a>).</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-collator-message" class="exampleblock">
+							<div class="title">Definition 116. <a
+									href="chapter-anv.html#net-msg-collator-message">Collator
+									Message</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The collator message is sent as part of the collator protocol message
+										(<a href="chapter-anv.html#net-msg-collator-protocol-message">Definition
+											115</a>). The collator
+										message, \$M\$, is a
+										varying datatype of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$M = {(0,-&gt;,(C_i,P_i,C_s)),(1,-&gt;,H),(4,-&gt;,(B_h,S)):}\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$M\$ is a varying datatype where <em>0</em> indicates the
+															intent to advertise a
+															collation and <em>1</em> indicates the advertisement of a
+															collation to a validator.
+															<em>4</em>
+															indicates that a collation sent to a validator was seconded.
+														</p>
+													</li>
+													<li>
+														<p>\$C_i\$ is the public key of the collator.</p>
+													</li>
+													<li>
+														<p>\$P_i\$ is the parachain Id (<a
+																href="chapter-anv.html#defn-para-id">Definition
+																134</a>).
+														</p>
+													</li>
+													<li>
+														<p>\$C_s\$ is the signature of the collator using the
+															<em>PeerId</em> of the collators node.
+														</p>
+													</li>
+													<li>
+														<p>\$H\$ is the hash of the parachain block (<a
+																href="chapter-anv.html#defn-para-block">Definition
+																132</a>).</p>
+													</li>
+													<li>
+														<p>\$S\$ is a full statement (<a
+																href="chapter-anv.html#defn-statement">Definition
+																102</a>).
+														</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-statement-distribution" class="exampleblock">
+							<div class="title">Definition 117. <a
+									href="chapter-anv.html#net-msg-statement-distribution">Statement
+									Distribution Message</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The statement distribution message is sent as part of the validator protocol
+										message (<a href="chapter-anv.html#net-msg-collator-protocol-message">Definition
+											115</a>) indicates
+										the validity vote of a
+										validator for a given candidate, described further in
+										<a href="chapter-anv.html#sect-candidate-statements">Section 8.2.1</a>. The
+										statement distribution
+										message,
+										\$M\$, is of varying type of the following format:
+									</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$M = {(0,-&gt;,(B_h,S)),(1,-&gt;,S_m):}\$
+										\$S_m = (B_h,C_h,A_i,A_s)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$M\$ is a varying datatype where <em>0</em> indicates a
+															signed statement and <em>1</em>
+															contains metadata about a seconded statement with a larger
+															payload, such as a
+															runtime upgrade. The candidate itself can be fetched via the
+															request/response
+															message (<a
+																href="chapter-anv.html#net-msg-statement-fetching-request">Definition
+																128</a>).</p>
+													</li>
+													<li>
+														<p>\$B_h\$ is the hash of the relay chain parent, indicating the
+															state this message is for.
+														</p>
+													</li>
+													<li>
+														<p>\$S\$ is a full statement (<a
+																href="chapter-anv.html#defn-statement">Definition
+																102</a>).
+														</p>
+													</li>
+													<li>
+														<p>\$A_i\$ is the validator index in the authority set
+															(<a href="chap-sync.html#defn-authority-list">Definition
+																33</a>) that signed this message.
+														</p>
+													</li>
+													<li>
+														<p>\$A_s\$ is the signature of the validator.</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-bitfield-dist-msg" class="exampleblock">
+							<div class="title">Definition 118. <a
+									href="chapter-anv.html#net-msg-bitfield-dist-msg">Bitfield
+									Distribution Message</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The bitfield distribution message is sent as part of the validator protocol
+										message (<a
+											href="chapter-anv.html#net-msg-validator-protocol-message">Definition
+											114</a>) and
+										indicates the availability
+										vote of a validator for a given candidate, described further in
+										<a href="chapter-anv.html#sect-availability-votes">Section 8.4.1</a>. This
+										message is sent in form
+										of a validator
+										protocol message (<a
+											href="chapter-anv.html#net-msg-validator-protocol-message">Definition
+											114</a>).
+										The bitfield
+										distribution message, \$M\$, is a datastructure of the following format:
+									</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$M = {(0,-&gt;,(B_h,P)):}\$
+										\$P = (d,A_i,A_s)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$B_h\$ is the hash of the relay chain parent, indicating the
+															state this message is for.
+														</p>
+													</li>
+													<li>
+														<p>\$d\$ is the bitfield array (<a
+																href="chapter-anv.html#defn-bitfield-array">Definition
+																141</a>).</p>
+													</li>
+													<li>
+														<p>\$A_i\$ is the validator index in the authority set
+															(<a href="chap-sync.html#defn-authority-list">Definition
+																33</a>) that signed this message.
+														</p>
+													</li>
+													<li>
+														<p>\$A_s\$ is the signature of the validator.</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-approval-distribution" class="exampleblock">
+							<div class="title">Definition 119. <a
+									href="chapter-anv.html#net-msg-approval-distribution">Approval
+									Distribution Message</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The approval distribution message is sent as part of the validator protocol
+										message (<a
+											href="chapter-anv.html#net-msg-validator-protocol-message">Definition
+											114</a>) and
+										indicates the approval vote
+										of a validator for a given candidate, described further in
+										<a href="chapter-anv.html#sect-availability-assignment-criteria">Section
+											8.5.1</a>. The approval
+										distribution message,
+										\$M\$, is a varying datatype of the following format:
+									</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$M = {(0,-&gt;,((C_,I_)_0…(C,I)_n)),(1,-&gt;,(V_0,…V_n)):}\$
+										\$C = (B_h,A_i,c_a)\$
+										\$c_a = (c_k,P_o,P_p)\$
+										\$c_k = {(0→s),(1→i):}\$
+										\$V = (B_h,I,A_i,A_s)\$
+									</div>
+								</div>
+								<div class="dlist">
+									<dl>
+										<dt class="hdlist1">where</dt>
+										<dd>
+											<div class="ulist">
+												<ul>
+													<li>
+														<p>\$M\$ is a varying datatype where <em>0</em> indicates
+															assignments for candidates in
+															recent, unfinalized blocks and <em>1</em> indicates
+															approvals for candidates in some
+															recent, unfinalized block.</p>
+													</li>
+													<li>
+														<p>\$C\$ is an assignment criterion which refers to the
+															candidate under which
+															the assignment is relevant by the block hash.</p>
+													</li>
+													<li>
+														<p>\$I\$ is an unsigned 32-bit integer indicating the index of
+															the candidate,
+															corresponding the the order of the availability cores
+															(<a
+																href="chap-runtime-api.html#sect-rt-api-availability-cores">Section
+																C.9.3</a>).</p>
+													</li>
+													<li>
+														<p>\$B_h\$ is the relay chain block hash where the candidate
+															appears.</p>
+													</li>
+													<li>
+														<p>\$A_i\$ is the authority set Id (<a
+																href="chap-sync.html#defn-authority-list">Definition
+																33</a>) of the validator
+															that created this message.</p>
+													</li>
+													<li>
+														<p>\$A_s\$ is the signature of the validator issuing this
+															message.</p>
+													</li>
+													<li>
+														<p>\$c_a\$ is the certification of the assignment.</p>
+													</li>
+													<li>
+														<p>\$c_k\$ is a varying datatype where <em>0</em> indicates an
+															assignment based on
+															the VRF that authorized the relay chain block where the
+															candidate was included,
+															followed by a sample number, \$s\$. <em>1</em> indicates an
+															assignment story based
+															on the VRF that authorized the relay chain block where the
+															candidate was
+															included combined with the index of a particular core. This
+															is described further
+															in <a href="chapter-anv.html#sect-approval-voting">Section
+																8.5</a>.</p>
+													</li>
+													<li>
+														<p>\$P_o\$ is a VRF output and \$P_p\$ its corresponding proof.
+														</p>
+													</li>
+												</ul>
+											</div>
+										</dd>
+									</dl>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="sect3">
+						<h4 id="id-request-response"><a class="anchor" href="#id-request-response"></a><a class="link"
+								href="#id-request-response">8.7.2. Request &amp; Response</a></h4>
+						<div class="paragraph">
+							<p>The request &amp; response network messages are sent and received between peers in
+								the Polkadot network, including collators and non-validator nodes. Those
+								messages are conducted on the request-response substreams
+								(<a href="chap-networking.html#sect-connection-establishment">Section 4.5</a>). The
+								network messages are
+								SCALE encoded as
+								described in Section ?.</p>
+						</div>
+						<div id="net-msg-pov-fetching-request" class="exampleblock">
+							<div class="title">Definition 120. <a
+									href="chapter-anv.html#net-msg-pov-fetching-request">PoV Fetching
+									Request</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The PoV fetching request is sent by clients who want to retrieve a PoV block
+										from a node. The request is a datastructure of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$C_h\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$C_h\$ is the 256-bit hash of the PoV block. The response message is
+										defined in <a href="chapter-anv.html#net-msg-pov-fetching-response">Definition
+											121</a>.</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-pov-fetching-response" class="exampleblock">
+							<div class="title">Definition 121. <a
+									href="chapter-anv.html#net-msg-pov-fetching-response">PoV Fetching
+									Response</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The PoV fetching response is sent by nodes to the clients who issued a PoV
+										fetching request (<a
+											href="chapter-anv.html#net-msg-pov-fetching-request">Definition 120</a>).
+										The
+										response, \$R\$, is
+										a varying datatype of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$R = {(0,-&gt;,B),(1,-&gt;,phi):}\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where <em>0</em> is followed by the PoV block and <em>1</em> indicates that the
+										PoV block was
+										not found.</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-chunk-fetching-request" class="exampleblock">
+							<div class="title">Definition 122. <a
+									href="chapter-anv.html#net-msg-chunk-fetching-request">Chunk
+									Fetching Request</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The chunk fetching request is sent by clients who want to retrieve chunks of a
+										parachain candidate. The request is a datastructure of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$(C_h,i)\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$C_h\$ is the 256-bit hash of the parachain candidate and \$i\$ is a
+										32-bit unsigned integer indicating the index of the chunk to fetch. The response
+										message is defined in <a
+											href="chapter-anv.html#net-msg-chunk-fetching-response">Definition 123</a>.
+									</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-chunk-fetching-response" class="exampleblock">
+							<div class="title">Definition 123. <a
+									href="chapter-anv.html#net-msg-chunk-fetching-response">Chunk
+									Fetching Response</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The chunk fetching response is sent by nodes to the clients who issued a chunk
+										fetching request (<a
+											href="chapter-anv.html#net-msg-chunk-fetching-request">Definition 122</a>).
+										The
+										response, \$R\$, is
+										a varying datatype of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$R = {(0,-&gt;,C_r),(1,-&gt;,phi):}\$
+										\$C_r = (c,c_p)\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where <em>0</em> is followed by the chunk response, \$C_r\$ and <em>1</em>
+										indicates that
+										the requested chunk was not found. \$C_r\$ contains the erasure-encoded chunk
+										of data belonging to the candidate block, \$c\$, and \$c_p\$ is that
+										chunks proof in the Merkle tree. Both \$c\$ and \$c_p\$ are byte arrays of
+										type \$(b_n…b_m)\$.</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-available-data-request" class="exampleblock">
+							<div class="title">Definition 124. <a
+									href="chapter-anv.html#net-msg-available-data-request">Available
+									Data Request</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The available data request is sent by clients who want to retrieve the PoV block
+										of a parachain candidate. The request is a datastructure of the following
+										format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$C_h\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$C_h\$ is the 256-bit candidate hash to get the available data for.
+										The response message is defined in <a
+											href="chapter-anv.html#net-msg-available-data-response">Definition 125</a>.
+									</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-available-data-response" class="exampleblock">
+							<div class="title">Definition 125. <a
+									href="chapter-anv.html#net-msg-available-data-response">Available
+									Data Response</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The available data response is sent by nodes to the clients who issued a
+										available data request (<a
+											href="chapter-anv.html#net-msg-available-data-request">Definition
+											124</a>). The response,
+										\$R\$, is a varying datatype of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$R = {(0,-&gt;,A),(1,-&gt;,phi):}\$
+										\$A = (P_{ov},D_{pv})\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where <em>0</em> is followed by the available data, \$A\$, and <em>1</em>
+										indicates the the
+										requested candidate hash was not found. \$P_{ov}\$ is the PoV block
+										(<a href="chapter-anv.html#defn-para-block">Definition 132</a>) and \$D_{pv}\$
+										is the persisted
+										validation data
+										(<a href="chap-runtime-api.html#defn-persisted-validation-data">Definition
+											227</a>).</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-collation-fetching-request" class="exampleblock">
+							<div class="title">Definition 126. <a
+									href="chapter-anv.html#net-msg-collation-fetching-request">Collation
+									Fetching Request</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The collation fetching request is sent by clients who want to retrieve the
+										advertised collation at the specified relay chain block. The request is a
+										datastructure of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$(B_h,P_{id})\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$B_h\$ is the hash of the relay chain block and \$P_{id}\$ is the
+										parachain Id (<a href="chapter-anv.html#defn-para-id">Definition 134</a>). The
+										response message is
+										defined in
+										<a href="chapter-anv.html#net-msg-collation-fetching-response">Definition
+											127</a>.
+									</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-collation-fetching-response" class="exampleblock">
+							<div class="title">Definition 127. <a
+									href="chapter-anv.html#net-msg-collation-fetching-response">Collation Fetching
+									Response</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The collation fetching response is sent by nodes to the clients who issued a
+										collation fetching request (<a
+											href="chapter-anv.html#net-msg-collation-fetching-request">Definition
+											126</a>). The
+										response, \$R\$, is a varying datatype of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$R = {(0,-&gt;,(C_r,B)):}\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$0\$ is followed by the candidate receipt
+										(<a href="chapter-anv.html#defn-candidate-receipt">Definition 104</a>), \$C_r\$,
+										as and the PoV
+										block
+										(<a href="chapter-anv.html#defn-para-block">Definition 132</a>), \$B\$. This
+										type does not notify
+										the client about a
+										statement that was not found.</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-statement-fetching-request" class="exampleblock">
+							<div class="title">Definition 128. <a
+									href="chapter-anv.html#net-msg-statement-fetching-request">Statement
+									Fetching Request</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The statement fetching request is sent by clients who want to retrieve
+										statements about a given candidate. The request is a datastructure of the
+										following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$(B_h,C_h)\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$B_h\$ is the hash of the relay chain parent and \$C_h\$ is the
+										candidate hash that was used to create a committed candidate receipt
+										(<a href="chapter-anv.html#defn-committed-candidate-receipt">Definition
+											105</a>). The response
+										message is defined in
+										<a href="chapter-anv.html#net-msg-statement-fetching-response">Definition
+											129</a>.
+									</p>
+								</div>
+							</div>
+						</div>
+						<div id="net-msg-statement-fetching-response" class="exampleblock">
+							<div class="title">Definition 129. <a
+									href="chapter-anv.html#net-msg-statement-fetching-response">Statement Fetching
+									Response</a></div>
+							<div class="content">
+								<div class="paragraph">
+									<p>The statement fetching response is sent by nodes to the clients who issued a
+										collation fetching request (<a
+											href="chapter-anv.html#net-msg-statement-fetching-request">Definition
+											128</a>). The
+										response, \$R\$, is a varying datatype of the following format:</p>
+								</div>
+								<div class="stemblock">
+									<div class="content">
+										\$R = {(0,-&gt;,C_r):}\$
+									</div>
+								</div>
+								<div class="paragraph">
+									<p>where \$C_r\$ is the committed candidate receipt
+										(<a href="chapter-anv.html#defn-committed-candidate-receipt">Definition
+											105</a>). No response is
+										returned if no statement
+										is found.</p>
+								</div>
+							</div>
+						</div>
+						<div class="sect4">
+							<h5 id="net-msg-dispute-request"><a class="anchor" href="#net-msg-dispute-request"></a><a
+									class="link" href="#net-msg-dispute-request">8.7.2.1. Dispute Request</a></h5>
+							<div class="paragraph">
+								<p>The dispute request is sent by clients who want to issue a dispute about a
+									candidate. The request, \$D_r\$, is a datastructure of the following format:</p>
+							</div>
+							<div class="stemblock">
+								<div class="content">
+									\$D_r = (C_r,S_i,I_v,V_v)\$
+									\$I_v = (A_i,A_s,k_i)\$
+									\$V_v = (A_i,A_s,k_v)\$
+									\$k_i = {(0,-&gt;,phi):}\$
+									\$k_v = {(0,-&gt;,phi),(1,-&gt;,C_h),(2,-&gt;,C_h),(3,-&gt;,phi):}\$
+								</div>
+							</div>
+							<div class="dlist">
+								<dl>
+									<dt class="hdlist1">where</dt>
+									<dd>
+										<div class="ulist">
+											<ul>
+												<li>
+													<p>\$C_r\$ is the candidate that is being disputed. The structure is
+														a
+														candidate receipt (<a
+															href="chapter-anv.html#defn-candidate-receipt">Definition
+															104</a>).
+													</p>
+												</li>
+												<li>
+													<p>\$S_i\$ is an unsigned 32-bit integer indicating the session
+														index the candidate appears
+														in.</p>
+												</li>
+												<li>
+													<p>\$I_v\$ is the invalid vote that makes up the request.</p>
+												</li>
+												<li>
+													<p>\$V_v\$ is the valid vote that makes this dispute request valid.
+													</p>
+												</li>
+												<li>
+													<p>\$A_i\$ is an unsigned 32-bit integer indicating the validator
+														index in the
+														authority set (<a
+															href="chap-sync.html#defn-authority-list">Definition
+															33</a>).</p>
+												</li>
+												<li>
+													<p>\$A_s\$ is the signature of the validator.</p>
+												</li>
+												<li>
+													<p>\$k_i\$ is a varying datatype and implies the dispute statement.
+														<em>0</em>
+														indicates an explicit statement.</p>
+												</li>
+												<li>
+													<p>\$k_v\$ is a varying datatype and implies the dispute statement.
+													</p>
+													<div class="ulist">
+														<ul>
+															<li>
+																<p>\$0\$ indicates an explicit statement.</p>
+															</li>
+															<li>
+																<p>\$1\$ indicates a seconded statement on a candidate,
+																	\$C_h\$, from the
+																	backing phase. \$C_h\$ is the hash of the candidate.
+																</p>
+															</li>
+															<li>
+																<p>\$2\$ indicates a valid statement on a candidate,
+																	\$C_h\$, from the
+																	backing phase. \$C_h\$ is the hash of the candidate.
+																</p>
+															</li>
+															<li>
+																<p>\$3\$ indicates an approval vote from the approval
+																	checking phase.</p>
+															</li>
+														</ul>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</dd>
+								</dl>
+							</div>
+							<div class="paragraph">
+								<p>The response message is defined in <a
+										href="chapter-anv.html#net-msg-dispute-response">Section
+										8.7.2.2</a>.</p>
+							</div>
+						</div>
+						<div class="sect4">
+							<h5 id="net-msg-dispute-response"><a class="anchor" href="#net-msg-dispute-response"></a><a
+									class="link" href="#net-msg-dispute-response">8.7.2.2. Dispute Response</a></h5>
+							<div class="paragraph">
+								<p>The dispute response is sent by nodes to the clients who who issued a dispute
+									request (<a href="chapter-anv.html#net-msg-dispute-request">Section 8.7.2.1</a>).
+									The response, \$R\$,
+									is a varying type
+									of the following format:</p>
+							</div>
+							<div class="stemblock">
+								<div class="content">
+									\$R = {(0,-&gt;,phi):}\$
+								</div>
+							</div>
+							<div class="paragraph">
+								<p>where \$0\$ indicates that the dispute was successfully processed.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="sect2">
+					<h3 id="sect-anv-definitions"><a class="anchor" href="#sect-anv-definitions"></a><a class="link"
+							href="#sect-anv-definitions">8.8. Definitions</a></h3>
+					<div id="defn-collator" class="exampleblock">
+						<div class="title">Definition 130. <a href="chapter-anv.html#defn-collator">Collator</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>A collator is a parachain node that sends parachain blocks, known as candidates
+									(<a href="chapter-anv.html#defn-candidate">Definition 131</a>), to the relay chain
+									validators. The
+									relay chain validators
+									are not concerned how the collator works or how it creates candidates.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-candidate" class="exampleblock">
+						<div class="title">Definition 131. <a href="chapter-anv.html#defn-candidate">Candidate</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>A candidate is a submitted parachain block (<a
+										href="chapter-anv.html#defn-para-block">Definition
+										132</a>) to the relay
+									chain validators. A parachain block stops being referred to as a candidate as
+									soon it has been finalized.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-para-block" class="exampleblock">
+						<div class="title">Definition 132. <a href="chapter-anv.html#defn-para-block">Parachain
+								Block</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>A parachain block or a Proof-of-Validity block (PoV block) contains the
+									necessary data for the parachain specific state transition logic. Relay chain
+									validators are not concerned with the inner structure of the block and treat it
+									as a byte array.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-head-data" class="exampleblock">
+						<div class="title">Definition 133. <a href="chapter-anv.html#defn-head-data">Head Data</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>The head data is contains information about a parachain block
+									(<a href="chapter-anv.html#defn-para-block">Definition 132</a>). The head data is
+									returned by
+									executing the parachain
+									Runtime and relay chain validators are not concerned with its inner structure
+									and treat it as a byte arrays.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-para-id" class="exampleblock">
+						<div class="title">Definition 134. <a href="chapter-anv.html#defn-para-id">Parachain Id</a>
+						</div>
+						<div class="content">
+							<div class="paragraph">
+								<p>The Parachain Id is a unique, unsigned 32-bit integer which serves as an
+									identifier of a parachain, assigned by the Runtime.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-availability-core" class="exampleblock">
+						<div class="title">Definition 135. <a
+								href="chapter-anv.html#defn-availability-core">Availability Core</a>
+						</div>
+						<div class="content">
+							<div class="paragraph">
+								<p>Availability cores are slots used to process parachains. The Runtime assigns
+									each parachain to a availability core and validators can fetch information about
+									the cores, such as parachain block candidates, by calling the appropriate
+									Runtime API (<a href="chap-runtime-api.html#sect-rt-api-availability-cores">Section
+										C.9.3</a>).
+									Validators are not concerned
+									with the internal workings from the Runtimes perspective.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-validator-groups" class="exampleblock">
+						<div class="title">Definition 136. <a href="chapter-anv.html#defn-validator-groups">Validator
+								Groups</a>
+						</div>
+						<div class="content">
+							<div class="paragraph">
+								<p>Validator groups indicate which validators are responsible for creating backable
+									candidates for parachains (<a href="chapter-anv.html#sect-candidate-backing">Section
+										8.2</a>), and are
+									assigned by the
+									Runtime (<a href="chap-runtime-api.html#sect-rt-api-validator-groups">Section
+										C.9.2</a>). Validators
+									are not concerned with
+									the internal workings from the Runtimes perspective. Collators can use this
+									information for submitting blocks.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-upward-message" class="exampleblock">
+						<div class="title">Definition 137. <a href="chapter-anv.html#defn-upward-message">Upward
+								Message</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>An upward message is an opaque byte array sent from a parachain to a relay chain.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-downward-message" class="exampleblock">
+						<div class="title">Definition 138. <a href="chapter-anv.html#defn-downward-message">Downward
+								Message</a>
+						</div>
+						<div class="content">
+							<div class="paragraph">
+								<p>A downward message is an opaque byte array received by the parachain from the
+									relay chain.</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-outbound-hrmp-message" class="exampleblock">
+						<div class="title">Definition 139. <a
+								href="chapter-anv.html#defn-outbound-hrmp-message">Outbound HRMP
+								Message</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>An outbound HRMP message (Horizontal Relay-routed Message Passing) is sent from
+									the perspective of a sender of a parachain to an other parachain by passing it
+									through the relay chain. It&#8217;s a datastructure of the following format:</p>
+							</div>
+							<div class="stemblock">
+								<div class="content">
+									\$(I,M)\$
+								</div>
+							</div>
+							<div class="paragraph">
+								<p>where \$I\$ is the recipient Id (<a href="chapter-anv.html#defn-para-id">Definition
+										134</a>) and
+									\$M\$ is an upward
+									message (<a href="chapter-anv.html#defn-upward-message">Definition 137</a>).</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-inbound-hrmp-message" class="exampleblock">
+						<div class="title">Definition 140. <a href="chapter-anv.html#defn-inbound-hrmp-message">Inbound
+								HRMP
+								Message</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>An inbound HRMP message (Horizontal Relay-routed Message Passing) is seen from
+									the perspective of a recipient parachain sent from an other parachain by passing
+									it through the relay chain. It&#8217;s a datastructure of the following format:</p>
+							</div>
+							<div class="stemblock">
+								<div class="content">
+									\$(N,M)\$
+								</div>
+							</div>
+							<div class="paragraph">
+								<p>where \$N\$ is the unsigned 32-bit integer indicating the relay chain block
+									number at which the message was passed down to the recipient parachain and
+									\$M\$ is a downward message (<a
+										href="chapter-anv.html#defn-downward-message">Definition 138</a>).</p>
+							</div>
+						</div>
+					</div>
+					<div id="defn-bitfield-array" class="exampleblock">
+						<div class="title">Definition 141. <a href="chapter-anv.html#defn-bitfield-array">Bitfield
+								Array</a></div>
+						<div class="content">
+							<div class="paragraph">
+								<p>A bitfield array contains single-bit values which indidate whether a candidate
+									is available. The number of items is equal of to the number of availability
+									cores (<a href="chapter-anv.html#defn-availability-core">Definition 135</a>) and
+									each bit represents a
+									vote on the
+									corresponding core in the given order. Respectively, if the single bit equals 1,
+									then the Polkadot validator claims that the availability core is occupied, there
+									exists a committed candidate receipt (<a
+										href="chapter-anv.html#defn-committed-candidate-receipt">Definition 105</a>) and
+									that the validator has a stored chunk of the parachain block
+									(<a href="chapter-anv.html#defn-para-block">Definition 132</a>).</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="paragraph nav-footer">
+			<p>← Previous: <a href="sect-lightclient.html">Light Clients</a> | ↑ Up: <a
+					href="part-polkadot-host.html">Polkadot Host</a> | ⌂ Home: <a href="polkadot-spec.html">Polkadot
+					Protocol
+					Specification</a> | Next: <a href="part-polkadot-runtime.html">Polkadot Runtime</a> →</p>
+		</div>
+	</div>
+	<div id="footer">
+		<div id="footer-text">
+			Version 0.2.1<br>
+			Last updated 2023-03-09 11:37:31 +0100
+		</div>
+	</div>
+	<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+
+</html>

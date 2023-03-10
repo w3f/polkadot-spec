@@ -1,0 +1,3303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="description" content="The Official Polkadot and Kusama Protocol Specification">
+<meta name="keywords" content="babe, blockchain, consensus, finality, grandpa, kusama, parachain, polkadot, relay-chain, runtime, spec, web3, w3f">
+<meta name="author" content="Web 3.0 Technologies Foundation">
+<link rel="icon" type="image/png" href="./favicon.png">
+<title>Polkadot Protocol Specification</title>
+<style>
+/* Fetch Unbounded - Normal - Regular */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400&display=swap');
+/* Fetch Work Sans - Normal + Italic - Regular + Bold */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+/* Fetch Asciidoctor Default Style Sheet */
+@import url('https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css');
+
+/* Base constants of theme */
+:root {
+	--font-header: 'Unbounded', cursive;
+	--font-text: 'Work Sans', sans-serif;
+
+	--black: #1E1E1E;
+	--white: #FFFFFF;
+
+	--dark-blue: #172026;
+	--grey: #efefef;
+
+	--pink: #E6007A;
+	--purple: #670d35;
+}
+
+
+/* Apply some layout corrections */
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+  	display: flex;
+  	flex-direction: column;
+}
+
+.partintro {
+	margin-bottom: 1.25rem;
+}
+
+/* Render part intros just like other text */
+.partintro div.content {
+	line-height: 1.6;
+	font-size: 1.0625rem;
+	letter-spacing: -.01em;
+	text-rendering: optimizeLegibility;
+}
+
+/* Set our custom font */
+body {
+	font-family: var(--font-text);
+}
+
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+#toc ul.sectlevel0 > li > a,
+.sidebarblock > .content > .title {
+	font-family: var(--font-header);
+	font-weight: 400;
+}
+
+#toc ul{
+	font-family: var(--font-text);
+}
+
+/* Set base colors */
+body {
+	color: var(--black);
+	background-color: var(--white);
+}
+
+/* Style all titles */
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+.subheader,
+.title {
+	color: var(--pink);
+}
+
+/* - could be replaced by !important in previous block */
+.sidebarblock > .content > .title,
+.admonitionblock td.content > .title,
+.audioblock > .title,
+.exampleblock > .title,
+.imageblock > .title,
+.listingblock > .title,
+.literalblock > .title,
+.stemblock > .title,
+.openblock > .title,
+.paragraph > .title,
+.quoteblock > .title,
+table.tableblock > .title,
+.verseblock > .title,
+.videoblock > .title,
+.dlist > .title,
+.olist > .title,
+.ulist > .title,
+.qlist > .title,
+.hdlist > .title {
+	color: inherit;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    color: inherit;
+}
+
+/* Style all links */
+a {
+	color: var(--pink);
+}
+
+a:hover {
+	color: var(--purple);
+}
+
+/* - same here, next two blocks or important above */
+#content h1 > a.link,
+h2 > a.link,
+h3 > a.link, #toctitle > a.link,
+h4 > a.link,
+h5 > a.link,
+h6 > a.link,
+.sidebarblock > .content > .title > a.link {
+	color: inherit;
+}
+
+#content h1 > a.link:hover,
+h2 > a.link:hover,
+h3 > a.link:hover,
+h4 > a.link:hover,
+h5 > a.link:hover,
+h6 > a.link:hover,
+#toctitle > a.link:hover,
+.sidebarblock > .content > .title > a.link:hover {
+	color: var(--purple);
+}
+
+/* Style header like toc on small screens */
+@media screen and (max-width:768px) {
+	#header {
+		background-color: var(--dark-blue);
+		max-width: none;
+	}
+
+	#header > h1:first-child {
+  		color: var(--pink);
+	}
+
+	#header .details {
+  		color: var(--white);
+		border: none;
+	}
+}
+
+/* Style table of content */
+#toc.toc2 {
+	background-color: var(--dark-blue);
+	border: none;
+}
+
+#toc ul.sectlevel0 > li > a {
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: underline;
+}
+
+#toc a {
+	color: var(--white);
+}
+
+#toc a code {
+	color: inherit;
+	background-color: inherit;
+}
+
+#toc a .toc-current,
+#toc .tocify-focus a {
+	color: var(--pink);
+}
+
+/* Tame SVG images */
+.imageblock .content svg {
+  max-width: 100%;
+}
+
+/* Style boxes */
+.exampleblock > .content, 
+.sidebarblock {
+	background: var(--grey);
+}
+
+/* Style footer */
+#footer {
+	color: var(--white);
+	background-color: var(--dark-blue);
+}
+
+/* CSS Ribbon */
+.ribbon {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  z-index: 99999;
+  top: 0px;
+  right: 0px;
+}
+
+.ribbon a {
+  display: inline-block;
+  position: inherit;
+  transform: rotate(45deg);
+  width: 200px;
+  top: 45px; 
+  right: -40px;
+  padding: 6px 0px;
+  overflow: hidden;
+
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+
+  color: var(--white);
+  background-color: var(--pink);
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+  border: 2px dotted var(--white);
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 3px 0px;
+}
+
+/* MathJax v3 */
+.stemblock mjx-container {
+  text-align: center;
+  display: block;
+  width: 100%;
+  margin: 1em 0em;
+}
+
+/* Pseudocode.js */
+.ps-root {
+  font-size: 1.2em !important;
+}
+
+/* Fix inline svg with fixed width or height. */
+.imageblock .content svg {
+  widht: auto;
+  height: auto;
+}
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge .cm {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cp {
+  color: #999999;
+  font-weight: bold;
+}
+pre.rouge .c1 {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cpf {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+pre.rouge .gd {
+  color: #000000;
+  background-color: #ffdddd;
+}
+pre.rouge .ge {
+  color: #000000;
+  font-style: italic;
+}
+pre.rouge .gr {
+  color: #aa0000;
+}
+pre.rouge .gh {
+  color: #999999;
+}
+pre.rouge .gi {
+  color: #000000;
+  background-color: #ddffdd;
+}
+pre.rouge .go {
+  color: #888888;
+}
+pre.rouge .gp {
+  color: #555555;
+}
+pre.rouge .gs {
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #aaaaaa;
+}
+pre.rouge .gt {
+  color: #aa0000;
+}
+pre.rouge .kc {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kd {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kn {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kp {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kr {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kt {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .k, pre.rouge .kv {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .mf {
+  color: #009999;
+}
+pre.rouge .mh {
+  color: #009999;
+}
+pre.rouge .il {
+  color: #009999;
+}
+pre.rouge .mi {
+  color: #009999;
+}
+pre.rouge .mo {
+  color: #009999;
+}
+pre.rouge .m, pre.rouge .mb, pre.rouge .mx {
+  color: #009999;
+}
+pre.rouge .sa {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .sb {
+  color: #d14;
+}
+pre.rouge .sc {
+  color: #d14;
+}
+pre.rouge .sd {
+  color: #d14;
+}
+pre.rouge .s2 {
+  color: #d14;
+}
+pre.rouge .se {
+  color: #d14;
+}
+pre.rouge .sh {
+  color: #d14;
+}
+pre.rouge .si {
+  color: #d14;
+}
+pre.rouge .sx {
+  color: #d14;
+}
+pre.rouge .sr {
+  color: #009926;
+}
+pre.rouge .s1 {
+  color: #d14;
+}
+pre.rouge .ss {
+  color: #990073;
+}
+pre.rouge .s, pre.rouge .dl {
+  color: #d14;
+}
+pre.rouge .na {
+  color: #008080;
+}
+pre.rouge .bp {
+  color: #999999;
+}
+pre.rouge .nb {
+  color: #0086B3;
+}
+pre.rouge .nc {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .no {
+  color: #008080;
+}
+pre.rouge .nd {
+  color: #3c5d5d;
+  font-weight: bold;
+}
+pre.rouge .ni {
+  color: #800080;
+}
+pre.rouge .ne {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nl {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nn {
+  color: #555555;
+}
+pre.rouge .nt {
+  color: #000080;
+}
+pre.rouge .vc {
+  color: #008080;
+}
+pre.rouge .vg {
+  color: #008080;
+}
+pre.rouge .vi {
+  color: #008080;
+}
+pre.rouge .nv, pre.rouge .vm {
+  color: #008080;
+}
+pre.rouge .ow {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .o {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .w {
+  color: #bbbbbb;
+}
+pre.rouge {
+  background-color: #f8f8f8;
+}
+</style>
+<style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
+                       font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
+             .nav-footer{text-align: center; margin-top: auto;}
+             .nav-footer > p > a {white-space: nowrap;}</style>
+</head>
+<body id="chap-runtime-api" class="book toc2 toc-left">
+<!-- Contribution Ribbon -->
+<div class="ribbon"><a target="_blank" href="https://github.com/w3f/polkadot-spec">Contributions welcome!</a></div>
+<div id="header">
+<h1>Polkadot Protocol Specification</h1>
+<div class="details">
+<span id="author" class="author">Web 3.0 Technologies Foundation</span><br>
+<span id="revnumber">version 0.2.1</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<p><span class="toc-root"><a href="polkadot-spec.html">Polkadot Protocol Specification</a></span></p><ul class="sectlevel1">
+<li><a href="id-polkadot-protocol.html">Polkadot Protocol</a>
+</li>
+<li><a href="part-polkadot-host.html">Polkadot Host</a>
+</li>
+<li><a href="part-polkadot-runtime.html">Polkadot Runtime</a>
+</li>
+<li><a href="id-cryptography-encoding.html">Appendix D: Cryptography &amp; Encoding</a>
+</li>
+<li><a href="chap-host-api.html">Appendix E: Host API</a>
+</li>
+<li><a href="chap-runtime-api.html"><span class="toc-current">Appendix F: Runtime API</span></a>
+<ul class="sectlevel2">
+<li><a href="chap-runtime-api.html#id-general-information">C.1. General Information</a>
+</li>
+<li><a href="chap-runtime-api.html#id-runtime-constants">C.2. Runtime Constants</a>
+</li>
+<li><a href="chap-runtime-api.html#id-runtime-call-convention">C.3. Runtime Call Convention</a>
+</li>
+<li><a href="chap-runtime-api.html#sect-runtime-core-module">C.4. Module Core</a>
+</li>
+<li><a href="chap-runtime-api.html#sect-runtime-metadata-module">C.5. Module Metadata</a>
+</li>
+<li><a href="chap-runtime-api.html#sect-runtime-blockbuilder-module">C.6. Module BlockBuilder</a>
+</li>
+<li><a href="chap-runtime-api.html#sect-runtime-txqueue-module">C.7. Module TaggedTransactionQueue</a>
+</li>
+<li><a href="chap-runtime-api.html#sect-runtime-offchainapi-module">C.8. Module OffchainWorkerApi</a>
+</li>
+<li><a href="chap-runtime-api.html#sect-anv-runtime-api">C.9. Module ParachainHost</a>
+</li>
+<li><a href="chap-runtime-api.html#id-module-grandpaapi">C.10. Module GrandpaApi</a>
+</li>
+<li><a href="chap-runtime-api.html#id-module-babeapi">C.11. Module BabeApi</a>
+</li>
+<li><a href="chap-runtime-api.html#id-module-accountnonceapi">C.12. Module AccountNonceApi</a>
+</li>
+</ul>
+</li>
+<li><a href="id-bibliography.html">Bibliography</a>
+</li>
+<li><a href="id-glossary.html">Glossary</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="chap-runtime-api"><a class="anchor" href="#chap-runtime-api"></a><a class="link" href="#chap-runtime-api">Appendix C: Runtime API</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Description of how to interact with the Runtime through its exported functions</p>
+</div>
+<div class="sect2">
+<h3 id="id-general-information"><a class="anchor" href="#id-general-information"></a><a class="link" href="#id-general-information">C.1. General Information</a></h3>
+<div class="paragraph">
+<p>The Polkadot Host assumes that at least the constants and functions
+described in this Chapter are implemented in the Runtime Wasm blob.</p>
+</div>
+<div class="paragraph">
+<p>It should be noted that the API can change through the Runtime updates.
+Therefore, a host should check the API versions of each module returned
+in the <code>api</code> field by <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) after
+every Runtime upgrade and warn if an updated API is encountered and that
+this might require an update of the host.</p>
+</div>
+<div class="paragraph">
+<p>In this section, we describe all Runtime API functions alongside their
+arguments and the return values. The functions are organized into
+modules with each being versioned independently.</p>
+</div>
+<div class="sect3">
+<h4 id="sect-json-rpc-api"><a class="anchor" href="#sect-json-rpc-api"></a><a class="link" href="#sect-json-rpc-api">C.1.1. JSON-RPC API for external services</a></h4>
+<div class="paragraph">
+<p>Polkadot Host implementers are encouraged to implement an API in order
+for external, third-party services to interact with the node. The
+<a href="https://github.com/w3f/PSPs/blob/master/PSPs/drafts/psp-6.md">JSON-RPC
+Interface for Polkadot Nodes</a> (PSP6) is a Polkadot Standard
+Proposal for such an API and makes it easier to integrate the node with
+existing tools available in the Polkadot ecosystem, such as
+<a href="https://polkadot.js.org/">polkadot.js.org</a>. The Runtime API has a few
+modules designed specifically for use in the official RPC API.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-runtime-constants"><a class="anchor" href="#id-runtime-constants"></a><a class="link" href="#id-runtime-constants">C.2. Runtime Constants</a></h3>
+<div class="sect3">
+<h4 id="id-__heap_base"><a class="anchor" href="#id-__heap_base"></a><a class="link" href="#id-__heap_base">C.2.1. <code>__heap_base</code></a></h4>
+<div class="paragraph">
+<p>This constant indicates the beginning of the heap in memory. The space
+below is reserved for the stack and the data section. For more details
+please refer to <a href="chap-state.html#sect-memory-management">Section 2.6.3.1</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-runtime-call-convention"><a class="anchor" href="#id-runtime-call-convention"></a><a class="link" href="#id-runtime-call-convention">C.3. Runtime Call Convention</a></h3>
+<div id="defn-runtime-api-convention" class="exampleblock">
+<div class="title">Definition 215. Runtime API Call Convention</div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>Runtime API Call Convention</strong> describes that all functions receive and
+return SCALE-encoded data and as a result have the following prototype
+signature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="wat">(func $generic_runtime_entry
+  (param $ptr i32) (parm $len i32) (result i64))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>where <code>ptr</code> points to the SCALE encoded tuple of the parameters passed to the
+function and <code>len</code> is the length of this data, while <code>result</code> is a pointer-size
+(Definition <a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE-encoded return data.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>See <a href="chap-state.html#sect-code-executor">Section 2.6.3</a> for more information about the behavior of the Wasm
+Runtime. Also note that any storage changes must be fork-aware
+(<a href="chap-state.html#sect-managing-multiple-states">Section 2.4.5</a>).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-runtime-core-module"><a class="anchor" href="#sect-runtime-core-module"></a><a class="link" href="#sect-runtime-core-module">C.4. Module Core</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 3</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="defn-rt-core-version"><a class="anchor" href="#defn-rt-core-version"></a><a class="link" href="#defn-rt-core-version">C.4.1. <code>Core_version</code></a></h4>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+For newer Runtimes, the version identifiers can be read directly from
+the Wasm blob in form of custom sections
+(<a href="chap-state.html#sect-runtime-version-custom-section">Section 2.6.3.4</a>). That method of retrieving this data
+should be preferred since it involves significantly less overhead.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Returns the version identifiers of the Runtime. This function can be used by the
+Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC
+API as described in <a href="chap-runtime-api.html#sect-json-rpc-api">Section C.1.1</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A datastructure of the following format:</p>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 6. Details of the version that the data type returns from the Runtime function.</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Runtime identifier</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>impl_name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Name of the implementation (e.g. C++)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>authoring_version</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 32-bit integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Version of the authorship interface</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>spec_version</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 32-bit integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Version of the Runtime specification</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>impl_version</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 32-bit integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Version of the Runtime implementation</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>apis</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ApiVersions (<a href="chap-runtime-api.html#defn-rt-apisvec">Definition 216</a>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of supported APIs along with their version</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>transaction_version</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 32-bit integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Version of the transaction format</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>state_version</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 8-bit integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Version of the trie format</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div id="defn-rt-apisvec" class="exampleblock">
+<div class="title">Definition 216. ApiVersions</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>ApiVersions</strong> is a specialized type for the (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) function entry. It represents an array of tuples, where the first value of the tuple is an array of 8-bytes containing the Blake2b hash of the API name. The second value of the tuple is the version number of the corresponding API.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{aligned}
+      \mathrm{ApiVersions} :=&amp; (T_0, \ldots, T_n)\\
+      T :=&amp; ((b_0, \ldots, b_7), \mathrm{UINT32})
+\end{aligned}\]
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Requires <code>Core_initialize_block</code> to be called beforehand.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-rte-core-execute-block"><a class="anchor" href="#sect-rte-core-execute-block"></a><a class="link" href="#sect-rte-core-execute-block">C.4.2. <code>Core_execute_block</code></a></h4>
+<div class="paragraph">
+<p>This function executes a full block and all its extrinsics and updates the state accordingly. Additionally, some integrity checks are executed such as validating if the parent hash is correct and that the transaction root represents the transactions. Internally, this function performs an operation similar to the process described in <a href="sect-block-production.html#algo-build-block">Build-Block</a>, by calling <code>Core_initialize_block</code>,<code>BlockBuilder_apply_extrinsics</code> and <code>BlockBuilder_finalize_block</code>.</p>
+</div>
+<div class="paragraph">
+<p>This function should be called when a fully complete block is available
+that is not actively being built on, such as blocks received from other
+peers. State changes resulted from calling this function are usually
+meant to persist when the block is imported successfully.</p>
+</div>
+<div class="paragraph">
+<p>Additionally, the seal digest in the block header, as described in  <a href="chap-state.html#defn-digest">Definition 11</a>, must be removed by the
+Polkadot host before submitting the block.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A block represented as a tuple consisting of a block header, as described in <a href="chap-state.html#defn-block-header">Definition 10</a>, and the block body, as described in <a href="chap-state.html#defn-block-body">Definition 13</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-rte-core-initialize-block"><a class="anchor" href="#sect-rte-core-initialize-block"></a><a class="link" href="#sect-rte-core-initialize-block">C.4.3. <code>Core_initialize_block</code></a></h4>
+<div class="paragraph">
+<p>Sets up the environment required for building a new block as described in <a href="sect-block-production.html#algo-build-block">Build-Block</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The header of the new block as defined in <a href="chap-state.html#defn-block-header">Definition 10</a>. The values \(H_r\), \(H_e\) and \(H_d\) are left empty.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-runtime-metadata-module"><a class="anchor" href="#sect-runtime-metadata-module"></a><a class="link" href="#sect-runtime-metadata-module">C.5. Module Metadata</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 1</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="sect-rte-metadata-metadata"><a class="anchor" href="#sect-rte-metadata-metadata"></a><a class="link" href="#sect-rte-metadata-metadata">C.5.1. <code>Metadata_metadata</code></a></h4>
+<div class="paragraph">
+<p>Returns native Runtime metadata in an opaque form. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in <a href="chap-runtime-api.html#sect-json-rpc-api">Section C.1.1</a>. and returns all the information necessary to build valid transactions.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The scale-encoded (<a href="id-cryptography-encoding.html#sect-scale-codec">Section A.2.2</a>) runtime metadata as described in <a href="sect-metadata.html">Chapter 12</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-runtime-blockbuilder-module"><a class="anchor" href="#sect-runtime-blockbuilder-module"></a><a class="link" href="#sect-runtime-blockbuilder-module">C.6. Module BlockBuilder</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 4</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All calls in this module require <code>Core_initialize_block</code>
+(<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect3">
+<h4 id="sect-rte-apply-extrinsic"><a class="anchor" href="#sect-rte-apply-extrinsic"></a><a class="link" href="#sect-rte-apply-extrinsic">C.6.1. <code>BlockBuilder_apply_extrinsic</code></a></h4>
+<div class="paragraph">
+<p>Apply the extrinsic outside of the block execution function. This does
+not attempt to validate anything regarding the block, but it builds a
+list of transaction hashes.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A byte array of varying size containing the opaque extrinsic.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Returns the varying datatype <em>ApplyExtrinsicResult</em> as defined in <a href="chap-runtime-api.html#defn-rte-apply-extrinsic-result">Definition 217</a>.
+This structure lets the block builder know whether an extrinsic should
+be included into the block or rejected.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div id="defn-rte-apply-extrinsic-result" class="exampleblock">
+<div class="title">Definition 217. ApplyExtrinsicResult</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>ApplyExtrinsicResult</strong> is a varying data type as defined in <a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>.
+This structure can contain multiple nested structures, indicating either module
+dispatch outcomes or transaction invalidity errors.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. Possible values of varying data type <em>ApplyExtrinsicResult</em>.</caption>
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 60%;">
+<col style="width: 30%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Id</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Outcome of dispatching the extrinsic.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>DispatchOutcome</em> (<a href="chap-runtime-api.html#defn-rte-dispatch-outcome">Definition 218</a>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Possible errors while checking the validity of a transaction.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>TransactionValidityError</em> (<a href="chap-runtime-api.html#defn-rte-transaction-validity-error">Definition 221</a>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As long as a <em>DispatchOutcome</em> (<a href="chap-runtime-api.html#defn-rte-dispatch-outcome">Definition 218</a>) is returned,
+the extrinsic is always included in the block, even if the outcome is a dispatch
+error. Dispatch errors do not invalidate the block and all state changes are
+persisted.
+</td>
+</tr>
+</table>
+</div>
+<div id="defn-rte-dispatch-outcome" class="exampleblock">
+<div class="title">Definition 218. DispatchOutcome</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>DispatchOutcome</strong> is the varying data type as defined in <a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. Possible values of varying data type <em>DispatchOutcome</em>.</caption>
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 60%;">
+<col style="width: 30%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Id</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Extrinsic is valid and was submitted successfully.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Possible errors while dispatching the extrinsic.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>DispatchError</em> (<a href="chap-runtime-api.html#defn-rte-dispatch-error">Definition 219</a>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="defn-rte-dispatch-error" class="exampleblock">
+<div class="title">Definition 219. DispatchError</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>DispatchError</strong> is a varying data type as defined in <a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>.
+Indicates various reasons why a dispatch call failed.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 9. Possible values of varying data type <em>DispatchError</em>.</caption>
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 40%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Id</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Some unknown error occurred.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">SCALE encoded byte array containing a valid UTF-8 sequence.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Failed to lookup some data.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A bad origin.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A custom error in a module.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>CustomModuleError</em> (<a href="chap-runtime-api.html#defn-rte-custom-module-error">Definition 220</a>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="defn-rte-custom-module-error" class="exampleblock">
+<div class="title">Definition 220. CustomModuleError</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>CustomModuleError</strong> is a tuple appended after a possible error in as defined in <a href="chap-runtime-api.html#defn-rte-dispatch-error">Definition 219</a>.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 10. Possible values of varying data type <em>CustomModuleError</em>.</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Name</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Index</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Module index matching the metadata module index.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 8-bit integer.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Module specific error value.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 8-bit integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Message</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional error message.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Varying data type <em>Option</em> (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>).
+The optional value is a SCALE encoded byte array containing a valid UTF-8 sequence.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Whenever <em>TransactionValidityError</em> (<a href="chap-runtime-api.html#defn-rte-transaction-validity-error">Definition 221</a>)
+is returned, the contained error type will indicate whether an extrinsic should
+be outright rejected or requested for a later block. This behavior is clarified
+further in <a href="chap-runtime-api.html#defn-rte-invalid-transaction">Definition 222</a> and respectively <a href="chap-runtime-api.html#defn-rte-unknown-transaction">Definition 223</a>.
+</td>
+</tr>
+</table>
+</div>
+<div id="defn-rte-transaction-validity-error" class="exampleblock">
+<div class="title">Definition 221. TransactionValidityError</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>TransactionValidityError</strong> is a varying data type as defined in <a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>.
+It indicates possible errors that can occur while checking the validity of a transaction.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 11. Possible values of varying data type <em>TransactionValidityError</em>.</caption>
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 50%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Id</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction is invalid.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>InvalidTransaction</em> (<a href="chap-runtime-api.html#defn-rte-invalid-transaction">Definition 222</a>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction validity can’t be determined.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>UnknownTransaction</em> (<a href="chap-runtime-api.html#defn-rte-unknown-transaction">Definition 223</a>)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="defn-rte-invalid-transaction" class="exampleblock">
+<div class="title">Definition 222. InvalidTransaction</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>InvalidTransaction</strong> is a varying data type as defined in <a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>
+and specifies the invalidity of the transaction in more detail.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. Possible values of varying data type <em>InvalidTransaction</em>.</caption>
+<colgroup>
+<col style="width: 9.0909%;">
+<col style="width: 54.5454%;">
+<col style="width: 18.1818%;">
+<col style="width: 18.1819%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Id</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Reject</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Call of the transaction is not expected.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">General error to do with the inability to pay some fees (e.g. account balance too low).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">General error to do with the transaction not yet being valid (e.g. nonce too high).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">General error to do with the transaction being outdated (e.g. nonce too low).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">General error to do with the transactions’ proof (e.g. signature)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The transaction birth block is ancient.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The transaction would exhaust the resources of the current block.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Some unknown error occurred.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 8-bit integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An extrinsic with mandatory dispatch resulted in an error.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A transaction with a mandatory dispatch (only inherents are allowed to have mandatory dispatch).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="defn-rte-unknown-transaction" class="exampleblock">
+<div class="title">Definition 223. UnknownTransaction</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>UnknownTransaction</strong> is a varying data type as defined in <a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>
+and specifies the unknown invalidity of the transaction in more detail.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 13. Possible values of varying data type <em>UnknownTransaction</em>.</caption>
+<colgroup>
+<col style="width: 9.0909%;">
+<col style="width: 54.5454%;">
+<col style="width: 18.1818%;">
+<col style="width: 18.1819%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Id</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Reject</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Could not lookup some information that is required to validate the transaction.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No validator found for the given unsigned transaction.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">None</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any other custom unknown validity that is not covered by this type.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 8-bit integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="defn-rt-blockbuilder-finalize-block"><a class="anchor" href="#defn-rt-blockbuilder-finalize-block"></a><a class="link" href="#defn-rt-blockbuilder-finalize-block">C.6.2. <code>BlockBuilder_finalize_block</code></a></h4>
+<div class="paragraph">
+<p>Finalize the block - it is up to the caller to ensure that all header
+fields are valid except for the state root. State changes resulting from
+calling this function are usually meant to persist upon successful
+execution of the function and appending of the block to the chain.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The header of the new block as defined in <a href="chap-state.html#defn-block-header">Definition 10</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="defn-rt-builder-inherent-extrinsics"><a class="anchor" href="#defn-rt-builder-inherent-extrinsics"></a><a class="link" href="#defn-rt-builder-inherent-extrinsics">C.6.3. <code>BlockBuilder_inherent_extrinisics</code>:</a></h4>
+<div class="paragraph">
+<p>Generates the inherent extrinsics, which are explained in more detail in
+<a href="chap-state.html#sect-inherents">Section 2.3.3</a>. This function takes a SCALE-encoded hash table as defined in
+<a href="id-cryptography-encoding.html#defn-scale-list">Definition 192</a> and returns an array of extrinsics. The Polkadot Host must
+submit each of those to the <code>BlockBuilder_apply_extrinsic</code>, described in
+<a href="chap-runtime-api.html#sect-rte-apply-extrinsic">Section C.6.1</a>. This procedure is outlined in <a href="sect-block-production.html#algo-build-block">Build-Block</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A Inherents-Data structure as defined in <a href="chap-state.html#defn-inherent-data">Definition 15</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A byte array of varying size containing extrinisics. Each extrinsic is a byte
+array of varying size.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-blockbuilder_check_inherents"><a class="anchor" href="#id-blockbuilder_check_inherents"></a><a class="link" href="#id-blockbuilder_check_inherents">C.6.4. <code>BlockBuilder_check_inherents</code></a></h4>
+<div class="paragraph">
+<p>Checks whether the provided inherent is valid. This function can be used
+by the Polkadot Host when deemed appropriate, e.g. during the
+block-building process.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A block represented as a tuple consisting of a block header as described in
+<a href="chap-state.html#defn-block-header">Definition 10</a> and the block body as described in <a href="chap-state.html#defn-block-body">Definition 13</a>.</p>
+</li>
+<li>
+<p>A Inherents-Data structure as defined in <a href="chap-state.html#defn-inherent-data">Definition 15</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A data structure of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\[(o, f_e, e)\]
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\(o\) is a boolean indicating whether the check was successful.</p>
+</li>
+<li>
+<p>\(f_e\) is a boolean indicating whether a fatal error was encountered.</p>
+</li>
+<li>
+<p>\(e\) is a Inherents-Data structure as defined in <a href="chap-state.html#defn-inherent-data">Definition 15</a>
+containing any errors created by this Runtime function.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-blockbuilder_random_seed"><a class="anchor" href="#id-blockbuilder_random_seed"></a><a class="link" href="#id-blockbuilder_random_seed">C.6.5. <code>BlockBuilder_random_seed</code></a></h4>
+<div class="paragraph">
+<p>Generates a random seed.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A 32-byte array containing the random seed.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-runtime-txqueue-module"><a class="anchor" href="#sect-runtime-txqueue-module"></a><a class="link" href="#sect-runtime-txqueue-module">C.7. Module TaggedTransactionQueue</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 2</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All calls in this module require <code>Core_initialize_block</code> (<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect3">
+<h4 id="sect-rte-validate-transaction"><a class="anchor" href="#sect-rte-validate-transaction"></a><a class="link" href="#sect-rte-validate-transaction">C.7.1. <code>TaggedTransactionQueue_validate_transaction</code></a></h4>
+<div class="paragraph">
+<p>This entry is invoked against extrinsics submitted through a transaction network
+message (<a href="chap-networking.html#sect-msg-transactions">Section 4.8.5</a>) or by an offchain worker through the Host API
+(<a href="chap-host-api.html#sect-ext-offchain-submit-transaction">Section B.6.2</a>).</p>
+</div>
+<div class="paragraph">
+<p>It indicates if the submitted blob represents a valid extrinsics, the
+order in which it should be applied and if it should be gossiped to
+other peers. Furthermore this function gets called internally when
+executing blocks with the runtime function as described in <a href="chap-runtime-api.html#sect-rte-core-execute-block">Section C.4.2</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The source of the transaction as defined in <a href="chap-runtime-api.html#defn-transaction-source">Definition 224</a>.</p>
+</li>
+<li>
+<p>A byte array that contains the transaction.</p>
+<div id="defn-transaction-source" class="exampleblock">
+<div class="title">Definition 224. TransactionSource</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>TransactionSource</strong> is an enum describing the source of a transaction and can
+have one of the following values:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 14. The <em>TransactionSource</em> enum</caption>
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 20%;">
+<col style="width: 70%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>InBlock</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction is already included in a block.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Local</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction is coming from a local source, e.g. off-chain worker.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>External</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Transaction has been received externally, e.g. over the network.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>This function returns a <em>Result</em> as defined in <a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a> which contains
+the type <em>ValidTransaction</em>  as defined in <a href="chap-runtime-api.html#defn-valid-transaction">Definition 225</a> on success
+and the type <em>TransactionValidityError</em> as defined in
+<a href="chap-runtime-api.html#defn-rte-transaction-validity-error">Definition 221</a> on failure.</p>
+<div id="defn-valid-transaction" class="exampleblock">
+<div class="title">Definition 225. ValidTransaction</div>
+<div class="content">
+<div class="paragraph">
+<p><strong>ValidTransaction</strong> is a tuple that contains information concerning a valid transaction.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 15. The tuple provided by in the case the transaction is judged to be valid.</caption>
+<colgroup>
+<col style="width: 10%;">
+<col style="width: 70%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Name</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Priority</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Determines the ordering of two transactions that have all their dependencies
+(required tags) are satisfied.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 64bit integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Requires</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">List of tags specifying extrinsics which should be applied before the current
+exrinsics can be applied.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array containing inner arrays</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Provides</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Informs Runtime  of the extrinsics depending on the tags in the list that can be
+applied after current extrinsics are being applied. Describes the minimum number
+of blocks for the validity to be correct</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array containing inner arrays</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Longevity</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">After this period, the transaction should be removed from the pool or revalidated.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 64-bit integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Propagate</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A flag indicating if the transaction should be gossiped to other peers.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If <em>Propagate</em> is set to <code>false</code> the transaction will still be considered for inclusion in blocks that are authored on the current node, but should not be gossiped to other peers.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If this function gets called by the Polkadot Host in order to validate a transaction received from peers, the Polkadot Host disregards and rewinds state changes resulting in such a call.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-runtime-offchainapi-module"><a class="anchor" href="#sect-runtime-offchainapi-module"></a><a class="link" href="#sect-runtime-offchainapi-module">C.8. Module OffchainWorkerApi</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 2</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Does not require <code>Core_initialize_block</code> (<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect3">
+<h4 id="id-offchainworkerapi_offchain_worker"><a class="anchor" href="#id-offchainworkerapi_offchain_worker"></a><a class="link" href="#id-offchainworkerapi_offchain_worker">C.8.1. <code>OffchainWorkerApi_offchain_worker</code></a></h4>
+<div class="paragraph">
+<p>Starts an off-chain worker and generates extrinsics. [To do: when is
+this called?]</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The block header as defined in <a href="chap-state.html#defn-block-header">Definition 10</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-anv-runtime-api"><a class="anchor" href="#sect-anv-runtime-api"></a><a class="link" href="#sect-anv-runtime-api">C.9. Module ParachainHost</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 1</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="sect-rt-api-validators"><a class="anchor" href="#sect-rt-api-validators"></a><a class="link" href="#sect-rt-api-validators">C.9.1. <code>ParachainHost_validators</code></a></h4>
+<div class="paragraph">
+<p>Returns the validator set at the current state. The specified validators are responsible for backing parachains for the current state.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of public keys representing the validators.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-rt-api-validator-groups"><a class="anchor" href="#sect-rt-api-validator-groups"></a><a class="link" href="#sect-rt-api-validator-groups">C.9.2. <code>ParachainHost_validator_groups</code></a></h4>
+<div class="paragraph">
+<p>Returns the validator groups (<a href="chapter-anv.html#defn-validator-groups">Definition 136</a>) used during the current
+session. The validators in the groups are referred to by the validator set Id
+(<a href="chap-sync.html#defn-authority-list">Definition 33</a>).</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of tuples, \$T\$, of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\$T = (I,G)\$
+\$I = (v_n,…v_m)\$
+\$G = (B_s,f,B_c)\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$I\$ is an array the validator set Ids (<a href="chap-sync.html#defn-authority-list">Definition 33</a>).</p>
+</li>
+<li>
+<p>\$B_s\$ indicates the block number where the session started.</p>
+</li>
+<li>
+<p>\$f\$ indicates how often groups rotate. 0 means never.</p>
+</li>
+<li>
+<p>\$B_c\$ indicates the current block number.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-rt-api-availability-cores"><a class="anchor" href="#sect-rt-api-availability-cores"></a><a class="link" href="#sect-rt-api-availability-cores">C.9.3. <code>ParachainHost_availability_cores</code></a></h4>
+<div class="paragraph">
+<p>Returns information on all availability cores (<a href="chapter-anv.html#defn-availability-core">Definition 135</a>).</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of core states, S, of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\$S = {(0,-&gt;,C_o),(1,-&gt;,C_s),(2,-&gt;,phi):}\$
+\$C_o = (n_u,B_o,B_t,n_t,b,G_i,C_h,C_d)\$
+\$C_s = (P_id,C_i)\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$S\$ specifies the core state. <em>0</em> indicates that the core is occupied,
+<em>1</em> implies it&#8217;s currently free but scheduled and given the opportunity to
+occupy and <em>2</em> implies it&#8217;s free and there&#8217;s nothing scheduled.</p>
+</li>
+<li>
+<p>\$n_u\$ is an <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) which can contain a
+\$C_s\$ value if the core was freed by the Runtime and indicates the
+assignment that is next scheduled on this core. An empty value indicates there
+is nothing scheduled.</p>
+</li>
+<li>
+<p>\$B_o\$ indicates the relay chain block number at which the core got occupied.</p>
+</li>
+<li>
+<p>\$B_t\$ indicates the relay chain block number the core will time-out at, if any.</p>
+</li>
+<li>
+<p>\$n_t\$ is an <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) which can contain a
+\$C_s\$ value if the core is freed by a time-out and indicates the assignment
+that is next scheduled on this core. An empty value indicates there is nothing
+scheduled.</p>
+</li>
+<li>
+<p>\$b\$ is a bitfield array (<a href="chapter-anv.html#defn-bitfield-array">Definition 141</a>). A \$&gt;2/3\$ majority
+of assigned validators voting with \$1\$ values means that the core is
+available.</p>
+</li>
+<li>
+<p>\$G_i\$ indicates the assigned validator group index
+(<a href="chapter-anv.html#defn-validator-groups">Definition 136</a>) is to distribute availability pieces of this
+candidate.</p>
+</li>
+<li>
+<p>\$C_h\$ indicates the hash of the candidate occupying the core.</p>
+</li>
+<li>
+<p>\$C_d\$ is the candidate descriptor (<a href="chapter-anv.html#defn-candidate-descriptor">Definition 106</a>).</p>
+</li>
+<li>
+<p>\$C_i\$ is an <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) which can contain the
+collators public key indicating who should author the block.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-rt-api-persisted-validation-data"><a class="anchor" href="#sect-rt-api-persisted-validation-data"></a><a class="link" href="#sect-rt-api-persisted-validation-data">C.9.4. <code>ParachainHost_persisted_validation_data</code></a></h4>
+<div class="paragraph">
+<p>Returns the persisted validation data for the given parachain Id and a given occupied core assumption.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The parachain Id (<a href="chapter-anv.html#defn-para-id">Definition 134</a>).</p>
+</li>
+<li>
+<p>An occupied core assumption (<a href="chap-runtime-api.html#defn-occupied-core-assumption">Definition 226</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) which can contain the persisted
+validation data (<a href="chap-runtime-api.html#defn-persisted-validation-data">Definition 227</a>). The value is empty if the
+parachain Id is not registered or the core assumption is of index \$2\$,
+meaning that the core was freed.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div id="defn-occupied-core-assumption" class="exampleblock">
+<div class="title">Definition 226. <a href="chap-runtime-api.html#defn-occupied-core-assumption">Occupied Core Assumption</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A occupied core assumption is used for fetching certain pieces of information
+about a parachain by using the relay chain API. The assumption indicates how the
+Runtime API should compute the result. The assumptions, A, is a varying datatype
+of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$A = {(0,-&gt;,phi),(1,-&gt;,phi),(2,-&gt;,phi):}\$
+</div>
+</div>
+<div class="paragraph">
+<p>where <em>0</em> indicates that the candidate occupying the core was made available and
+included to free the core, <em>1</em> indicates that it timed-out and freed the core
+without advancing the parachain and <em>2</em> indicates that the core was not occupied
+to begin with.</p>
+</div>
+</div>
+</div>
+<div id="defn-persisted-validation-data" class="exampleblock">
+<div class="title">Definition 227. <a href="chap-runtime-api.html#defn-persisted-validation-data">Persisted Validation Data</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The persisted validation data provides information about how to create the
+inputs for the validation of a candidate by calling the Runtime. This
+information is derived from the parachain state and will vary from parachain to
+parachain, although some of the fields may be the same for every parachain. This
+validation data acts as a way to authorize the additional data (such as
+messages) the collator needs to pass to the validation function.</p>
+</div>
+<div class="paragraph">
+<p>The persisted validation data, \$D_{pv}\$, is a datastructure of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$D_{pv} = (P_h,H_i,H_r,m_b)\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$P_h\$ is the parent head data (<a href="chapter-anv.html#defn-head-data">Definition 133</a>).</p>
+</li>
+<li>
+<p>\$H_i\$ is the relay chain block number this is in the context of.</p>
+</li>
+<li>
+<p>\$H_r\$ is the relay chain storage root this is in the context of.</p>
+</li>
+<li>
+<p>\$m_b\$ is the maximum legal size of the PoV block, in bytes.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>The persisted validation data is fetched via the Runtime API
+(<a href="chap-runtime-api.html#sect-rt-api-persisted-validation-data">Section C.9.4</a>).</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-parachainhost_check_validation_outputs"><a class="anchor" href="#id-parachainhost_check_validation_outputs"></a><a class="link" href="#id-parachainhost_check_validation_outputs">C.9.5. <code>ParachainHost_check_validation_outputs</code></a></h4>
+<div class="paragraph">
+<p>Checks if the given validation outputs pass the acceptance criteria.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The parachain Id (<a href="chapter-anv.html#defn-para-id">Definition 134</a>).</p>
+</li>
+<li>
+<p>The candidate commitments (<a href="chapter-anv.html#defn-candidate-commitments">Definition 107</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A boolean indicating whether the candidate commitments pass the acceptance criteria.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-parachainhost_session_index_for_child"><a class="anchor" href="#id-parachainhost_session_index_for_child"></a><a class="link" href="#id-parachainhost_session_index_for_child">C.9.6. <code>ParachainHost_session_index_for_child</code></a></h4>
+<div class="paragraph">
+<p>Returns the session index that is expected at the child of a block.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+TODO clarify session index
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A unsigned 32-bit integer representing the session index.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-rt-api-validation-code"><a class="anchor" href="#sect-rt-api-validation-code"></a><a class="link" href="#sect-rt-api-validation-code">C.9.7. <code>ParachainHost_validation_code</code></a></h4>
+<div class="paragraph">
+<p>Fetches the validation code (Runtime) of a parachain by parachain Id.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The parachain Id (<a href="chapter-anv.html#defn-para-id">Definition 134</a>).</p>
+</li>
+<li>
+<p>The occupied core assumption (<a href="chap-runtime-api.html#defn-occupied-core-assumption">Definition 226</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the full validation code
+in an byte array. This value is empty if the parachain Id cannot be found or the
+assumption is wrong.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-rt-api-validation-code-by-hash"><a class="anchor" href="#sect-rt-api-validation-code-by-hash"></a><a class="link" href="#sect-rt-api-validation-code-by-hash">C.9.8. <code>ParachainHost_validation_code_by_hash</code></a></h4>
+<div class="paragraph">
+<p>Returns the validation code (Runtime) of a parachain by its hash.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The hash value of the validation code.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the full validation code
+in an byte array. This value is empty if the parachain Id cannot be found or the
+assumption is wrong.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-parachainhost_candidate_pending_availability"><a class="anchor" href="#id-parachainhost_candidate_pending_availability"></a><a class="link" href="#id-parachainhost_candidate_pending_availability">C.9.9. <code>ParachainHost_candidate_pending_availability</code></a></h4>
+<div class="paragraph">
+<p>Returns the receipt of a candidate pending availability for any parachain
+assigned to an occupied availability core.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The parachain Id (<a href="chapter-anv.html#defn-para-id">Definition 134</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the committed candidate
+receipt (<a href="chapter-anv.html#defn-candidate-receipt">Definition 104</a>). This value is empty if the given parachain
+Id is not assigned to an occupied availability cores.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-parachainhost_candidate_events"><a class="anchor" href="#id-parachainhost_candidate_events"></a><a class="link" href="#id-parachainhost_candidate_events">C.9.10. <code>ParachainHost_candidate_events</code></a></h4>
+<div class="paragraph">
+<p>Returns an array of candidate events that occurred within the latest state.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of single candidate events, E, of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\$E = {(0,-&gt;,d),(1,-&gt;,d),(2,-&gt;,(C_r,h,I_c)):}\$
+\$d = (C_r,h,I_c,G_i)\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$E\$ specifies the the event type of the candidate. <em>0</em> indicates that the
+candidate receipt was backed in the latest relay chain block, <em>1</em> indicates that
+it was included and became a parachain block at the latest relay chain block and
+<em>2</em> indicates that the candidate receipt was not made available and timed-out.</p>
+</li>
+<li>
+<p>\$C_r\$ is the candidate receipt (<a href="chapter-anv.html#defn-candidate-receipt">Definition 104</a>).</p>
+</li>
+<li>
+<p>\$h\$ is the parachain head data (<a href="chapter-anv.html#defn-head-data">Definition 133</a>).</p>
+</li>
+<li>
+<p>\$I_c\$ is the index of the availability core as can be retrieved in
+<a href="chap-runtime-api.html#sect-rt-api-availability-cores">Section C.9.3</a> that the candidate is occupying. If \$E\$
+is of variant \$2\$, then this indicates the core index the candidate <em>was</em>
+occupying.</p>
+</li>
+<li>
+<p>\$G_i\$ is the group index (<a href="chapter-anv.html#defn-validator-groups">Definition 136</a>) that is responsible
+of backing the candidate.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-rt-api-session-info"><a class="anchor" href="#sect-rt-api-session-info"></a><a class="link" href="#sect-rt-api-session-info">C.9.11. <code>ParachainHost_session_info</code></a></h4>
+<div class="paragraph">
+<p>Get the session info of the given session, if available.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The unsigned 32-bit integer indicating the session index.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An <em>Option</em> type (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) which can contain the session info
+structure, \$S\$, of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\$S = (A,D,K,G,c,z,s,d,x,a)\$
+\$A = (v_n,…v_m)\$
+\$D = (v_(_n),…v_m)\$
+\$K = (v_n,…v_m)\$
+\$G = (g_n,…g_m)\$
+\$g = (A_n,…A_m)\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$A\$ indicates the validators of the current session, in canonical order.
+There might be more validators in the current session than validators
+participating in parachain consensus, as returned by the Runtime API
+(<a href="chap-runtime-api.html#sect-rt-api-validators">Section C.9.1</a>).</p>
+</li>
+<li>
+<p>\$D\$ indicates the validator authority discovery keys for the given
+session in canonical order. The first couple of validators are equal to the
+corresponding validators participating in the parachain consensus, as returned
+by the Runtime API (<a href="chap-runtime-api.html#sect-rt-api-validators">Section C.9.1</a>). The remaining authorities are
+not participating in the parachain consensus.</p>
+</li>
+<li>
+<p>\$K\$ indicates the assignment keys for validators. There might be more
+authorities in the session that validators participating in parachain consensus,
+as returned by the Runtime API (<a href="chap-runtime-api.html#sect-rt-api-validators">Section C.9.1</a>).</p>
+</li>
+<li>
+<p>\$G\$ indicates the validator groups in shuffled order.</p>
+</li>
+<li>
+<p>\$v_n\$ is public key of the authority.</p>
+</li>
+<li>
+<p>\$A_n\$ is the authority set Id (<a href="chap-sync.html#defn-authority-list">Definition 33</a>).</p>
+</li>
+<li>
+<p>\$c\$ is an unsigned 32-bit integer indicating the number of availability
+cores used by the protocol during the given session.</p>
+</li>
+<li>
+<p>\$z\$ is an unsigned 32-bit integer indicating the zeroth delay tranche width.</p>
+</li>
+<li>
+<p>\$s\$ is an unsigned 32-bit integer indicating the number of samples an
+assigned validator should do for approval voting.</p>
+</li>
+<li>
+<p>\$d\$ is an unsigned 32-bit integer indicating the number of delay tranches in total.</p>
+</li>
+<li>
+<p>\$x\$ is an unsigned 32-bit integer indicating how many BABE slots must
+pass before an assignment is considered a “no-show”.</p>
+</li>
+<li>
+<p>\$a\$ is an unsigned 32-bit integer indicating the number of validators
+needed to approve a block.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-parachainhost_dmq_contents"><a class="anchor" href="#id-parachainhost_dmq_contents"></a><a class="link" href="#id-parachainhost_dmq_contents">C.9.12. <code>ParachainHost_dmq_contents</code></a></h4>
+<div class="paragraph">
+<p>Returns all the pending inbound messages in the downward message queue for a given parachain.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The parachain Id (<a href="chapter-anv.html#defn-para-id">Definition 134</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of inbound downward messages (<a href="chapter-anv.html#defn-downward-message">Definition 138</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-parachainhost_inbound_hrmp_channels_contents"><a class="anchor" href="#id-parachainhost_inbound_hrmp_channels_contents"></a><a class="link" href="#id-parachainhost_inbound_hrmp_channels_contents">C.9.13. <code>ParachainHost_inbound_hrmp_channels_contents</code></a></h4>
+<div class="paragraph">
+<p>Returns the contents of all channels addressed to the given recipient. Channels that have no messages in them are also included.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The parachain Id (<a href="chapter-anv.html#defn-para-id">Definition 134</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of inbound HRMP messages (<a href="chapter-anv.html#defn-inbound-hrmp-message">Definition 140</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-module-grandpaapi"><a class="anchor" href="#id-module-grandpaapi"></a><a class="link" href="#id-module-grandpaapi">C.10. Module GrandpaApi</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 2</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All calls in this module require <code>Core_initialize_block</code> (<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect3">
+<h4 id="sect-rte-grandpa-auth"><a class="anchor" href="#sect-rte-grandpa-auth"></a><a class="link" href="#sect-rte-grandpa-auth">C.10.1. <code>GrandpaApi_grandpa_authorities</code></a></h4>
+<div class="paragraph">
+<p>This entry fetches the list of GRANDPA authorities according to the
+genesis block and is used to initialize an authority list at genesis,
+defined in <a href="chap-sync.html#defn-authority-list">Definition 33</a>.
+Any future authority changes get tracked via Runtime-to-consensus engine
+messages, as described in <a href="chap-sync.html#sect-consensus-message-digest">Section 3.3.2</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An authority list as defined in <a href="chap-sync.html#defn-authority-list">Definition 33</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic"><a class="anchor" href="#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic"></a><a class="link" href="#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic">C.10.2. <code>GrandpaApi_submit_report_equivocation_unsigned_extrinsic</code></a></h4>
+<div class="paragraph">
+<p>A GRANDPA equivocation occurs when a validator votes for multiple blocks
+during one voting subround, as described further in <a href="sect-finality.html#defn-equivocation">Definition 80</a>. The Polkadot Host is expected to identify equivocators and report those to the Runtime by
+calling this function.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The equivocation proof of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{aligned}
+    G_{\mathrm{Ep}} =&amp; (\mathrm{id}_{\mathbb{V}}, e, r, A_{\mathrm{id}}, B^1_h,
+    B^1_n A^1_{\mathrm{sig}}, B^2_h, B^2_n, A^2_{\mathrm{sig}}) \\
+    e =&amp; \begin{cases}
+      0 &amp;\quad \textrm{Equivocation at prevote stage} \\
+      1 &amp;\quad \textrm{Equivocation at precommit stage}
+    \end{cases}
+\end{aligned}\]
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\(\mathrm{id}_{\mathbb{V}}\) is the authority set id as defined in <a href="sect-finality.html#defn-authority-set-id">Definition 73</a>.</p>
+</li>
+<li>
+<p>\(e\) indicates the stage at which the equivocation occurred.</p>
+</li>
+<li>
+<p>\(r\) is the round number the equivocation occurred.</p>
+</li>
+<li>
+<p>\(A_{\mathrm{id}}\) is the public key of the equivocator.</p>
+</li>
+<li>
+<p>\(B^1_h\) is the block hash of the first block the equivocator voted for.</p>
+</li>
+<li>
+<p>\(B^1_n\) is the block number of the first block the equivocator voted for.</p>
+</li>
+<li>
+<p>\(A^1_{\mathrm{sig}}\) is the equivocators signature of the first vote.</p>
+</li>
+<li>
+<p>\(B^2_h\) is the block hash of the second block the equivocator voted for.</p>
+</li>
+<li>
+<p>\(B^2_n\) is the block number of the second block the equivocator voted for.</p>
+</li>
+<li>
+<p>\(A^2_{\mathrm{sig}}\) is the equivocators signature of the second vote.</p>
+</li>
+<li>
+<p>A proof of the key owner in an opaque form as described in <a href="chap-runtime-api.html#sect-grandpaapi_generate_key_ownership_proof">Section C.10.3</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A SCALE encoded <em>Option</em> as defined in <a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a> containing an empty value on success.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-grandpaapi_generate_key_ownership_proof"><a class="anchor" href="#sect-grandpaapi_generate_key_ownership_proof"></a><a class="link" href="#sect-grandpaapi_generate_key_ownership_proof">C.10.3. <code>GrandpaApi_generate_key_ownership_proof</code></a></h4>
+<div class="paragraph">
+<p>Generates proof of the membership of a key owner in the specified block
+state. The returned value is used to report equivocations as described
+in <a href="chap-runtime-api.html#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic">Section C.10.2</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The authority set id as defined in <a href="sect-finality.html#defn-authority-set-id">Definition 73</a>.</p>
+</li>
+<li>
+<p>The 256-bit public key of the authority.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A SCALE encoded <em>Option</em> as defined in <a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a> containing the proof in an opaque form.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-module-babeapi"><a class="anchor" href="#id-module-babeapi"></a><a class="link" href="#id-module-babeapi">C.11. Module BabeApi</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 2</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All calls in this module require <code>Core_initialized_block</code> (<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect3">
+<h4 id="sect-rte-babeapi-epoch"><a class="anchor" href="#sect-rte-babeapi-epoch"></a><a class="link" href="#sect-rte-babeapi-epoch">C.11.1. <code>BabeApi_configuration</code></a></h4>
+<div class="paragraph">
+<p>This entry is called to obtain the current configuration of the BABE
+consensus protocol.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A tuple containing configuration data used by the Babe consensus
+engine.</p>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 16. The tuple provided by <strong>BabeApi_configuration</strong>.</caption>
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 60%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top"><strong>Name</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Description</strong></th>
+<th class="tableblock halign-left valign-top"><strong>Type</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>SlotDuration</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The slot duration in milliseconds. Currently, only the value provided by this
+type at genesis will be used. Dynamic slot duration may be supported in the future.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 64bit integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>EpochLength</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The duration of epochs in slots.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unsigned 64bit integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Constant</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A constant value that is used in the threshold calculation formula as defined in <a href="sect-block-production.html#defn-babe-constant">Definition 59</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tuple containing two unsigned 64bit integers</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>GenesisAuthorities</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The authority list for the genesis epoch as defined in <a href="chap-sync.html#defn-authority-list">Definition 33</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Array of tuples containing a 256-bit byte array and a unsigned 64bit integer</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>Randomness</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The randomness for the genesis epoch</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">32-byte array</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><em>SecondarySlot</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether this chain should run with round-robin-style secondary slot and if this secondary slot
+requires the inclusion of an auxiliary VRF output (<a href="sect-block-production.html#sect-block-production-lottery">Section 5.2</a>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A one-byte enum as defined in <a href="sect-block-production.html#defn-consensus-message-babe">Definition 58</a> as \$2_("nd")\$.</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-babeapi_current_epoch_start"><a class="anchor" href="#id-babeapi_current_epoch_start"></a><a class="link" href="#id-babeapi_current_epoch_start">C.11.2. <code>BabeApi_current_epoch_start</code></a></h4>
+<div class="paragraph">
+<p>Finds the start slot of the current epoch.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A unsigned 64-bit integer indicating the slot number.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-babeapi_current_epoch"><a class="anchor" href="#sect-babeapi_current_epoch"></a><a class="link" href="#sect-babeapi_current_epoch">C.11.3. <code>BabeApi_current_epoch</code></a></h4>
+<div class="paragraph">
+<p>Produces information about the current epoch.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A data structure of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\[(e_i, s_s, d, A, r)\]
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\(e_i\) is a unsigned 64-bit integer representing the epoch index.</p>
+</li>
+<li>
+<p>\(s_s\) is a unsigned 64-bit integer representing the starting slot of the epoch.</p>
+</li>
+<li>
+<p>\(d\) is a unsigned 64-bit integer representing the duration of the epoch.</p>
+</li>
+<li>
+<p>\(A\) is an authority list as defined in <a href="chap-sync.html#defn-authority-list">Definition 33</a>.</p>
+</li>
+<li>
+<p>\(r\) is an 256-bit array containing the randomness for the epoch as defined in <a href="sect-block-production.html#defn-epoch-randomness">Definition 71</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-babeapi_next_epoch"><a class="anchor" href="#id-babeapi_next_epoch"></a><a class="link" href="#id-babeapi_next_epoch">C.11.4. <code>BabeApi_next_epoch</code></a></h4>
+<div class="paragraph">
+<p>Produces information about the next epoch.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Returns the same datastructure as described in <a href="chap-runtime-api.html#sect-babeapi_current_epoch">Section C.11.3</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-babeapi_generate_key_ownership_proof"><a class="anchor" href="#sect-babeapi_generate_key_ownership_proof"></a><a class="link" href="#sect-babeapi_generate_key_ownership_proof">C.11.5. <code>BabeApi_generate_key_ownership_proof</code></a></h4>
+<div class="paragraph">
+<p>Generates a proof of the membership of a key owner in the specified
+block state. The returned value is used to report equivocations as
+described in <a href="chap-runtime-api.html#sect-babeapi_submit_report_equivocation_unsigned_extrinsic">Section C.11.6</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The unsigned 64-bit integer indicating the slot number.</p>
+</li>
+<li>
+<p>The 256-bit public key of the authority.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A SCALE encoded <em>Option</em> as defined in Definition <a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a> containing the
+proof in an opaque form.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-babeapi_submit_report_equivocation_unsigned_extrinsic"><a class="anchor" href="#sect-babeapi_submit_report_equivocation_unsigned_extrinsic"></a><a class="link" href="#sect-babeapi_submit_report_equivocation_unsigned_extrinsic">C.11.6. <code>BabeApi_submit_report_equivocation_unsigned_extrinsic</code></a></h4>
+<div class="paragraph">
+<p>A BABE equivocation occurs when a validator produces more than one block
+at the same slot. The proof of equivocation are the given distinct
+headers that were signed by the validator and which include the slot
+number. The Polkadot Host is expected to identify equivocators and
+report those to the Runtime using this function.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If there are more than two blocks which cause an equivocation, the
+equivocation only needs to be reported once i.e. no additional
+equivocations must be reported for the same slot.
+</td>
+</tr>
+</table>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The equivocation proof of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\[B_{\mathrm{Ep}} = (A_{\mathrm{id}}, s, h_1, h_2)\]
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\(A_{\mathrm{id}}\) is the public key of the equivocator.</p>
+</li>
+<li>
+<p>\(s\) is the slot as described in <a href="sect-block-production.html#defn-epoch-slot">Definition 54</a> at which the equivocation occurred.</p>
+</li>
+<li>
+<p>\(h_1\) is the block header of the first block produced by the equivocator.</p>
+</li>
+<li>
+<p>\(h_2\) is the block header of the second block produced by the equivocator.</p>
+<div class="paragraph">
+<p>Unlike during block execution, the Seal in both block headers is not removed before
+submission. The block headers are submitted in its full form.</p>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+<li>
+<p>An proof of the key owner in an opaque form as described in <a href="chap-runtime-api.html#sect-babeapi_generate_key_ownership_proof">Section C.11.5</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A SCALE encoded <em>Option</em> as defined in <a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a> containing an empty
+value on success.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-module-authoritydiscoveryapi"><a class="anchor" href="#id-module-authoritydiscoveryapi"></a><a class="link" href="#id-module-authoritydiscoveryapi">C.11.7. Module AuthorityDiscoveryApi</a></h4>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 1</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All calls in this module require (Section
+<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect4">
+<h5 id="id-authoritydiscoveryapi_authorities"><a class="anchor" href="#id-authoritydiscoveryapi_authorities"></a><a class="link" href="#id-authoritydiscoveryapi_authorities">C.11.7.1. <code>AuthorityDiscoveryApi_authorities</code></a></h5>
+<div class="paragraph">
+<p>A function which helps to discover authorities.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A byte array of varying size containing 256-bit pulic keys of the
+authorities.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-runtime-sessionkeys-module"><a class="anchor" href="#sect-runtime-sessionkeys-module"></a><a class="link" href="#sect-runtime-sessionkeys-module">C.11.8. Module SessionKeys</a></h4>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 1</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All calls in this module require <code>Core_initialize_block</code> (<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect4">
+<h5 id="id-sessionkeys_generate_session_keys"><a class="anchor" href="#id-sessionkeys_generate_session_keys"></a><a class="link" href="#id-sessionkeys_generate_session_keys">C.11.8.1. <code>SessionKeys_generate_session_keys</code></a></h5>
+<div class="paragraph">
+<p>Generates a set of session keys with an optional seed. The keys should
+be stored within the keystore exposed by the Host Api. The seed needs to
+be valid and UTF-8 encoded.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A SCALE-encoded <em>Option</em> as defined in <a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a> containing an array of varying sizes indicating the seed.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A byte array of varying size containing the encoded session keys.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-sessionkeys_decode_session_keys"><a class="anchor" href="#id-sessionkeys_decode_session_keys"></a><a class="link" href="#id-sessionkeys_decode_session_keys">C.11.8.2. <code>SessionKeys_decode_session_keys</code></a></h5>
+<div class="paragraph">
+<p>Decodes the given public session keys. Returns a list of raw public keys including their key type.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of varying size containing the encoded public session keys.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of varying size containing tuple pairs of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\[(k, k_{\mathrm{id}})\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(k\) is an array of varying sizes containing the raw
+public key and \(k_{\mathrm{id}}\) is a
+4-byte array indicating the key type.</p>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-module-accountnonceapi"><a class="anchor" href="#id-module-accountnonceapi"></a><a class="link" href="#id-module-accountnonceapi">C.12. Module AccountNonceApi</a></h3>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 1</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All calls in this module require <code>Core_initialize_block</code> (<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect3">
+<h4 id="sect-accountnonceapi-account-nonce"><a class="anchor" href="#sect-accountnonceapi-account-nonce"></a><a class="link" href="#sect-accountnonceapi-account-nonce">C.12.1. <code>AccountNonceApi_account_nonce</code></a></h4>
+<div class="paragraph">
+<p>Get the current nonce of an account. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in <a href="chap-runtime-api.html#sect-json-rpc-api">Section C.1.1</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>The 256-bit public key of the account.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A 32-bit unsigned integer indicating the nonce of the account.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-module-transactionpaymentapi"><a class="anchor" href="#id-module-transactionpaymentapi"></a><a class="link" href="#id-module-transactionpaymentapi">C.12.2. Module TransactionPaymentApi</a></h4>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+This section describes <strong>Version 1</strong> of this API. Please check <code>Core_version</code> (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) to ensure compatibility.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All calls in this module require <code>Core_initialize_block</code> (<a href="chap-runtime-api.html#sect-rte-core-initialize-block">Section C.4.3</a>) to be called beforehand.</p>
+</div>
+<div class="sect4">
+<h5 id="id-transactionpaymentapi_query_info"><a class="anchor" href="#id-transactionpaymentapi_query_info"></a><a class="link" href="#id-transactionpaymentapi_query_info">C.12.2.1. <code>TransactionPaymentApi_query_info</code></a></h5>
+<div class="paragraph">
+<p>Returns information of a given extrinsic. This function is not aware of
+the internals of an extrinsic, but only interprets the extrinsic as some
+encoded value and accounts for its weight and length, the Runtime’s
+extrinsic base weight and the current fee multiplier.</p>
+</div>
+<div class="paragraph">
+<p>This function can be used by the Polkadot Host implementation when it
+seems appropriate, such as for the JSON-RPC API as described in <a href="chap-runtime-api.html#sect-json-rpc-api">Section C.1.1</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A byte array of varying sizes containing the extrinsic.</p>
+</li>
+<li>
+<p>The length of the extrinsic. [To do: why is this needed?]</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A data structure of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\[(w, c, f)\]
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\(w\) is the weight of the extrinsic.</p>
+</li>
+<li>
+<p>\(c\) is the "class" of the extrinsic, where class is a  varying data (<a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>) type defined as:</p>
+<div class="stemblock">
+<div class="content">
+\[c = \left\{\begin{array}{l}
+       0 \quad \textrm{Normal extrinsic}\\
+       1 \quad \textrm{Operational extrinsic}\\
+       2 \quad \textrm{Mandatory extrinsic, which is always included}
+     \end{array}\right.\]
+</div>
+</div>
+</li>
+<li>
+<p>\(f\) is the inclusion fee of the extrinsic. This does not
+include a tip or anything else that depends on the signature.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-transactionpaymentapi_query_fee_details"><a class="anchor" href="#id-transactionpaymentapi_query_fee_details"></a><a class="link" href="#id-transactionpaymentapi_query_fee_details">C.12.2.2. <code>TransactionPaymentApi_query_fee_details</code></a></h5>
+<div class="paragraph">
+<p>Query the detailed fee of a given extrinsic. This function can be used
+by the Polkadot Host implementation when it seems appropriate, such as
+for the JSON-RPC API as described in <a href="chap-runtime-api.html#sect-json-rpc-api">Section C.1.1</a>.</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A byte array of varying sizes containing the extrinsic.</p>
+</li>
+<li>
+<p>The length of the extrinsic.</p>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Return</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>A data structure of the following format:</p>
+<div class="stemblock">
+<div class="content">
+\[(f, t)\]
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\(f\) is a SCALE encoded as defined in <a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a> containing the following data structure:</p>
+<div class="stemblock">
+<div class="content">
+\[ f = (f_b, f_l, f_a)\]
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\(f_b\) is the minimum required fee for an extrinsic.</p>
+</li>
+<li>
+<p>\(f_l\) is the length fee, the amount paid for the encoded length (in bytes) of the extrinsic.</p>
+</li>
+<li>
+<p>\(f_a\) is the &#8220;adjusted weight fee&#8221;, which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+<li>
+<p>\(t\) is the tip for the block author.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph nav-footer">
+<p>← Previous: <a href="chap-host-api.html">Appendix B: Host API</a> | ↑ Up: <a href="polkadot-spec.html">Polkadot Protocol Specification</a> | Next: <a href="id-bibliography.html">Bibliography</a> →</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 0.2.1<br>
+Last updated 2023-03-09 11:37:31 +0100
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>

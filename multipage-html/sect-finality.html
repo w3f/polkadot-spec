@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="description" content="The Official Polkadot and Kusama Protocol Specification">
+<meta name="keywords" content="babe, blockchain, consensus, finality, grandpa, kusama, parachain, polkadot, relay-chain, runtime, spec, web3, w3f">
+<meta name="author" content="Web 3.0 Technologies Foundation">
+<link rel="icon" type="image/png" href="./favicon.png">
+<title>Polkadot Protocol Specification</title>
+<style>
+/* Fetch Unbounded - Normal - Regular */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400&display=swap');
+/* Fetch Work Sans - Normal + Italic - Regular + Bold */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+/* Fetch Asciidoctor Default Style Sheet */
+@import url('https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css');
+
+/* Base constants of theme */
+:root {
+	--font-header: 'Unbounded', cursive;
+	--font-text: 'Work Sans', sans-serif;
+
+	--black: #1E1E1E;
+	--white: #FFFFFF;
+
+	--dark-blue: #172026;
+	--grey: #efefef;
+
+	--pink: #E6007A;
+	--purple: #670d35;
+}
+
+
+/* Apply some layout corrections */
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+  	display: flex;
+  	flex-direction: column;
+}
+
+.partintro {
+	margin-bottom: 1.25rem;
+}
+
+/* Render part intros just like other text */
+.partintro div.content {
+	line-height: 1.6;
+	font-size: 1.0625rem;
+	letter-spacing: -.01em;
+	text-rendering: optimizeLegibility;
+}
+
+/* Set our custom font */
+body {
+	font-family: var(--font-text);
+}
+
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+#toc ul.sectlevel0 > li > a,
+.sidebarblock > .content > .title {
+	font-family: var(--font-header);
+	font-weight: 400;
+}
+
+#toc ul{
+	font-family: var(--font-text);
+}
+
+/* Set base colors */
+body {
+	color: var(--black);
+	background-color: var(--white);
+}
+
+/* Style all titles */
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+.subheader,
+.title {
+	color: var(--pink);
+}
+
+/* - could be replaced by !important in previous block */
+.sidebarblock > .content > .title,
+.admonitionblock td.content > .title,
+.audioblock > .title,
+.exampleblock > .title,
+.imageblock > .title,
+.listingblock > .title,
+.literalblock > .title,
+.stemblock > .title,
+.openblock > .title,
+.paragraph > .title,
+.quoteblock > .title,
+table.tableblock > .title,
+.verseblock > .title,
+.videoblock > .title,
+.dlist > .title,
+.olist > .title,
+.ulist > .title,
+.qlist > .title,
+.hdlist > .title {
+	color: inherit;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    color: inherit;
+}
+
+/* Style all links */
+a {
+	color: var(--pink);
+}
+
+a:hover {
+	color: var(--purple);
+}
+
+/* - same here, next two blocks or important above */
+#content h1 > a.link,
+h2 > a.link,
+h3 > a.link, #toctitle > a.link,
+h4 > a.link,
+h5 > a.link,
+h6 > a.link,
+.sidebarblock > .content > .title > a.link {
+	color: inherit;
+}
+
+#content h1 > a.link:hover,
+h2 > a.link:hover,
+h3 > a.link:hover,
+h4 > a.link:hover,
+h5 > a.link:hover,
+h6 > a.link:hover,
+#toctitle > a.link:hover,
+.sidebarblock > .content > .title > a.link:hover {
+	color: var(--purple);
+}
+
+/* Style header like toc on small screens */
+@media screen and (max-width:768px) {
+	#header {
+		background-color: var(--dark-blue);
+		max-width: none;
+	}
+
+	#header > h1:first-child {
+  		color: var(--pink);
+	}
+
+	#header .details {
+  		color: var(--white);
+		border: none;
+	}
+}
+
+/* Style table of content */
+#toc.toc2 {
+	background-color: var(--dark-blue);
+	border: none;
+}
+
+#toc ul.sectlevel0 > li > a {
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: underline;
+}
+
+#toc a {
+	color: var(--white);
+}
+
+#toc a code {
+	color: inherit;
+	background-color: inherit;
+}
+
+#toc a .toc-current,
+#toc .tocify-focus a {
+	color: var(--pink);
+}
+
+/* Tame SVG images */
+.imageblock .content svg {
+  max-width: 100%;
+}
+
+/* Style boxes */
+.exampleblock > .content, 
+.sidebarblock {
+	background: var(--grey);
+}
+
+/* Style footer */
+#footer {
+	color: var(--white);
+	background-color: var(--dark-blue);
+}
+
+/* CSS Ribbon */
+.ribbon {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  z-index: 99999;
+  top: 0px;
+  right: 0px;
+}
+
+.ribbon a {
+  display: inline-block;
+  position: inherit;
+  transform: rotate(45deg);
+  width: 200px;
+  top: 45px; 
+  right: -40px;
+  padding: 6px 0px;
+  overflow: hidden;
+
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+
+  color: var(--white);
+  background-color: var(--pink);
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+  border: 2px dotted var(--white);
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 3px 0px;
+}
+
+/* MathJax v3 */
+.stemblock mjx-container {
+  text-align: center;
+  display: block;
+  width: 100%;
+  margin: 1em 0em;
+}
+
+/* Pseudocode.js */
+.ps-root {
+  font-size: 1.2em !important;
+}
+
+/* Fix inline svg with fixed width or height. */
+.imageblock .content svg {
+  widht: auto;
+  height: auto;
+}
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
+                       font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
+             .nav-footer{text-align: center; margin-top: auto;}
+             .nav-footer > p > a {white-space: nowrap;}</style>
+</head>
+<body id="sect-finality" class="book toc2 toc-left">
+<!-- Contribution Ribbon -->
+<div class="ribbon"><a target="_blank" href="https://github.com/w3f/polkadot-spec">Contributions welcome!</a></div>
+<div id="header">
+<h1>Polkadot Protocol Specification</h1>
+<div class="details">
+<span id="author" class="author">Web 3.0 Technologies Foundation</span><br>
+<span id="revnumber">version 0.2.1</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<p><span class="toc-root"><a href="polkadot-spec.html">Polkadot Protocol Specification</a></span></p><ul class="sectlevel1">
+<li><a href="id-polkadot-protocol.html">Polkadot Protocol</a>
+</li>
+<li><a href="part-polkadot-host.html">Polkadot Host</a>
+<ul class="sectlevel1">
+<li><a href="chap-overview.html">1. Overview</a>
+</li>
+<li><a href="chap-state.html">2. States and Transitions</a>
+</li>
+<li><a href="chap-sync.html">3. Synchronization</a>
+</li>
+<li><a href="chap-networking.html">4. Networking</a>
+</li>
+<li><a href="sect-block-production.html">5. Block Production</a>
+</li>
+<li><a href="sect-finality.html"><span class="toc-current">6. Finality</span></a>
+<ul class="sectlevel2">
+<li><a href="sect-finality.html#id-introduction-4">6.1. Introduction</a>
+</li>
+<li><a href="sect-finality.html#id-initiating-the-grandpa-state">6.2. Initiating the GRANDPA State</a>
+</li>
+<li><a href="sect-finality.html#id-rejoining-the-same-voter-set">6.3. Rejoining the Same Voter Set</a>
+</li>
+<li><a href="sect-finality.html#id-voting-process-in-round-r">6.4. Voting Process in Round \$r\$</a>
+</li>
+<li><a href="sect-finality.html#sect-finality-forced-changes">6.5. Forced Authority Set Changes</a>
+</li>
+<li><a href="sect-finality.html#sect-block-finalization">6.6. Block Finalization</a>
+</li>
+<li><a href="sect-finality.html#sect-grandpa-beefy">6.7. Bridge design (BEEFY)</a>
+</li>
+</ul>
+</li>
+<li><a href="sect-lightclient.html">7. Light Clients</a>
+</li>
+<li><a href="chapter-anv.html">8. Availability &amp; Validity</a>
+</li>
+</ul>
+</li>
+<li><a href="part-polkadot-runtime.html">Polkadot Runtime</a>
+</li>
+<li><a href="id-cryptography-encoding.html">Appendix D: Cryptography &amp; Encoding</a>
+</li>
+<li><a href="chap-host-api.html">Appendix E: Host API</a>
+</li>
+<li><a href="chap-runtime-api.html">Appendix F: Runtime API</a>
+</li>
+<li><a href="id-bibliography.html">Bibliography</a>
+</li>
+<li><a href="id-glossary.html">Glossary</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="sect-finality"><a class="anchor" href="#sect-finality"></a><a class="link" href="#sect-finality">6. Finality</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="id-introduction-4"><a class="anchor" href="#id-introduction-4"></a><a class="link" href="#id-introduction-4">6.1. Introduction</a></h3>
+<div class="paragraph">
+<p>The Polkadot Host uses GRANDPA Finality protocol to finalize blocks.
+Finality is obtained by consecutive rounds of voting by the validator
+nodes. Validators execute GRANDPA finality process in parallel to Block
+Production as an independent service. In this section, we describe the
+different functions that GRANDPA service performs to successfully
+participate in the block-finalization process.</p>
+</div>
+<div id="defn-grandpa-voter" class="exampleblock">
+<div class="title">Definition 72. <a href="sect-finality.html#defn-grandpa-voter">GRANDPA Voter</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>GRANDPA Voter</strong>,
+\$v\$, represented by a key pair
+\$(K_v^("pr"),v_("id"))\$
+where \$k_v^("pr")\$ represents an
+<em>ed25519</em> private key, is a
+node running a GRANDPA protocol and broadcasting votes to finalize
+blocks in a Polkadot Host-based chain. The <strong>set of all GRANDPA voters</strong>
+for a given block B is indicated by \$bbb V_B\$. In that
+regard, we have [To do: change function name, only call at genesis,
+adjust V_B over the sections]</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$bbb V = tt "grandpa_authorities"(B)\$
+</div>
+</div>
+<div class="paragraph">
+<p>where \$tt "grandpa_authorities"\$ is a function entrypoint of the Runtime
+described in <a href="chap-runtime-api.html#sect-rte-grandpa-auth">Section C.10.1</a>. We refer to \$bbb V_B\$ as
+\$bbb V\$ when there is no chance of ambiguity.</p>
+</div>
+<div class="paragraph">
+<p>Analogously we say that a Polkadot node is a <strong>non-voter node</strong> for block
+\$B\$, if it does not own any of the key pairs in
+\$bbb V_B\$.</p>
+</div>
+</div>
+</div>
+<div id="defn-authority-set-id" class="exampleblock">
+<div class="title">Definition 73. <a href="sect-finality.html#defn-authority-set-id">Authority Set Id</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>authority set Id</strong> (\$"id"_(bbb V)\$) is an incremental counter which
+tracks the amount of authority list changes that occurred
+(<a href="sect-finality.html#defn-consensus-message-grandpa">Definition 86</a>). Starting with the value of zero at genesis,
+the Polkadot Host increments this value by one every time a <strong>Scheduled Change</strong>
+or a <strong>Forced Change</strong> occurs. The authority set Id is an unsigned 64-bit integer.</p>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-state" class="exampleblock">
+<div class="title">Definition 74. <a href="sect-finality.html#defn-grandpa-state">GRANDPA State</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>GRANDPA state</strong>, \$"GS"\$, is defined as:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$"GS" := {bbb V, "id"_(bbb V),r}\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$bbb V\$: is the set of voters.</p>
+</li>
+<li>
+<p>\$"id"_(bbb V)\$: is the authority set ID (<a href="sect-finality.html#defn-authority-set-id">Definition 73</a>).</p>
+</li>
+<li>
+<p>\$r\$: is the voting round number.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="defn-vote" class="exampleblock">
+<div class="title">Definition 75. <a href="sect-finality.html#defn-vote">GRANDPA Vote</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>GRANDPA vote</strong> or simply a vote for block \$B\$ is an ordered pair defined
+as</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$V(B) := (H_h(B),H_i(B))\$
+</div>
+</div>
+<div class="paragraph">
+<p>where \$H_h(B)\$ and \$H_i (B)\$ are the block hash
+(<a href="chap-state.html#defn-block-header-hash">Definition 12</a>) and the block number (<a href="chap-state.html#defn-block-header">Definition 10</a>).</p>
+</div>
+</div>
+</div>
+<div id="defn-voting-rounds" class="exampleblock">
+<div class="title">Definition 76. <a href="sect-finality.html#defn-voting-rounds">Voting Rounds</a></div>
+<div class="content">
+<div class="paragraph">
+<p>Voters engage in a maximum of two sub-rounds of voting for each round \$r\$.
+The first sub-round is called <strong>pre-vote</strong> and the second sub-round is called
+<strong>pre-commit</strong>.</p>
+</div>
+<div class="paragraph">
+<p>By \$V_v^(r,"pv")\$ and \$V_v^(r,"pc")\$ we refer to the vote cast by
+voter \$v\$ in round \$r\$ (for block \$B\$) during the pre-vote and
+the pre-commit sub-round respectively.</p>
+</div>
+<div class="paragraph">
+<p>Voting is done by means of broadcasting voting messages (<a href="chap-networking.html#sect-msg-grandpa">Section 4.8.6</a>)
+to the network. Validators inform their peers about the block finalized in round
+\$r\$ by broadcasting a commit message (<a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a>).</p>
+</div>
+</div>
+</div>
+<div id="defn-sign-round-vote" class="exampleblock">
+<div class="title">Definition 77. <a href="sect-finality.html#defn-sign-round-vote">Vote Signature</a></div>
+<div class="content">
+<div class="paragraph">
+<p>\$"Sign"_(v_i)^(r,"stage")\$ refers to the signature of a voter for a specific
+message in a round and is formally defined as:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$"Sign"_(v_i)^(r,"stage") := "Sig"_("ed25519")("msg",r,"id"_(bbb V))\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$"msg"\$: is an byte array containing the message to be signed
+(<a href="sect-finality.html#defn-vote">Definition 75</a>).</p>
+</li>
+<li>
+<p>\$r\$: is an unsigned 64-bit integer is the round number.</p>
+</li>
+<li>
+<p>\$"id"_(bbb V)\$: is an unsigned 64-bit integer indicating the authority
+set Id (<a href="chap-sync.html#defn-authority-list">Definition 33</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-justification" class="exampleblock">
+<div class="title">Definition 78. <a href="sect-finality.html#defn-grandpa-justification">Justification</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>justification</strong> for block \$B\$ in round \$r\$,
+\$J^(r,"stage")(B)\$, is a vector of pairs of the type:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$(V(B'),"Sign"_(v_i)^(r,"stage")(B'),v_("id"))\$
+</div>
+</div>
+<div class="paragraph">
+<p>in which either</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$B' &gt;= B\$
+</div>
+</div>
+<div class="paragraph">
+<p>or \$V_(v_i)^(r,"pc")(B')\$ is an equivocatory vote.</p>
+</div>
+<div class="paragraph">
+<p>In all cases, \$"Sign"_(v_i)^(r,"stage")(B')\$ is the signature
+(<a href="sect-finality.html#defn-sign-round-vote">Definition 77</a>) of voter \$v_("id") in bbb V_B\$ broadcasted during
+either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of
+round r. A <strong>valid justification</strong> must only contain up-to-one valid vote from
+each voter and must not contain more than two equivocatory votes from each
+voter.</p>
+</div>
+</div>
+</div>
+<div id="defn-finalizing-justification" class="exampleblock">
+<div class="title">Definition 79. <a href="sect-finality.html#defn-finalizing-justification">Finalizing Justification</a></div>
+<div class="content">
+<div class="paragraph">
+<p>We say \$J^(r,"pc")(B)\$ <strong>justifies the finalization</strong> of \$B' &gt;= B\$ <strong>for
+a non-voter node</strong> \$n\$ if the number of valid signatures in
+\$J^(r,"pc")(B)\$ for \$B'\$ is greater than \$2/3|bbb V_B|\$.</p>
+</div>
+<div class="paragraph">
+<p>Note that \$J^(r,"pc")(B)\$ can only be used by a non-voter node to finalize
+a block. In contrast, a voter node can only be assured of the finality
+(<a href="sect-finality.html#defn-finalized-block">Definition 90</a>) of block \$B\$ by actively participating in the
+voting process. That is by invoking <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a>.</p>
+</div>
+<div class="paragraph">
+<p>The GRANDPA protocol dictates how an honest voter should vote in each sub-round,
+which is described by <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a>. After
+defining what constitutes a vote in GRANDPA, we define how GRANDPA counts votes.</p>
+</div>
+</div>
+</div>
+<div id="defn-equivocation" class="exampleblock">
+<div class="title">Definition 80. <a href="sect-finality.html#defn-equivocation">Equivocation</a></div>
+<div class="content">
+<div class="paragraph">
+<p>Voter \$v\$ <strong>equivocates</strong> if they broadcast two or more valid votes to blocks
+during one voting sub-round. In such a situation, we say that \$v\$ is an
+<strong>equivocator</strong> and any vote \$V_v^(r,"stage")(B)\$ cast by \$v\$ in that
+sub-round is an <strong>equivocatory vote</strong>, and</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$cc E^(r,"stage")\$
+</div>
+</div>
+<div class="paragraph">
+<p>represents the set of all equivocators voters in sub-round <em>stage</em> of
+round \$r\$. When we want to refer to the number of equivocators whose
+equivocation has been observed by voter \$v\$ we refer to it by:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$cc E_("obs"(v))^(r,"stage")\$
+</div>
+</div>
+<div class="paragraph">
+<p>The Polkadot Host must detect equivocations committed by other validators and
+submit those to the Runtime as described in
+<a href="chap-runtime-api.html#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic">Section C.10.2</a>.</p>
+</div>
+<div class="paragraph">
+<p>A vote \$V_v^(r,"stage") = V(B)\$ is <strong>invalid</strong> if</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>\$H (B)\$ does not correspond to a valid block.</p>
+</li>
+<li>
+<p>\$B\$ is not an (eventual) descendant of a previously finalized block.</p>
+</li>
+<li>
+<p>\$M_v^(r,"stage")\$ does not bear a valid signature.</p>
+</li>
+<li>
+<p>\$"id"_(bbb V)\$ does no match the current \$bbb V\$.</p>
+</li>
+<li>
+<p>\$V_v^(r,"stage")\$ is an equivocatory vote.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="defn-observed-direct-votes" class="exampleblock">
+<div class="title">Definition 81. <a href="sect-finality.html#defn-observed-direct-votes">Set of Observed Direct Votes</a></div>
+<div class="content">
+<div class="paragraph">
+<p>For validator \$v\$, <strong>the set of observed direct votes for Block \$B\$ in
+round \$r\$</strong>, formally denoted by \$"VD"_("obs"(v))^(r,"stage")(B)\$ is
+equal to the union of:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>set of <em>valid</em> votes \$V_(v_i)^(r,"stage")\$ cast in round \$r\$ and
+received by \$v\$ such that \$V_(v_i)^(r,"stage") = V(B)\$.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="defn-observed-votes" class="exampleblock">
+<div class="title">Definition 82. <a href="sect-finality.html#defn-observed-votes">Set of Total Observed Votes</a></div>
+<div class="content">
+<div class="paragraph">
+<p>We refer to <strong>the set of total votes observed by voter \$v\$ in sub-round
+<em>stage</em> of round \$r\$</strong> by \$V_("obs"(v))^(r,"stage")\$.</p>
+</div>
+<div class="paragraph">
+<p>The <strong>set of all observed votes by \$v\$ in the sub-round stage of round
+\$r\$ for block \$B\$</strong>, <strong>\$V_("obs"(v))^(r,"stage")\$</strong> is equal to all
+of the observed direct votes cast for block \$B\$ and all of the \$B\$’s
+descendants defined formally as:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$V_("obs"(v))^(r,"stage")(B) := uuu_(v_i in bbb V, B &lt; B') "VD"_("obs"(v))^(r,"stage")(B')\$
+</div>
+</div>
+<div class="paragraph">
+<p>The <strong>total number of observed votes for Block \$B\$ in round \$r\$</strong> is
+defined to be the size of that set plus the total number of equivocator voters:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$#V_("obs"(v))^(r,"stage")(B) := |V_("obs"(v))^(r,"stage")(B)|+|cc E_("obs"(v))^(r,"stage")|\$
+</div>
+</div>
+<div class="paragraph">
+<p>Note that for genesis state we always have
+\$#V_("obs"(v))^(r,"pv")(B) = |bbb V|\$.</p>
+</div>
+</div>
+</div>
+<div id="defn-total-potential-votes" class="exampleblock">
+<div class="title">Definition 83. <a href="sect-finality.html#defn-total-potential-votes">Set of Total Potential Votes</a></div>
+<div class="content">
+<div class="paragraph">
+<p>Let \$V_("unobs"(v))^(r,"stage")\$ be the set of voters whose vote in the
+given stage has not been received. We define the <strong>total number of potential
+votes for Block \$B\$ in round \$r\$</strong> to be:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$#V_("obs"(v),"pot")^(r,"stage")(B) := |V_("obs"(v))^(r,"stage")(B)|+|V_("unobs"(v))^(r,"stage")|+"Min"(1/3|bbb V|,|bbb V|-|V_("obs"(v))^(r,"stage")(B)|-|V_("unobs"(v))^(r,"stage")|)\$
+</div>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-ghost" class="exampleblock">
+<div class="title">Definition 84. <a href="sect-finality.html#defn-grandpa-ghost">Current Pre-Voted Block</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The current <strong>pre-voted</strong> block \$B_v^(r,"pv")\$ also know as GRANDPA GHOST is
+the block chosen by <a href="sect-finality.html#algo-grandpa-ghost">GRANDPA-GHOST</a>:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$B_v^(r,"pv") := "GRANDPA-GHOST"(r)\$
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, we define when a voter \$v\$ sees a round as completable, that is
+when they are confident that \$B_v^(r,"pv")\$ is an upper bound for what is
+going to be finalized in this round.</p>
+</div>
+</div>
+</div>
+<div id="defn-grandpa-completable" class="exampleblock">
+<div class="title">Definition 85. <a href="sect-finality.html#defn-grandpa-completable">Completable Round</a></div>
+<div class="content">
+<div class="paragraph">
+<p>We say that
+round \$r\$ is <strong>completable</strong> if
+\$|V_("obs"(v))^(r,"pc")|+ cc E_("obs"(v))^(r,"pc") &gt; 2/3 bbb V\$
+and for all \$B' &gt; B_v^(r,"pv")\$:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$|V_("obs"(v))^(r,"pc")|- cc E_("obs"(v))^(r,"pc") - |V_("obs"(v))^(r,"pc")(B')|&gt; 2/3|bbb V|\$
+</div>
+</div>
+<div class="paragraph">
+<p>Note that in practice we only need to check the inequality for those \$B' &gt;
+B_v^(r,"pv")\$ where \$|V_("obs"(v))^(r,"pc")(B')| &gt; 0\$.</p>
+</div>
+</div>
+</div>
+<div id="defn-consensus-message-grandpa" class="exampleblock">
+<div class="title">Definition 86. <a href="sect-block-production.html#defn-consensus-message-babe">GRANDPA Consensus Message</a></div>
+<div class="content">
+<div class="paragraph">
+<p>\$"CM"_g\$, the consensus message for GRANDPA, is of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$"CM"_g = {(1,("Auth"_C,N_("delay"))),(2,(m,"Auth"_C,N_("delay"))),(3,"A"_i),(4,N_("delay")),(5,N_("delay")):}\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+</dl>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+\$N_"delay"\$
+</td>
+<td class="hdlist2">
+<p>is an unsigned 32-bit integer indicating how deep in the
+chain the announcing block must be before the change is applied.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+1
+</td>
+<td class="hdlist2">
+<p>implies <strong>scheduled change</strong>: Schedule an authority set change after the
+given delay of \$N_("delay") := |"SubChain"(B,B')|\$ where \$B'\$ is the
+block where the change is applied. The earliest digest of this type in a
+single block will be respected, unless a force change is present, in which case
+the force change takes precedence.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+2
+</td>
+<td class="hdlist2">
+<p>implies <strong>forced change</strong>: Schedule a forced authority set change after the
+given delay of \$N_("delay") := |"SubChain"(B,m + B')|\$ where \$B'\$ is
+the block where the change is applied. The earliest digest
+of this type in a block will be respected.</p>
+<div class="paragraph">
+<p>Forced changes are explained further in <a href="sect-finality.html#sect-finality-forced-changes">Section 6.5</a>.</p>
+</div>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+3
+</td>
+<td class="hdlist2">
+<p>implies <strong>on disabled</strong>: An index to the individual authority in the current
+authority list (<a href="chap-sync.html#defn-authority-list">Definition 33</a>) that should be immediately disabled
+until the next authority set changes. When an authority gets disabled, the node
+should stop performing any authority functionality from that authority,
+including authoring blocks and casting GRANDPA votes for finalization.
+Similarly, other nodes should ignore all messages from the indicated authority
+which pertain to their authority role.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+4
+</td>
+<td class="hdlist2">
+<p>implies <strong>pause</strong>: A signal to pause the current authority set after the
+given delay of \$N_("delay") := |"SubChain"(B,B')|\$ where \$B'\$ is a
+block where the change is applied. Once applied, the authorities should stop
+voting.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+5
+</td>
+<td class="hdlist2">
+<p>implies <strong>resume</strong>: A signal to resume the current authority set after the
+given delay of \$N_("delay") := |"SubChain"(B,B')|\$ where \$B'\$ is the
+block where the change is applied. Once applied, the authorities should resume
+voting.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div id="defn-consensus-message-beefy" class="exampleblock">
+<div class="title">Definition 87. <a href="sect-finality.html#defn-consensus-message-beefy">BEEFY Consensus Message</a></div>
+<div class="content">
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+The BEEFY protocol is still under construction. The following part will be
+updated in the future and certain information will be clarified.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>\$"CM"_y\$, the consensus message for BEEFY (<a href="sect-finality.html#sect-grandpa-beefy">Section 6.7</a>), is of
+the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$"CM"_y = {(1,(V_B,V_i)),(2,A_i),(3,R):}\$
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+</dl>
+</div>
+<div class="hdlist">
+<table>
+<tr>
+<td class="hdlist1">
+1
+</td>
+<td class="hdlist2">
+<p>implies that the remote <strong>authorities have changed</strong>. \$V_B\$ is the
+array of the new BEEFY authorities&#8217;s public keys and \$V_i\$ is the
+identifier of the remote validator set.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+2
+</td>
+<td class="hdlist2">
+<p>implies <strong>on disabled</strong>: an index to the individual authorty in \$V_B\$
+that should be immediately disabled until the next authority change.</p>
+</td>
+</tr>
+<tr>
+<td class="hdlist1">
+3
+</td>
+<td class="hdlist2">
+<p>implies <strong>MMR root</strong>: a 32-byte array containing the MMR root.</p>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-initiating-the-grandpa-state"><a class="anchor" href="#id-initiating-the-grandpa-state"></a><a class="link" href="#id-initiating-the-grandpa-state">6.2. Initiating the GRANDPA State</a></h3>
+<div class="paragraph">
+<p>In order to participate coherently in the voting process, a validator must
+initiate its state and sync it with other active validators. In particular,
+considering that voting is happening in different distinct rounds where each
+round of voting is assigned a unique sequential round number \$r_v\$, it
+needs to determine and set its round counter \$r\$ equal to the voting round
+\$r_n\$ currently undergoing in the network. The mandated initialization
+procedure for the GRANDPA protocol for a joining validator is described in
+detail in <a href="sect-finality.html#algo-initiate-grandpa">Initiate-Grandpa</a>.</p>
+</div>
+<div class="paragraph">
+<p>The process of joining a new voter set is different from the one of rejoining
+the current voter set after a network disconnect. The details of this
+distinction are described further in this section.</p>
+</div>
+<div class="sect3">
+<h4 id="id-voter-set-changes"><a class="anchor" href="#id-voter-set-changes"></a><a class="link" href="#id-voter-set-changes">6.2.1. Voter Set Changes</a></h4>
+<div class="paragraph">
+<p>A GRANDPA voter node which is initiating GRANDPA protocol as part of joining a
+new authority set is required to execute <a href="sect-finality.html#algo-initiate-grandpa">Initiate-Grandpa</a>. The
+algorithm mandates the initialization procedure for GRANDPA protocol.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The GRANDPA round number reset to 0 for every authority set change.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Voter set changes are signaled by Runtime via a consensus engine message
+(<a href="chap-sync.html#sect-consensus-message-digest">Section 3.3.2</a>). When Authorities process such messages they
+must not vote on any block with a higher number than the block at which the
+change is supposed to happen. The new authority set should reinitiate GRANDPA
+protocol by executing <a href="sect-finality.html#algo-initiate-grandpa">Initiate-Grandpa</a>.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\input $r_{last}, B_{last}$
+
+\state \textsc{Last-Finalized-Block} $\leftarrow B_{last}$
+
+\state \textsc{Best-Final-Candidate}$(0) \leftarrow B_{last}$
+
+\state \textsc{GRANDPA-GHOST}$(0) \leftarrow B_{last}$
+
+\state \textsc{Last-Completed-Round}$ \leftarrow 0$
+
+\state $r_n \leftarrow 1$
+
+\state \call{Play-Grandpa-round}{$r_n$}
+<div class="paragraph">
+<p>where \$B_("last")\$ is the last block which has been finalized on the chain
+(<a href="sect-finality.html#defn-finalized-block">Definition 90</a>). \$r_("last")\$ is equal to the latest round the
+voter has observed that other voters are voting on. The voter obtains this
+information through various gossiped messages including those mentioned in
+<a href="sect-finality.html#defn-finalized-block">Definition 90</a>. \$r_("last")\$ is set to <em>0</em> if the GRANDPA node is
+initiating the GRANDPA voting process as a part of a new authority set. This is
+because the GRANDPA round number resets to <em>0</em> for every authority set change.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-rejoining-the-same-voter-set"><a class="anchor" href="#id-rejoining-the-same-voter-set"></a><a class="link" href="#id-rejoining-the-same-voter-set">6.3. Rejoining the Same Voter Set</a></h3>
+<div class="paragraph">
+<p>When a voter node rejoins the network after a disconnect from the voter set and
+with the condition that there has been no change to the voter set at the time of
+the disconnect, the node must continue performing the GRANDPA protocol at the
+same state as before getting disconnected from the network, ignoring any
+possible progress in GRANDPA finalization. Following reconnection, the node
+eventually gets updated to the current GRANDPA round and synchronizes its state
+with the rest of the voting set through the process called Catchup
+(<a href="sect-finality.html#sect-grandpa-catchup">Section 6.6.1</a>).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-voting-process-in-round-r"><a class="anchor" href="#id-voting-process-in-round-r"></a><a class="link" href="#id-voting-process-in-round-r">6.4. Voting Process in Round \$r\$</a></h3>
+<div class="paragraph">
+<p>For each round \$r\$, an honest voter \$v\$ must participate in the voting
+process by following <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a>.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\REQUIRE($r$)
+\STATE $t_{r, v} \leftarrow$ Current local time
+\STATE $\textrm{primary} \leftarrow$ \call{Derive-Primary}{$r$}
+\IF{$v = \textrm{primary}$}
+  \STATE \call{Broadcast}{$M_{v}^{r - 1, \textrm{Fin}}($\call{Best-Final-Candidate}{$r - 1$}$)$}
+  \IF{\call{Best-Final-Candidate}{$r - 1$} $\geqslant$ \textsc{Last-Finalized-Block}}
+    \STATE \call{Broadcast}{$M_{v}^{r - 1, \textrm{Prim}}($\call{Best-Final-Candidate}{$r - 1$}$)$}
+  \ENDIF
+\ENDIF
+\STATE \call{Receive-Messages}{\textbf{until} Time $\geqslant t_{r_,v} + 2 \times T$ \or $r$ \textbf{is} completable}
+\STATE $L \leftarrow$ \call{Best-Final-Candidate}{$r - 1$}
+\STATE $N \leftarrow$ \call{Best-PreVote-Candidate}{$r$}
+\STATE \call{Broadcast}{$M_v^{r, \textrm{pv}} (N)$}
+\STATE \call{Receive-Messages}{\textbf{until} $B^{r,\textrm{pv}}_v \geqslant L$ \and $($ Time $\geqslant t_{r_,v} + 4 \times T$ \or $r$ \textbf{is} completable $)$}
+\STATE \call{Broadcast}{$M_v^{r, \textrm{pc}}(B_v^{r, \textrm{pv}})$}
+
+\REPEAT
+  \STATE \call{Receive-Messages}{}
+  \STATE \call{Attempt-To-Finalize-At-Round}{$r$}
+\UNTIL{$r$ \textbf{is} completable \and \call{Finalizable}{$r$} \and \textsc{Last-Finalized-Block} $\geqslant$ \call{Best-Final-Candidate}{$r - 1$}}
+
+\STATE \call{Play-Grandpa-round}{$r + 1$}
+
+\REPEAT
+  \STATE \call{Receive-Messages}{}
+  \STATE \call{Attempt-To-Finalize-At-Round}{$r$}
+\UNTIL{\textsc{Last-Finalized-Block} $\geqslant$ \call{Best-Final-Candidate}{$r$}}
+
+\IF{\textsc{Last-Completed-Round} $ < r $}
+  \STATE \textsc{Last-Completed-Round} $\leftarrow r$
+\ENDIF
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$T\$ is sampled from a log-normal distribution whose mean and standard
+deviation are equal to the average network delay for a message to be sent and
+received from one validator to another.</p>
+</li>
+<li>
+<p>\$"Derive-Primary"\$ is described in <a href="sect-finality.html#algo-derive-primary">Derive-Primary</a>.</p>
+</li>
+<li>
+<p>The condition of <em>completablitiy</em> is defined in <a href="sect-finality.html#defn-grandpa-completable">Definition 85</a>.</p>
+</li>
+<li>
+<p>\$"Best-Final-Candidate"\$ function is explained in <a href="sect-finality.html#algo-grandpa-best-candidate">Best-Final-Candidate</a>.</p>
+</li>
+<li>
+<p>\$"Attempt-To-Finalize-At-Round"(r)\$ is described in <a href="sect-finality.html#algo-attempt-to–finalize">Attempt-To-Finalize-At-Round</a>.</p>
+</li>
+<li>
+<p>\$"Finalizable"\$ is defined in <a href="sect-finality.html#algo-finalizable">Finalizable</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\input $r$
+
+\return $r \bmod |\mathbb{V}|$
+<div class="paragraph">
+<p>where \$r\$ is the GRANDPA round whose primary is to be determined.</p>
+</div>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\input $r$
+
+\state $B_v^{r, pv} \leftarrow$ \call{GRANDPA-GHOST}{$r$}
+
+\if{$r = 0$}
+
+    \return $B_v^{r, pv}$
+
+\else
+
+    \state $\mathcal{C} \leftarrow \{ B' | B' \leqslant B_v^{r,pv} | \#V^{r, pc}_{\operatorname{obv}(v), pot}(B') > \frac{2}{3} |\mathbb{V}| \}$
+
+    \if{$\mathcal{C} = \phi$}
+
+        \return $B_v^{r, pv}$
+
+    \else
+
+        \return $E \in \mathcal{C} : H_n (E) = \operatorname{max}\left(H_n (B') | B' \in \mathcal{C}\right)$
+
+    \endif
+
+\endif
+<div class="paragraph">
+<p>where \$#V_("obv"(v),pot)^(r,pc)\$ is defined in <a href="sect-finality.html#defn-total-potential-votes">Definition 83</a>.</p>
+</div>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\input $r$
+
+\if{$r = 0$}
+
+    \state $G \leftarrow B_{last}$
+
+\else
+
+    \state $L \leftarrow$ \call{Best-Final-Candidate}{$r - 1$}
+
+    \state $\mathcal{G} = \{ \forall B > L | \#V_{\operatorname{obs}(v)}^{r, pv}(B) \geqslant \frac{2}{3} |\mathbb{V}| \}$
+
+    \if{$\mathcal{G} = \phi$}
+
+        \state $G \leftarrow L$
+
+    \else
+
+        \state $G \in \mathcal{G} | H_n(G) = \operatorname{max}\left( H_n (B) | \forall B \in \mathcal{G} \right)$
+
+    \endif
+
+\endif
+
+\return $G$
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$B_("last")\$ is the last block which has been finalized on the chain
+(<a href="sect-finality.html#defn-finalized-block">Definition 90</a>).</p>
+</li>
+<li>
+<p>\$#V_("obs"(v))^(r,pv)(B)\$ is defined in <a href="sect-finality.html#defn-observed-votes">Definition 82</a>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\input $r$
+
+\state $B^{r, pv}_v \leftarrow$ \call{GRANDPA-GHOST}{$r$}
+
+\if{\call{Received}{$M_{v_{primary}}^{r, prim}(B))$ \and $B^{r, pv}_v \geqslant B > L$}}
+
+    \state $N \leftarrow B$
+
+\else
+
+    \state $N \leftarrow B^{r, pv}_v$
+
+\endif
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\REQUIRE($r$)
+\STATE $L \leftarrow$ \textsc{Last-Finalized-Block}
+\STATE $E \leftarrow$ \call{Best-Final-Candidate}{$r$}
+\IF{$E \geqslant L$ \and ${V^{r, \textrm{pc}}_{\textrm{obs}(v)}}(E) > 2 / 3 |\mathbb{V}|$}
+  \STATE{\textsc{Last-Finalized-Block}$\leftarrow E$}
+  \IF{$M_v^{r, \textrm{Fin}} (E) \notin $\textsc{Received-Messages}}
+    \STATE \call{Broadcast}{$M_v^{r, \textrm{Fin}}(E)$}
+    \RETURN
+  \ENDIF
+\ENDIF
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\REQUIRE($r$)
+\IF{$r$ \textbf{is not} Completable}
+  \RETURN \textbf{False}
+\ENDIF
+\STATE $G \leftarrow$ \call{GRANDPA-GHOST}{$J^{r, pv}(B)$}
+\IF{$G = \phi$}
+  \RETURN \textbf{False}
+\ENDIF
+\STATE $E_r \leftarrow$ \call{Best-Final-Candidate}{$r$}
+\IF{$E_r \neq \phi$ \and \call{Best-Final-Candidate}{$r - 1$} $\leqslant E_r \leqslant G$}
+  \RETURN \textbf{True}
+\ELSE
+  \RETURN \textbf{False}
+\ENDIF
+<div class="paragraph">
+<p>where the condition for <em>completability</em> is defined in <a href="sect-finality.html#defn-grandpa-completable">Definition 85</a>.</p>
+</div>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a> prevents us from moving to the round \$r+1\$ before finalizing the best final candidate of round \$r-1\$) The example in <a href="sect-finality.html#exmp-candid-unfinalized">Definition 88</a> serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:</p>
+</div>
+<div id="exmp-candid-unfinalized" class="exampleblock">
+<div class="title">Definition 88. Unfinalized Candidate</div>
+<div class="content">
+<div class="paragraph">
+<p>Let us assume
+that we have 100 voters and there are two blocks in the chain
+(\$B_1 &lt; B_2\$). At round 1, we get 67 pre-votes for
+\$B_2\$ and at least one pre-vote for \$B_1\$ which
+means that \$"GRANDPA-GHOST"(1) = B_2\$.</p>
+</div>
+<div class="paragraph">
+<p>Subsequently, potentially honest voters who could claim not seeing all the
+pre-votes for \$B_2\$ but receiving the pre-votes for \$B_1\$ would
+pre-commit to \$B_1\$. In this way, we receive 66 pre-commits for \$B_1\$
+and 1 pre-commit for \$B_2\$. Henceforth, we finalize \$B_1\$ since we
+have a threshold commit (67 votes) for \$B_1\$.</p>
+</div>
+<div class="paragraph">
+<p>At this point, though, we have
+\$tt "Best-Final-Candidate"(r) = B_2\$ as
+\$#V_("obs"(v),"pot")^(r,"stage")(B_2) = 67\$
+and \$2 &gt; 1\$.</p>
+</div>
+<div class="paragraph">
+<p>However, at this point, the round is already completable as we know that we have
+\$tt "GRANDPA-GHOST"(1) = B_2\$ as an upper limit on what we can finalize and
+nothing greater than \$B_2\$ can be finalized at \$r = 1\$. Therefore, the
+condition of <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a> is satisfied and we must proceed to round 2.</p>
+</div>
+<div class="paragraph">
+<p>Nonetheless, we must continue to attempt to finalize round <em>1</em> in the background
+as the condition of <a href="sect-finality.html#algo-attempt-to–finalize">Attempt-To-Finalize-At-Round</a> has not been fulfilled.</p>
+</div>
+<div class="paragraph">
+<p>This prevents us from proceeding to round 3 until either:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>We finalize \$B_2\$ in round 2, or</p>
+</li>
+<li>
+<p>We receive an extra pre-commit vote for \$B_1\$ in round 1. This will make
+it impossible to finalize \$B_2\$ in round 1, no matter to whom the remaining
+pre-commits are going to be cast for (even with considering the possibility of
+1/3 of voter equivocating) and therefore we have \$tt
+"Best-Final-Candidate"(r) = B_1\$.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Both scenarios unblock <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a>,
+\$tt "Last-Finalized-Block" &gt;= tt "Best-Final-Candidate"(r - 1)\$ albeit in
+different ways: the former with increasing the \$tt "Last-Finalized-Block"\$
+and the latter with decreasing \$tt "Best-Final-Candidate"(r - 1)\$.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-finality-forced-changes"><a class="anchor" href="#sect-finality-forced-changes"></a><a class="link" href="#sect-finality-forced-changes">6.5. Forced Authority Set Changes</a></h3>
+<div class="paragraph">
+<p>In a case of emergency where the Polkadot network is unable to finalize blocks,
+such as in an event of mass validator outage, the Polkadot governance mechanism
+must enact a forced change, which the Host must handle in a specific manner.
+Given that in such a case finality cannot be relied on, the Host must detect the
+forced change (<a href="sect-finality.html#defn-consensus-message-grandpa">Definition 86</a>) in a (valid) block and apply
+it to all forks.</p>
+</div>
+<div class="paragraph">
+<p>The \$m in CM_g\$, which is specified by the governance mechanism, defines
+the starting block at which \$N_("delay")\$ is applied. This provides some
+degree of probabilistic consensus to the network with the assumption that the
+forced change was received by most participants and that finality can be
+continued.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<svg xmlns="http://www.w3.org/2000/svg" style="background-color: rgb(255, 255, 255);" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="871px" height="422px" viewBox="-0.5 -0.5 871 422" content="&lt;mxfile host=&quot;app.diagrams.net&quot; modified=&quot;2022-06-07T10:56:02.198Z&quot; agent=&quot;5.0 (X11)&quot; version=&quot;19.0.2&quot; etag=&quot;MZnKmeYrkyP88Fwe8Ahs&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;liZ5AVIy7FNIeXNKdl8L&quot;&gt;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&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><path d="M 235 210 L 215 210 L 203.89 209.89" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 198.64 209.83 L 205.67 206.4 L 203.89 209.89 L 205.6 213.4 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="235" y="180" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 187px; margin-left: 240px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #100</div></div></div></foreignObject><text x="240" y="203" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #100</text></switch></g><path d="M 395 150 L 375 150 L 375 210 L 361.37 210" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 356.12 210 L 363.12 206.5 L 361.37 210 L 363.12 213.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="395" y="120" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 127px; margin-left: 400px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #101'A</div></div></div></foreignObject><text x="400" y="143" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #101'A</text></switch></g><path d="M 395 270 L 375 270 L 375 210 L 361.37 210" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 356.12 210 L 363.12 206.5 L 361.37 210 L 363.12 213.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="395" y="240" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 247px; margin-left: 400px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #101'B</div></div></div></foreignObject><text x="400" y="263" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #101'B</text></switch></g><path d="M 550 70 L 690 70 L 690 113.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 690 118.88 L 686.5 111.88 L 690 113.63 L 693.5 111.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 80px; margin-left: 720px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">Applied</div></div></div></foreignObject><text x="720" y="85" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Applied</text></switch></g><path d="M 418.75 90 L 418.83 120.42 L 415.83 120.42" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="1 1" pointer-events="stroke"/><path d="M 550 70 L 806 70 L 805.96 134.49" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 805.96 139.74 L 802.46 132.74 L 805.96 134.49 L 809.46 132.74 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="375" y="50" width="175" height="40" fill="#dccbd7" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 170px; height: 1px; padding-top: 70px; margin-left: 380px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #172026; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(23, 32, 38); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;"><i style="font-size: 16px;"><font style="font-size: 16px;">(Scheduled Change)<br style="font-size: 16px;" /></font></i>Authority Set #A, <i style="font-size: 16px;"><b style="font-size: 16px;">delay 5</b></i></div></div></div></foreignObject><text x="380" y="75" fill="#172026" font-family="Times New Roman" font-size="16px">(Scheduled Change)...</text></switch></g><path d="M 550 350 L 690 350 L 690 306.37" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 690 301.12 L 693.5 308.12 L 690 306.37 L 686.5 308.12 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 341px; margin-left: 720px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">Applied</div></div></div></foreignObject><text x="720" y="346" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Applied</text></switch></g><path d="M 418.75 330 L 415.42 330 L 415.4 301.2" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="1 1" pointer-events="stroke"/><path d="M 550 350 L 806.67 350 L 806.65 287.23" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 806.65 281.98 L 810.15 288.98 L 806.65 287.23 L 803.15 288.98 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="375" y="330" width="175" height="40" fill="#dccbd7" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 170px; height: 1px; padding-top: 350px; margin-left: 380px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #172026; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(23, 32, 38); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;"><i style="font-size: 16px;">(Scheduled Change)<br style="font-size: 16px;" /></i>Authority Set #B, <i style="font-size: 16px;"><b style="font-size: 16px;">delay 5</b></i></div></div></div></foreignObject><text x="380" y="355" fill="#172026" font-family="Times New Roman" font-size="16px">(Scheduled Change)...</text></switch></g><rect x="325" y="130" width="70" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 140px; margin-left: 360px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">Fork #A</div></div></div></foreignObject><text x="360" y="145" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Fork #A</text></switch></g><rect x="325" y="270" width="70" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 280px; margin-left: 360px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">Fork #B</div></div></div></foreignObject><text x="360" y="285" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Fork #B</text></switch></g><path d="M 165 210 L 96.37 210" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 91.12 210 L 98.12 206.5 L 96.37 210 L 98.12 213.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="165" y="200" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 210px; margin-left: 180px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="180" y="215" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><path d="M 130 120 L 130 160 L 181.58 160 L 181.59 192.39" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 181.59 197.64 L 178.09 190.64 L 181.59 192.39 L 185.09 190.64 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 210 100 L 295 100 L 295 173.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 295 178.88 L 291.5 171.88 L 295 173.63 L 298.5 171.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 210 100 L 415.78 100 M 421.78 100 M 421.78 100 L 570 100 L 570 133.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 570 138.88 L 566.5 131.88 L 570 133.63 L 573.5 131.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 130 120 L 130 207 M 130 213 M 130 213 L 130 320 L 412.41 320 M 418.41 320 M 418.41 320 L 571.33 320 L 571.3 286.09" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 571.29 280.84 L 574.8 287.83 L 571.3 286.09 L 567.8 287.84 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 210 100 L 415.78 100 M 421.78 100 M 421.78 100 L 455 100 L 455 113.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 455 118.88 L 451.5 111.88 L 455 113.63 L 458.5 111.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 130 120 L 130 207 M 130 213 M 130 213 L 130 320 L 412.41 320 M 418.41 320 M 418.41 320 L 455 320 L 455 306.37" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 455 301.12 L 458.5 308.12 L 455 306.37 L 451.5 308.12 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 76.72 121 L 76.17 201.34" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="1 1" pointer-events="stroke"/><rect x="50" y="80" width="160" height="40" fill="#dccbd7" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 155px; height: 1px; padding-top: 100px; margin-left: 55px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #172026; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(23, 32, 38); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;"><i style="font-size: 16px;">(Scheduled Change)<br style="font-size: 16px;" /></i>Authority Set #X</div></div></div></foreignObject><text x="55" y="105" fill="#172026" font-family="Times New Roman" font-size="16px">(Scheduled Change)...</text></switch></g><path d="M 555 150 L 521.37 150" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 516.12 150 L 523.12 146.5 L 521.37 150 L 523.12 153.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="555" y="140" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 150px; margin-left: 570px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="570" y="155" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><path d="M 555 270 L 521.37 270" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 516.12 270 L 523.12 266.5 L 521.37 270 L 523.12 273.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="555" y="260" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 270px; margin-left: 570px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="570" y="275" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><path d="M 630 270 L 593.08 270.4" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 587.83 270.55 L 594.73 266.85 L 593.08 270.4 L 594.92 273.85 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="630" y="240" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 247px; margin-left: 635px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #106'B</div></div></div></foreignObject><text x="635" y="263" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #106'B</text></switch></g><path d="M 630 150 L 594.79 149.61" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 589.54 149.45 L 596.64 146.17 L 594.79 149.61 L 596.43 153.17 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="630" y="120" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 127px; margin-left: 635px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #106'A</div></div></div></foreignObject><text x="635" y="143" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #106'A</text></switch></g><path d="M 790 150 L 756.37 150" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 751.12 150 L 758.12 146.5 L 756.37 150 L 758.12 153.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="790" y="140" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 150px; margin-left: 805px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="805" y="155" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><path d="M 790 270 L 756.37 270" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 751.12 270 L 758.12 266.5 L 756.37 270 L 758.12 273.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="790" y="260" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 270px; margin-left: 805px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="805" y="275" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><rect x="60" y="200" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 210px; margin-left: 75px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="75" y="215" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g></g><switch><g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/><a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank"><text text-anchor="middle" font-size="10px" x="50%" y="100%">Text is not SVG - cannot display</text></a></switch></svg>
+</div>
+<div class="title">Figure 2. Applying a scheduled change</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<svg xmlns="http://www.w3.org/2000/svg" style="background-color: rgb(255, 255, 255);" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="871px" height="442px" viewBox="-0.5 -0.5 871 442" content="&lt;mxfile host=&quot;app.diagrams.net&quot; modified=&quot;2022-06-07T10:56:19.495Z&quot; agent=&quot;5.0 (X11)&quot; version=&quot;19.0.2&quot; etag=&quot;1w9YJhjo6zulCMZPoTNo&quot; type=&quot;device&quot;&gt;&lt;diagram id=&quot;sbszC-jo-hkVt9zIXCEv&quot;&gt;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&lt;/diagram&gt;&lt;/mxfile&gt;"><defs/><g><path d="M 235 210 L 215 210 L 203.89 209.89" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 198.64 209.83 L 205.67 206.4 L 203.89 209.89 L 205.6 213.4 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="235" y="180" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 187px; margin-left: 240px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #100</div></div></div></foreignObject><text x="240" y="203" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #100</text></switch></g><path d="M 395 150 L 375 150 L 375 210 L 361.37 210" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 356.12 210 L 363.12 206.5 L 361.37 210 L 363.12 213.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="395" y="120" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 127px; margin-left: 400px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #101'A</div></div></div></foreignObject><text x="400" y="143" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #101'A</text></switch></g><path d="M 395 270 L 375 270 L 375 210 L 361.37 210" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 356.12 210 L 363.12 206.5 L 361.37 210 L 363.12 213.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="395" y="240" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 247px; margin-left: 400px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #101'B</div></div></div></foreignObject><text x="400" y="263" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #101'B</text></switch></g><path d="M 418.75 90 L 418.83 120.42 L 415.83 120.42" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="1 1" pointer-events="stroke"/><path d="M 550 70 L 690 70 L 690 120" fill="none" stroke="#dccbd7" stroke-width="2" stroke-miterlimit="10" stroke-dasharray="6 6" pointer-events="stroke"/><path d="M 550 70 L 805.33 70 L 805.27 137.42" fill="none" stroke="#dccbd7" stroke-width="2" stroke-miterlimit="10" stroke-dasharray="6 6" pointer-events="stroke"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 80px; margin-left: 720px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;"><b style="font-size: 16px;">Ignored</b></div></div></div></foreignObject><text x="720" y="85" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Ignored</text></switch></g><rect x="375" y="50" width="175" height="40" fill="none" stroke="none" pointer-events="all"/><path d="M 374.91 50.1 C 374.91 50.1 374.91 50.1 374.91 50.1 M 374.91 50.1 C 374.91 50.1 374.91 50.1 374.91 50.1 M 375.31 55.74 C 376.34 53.97 377.92 53.44 380.56 49.71 M 375.31 55.74 C 376.71 54.54 377.16 53.17 380.56 49.71 M 375.05 62.14 C 378.66 59.03 382.91 53.93 385.54 50.07 M 375.05 62.14 C 378.9 57.83 381.23 54.89 385.54 50.07 M 374.78 68.54 C 378.76 61.87 383.88 56.28 391.19 49.67 M 374.78 68.54 C 379.15 62.11 385.32 57.14 391.19 49.67 M 375.18 74.18 C 382.05 67.97 384.89 62.97 396.17 50.03 M 375.18 74.18 C 380.62 67.56 384.57 63.31 396.17 50.03 M 374.92 80.58 C 381.49 73.07 392.69 61.98 401.82 49.64 M 374.92 80.58 C 381.4 74.14 386.74 66.48 401.82 49.64 M 375.31 86.22 C 389.15 70.2 398.72 58.78 406.8 50 M 375.31 86.22 C 383.48 76.37 392.4 65.49 406.8 50 M 376.36 91.11 C 390.07 77.94 402.55 63.01 411.79 50.36 M 376.36 91.11 C 387.4 79.13 399.49 66.6 411.79 50.36 M 381.35 91.47 C 397.4 74.31 410.35 60.41 417.43 49.96 M 381.35 91.47 C 394.44 75.75 407.42 62.91 417.43 49.96 M 386.99 91.08 C 400.81 75.4 415.6 58.48 422.42 50.32 M 386.99 91.08 C 397.49 79.03 406.34 67.98 422.42 50.32 M 391.98 91.44 C 401.12 84.53 409.24 74.58 428.06 49.93 M 391.98 91.44 C 398.64 82.69 407.1 74.95 428.06 49.93 M 397.62 91.04 C 412.26 73.02 424.56 58.72 433.05 50.29 M 397.62 91.04 C 404.61 81.9 411.52 74.01 433.05 50.29 M 402.61 91.4 C 416.94 73.43 431.09 56.9 438.69 49.89 M 402.61 91.4 C 413.49 77.67 425.1 64.36 438.69 49.89 M 408.25 91.01 C 418.68 77.36 431.75 63.59 443.68 50.25 M 408.25 91.01 C 418.38 81.11 426.82 70.32 443.68 50.25 M 413.24 91.37 C 422.93 81.19 434.09 68.21 449.32 49.86 M 413.24 91.37 C 423.17 81.75 431.48 72.25 449.32 49.86 M 418.88 90.97 C 427.77 80.27 436.84 69.93 454.31 50.22 M 418.88 90.97 C 427.53 80.7 436.18 70.37 454.31 50.22 M 423.87 91.33 C 435.73 77.73 448.89 63.05 459.95 49.82 M 423.87 91.33 C 432.56 81.51 441.26 70.88 459.95 49.82 M 429.51 90.94 C 440.31 79.79 445.02 72.43 464.94 50.18 M 429.51 90.94 C 442.87 74.2 456.56 59.52 464.94 50.18 M 434.5 91.3 C 444.43 77.7 455.89 67.5 470.58 49.79 M 434.5 91.3 C 444.15 79.61 453.69 69.98 470.58 49.79 M 440.14 90.9 C 454.46 75.96 466.72 59.41 475.57 50.15 M 440.14 90.9 C 452.88 75.98 464.53 63.25 475.57 50.15 M 445.13 91.26 C 451.69 82.29 462.07 71.4 481.21 49.76 M 445.13 91.26 C 457.84 77.81 470.05 62.99 481.21 49.76 M 450.77 90.87 C 464.91 75.73 479.18 62.11 486.2 50.12 M 450.77 90.87 C 461.21 79.76 470.8 68.82 486.2 50.12 M 455.76 91.23 C 464.78 82.03 469.21 75.59 491.84 49.72 M 455.76 91.23 C 469.87 74.26 483.76 58.75 491.84 49.72 M 461.4 90.83 C 471.59 82.07 475.89 71.26 496.83 50.08 M 461.4 90.83 C 471.68 79.07 483.49 66.15 496.83 50.08 M 466.39 91.2 C 476.45 81.9 483.15 73.09 502.47 49.69 M 466.39 91.2 C 474.83 80.65 484.01 70.58 502.47 49.69 M 472.03 90.8 C 480.92 77.65 495.36 64.7 507.46 50.05 M 472.03 90.8 C 481.81 79.4 492.94 66.13 507.46 50.05 M 477.02 91.16 C 491.25 77.67 503.7 61.39 513.1 49.65 M 477.02 91.16 C 484.44 81.98 492.57 75.22 513.1 49.65 M 482.01 91.52 C 491.9 79.64 500.47 70.77 518.09 50.01 M 482.01 91.52 C 489.39 81.88 498.29 73.82 518.09 50.01 M 487.65 91.13 C 495.93 83.57 500.91 74.98 523.08 50.37 M 487.65 91.13 C 497.23 78.79 508.03 66.41 523.08 50.37 M 492.64 91.49 C 503.28 76.44 515.03 64.88 528.72 49.98 M 492.64 91.49 C 500.39 82.71 509.17 72.56 528.72 49.98 M 498.28 91.09 C 510.15 75.48 524.25 61.76 533.71 50.34 M 498.28 91.09 C 504.46 83.36 512.94 74.21 533.71 50.34 M 503.27 91.45 C 511.64 80.88 523.67 70.52 539.35 49.94 M 503.27 91.45 C 517.93 74.37 532.1 58.19 539.35 49.94 M 508.91 91.06 C 522.95 75.92 535.03 59.72 544.34 50.3 M 508.91 91.06 C 521.11 77.34 530.99 64.74 544.34 50.3 M 513.9 91.42 C 526.17 80.37 537.44 64.85 549.98 49.91 M 513.9 91.42 C 526.66 77.17 540.15 62.15 549.98 49.91 M 519.54 91.02 C 526.63 82.87 533.9 75.88 553 52.53 M 519.54 91.02 C 530.12 77.66 541.99 65.36 553 52.53 M 524.53 91.38 C 532.9 83.74 540.39 73.45 552.74 58.93 M 524.53 91.38 C 531.58 81.53 539.47 74.4 552.74 58.93 M 530.17 90.99 C 535.62 84.92 539.42 78.49 553.13 64.57 M 530.17 90.99 C 534.06 85.08 538.99 79.85 553.13 64.57 M 535.16 91.35 C 543.11 85.73 546.99 76.15 552.87 70.97 M 535.16 91.35 C 538.37 85.58 544.59 80.81 552.87 70.97 M 540.8 90.95 C 544.89 84.47 547.69 82.36 553.27 76.61 M 540.8 90.95 C 543.28 88.19 546.57 84.45 553.27 76.61 M 545.79 91.31 C 549.55 88.81 550.3 86.12 553.01 83.01 M 545.79 91.31 C 548.1 87.96 550.19 85.68 553.01 83.01" fill="none" stroke="#dccbd7" stroke-width="0.5" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" pointer-events="all"/><path d="M 375 50 C 426.04 52.42 476.52 50.91 550 50 M 375 50 C 424.68 52.32 475.95 51.59 550 50 M 550 50 C 550.81 65.64 548.73 76.79 550 90 M 550 50 C 549.95 58.51 551.03 66.16 550 90 M 550 90 C 510.15 88.82 475.07 90.11 375 90 M 550 90 C 481.87 90.36 414.19 90.26 375 90 M 375 90 C 373.88 79.22 373.9 68.8 375 50 M 375 90 C 375.25 78.51 375.14 67.07 375 50" fill="none" stroke="#dccbd7" stroke-linejoin="round" stroke-linecap="round" stroke-miterlimit="10" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 170px; height: 1px; padding-top: 70px; margin-left: 380px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #172026; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(23, 32, 38); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;"><i style="font-size: 16px;"><font style="font-size: 16px;">(Scheduled Change)<br style="font-size: 16px;" /></font></i>Authority Set #A, <i style="font-size: 16px;"><b style="font-size: 16px;">delay 5</b></i></div></div></div></foreignObject><text x="380" y="75" fill="#172026" font-family="Times New Roman" font-size="16px">(Scheduled Change)...</text></switch></g><path d="M 550 360 L 690 360 L 690 306.37" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 690 301.12 L 693.5 308.12 L 690 306.37 L 686.5 308.12 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 350px; margin-left: 720px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">Applied</div></div></div></foreignObject><text x="720" y="355" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Applied</text></switch></g><path d="M 418.75 330 L 415.42 330 L 415.4 301.2" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="1 1" pointer-events="stroke"/><path d="M 550 360 L 806.67 360 L 806.65 287.23" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 806.65 281.98 L 810.15 288.98 L 806.65 287.23 L 803.15 288.98 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 550 360 L 610 360 L 610 210 L 690 210 L 690 188.24" fill="none" stroke="#e6007a" stroke-width="2" stroke-miterlimit="10" stroke-dasharray="6 6" pointer-events="stroke"/><path d="M 690 182.24 L 694 190.24 L 690 188.24 L 686 190.24 Z" fill="#e6007a" stroke="#e6007a" stroke-width="2" stroke-miterlimit="10" pointer-events="all"/><path d="M 550 360 L 610 360 L 610 210 L 806.67 210 L 806.65 169.8" fill="none" stroke="#e6007a" stroke-width="2" stroke-miterlimit="10" stroke-dasharray="6 6" pointer-events="stroke"/><path d="M 806.65 163.8 L 810.65 171.79 L 806.65 169.8 L 802.65 171.8 Z" fill="#e6007a" stroke="#e6007a" stroke-width="2" stroke-miterlimit="10" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 200px; margin-left: 608px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">Applied cross-fork</div></div></div></foreignObject><text x="608" y="205" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Applied cross-fork</text></switch></g><rect x="375" y="330" width="175" height="60" fill="#e6007a" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 170px; height: 1px; padding-top: 360px; margin-left: 380px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;"><i style="font-size: 16px;">(<b style="font-size: 16px;">Forced</b> Change)<br style="font-size: 16px;" /></i>Authority Set #B<br style="font-size: 16px;" /><b style="font-size: 16px;">starting at</b> <i style="font-size: 16px;"><b style="font-size: 16px;">m</b></i>, <i style="font-size: 16px;"><b style="font-size: 16px;">delay 5</b></i></div></div></div></foreignObject><text x="380" y="365" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">(Forced Change)...</text></switch></g><rect x="325" y="130" width="70" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 140px; margin-left: 360px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">Fork #A</div></div></div></foreignObject><text x="360" y="145" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Fork #A</text></switch></g><rect x="325" y="270" width="70" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 280px; margin-left: 360px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">Fork #B</div></div></div></foreignObject><text x="360" y="285" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">Fork #B</text></switch></g><path d="M 165 210 L 96.37 210" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 91.12 210 L 98.12 206.5 L 96.37 210 L 98.12 213.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="165" y="200" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 210px; margin-left: 180px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="180" y="215" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><path d="M 130 120 L 130 160 L 181.58 160 L 181.59 192.39" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 181.59 197.64 L 178.09 190.64 L 181.59 192.39 L 185.09 190.64 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 210 100 L 295 100 L 295 173.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 295 178.88 L 291.5 171.88 L 295 173.63 L 298.5 171.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 210 100 L 415.78 100 M 421.78 100 M 421.78 100 L 570 100 L 570 133.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 570 138.88 L 566.5 131.88 L 570 133.63 L 573.5 131.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 130 120 L 130 207 M 130 213 M 130 213 L 130 320 L 412.41 320 M 418.41 320 M 418.41 320 L 571.33 320 L 571.3 286.09" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 571.29 280.84 L 574.8 287.83 L 571.3 286.09 L 567.8 287.84 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 210 100 L 415.78 100 M 421.78 100 M 421.78 100 L 455 100 L 455 113.63" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 455 118.88 L 451.5 111.88 L 455 113.63 L 458.5 111.88 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 130 120 L 130 207 M 130 213 M 130 213 L 130 320 L 412.41 320 M 418.41 320 M 418.41 320 L 455 320 L 455 306.37" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="3 3" pointer-events="stroke"/><path d="M 455 301.12 L 458.5 308.12 L 455 306.37 L 451.5 308.12 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><path d="M 76.72 121 L 76.17 201.34" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" stroke-dasharray="1 1" pointer-events="stroke"/><rect x="50" y="80" width="160" height="40" fill="#dccbd7" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe flex-start; width: 155px; height: 1px; padding-top: 100px; margin-left: 55px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #172026; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(23, 32, 38); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;"><i style="font-size: 16px;">(Scheduled Change)<br style="font-size: 16px;" /></i>Authority Set #X</div></div></div></foreignObject><text x="55" y="105" fill="#172026" font-family="Times New Roman" font-size="16px">(Scheduled Change)...</text></switch></g><path d="M 555 150 L 521.37 150" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 516.12 150 L 523.12 146.5 L 521.37 150 L 523.12 153.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="555" y="140" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 150px; margin-left: 570px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="570" y="155" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><path d="M 555 270 L 521.37 270" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 516.12 270 L 523.12 266.5 L 521.37 270 L 523.12 273.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="555" y="260" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 270px; margin-left: 570px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="570" y="275" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><path d="M 630 270 L 613 270.23 M 607 270.31 M 607 270.31 L 593.08 270.4" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 587.83 270.55 L 594.73 266.85 L 593.08 270.4 L 594.92 273.85 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="630" y="240" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 247px; margin-left: 635px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #(m+5)'B</div></div></div></foreignObject><text x="635" y="263" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #(m+5)'B</text></switch></g><path d="M 630 150 L 594.79 149.61" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 589.54 149.45 L 596.64 146.17 L 594.79 149.61 L 596.43 153.17 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="630" y="120" width="120" height="60" fill="#172026" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe flex-start; justify-content: unsafe flex-start; width: 115px; height: 1px; padding-top: 127px; margin-left: 635px;"><div style="box-sizing: border-box; font-size: 0px; text-align: left;" data-drawio-colors="color: #FFFFFF; "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(255, 255, 255); line-height: 1.2; pointer-events: all; white-space: normal; overflow-wrap: normal;">Block #(m+5)'A</div></div></div></foreignObject><text x="635" y="143" fill="#FFFFFF" font-family="Times New Roman" font-size="16px">Block #(m+5)'A</text></switch></g><path d="M 790 150 L 756.37 150" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 751.12 150 L 758.12 146.5 L 756.37 150 L 758.12 153.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="790" y="140" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 150px; margin-left: 805px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="805" y="155" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><path d="M 790 270 L 756.37 270" fill="none" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="stroke"/><path d="M 751.12 270 L 758.12 266.5 L 756.37 270 L 758.12 273.5 Z" fill="rgb(0, 0, 0)" stroke="rgb(0, 0, 0)" stroke-miterlimit="10" pointer-events="all"/><rect x="790" y="260" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 270px; margin-left: 805px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="805" y="275" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g><rect x="60" y="200" width="30" height="20" fill="none" stroke="none" pointer-events="all"/><g transform="translate(-0.5 -0.5)"><switch><foreignObject style="overflow: visible; text-align: left;" pointer-events="none" width="100%" height="100%" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"><div xmlns="http://www.w3.org/1999/xhtml" style="display: flex; align-items: unsafe center; justify-content: unsafe center; width: 1px; height: 1px; padding-top: 210px; margin-left: 75px;"><div style="box-sizing: border-box; font-size: 0px; text-align: center;" data-drawio-colors="color: rgb(0, 0, 0); "><div style="display: inline-block; font-size: 16px; font-family: Times New Roman; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; white-space: nowrap;">...</div></div></div></foreignObject><text x="75" y="215" fill="rgb(0, 0, 0)" font-family="Times New Roman" font-size="16px" text-anchor="middle">...</text></switch></g></g><switch><g requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"/><a transform="translate(0,-5)" xlink:href="https://www.diagrams.net/doc/faq/svg-export-text-problems" target="_blank"><text text-anchor="middle" font-size="10px" x="50%" y="100%">Text is not SVG - cannot display</text></a></switch></svg>
+</div>
+<div class="title">Figure 3. Applying a forced change</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-block-finalization"><a class="anchor" href="#sect-block-finalization"></a><a class="link" href="#sect-block-finalization">6.6. Block Finalization</a></h3>
+<div id="defn-justified-block-header" class="exampleblock">
+<div class="title">Definition 89. <a href="sect-finality.html#defn-justified-block-header">Justified Block Header</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The Justified Block Header is provided by the consensus engine and
+presented to the Polkadot Host, for the block to be appended to the
+blockchain. It contains the following parts:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>block_header</strong> the complete block header (<a href="chap-state.html#defn-block-header">Definition 10</a>) and denoted
+by \$"Head"(B)\$.</p>
+</li>
+<li>
+<p><strong>justification</strong>: as defined by the consensus specification indicated by
+\$"Just"(B)\$ as defined in <a href="sect-finality.html#defn-grandpa-justification">Definition 78</a>.</p>
+</li>
+<li>
+<p><strong>authority Ids</strong>: This is the list of the Ids of authorities, which have voted
+for the block to be stored and is formally referred to as \$A(B)\$. An
+authority Id is 256-bit.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="defn-finalized-block" class="exampleblock">
+<div class="title">Definition 90. <a href="sect-finality.html#defn-finalized-block">Finalized</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A Polkadot relay chain node \$n\$ should consider block \$B\$ as
+<strong>finalized</strong> if any of the following criteria hold for \$B' &gt;= B\$:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>\$V_("obs"(n))^(r,"pc")(B') &gt; 2/3|bbb V_(B')|\$.</p>
+</li>
+<li>
+<p>It receives a \$M_v^(r,"Fin")(B')\$ message in which \$J^r(B)\$
+justifies the finalization (<a href="sect-finality.html#defn-grandpa-justification">Definition 78</a>).</p>
+</li>
+<li>
+<p>It receives a block data message for \$B'\$ with \$"Just"(B')\$
+(<a href="sect-finality.html#defn-justified-block-header">Definition 89</a>) which justifies the finalization.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>for:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Any round \$r\$ if the node \$n\$ is <em>not</em> a GRANDPA voter.</p>
+</li>
+<li>
+<p>Only for round \$r\$ for which the node \$n\$ has invoked <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a> and round \$r+1\$ if \$n\$ is a GRANDPA voter and has already caught up to its peers according to the process described in Section <a href="sect-finality.html#sect-grandpa-catchup">Section 6.6.1</a>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit
+messages regardless of their GRANDPA voter status.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-grandpa-catchup"><a class="anchor" href="#sect-grandpa-catchup"></a><a class="link" href="#sect-grandpa-catchup">6.6.1. Catching up</a></h4>
+<div class="paragraph">
+<p>When a Polkadot node (re)joins the network, it requests the history of state transitions in the form of blocks, which it is missing.</p>
+</div>
+<div class="paragraph">
+<p>Nonetheless, the process is different for a GRANDPA voter node. When a voter node joins the network, it needs to gather the justification (<a href="sect-finality.html#defn-grandpa-justification">Definition 78</a>) of the rounds it has missed. Through this process, they can safely join the voting process of the current round, on which the voting is taking place.</p>
+</div>
+<div class="sect4">
+<h5 id="sect-sending-catchup-request"><a class="anchor" href="#sect-sending-catchup-request"></a><a class="link" href="#sect-sending-catchup-request">6.6.1.1. Sending the catch-up requests</a></h5>
+<div class="paragraph">
+<p>When a Polkadot voter node has the same authority list as a peer voter node who is reporting
+a higher number for the <em>finalized round</em> field, it should send a catch-up
+request message (<a href="chap-networking.html#defn-grandpa-catchup-request-msg">Definition 48</a>) to the reporting peer. This will allow the node to
+to catch up to the more advanced finalized round, provided that the
+following criteria hold:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The peer node is a GRANDPA voter, and:</p>
+</li>
+<li>
+<p>The last known finalized round for the Polkadot node is at least 2 rounds
+behind the finalized round for the peer.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-processing-the-catch-up-requests"><a class="anchor" href="#id-processing-the-catch-up-requests"></a><a class="link" href="#id-processing-the-catch-up-requests">6.6.1.2. Processing the catch-up requests</a></h5>
+<div class="paragraph">
+<p>Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute <a href="sect-finality.html#algo-process-catchup-request">Process-Catchup-Request</a>. Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a> is not concluded.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\input $M_{i, v}^\text{Cat-q}(\text{id}_\mathbb{V}, r)$
+
+\if{$M_{i, v}^\text{Cat-q}(\text{id}_\mathbb{V}, r).\text{id}_\mathbb{V} \neq \text{id}_\mathbb{V}$}
+
+    \state \textbf{error} ``Catching up on different set''
+
+\endif
+
+\if{$i \notin \mathbb{P}$}
+
+    \state \textbf{error} ``Requesting catching up from a non-peer''
+
+\endif
+
+\if{$r >$ \textsc{Last-Completed-Round}}
+
+    \state \textbf{error} ``Catching up on a round in the future''
+
+\endif
+
+\state \call{Send}{$i, M_{v, i}^\text{Cat-s}(\text{id}_\mathbb{V}, r)$}
+<div class="dlist">
+<dl>
+<dt class="hdlist1">where</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>\$M_(i,v)^("Cat"-q)("id"_(bbb V),r)\$ is the catch-up message received
+from peer \$i\$ (<a href="chap-networking.html#defn-grandpa-catchup-request-msg">Definition 48</a>).</p>
+</li>
+<li>
+<p>\$"id"_(bbb V)\$ is the voter set id with which the serving node is
+operating</p>
+</li>
+<li>
+<p>\$r\$ is the round number for which the catch-up is requested for.</p>
+</li>
+<li>
+<p>\$bbb P\$ is the set of immediate peers of node \$v\$.</p>
+</li>
+<li>
+<p>\$tt "Last-Completed-Round"\$ is initiated in <a href="sect-finality.html#algo-initiate-grandpa">Initiate-Grandpa</a> and gets updated by <a href="sect-finality.html#algo-grandpa-round">Play-Grandpa-Round</a>.</p>
+</li>
+<li>
+<p>\$M_(v,i)^("Cat"-s)("id"_(bbb V),r)\$ is the catch-up response
+(<a href="chap-networking.html#defn-grandpa-catchup-response-msg">Definition 49</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-processing-catch-up-responses"><a class="anchor" href="#id-processing-catch-up-responses"></a><a class="link" href="#id-processing-catch-up-responses">6.6.1.3. Processing catch-up responses</a></h5>
+<div class="paragraph">
+<p>A Catch-up response message contains critical information for the requester node
+to update their view on the active rounds which are being voted on by GRANDPA
+voters. As such, the requester node should verify the content of the catch-up
+response message and subsequently updates its view of the state of the finality
+of the Relay chain according to <a href="sect-finality.html#algo-process-catchup-response">Process-Catchup-Response</a>.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+\input $M_{v,i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r)$
+
+\state $M_{v,i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r).\text{id}_{\mathbb{V}}, r, J^{r, pv}(B), J^{r, pc}(B), H_h(B'), H_i(B') \leftarrow \text{Dec}_{SC}(M_{v, i}^{Cat-s}(\text{id}_{\mathbb{V}}, r)$
+
+\if{$M_{v, i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r).\text{id}_{\mathbb{V}} \neq \text{id}_{\mathbb{V}}$}
+
+    \state \textbf{error} ``Catching up on different set''
+
+\endif
+
+\if{$r \leqslant$ \textsc{Leading-Round}}
+
+    \state \textbf{error} ``Catching up in to the past''
+
+\endif
+
+\if{$J^{r, pv}(B)$ \textbf{is not} valid}
+
+    \state \textbf{error} ``Invalid pre-vote justification''
+
+\endif
+
+\if{$J^{r, pc}(B)$ \textbf{is not} valid}
+
+    \state \textbf{error} ``Invalid pre-commit justification''
+
+\endif
+
+\state $G \leftarrow$ \call{GRANDPA-GHOST}{$J^{r, pv}(B)$}
+
+\if{$G = \phi$}
+
+    \state \textbf{error} ``GHOST-less Catch-up''
+
+\endif
+
+\if{$r$ \textbf{is not} completable}
+
+    \state \textbf{error} ``Catch-up round is not completable''
+
+\endif
+
+\if{$J^{r, pc}(B)$ justifies $B'$ finalization}
+
+    \state \textbf{error} ``Unjustified Catch-up target finalization''
+
+\endif
+
+\state \textsc{Last-Completed-Round} $\leftarrow r$
+
+\if{$i \in \mathbb{V}$}
+
+    \state \call{Play-Grandpa-round}{$r + 1$}
+
+\endif
+<div class="paragraph">
+<p>where \$M_(v,i)^("Cat"-s)("id"_(bbb V),r)\$ is the catch-up response
+received from node \$v\$ (<a href="chap-networking.html#defn-grandpa-catchup-response-msg">Definition 49</a>).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-grandpa-beefy"><a class="anchor" href="#sect-grandpa-beefy"></a><a class="link" href="#sect-grandpa-beefy">6.7. Bridge design (BEEFY)</a></h3>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+The BEEFY protocol is currently in early development and subject to
+change. The specification has not been completed yet.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The BEEFY (Bridge Effiency Enabling Finality Yielder) is a secondary protocol to
+GRANDPA to support efficient bridging between the Polkadot network (relay chain)
+and remote, segregated blockchains, such as Ethereum, which were not built with
+the Polkadot interchain operability in mind. The protocol allows participants of
+the remote network to verify finality proofs created by the Polkadot relay chain
+validators. In other words: clients in the Ethereum network should able to
+verify that the Polkadot network is at a specific state.</p>
+</div>
+<div class="paragraph">
+<p>Storing all the information necessary to verify the state of the remote chain,
+such as the block headers, is too expensive. BEEFY stores the information in a
+space-efficient way and clients can request additional information over the
+protocol.</p>
+</div>
+<div class="sect3">
+<h4 id="id-preliminaries-2"><a class="anchor" href="#id-preliminaries-2"></a><a class="link" href="#id-preliminaries-2">6.7.1. Preliminaries</a></h4>
+<div id="defn-mmr" class="exampleblock">
+<div class="title">Definition 91. <a href="sect-finality.html#defn-mmr">Merkle Mountain Ranges</a></div>
+<div class="content">
+<div class="paragraph">
+<p>Merkle Mountain Ranges, <strong>MMR</strong>, are used
+as an efficient way to send block headers and signatures to light clients.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+MMRs have not been defined yet.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div id="defn-beefy-statement" class="exampleblock">
+<div class="title">Definition 92. <a href="sect-finality.html#defn-beefy-statement">Statement</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>statement</strong> is the same piece of information which every relay chain
+validator is voting on. Namely, the MMR root of all the block header hashes
+leading up to the latest, finalized block.</p>
+</div>
+</div>
+</div>
+<div id="defn-beefy-witness-data" class="exampleblock">
+<div class="title">Definition 93. <a href="sect-finality.html#defn-beefy-witness-data">Witness Data</a></div>
+<div class="content">
+<div class="paragraph">
+<p><strong>Witness data</strong> contains the statement (<a href="sect-finality.html#defn-beefy-statement">Definition 92</a>), an array
+indicating which validator of the Polkadot network voted for the statement (but
+not the signatures themselves) and a MMR root of the signatures. The indicators
+of which validator voted for the statement are just claims and provide no
+proofs. The network message is defined in
+<a href="chap-networking.html#defn-grandpa-beefy-signed-commitment-witness">Definition 53</a> and the relayer saves it on the
+chain of the remote network.</p>
+</div>
+</div>
+</div>
+<div id="defn-beefy-light-client" class="exampleblock">
+<div class="title">Definition 94. <a href="sect-finality.html#defn-beefy-light-client">Light Client</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>light client</strong> is an abstract entity in a remote network such as Ethereum. It
+can be a node or a smart contract with the intent of requesting finality proofs
+from the Polkadot network. A light client reads the witness data
+(<a href="sect-finality.html#defn-beefy-witness-data">Definition 93</a> from the chain, then requests the signatures
+directly from the relayer in order to verify those.</p>
+</div>
+<div class="paragraph">
+<p>The light client is expected to know who the validators are and has
+access to their public keys.</p>
+</div>
+</div>
+</div>
+<div id="defn-beefy-relayer" class="exampleblock">
+<div class="title">Definition 95. <a href="sect-finality.html#defn-beefy-relayer">Relayer</a></div>
+<div class="content">
+<div class="paragraph">
+<p>A <strong>relayer</strong> (or "prover") is an abstract entity which takes finality proofs from
+the Polkadot network and makes those available to the light clients. Inherently,
+the relayer tries to convince the light clients that the finality proofs have
+been voted for by the Polkadot relay chain validators. The relayer operates
+offchain and can for example be a node or a collection of nodes.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-voting-on-statements"><a class="anchor" href="#id-voting-on-statements"></a><a class="link" href="#id-voting-on-statements">6.7.2. Voting on Statements</a></h4>
+<div class="paragraph">
+<p>The Polkadot Host signs a statement (<a href="sect-finality.html#defn-beefy-statement">Definition 92</a>) and gossips it as
+part of a vote (<a href="chap-networking.html#defn-msg-beefy-gossip">Definition 51</a>) to its peers on every new, finalized
+block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum
+has better compatibility for it compared to SR25519 or ED25519.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-beefy-committing-witnesses"><a class="anchor" href="#sect-beefy-committing-witnesses"></a><a class="link" href="#sect-beefy-committing-witnesses">6.7.3. Committing Witnesses</a></h4>
+<div class="paragraph">
+<p>The relayer (<a href="sect-finality.html#defn-beefy-relayer">Definition 95</a>) participates in the Polkadot network by
+collecting the gossiped votes (<a href="chap-networking.html#defn-msg-beefy-gossip">Definition 51</a>). Those votes are
+converted into the witness data structure (<a href="sect-finality.html#defn-beefy-witness-data">Definition 93</a>).
+The relayer saves the data on the chain of the remote network. The occurrence of
+saving witnesses on remote networks is undefined.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-requesting-signed-commitments"><a class="anchor" href="#id-requesting-signed-commitments"></a><a class="link" href="#id-requesting-signed-commitments">6.7.4. Requesting Signed Commitments</a></h4>
+<div class="paragraph">
+<p>A light client (<a href="sect-finality.html#defn-beefy-light-client">Definition 94</a>) fetches the witness data
+(<a href="sect-finality.html#defn-beefy-witness-data">Definition 93</a>) from the chain. Once the light client knows which
+validators apparently voted for the specified statement, it needs to request the
+signatures from the relayer to verify whether the claims are actually true. This
+is achieved by requesting signed commitments
+(<a href="chap-networking.html#defn-grandpa-beefy-signed-commitment">Definition 52</a>).</p>
+</div>
+<div class="paragraph">
+<p>How those signed commitments are requested by the light client and delivered by
+the relayer varies among networks or implementations. On Ethereum, for example,
+the light client can request the signed commitments in form of a transaction,
+which results in a response in form of a transaction.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph nav-footer">
+<p>← Previous: <a href="sect-block-production.html">Block Production</a> | ↑ Up: <a href="part-polkadot-host.html">Polkadot Host</a> | ⌂ Home: <a href="polkadot-spec.html">Polkadot Protocol Specification</a> | Next: <a href="sect-lightclient.html">Light Clients</a> →</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 0.2.1<br>
+Last updated 2023-03-09 11:37:31 +0100
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>

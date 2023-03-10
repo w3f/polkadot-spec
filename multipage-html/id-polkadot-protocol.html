@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="description" content="The Official Polkadot and Kusama Protocol Specification">
+<meta name="keywords" content="babe, blockchain, consensus, finality, grandpa, kusama, parachain, polkadot, relay-chain, runtime, spec, web3, w3f">
+<meta name="author" content="Web 3.0 Technologies Foundation">
+<link rel="icon" type="image/png" href="./favicon.png">
+<title>Polkadot Protocol Specification</title>
+<style>
+/* Fetch Unbounded - Normal - Regular */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400&display=swap');
+/* Fetch Work Sans - Normal + Italic - Regular + Bold */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+/* Fetch Asciidoctor Default Style Sheet */
+@import url('https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css');
+
+/* Base constants of theme */
+:root {
+	--font-header: 'Unbounded', cursive;
+	--font-text: 'Work Sans', sans-serif;
+
+	--black: #1E1E1E;
+	--white: #FFFFFF;
+
+	--dark-blue: #172026;
+	--grey: #efefef;
+
+	--pink: #E6007A;
+	--purple: #670d35;
+}
+
+
+/* Apply some layout corrections */
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+  	display: flex;
+  	flex-direction: column;
+}
+
+.partintro {
+	margin-bottom: 1.25rem;
+}
+
+/* Render part intros just like other text */
+.partintro div.content {
+	line-height: 1.6;
+	font-size: 1.0625rem;
+	letter-spacing: -.01em;
+	text-rendering: optimizeLegibility;
+}
+
+/* Set our custom font */
+body {
+	font-family: var(--font-text);
+}
+
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+#toc ul.sectlevel0 > li > a,
+.sidebarblock > .content > .title {
+	font-family: var(--font-header);
+	font-weight: 400;
+}
+
+#toc ul{
+	font-family: var(--font-text);
+}
+
+/* Set base colors */
+body {
+	color: var(--black);
+	background-color: var(--white);
+}
+
+/* Style all titles */
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+.subheader,
+.title {
+	color: var(--pink);
+}
+
+/* - could be replaced by !important in previous block */
+.sidebarblock > .content > .title,
+.admonitionblock td.content > .title,
+.audioblock > .title,
+.exampleblock > .title,
+.imageblock > .title,
+.listingblock > .title,
+.literalblock > .title,
+.stemblock > .title,
+.openblock > .title,
+.paragraph > .title,
+.quoteblock > .title,
+table.tableblock > .title,
+.verseblock > .title,
+.videoblock > .title,
+.dlist > .title,
+.olist > .title,
+.ulist > .title,
+.qlist > .title,
+.hdlist > .title {
+	color: inherit;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    color: inherit;
+}
+
+/* Style all links */
+a {
+	color: var(--pink);
+}
+
+a:hover {
+	color: var(--purple);
+}
+
+/* - same here, next two blocks or important above */
+#content h1 > a.link,
+h2 > a.link,
+h3 > a.link, #toctitle > a.link,
+h4 > a.link,
+h5 > a.link,
+h6 > a.link,
+.sidebarblock > .content > .title > a.link {
+	color: inherit;
+}
+
+#content h1 > a.link:hover,
+h2 > a.link:hover,
+h3 > a.link:hover,
+h4 > a.link:hover,
+h5 > a.link:hover,
+h6 > a.link:hover,
+#toctitle > a.link:hover,
+.sidebarblock > .content > .title > a.link:hover {
+	color: var(--purple);
+}
+
+/* Style header like toc on small screens */
+@media screen and (max-width:768px) {
+	#header {
+		background-color: var(--dark-blue);
+		max-width: none;
+	}
+
+	#header > h1:first-child {
+  		color: var(--pink);
+	}
+
+	#header .details {
+  		color: var(--white);
+		border: none;
+	}
+}
+
+/* Style table of content */
+#toc.toc2 {
+	background-color: var(--dark-blue);
+	border: none;
+}
+
+#toc ul.sectlevel0 > li > a {
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: underline;
+}
+
+#toc a {
+	color: var(--white);
+}
+
+#toc a code {
+	color: inherit;
+	background-color: inherit;
+}
+
+#toc a .toc-current,
+#toc .tocify-focus a {
+	color: var(--pink);
+}
+
+/* Tame SVG images */
+.imageblock .content svg {
+  max-width: 100%;
+}
+
+/* Style boxes */
+.exampleblock > .content, 
+.sidebarblock {
+	background: var(--grey);
+}
+
+/* Style footer */
+#footer {
+	color: var(--white);
+	background-color: var(--dark-blue);
+}
+
+/* CSS Ribbon */
+.ribbon {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  z-index: 99999;
+  top: 0px;
+  right: 0px;
+}
+
+.ribbon a {
+  display: inline-block;
+  position: inherit;
+  transform: rotate(45deg);
+  width: 200px;
+  top: 45px; 
+  right: -40px;
+  padding: 6px 0px;
+  overflow: hidden;
+
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+
+  color: var(--white);
+  background-color: var(--pink);
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+  border: 2px dotted var(--white);
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 3px 0px;
+}
+
+/* MathJax v3 */
+.stemblock mjx-container {
+  text-align: center;
+  display: block;
+  width: 100%;
+  margin: 1em 0em;
+}
+
+/* Pseudocode.js */
+.ps-root {
+  font-size: 1.2em !important;
+}
+
+/* Fix inline svg with fixed width or height. */
+.imageblock .content svg {
+  widht: auto;
+  height: auto;
+}
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
+                       font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
+             .nav-footer{text-align: center; margin-top: auto;}
+             .nav-footer > p > a {white-space: nowrap;}</style>
+</head>
+<body id="id-polkadot-protocol" class="book toc2 toc-left">
+<!-- Contribution Ribbon -->
+<div class="ribbon"><a target="_blank" href="https://github.com/w3f/polkadot-spec">Contributions welcome!</a></div>
+<div id="header">
+<h1>Polkadot Protocol Specification</h1>
+<div class="details">
+<span id="author" class="author">Web 3.0 Technologies Foundation</span><br>
+<span id="revnumber">version 0.2.1</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<p><span class="toc-root"><a href="polkadot-spec.html">Polkadot Protocol Specification</a></span></p><ul class="sectlevel1">
+<li><a href="id-polkadot-protocol.html"><span class="toc-current">Polkadot Protocol</span></a>
+</li>
+<li><a href="part-polkadot-host.html">Polkadot Host</a>
+</li>
+<li><a href="part-polkadot-runtime.html">Polkadot Runtime</a>
+</li>
+<li><a href="id-cryptography-encoding.html">Appendix D: Cryptography &amp; Encoding</a>
+</li>
+<li><a href="chap-host-api.html">Appendix E: Host API</a>
+</li>
+<li><a href="chap-runtime-api.html">Appendix F: Runtime API</a>
+</li>
+<li><a href="id-bibliography.html">Bibliography</a>
+</li>
+<li><a href="id-glossary.html">Glossary</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="id-polkadot-protocol"><a class="anchor" href="#id-polkadot-protocol"></a><a class="link" href="#id-polkadot-protocol">Polkadot Protocol</a></h2>
+<div class="sectionbody">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+This specification is <strong>Work-In-Progress</strong> and any content, structure,
+design and/or hyper/anchor-link <strong>is subject to change</strong>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Formally, Polkadot is a replicated sharded state machine designed to
+resolve the scalability and interoperability among blockchains. In
+Polkadot vocabulary, shards are called <em>parachains</em> and Polkadot <em>relay
+chain</em> is part of the protocol ensuring global consensus among all the
+parachains. The Polkadot relay chain protocol, henceforward called
+<em>Polkadot protocol</em>, can itself be considered as a replicated state
+machine on its own. As such, the protocol can be specified by
+identifying the state machine and the replication strategy.</p>
+</div>
+<div class="paragraph">
+<p>From a more technical point of view, the Polkadot protocol has been divided into
+two parts, the <a href="part-polkadot-runtime.html">Polkadot Runtime</a> and the <a href="part-polkadot-host.html">Polkadot Host</a>. The Runtime comprises the state
+transition logic for the Polkadot protocol and is designed and be upgradable via
+the consensus engine without requiring hard forks of the blockchain. The
+Polkadot Host provides the necessary functionality for the Runtime to execute
+its state transition logic, such as an execution environment, I/O, consensus and
+network interoperability between parachains. The Polkadot Host is planned to be
+stable and mostly static for the lifetime duration of the Polkadot protocol, the
+goal being that most changes to the protocol are primarily conducted by applying
+Runtime updates and not having to coordinate with network participants on manual
+software updates.</p>
+</div>
+</div>
+</div>
+<div class="paragraph nav-footer">
+<p>↑ Up: <a href="polkadot-spec.html">Polkadot Protocol Specification</a> | Next: <a href="part-polkadot-host.html">Polkadot Host</a> →</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 0.2.1<br>
+Last updated 2023-03-09 11:37:31 +0100
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>

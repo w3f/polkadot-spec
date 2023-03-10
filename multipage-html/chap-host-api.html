@@ -1,0 +1,4466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="description" content="The Official Polkadot and Kusama Protocol Specification">
+<meta name="keywords" content="babe, blockchain, consensus, finality, grandpa, kusama, parachain, polkadot, relay-chain, runtime, spec, web3, w3f">
+<meta name="author" content="Web 3.0 Technologies Foundation">
+<link rel="icon" type="image/png" href="./favicon.png">
+<title>Polkadot Protocol Specification</title>
+<style>
+/* Fetch Unbounded - Normal - Regular */
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@400&display=swap');
+/* Fetch Work Sans - Normal + Italic - Regular + Bold */
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+/* Fetch Asciidoctor Default Style Sheet */
+@import url('https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css');
+
+/* Base constants of theme */
+:root {
+	--font-header: 'Unbounded', cursive;
+	--font-text: 'Work Sans', sans-serif;
+
+	--black: #1E1E1E;
+	--white: #FFFFFF;
+
+	--dark-blue: #172026;
+	--grey: #efefef;
+
+	--pink: #E6007A;
+	--purple: #670d35;
+}
+
+
+/* Apply some layout corrections */
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100%;
+  	display: flex;
+  	flex-direction: column;
+}
+
+.partintro {
+	margin-bottom: 1.25rem;
+}
+
+/* Render part intros just like other text */
+.partintro div.content {
+	line-height: 1.6;
+	font-size: 1.0625rem;
+	letter-spacing: -.01em;
+	text-rendering: optimizeLegibility;
+}
+
+/* Set our custom font */
+body {
+	font-family: var(--font-text);
+}
+
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+#toc ul.sectlevel0 > li > a,
+.sidebarblock > .content > .title {
+	font-family: var(--font-header);
+	font-weight: 400;
+}
+
+#toc ul{
+	font-family: var(--font-text);
+}
+
+/* Set base colors */
+body {
+	color: var(--black);
+	background-color: var(--white);
+}
+
+/* Style all titles */
+h1, h2, h3, h4, h5, h6,
+#toctitle,
+.subheader,
+.title {
+	color: var(--pink);
+}
+
+/* - could be replaced by !important in previous block */
+.sidebarblock > .content > .title,
+.admonitionblock td.content > .title,
+.audioblock > .title,
+.exampleblock > .title,
+.imageblock > .title,
+.listingblock > .title,
+.literalblock > .title,
+.stemblock > .title,
+.openblock > .title,
+.paragraph > .title,
+.quoteblock > .title,
+table.tableblock > .title,
+.verseblock > .title,
+.videoblock > .title,
+.dlist > .title,
+.olist > .title,
+.ulist > .title,
+.qlist > .title,
+.hdlist > .title {
+	color: inherit;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+    color: inherit;
+}
+
+/* Style all links */
+a {
+	color: var(--pink);
+}
+
+a:hover {
+	color: var(--purple);
+}
+
+/* - same here, next two blocks or important above */
+#content h1 > a.link,
+h2 > a.link,
+h3 > a.link, #toctitle > a.link,
+h4 > a.link,
+h5 > a.link,
+h6 > a.link,
+.sidebarblock > .content > .title > a.link {
+	color: inherit;
+}
+
+#content h1 > a.link:hover,
+h2 > a.link:hover,
+h3 > a.link:hover,
+h4 > a.link:hover,
+h5 > a.link:hover,
+h6 > a.link:hover,
+#toctitle > a.link:hover,
+.sidebarblock > .content > .title > a.link:hover {
+	color: var(--purple);
+}
+
+/* Style header like toc on small screens */
+@media screen and (max-width:768px) {
+	#header {
+		background-color: var(--dark-blue);
+		max-width: none;
+	}
+
+	#header > h1:first-child {
+  		color: var(--pink);
+	}
+
+	#header .details {
+  		color: var(--white);
+		border: none;
+	}
+}
+
+/* Style table of content */
+#toc.toc2 {
+	background-color: var(--dark-blue);
+	border: none;
+}
+
+#toc ul.sectlevel0 > li > a {
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: underline;
+}
+
+#toc a {
+	color: var(--white);
+}
+
+#toc a code {
+	color: inherit;
+	background-color: inherit;
+}
+
+#toc a .toc-current,
+#toc .tocify-focus a {
+	color: var(--pink);
+}
+
+/* Tame SVG images */
+.imageblock .content svg {
+  max-width: 100%;
+}
+
+/* Style boxes */
+.exampleblock > .content, 
+.sidebarblock {
+	background: var(--grey);
+}
+
+/* Style footer */
+#footer {
+	color: var(--white);
+	background-color: var(--dark-blue);
+}
+
+/* CSS Ribbon */
+.ribbon {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  z-index: 99999;
+  top: 0px;
+  right: 0px;
+}
+
+.ribbon a {
+  display: inline-block;
+  position: inherit;
+  transform: rotate(45deg);
+  width: 200px;
+  top: 45px; 
+  right: -40px;
+  padding: 6px 0px;
+  overflow: hidden;
+
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+
+  color: var(--white);
+  background-color: var(--pink);
+  background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.15));
+  border: 2px dotted var(--white);
+  box-shadow: rgba(0, 0, 0, 0.5) 0px 2px 3px 0px;
+}
+
+/* MathJax v3 */
+.stemblock mjx-container {
+  text-align: center;
+  display: block;
+  width: 100%;
+  margin: 1em 0em;
+}
+
+/* Pseudocode.js */
+.ps-root {
+  font-size: 1.2em !important;
+}
+
+/* Fix inline svg with fixed width or height. */
+.imageblock .content svg {
+  widht: auto;
+  height: auto;
+}
+
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
+                       font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
+             .nav-footer{text-align: center; margin-top: auto;}
+             .nav-footer > p > a {white-space: nowrap;}</style>
+</head>
+<body id="chap-host-api" class="book toc2 toc-left">
+<!-- Contribution Ribbon -->
+<div class="ribbon"><a target="_blank" href="https://github.com/w3f/polkadot-spec">Contributions welcome!</a></div>
+<div id="header">
+<h1>Polkadot Protocol Specification</h1>
+<div class="details">
+<span id="author" class="author">Web 3.0 Technologies Foundation</span><br>
+<span id="revnumber">version 0.2.1</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<p><span class="toc-root"><a href="polkadot-spec.html">Polkadot Protocol Specification</a></span></p><ul class="sectlevel1">
+<li><a href="id-polkadot-protocol.html">Polkadot Protocol</a>
+</li>
+<li><a href="part-polkadot-host.html">Polkadot Host</a>
+</li>
+<li><a href="part-polkadot-runtime.html">Polkadot Runtime</a>
+</li>
+<li><a href="id-cryptography-encoding.html">Appendix D: Cryptography &amp; Encoding</a>
+</li>
+<li><a href="chap-host-api.html"><span class="toc-current">Appendix E: Host API</span></a>
+<ul class="sectlevel2">
+<li><a href="chap-host-api.html#id-preliminaries-4">B.1. Preliminaries</a>
+</li>
+<li><a href="chap-host-api.html#sect-storage-api">B.2. Storage</a>
+</li>
+<li><a href="chap-host-api.html#sect-child-storage-api">B.3. Child Storage</a>
+</li>
+<li><a href="chap-host-api.html#sect-crypto-api">B.4. Crypto</a>
+</li>
+<li><a href="chap-host-api.html#sect-hashing-api">B.5. Hashing</a>
+</li>
+<li><a href="chap-host-api.html#sect-offchain-api">B.6. Offchain</a>
+</li>
+<li><a href="chap-host-api.html#sect-trie-api">B.7. Trie</a>
+</li>
+<li><a href="chap-host-api.html#sect-misc-api">B.8. Miscellaneous</a>
+</li>
+<li><a href="chap-host-api.html#sect-allocator-api">B.9. Allocator</a>
+</li>
+<li><a href="chap-host-api.html#sect-logging-api">B.10. Logging</a>
+</li>
+<li><a href="chap-host-api.html#id-abort-handler">B.11. Abort Handler</a>
+</li>
+</ul>
+</li>
+<li><a href="chap-runtime-api.html">Appendix F: Runtime API</a>
+</li>
+<li><a href="id-bibliography.html">Bibliography</a>
+</li>
+<li><a href="id-glossary.html">Glossary</a>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="chap-host-api"><a class="anchor" href="#chap-host-api"></a><a class="link" href="#chap-host-api">Appendix B: Host API</a></h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Description of the expected environment available for import by the Polkadot Runtime</p>
+</div>
+<div class="sect2">
+<h3 id="id-preliminaries-4"><a class="anchor" href="#id-preliminaries-4"></a><a class="link" href="#id-preliminaries-4">B.1. Preliminaries</a></h3>
+<div class="paragraph">
+<p>The Polkadot Host API is a set of functions that the Polkadot Host
+exposes to Runtime to access external functions needed for various
+reasons, such as the Storage of the content, access and manipulation,
+memory allocation, and also efficiency. The encoding of each data type
+is specified or referenced in this section. If the encoding is not
+mentioned, then the default Wasm encoding is used, such as little-endian
+byte ordering for integers.</p>
+</div>
+<div id="defn-host-api-at-state" class="exampleblock">
+<div class="title">Definition 201. <a href="chap-host-api.html#defn-host-api-at-state">Exposed Host API</a></div>
+<div class="content">
+<div class="paragraph">
+<p>By \$"RE"_B\$ we refer to the API exposed by the Polkadot Host which
+interact, manipulate and response based on the state storage whose state is set
+at the end of the execution of block \$B\$.</p>
+</div>
+</div>
+</div>
+<div id="defn-runtime-pointer" class="exampleblock">
+<div class="title">Definition 202. <a href="chap-host-api.html#defn-runtime-pointer">Runtime Pointer</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>Runtime pointer</strong> type is an unsigned 32-bit integer representing a pointer
+to data in memory. This pointer is the primary way to exchange data of
+fixed/known size between the Runtime and Polkadot Host.</p>
+</div>
+</div>
+</div>
+<div id="defn-runtime-pointer-size" class="exampleblock">
+<div class="title">Definition 203. <a href="chap-host-api.html#defn-runtime-pointer-size">Runtime Pointer Size</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>Runtime pointer-size</strong> type is an unsigned 64-bit integer, representing two
+consecutive integers. The least significant is <strong>Runtime pointer</strong> (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>).
+The most significant provides the size of the data in bytes. This representation
+is the primary way to exchange data of arbitrary/dynamic sizes between the
+Runtime and the Polkadot Host.</p>
+</div>
+</div>
+</div>
+<div id="defn-lexicographic-ordering" class="exampleblock">
+<div class="title">Definition 204. <a href="chap-host-api.html#defn-lexicographic-ordering">Lexicographic ordering</a></div>
+<div class="content">
+<div class="paragraph">
+<p><strong>Lexicographic ordering</strong> refers to the ascending ordering of bytes or byte
+arrays, such as:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$[0,0,2]&lt;[0,1,1]&lt;[1]&lt;[1,1,0]&lt;[2]&lt;[...]\$
+</div>
+</div>
+<div class="paragraph">
+<p>The functions are specified in each subsequent subsection for each category of
+those functions.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-storage-api"><a class="anchor" href="#sect-storage-api"></a><a class="link" href="#sect-storage-api">B.2. Storage</a></h3>
+<div class="paragraph">
+<p>Interface for accessing the storage from within the runtime.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+As of now, the storage API should silently ignore any keys that start
+with the <code>:child_storage:default:</code> prefix. This applies to reading and writing.
+If the function expects a return value, then <em>None</em> (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>)
+should be returned. See
+<a href="https://github.com/paritytech/substrate/issues/12461">substrate issue #12461</a>.
+</td>
+</tr>
+</table>
+</div>
+<div id="defn-state-version" class="exampleblock">
+<div class="title">Definition 205. <a href="chap-host-api.html#defn-state-version">State Version</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The state version, \$v\$, dictates how a merkle root should be constructed.
+The datastructure is a varying type of the following format:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$v = {(0, "full values"),(1, "node hashes"):}\$
+</div>
+</div>
+<div class="paragraph">
+<p>where \$0\$ indicates that the values of the keys should be inserted into the
+trie directly and \$1\$ makes use of "node hashes" when calculating the
+merkle proof (<a href="chap-state.html#defn-hashed-subvalue">Definition 28</a>).</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-storage-set"><a class="anchor" href="#sect-storage-set"></a><a class="link" href="#sect-storage-set">B.2.1. <code>ext_storage_set</code></a></h4>
+<div class="paragraph">
+<p>Sets the value under a given key into storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype"><a class="anchor" href="#id-version-1-prototype"></a><a class="link" href="#id-version-1-prototype">B.2.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_set_version_1
+	(param $key i64) (param $value i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the key.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the
+value.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_storage_get"><a class="anchor" href="#id-ext_storage_get"></a><a class="link" href="#id-ext_storage_get">B.2.2. <code>ext_storage_get</code></a></h4>
+<div class="paragraph">
+<p>Retrieves the value associated with the given key from storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-2"><a class="anchor" href="#id-version-1-prototype-2"></a><a class="link" href="#id-version-1-prototype-2">B.2.2.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_get_version_1
+	(param $key i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the key.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) returning the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the value.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_storage_read"><a class="anchor" href="#id-ext_storage_read"></a><a class="link" href="#id-ext_storage_read">B.2.3. <code>ext_storage_read</code></a></h4>
+<div class="paragraph">
+<p>Gets the given key from storage, placing the value into a buffer and
+returning the number of bytes that the entry in storage has beyond the
+offset.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-3"><a class="anchor" href="#id-version-1-prototype-3"></a><a class="link" href="#id-version-1-prototype-3">B.2.3.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_read_version_1
+	(param $key i64) (param $value_out i64) (param $offset i32) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the key.</p>
+</li>
+<li>
+<p><code>value_out</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the
+buffer to which the value will be written to. This function will never write
+more then the length of the buffer, even if the value’s length is bigger.</p>
+</li>
+<li>
+<p><code>offset</code>: an u32 integer (typed as i32 due to wasm types) containing the offset beyond the value should be read
+from.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) pointing to a SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing an unsigned 32-bit
+integer representing the number of bytes left at supplied <code>offset</code>. Returns
+<em>None</em> if the entry does not exists.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_storage_clear"><a class="anchor" href="#id-ext_storage_clear"></a><a class="link" href="#id-ext_storage_clear">B.2.4. <code>ext_storage_clear</code></a></h4>
+<div class="paragraph">
+<p>Clears the storage of the given key and its value. Non-existent entries are
+silently ignored.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-4"><a class="anchor" href="#id-version-1-prototype-4"></a><a class="link" href="#id-version-1-prototype-4">B.2.4.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_clear_version_1
+	(param $key_data i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the key.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_storage_exists"><a class="anchor" href="#id-ext_storage_exists"></a><a class="link" href="#id-ext_storage_exists">B.2.5. <code>ext_storage_exists</code></a></h4>
+<div class="paragraph">
+<p>Checks whether the given key exists in storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-5"><a class="anchor" href="#id-version-1-prototype-5"></a><a class="link" href="#id-version-1-prototype-5">B.2.5.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_exists_version_1
+	(param $key_data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the key.</p>
+</li>
+<li>
+<p><code>return</code>: an i32 integer value equal to <em>1</em> if the key exists or a value equal
+to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_storage_clear_prefix"><a class="anchor" href="#id-ext_storage_clear_prefix"></a><a class="link" href="#id-ext_storage_clear_prefix">B.2.6. <code>ext_storage_clear_prefix</code></a></h4>
+<div class="paragraph">
+<p>Clear the storage of each key/value pair where the key starts with the given
+prefix.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-6"><a class="anchor" href="#id-version-1-prototype-6"></a><a class="link" href="#id-version-1-prototype-6">B.2.6.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_clear_prefix_version_1
+	(param $prefix i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>prefix</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing
+the prefix.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype"><a class="anchor" href="#id-version-2-prototype"></a><a class="link" href="#id-version-2-prototype">B.2.6.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_clear_prefix_version_2
+	(param $prefix i64) (param $limit i64)
+	(return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>prefix</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing
+the prefix.</p>
+</li>
+<li>
+<p><code>limit</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an <em>Option</em> type
+(<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is <em>None</em>.
+Any keys created during the current block execution do not count towards the
+limit.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the following variant, \$k\$:</p>
+<div class="stemblock">
+<div class="content">
+\$k = {(0,-&gt; c),(1,-&gt; c):}\$
+</div>
+</div>
+<div class="paragraph">
+<p>where <em>0</em> indicates that all keys of the child storage have been removed,
+followed by the number of removed keys, \$c\$. The variant <em>1</em> indicates that
+there are remaining keys, followed by the number of removed keys.</p>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_storage_append"><a class="anchor" href="#id-ext_storage_append"></a><a class="link" href="#id-ext_storage_append">B.2.7. <code>ext_storage_append</code></a></h4>
+<div class="paragraph">
+<p>Append the SCALE encoded value to a SCALE encoded sequence (<a href="id-cryptography-encoding.html#defn-scale-list">Definition 192</a>)
+at the given key. This function assumes that the existing storage item is either
+empty or a SCALE encoded sequence and that the value to append is also SCALE
+encoded and of the same type as the items in the existing sequence.</p>
+</div>
+<div class="paragraph">
+<p>To improve performance, this function is allowed to skip decoding the entire
+SCALE encoded sequence and instead can just append the new item to the end of
+the existing data and increment the length prefix \$"Enc"_("SC")^("Len")\$.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+If the storage item does not exist or is not SCALE encoded, the storage
+item will be set to the specified value, represented as a SCALE encoded byte
+array.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-7"><a class="anchor" href="#id-version-1-prototype-7"></a><a class="link" href="#id-version-1-prototype-7">B.2.7.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_append_version_1
+	(param $key i64) (param $value i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the key.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) containing the
+value to be appended.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_storage_root"><a class="anchor" href="#id-ext_storage_root"></a><a class="link" href="#id-ext_storage_root">B.2.8. <code>ext_storage_root</code></a></h4>
+<div class="paragraph">
+<p>Compute the storage root.</p>
+</div>
+<div class="sect4">
+<h5 id="sect-ext-storage-root-version-1"><a class="anchor" href="#sect-ext-storage-root-version-1"></a><a class="link" href="#sect-ext-storage-root-version-1">B.2.8.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_root_version_1
+	(return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to a buffer containing
+the 256-bit Blake2 storage root.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="sect-ext-storage-root-version-2"><a class="anchor" href="#sect-ext-storage-root-version-2"></a><a class="link" href="#sect-ext-storage-root-version-2">B.2.8.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_root_version_2
+	(param $version i32) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>version</code>: the state version (<a href="chap-host-api.html#defn-state-version">Definition 205</a>).</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the buffer containing the 256-bit Blake2 storage
+root.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-storage-changes-root"><a class="anchor" href="#sect-ext-storage-changes-root"></a><a class="link" href="#sect-ext-storage-changes-root">B.2.9. <code>ext_storage_changes_root</code></a></h4>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This function is not longer used and only exists for compatibility reasons.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-8"><a class="anchor" href="#id-version-1-prototype-8"></a><a class="link" href="#id-version-1-prototype-8">B.2.9.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_changes_root_version_1
+	(param $parent_hash i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>parent_hash</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+SCALE encoded block hash.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an <em>Option</em> type
+(<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) that&#8217;s always <em>None</em>.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_storage_next_key"><a class="anchor" href="#id-ext_storage_next_key"></a><a class="link" href="#id-ext_storage_next_key">B.2.10. <code>ext_storage_next_key</code></a></h4>
+<div class="paragraph">
+<p>Get the next key in storage after the given one in lexicographic order
+(<a href="chap-host-api.html#defn-lexicographic-ordering">Definition 204</a>). The key provided to this function may or may
+not exist in storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-9"><a class="anchor" href="#id-version-1-prototype-9"></a><a class="link" href="#id-version-1-prototype-9">B.2.10.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_next_key_version_1
+	(param $key i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the next key in
+lexicographic order.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-storage-start-transaction"><a class="anchor" href="#sect-ext-storage-start-transaction"></a><a class="link" href="#sect-ext-storage-start-transaction">B.2.11. <code>ext_storage_start_transaction</code></a></h4>
+<div class="paragraph">
+<p>Start a new nested transaction. This allows to either commit or roll back all
+changes that are made after this call. For every transaction there must be a
+matching call to either <code>ext_storage_rollback_transaction</code>
+(<a href="chap-host-api.html#sect-ext-storage-rollback-transaction">Section B.2.12</a>) or <code>ext_storage_commit_transaction</code>
+(<a href="chap-host-api.html#sect-ext-storage-commit-transaction">Section B.2.13</a>). This is also effective for all values
+manipulated using the child storage API (<a href="chap-host-api.html#sect-child-storage-api">Section B.3</a>). It&#8217;s legal
+to call this function multiple times in a row.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+This is a low level API that is potentially dangerous as it can easily
+result in unbalanced transactions. Runtimes should use high level storage
+abstractions.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-10"><a class="anchor" href="#id-version-1-prototype-10"></a><a class="link" href="#id-version-1-prototype-10">B.2.11.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_start_transaction_version_1)</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-storage-rollback-transaction"><a class="anchor" href="#sect-ext-storage-rollback-transaction"></a><a class="link" href="#sect-ext-storage-rollback-transaction">B.2.12. <code>ext_storage_rollback_transaction</code></a></h4>
+<div class="paragraph">
+<p>Rollback the last transaction started by <code>ext_storage_start_transaction</code>
+(<a href="chap-host-api.html#sect-ext-storage-start-transaction">Section B.2.11</a>). Any changes made during that
+transaction are discarded. It&#8217;s legal to call this function multiple times in a
+row.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Panics if <code>ext_storage_start_transaction</code>
+(<a href="chap-host-api.html#sect-ext-storage-start-transaction">Section B.2.11</a>) was not called.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-11"><a class="anchor" href="#id-version-1-prototype-11"></a><a class="link" href="#id-version-1-prototype-11">B.2.12.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_rollback_transaction_version_1)</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-storage-commit-transaction"><a class="anchor" href="#sect-ext-storage-commit-transaction"></a><a class="link" href="#sect-ext-storage-commit-transaction">B.2.13. <code>ext_storage_commit_transaction</code></a></h4>
+<div class="paragraph">
+<p>Commit the last transaction started by <code>ext_storage_start_transaction</code>
+(<a href="chap-host-api.html#sect-ext-storage-start-transaction">Section B.2.11</a>). Any changes made during that
+transaction are committed to the main state. It&#8217;s legal to call this function
+multiple times in a row.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Panics if <code>ext_storage_start_transaction</code>
+(<a href="chap-host-api.html#sect-ext-storage-start-transaction">Section B.2.11</a>) was not called.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-12"><a class="anchor" href="#id-version-1-prototype-12"></a><a class="link" href="#id-version-1-prototype-12">B.2.13.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_storage_commit_transaction_version_1)</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-child-storage-api"><a class="anchor" href="#sect-child-storage-api"></a><a class="link" href="#sect-child-storage-api">B.3. Child Storage</a></h3>
+<div class="paragraph">
+<p>Interface for accessing the child storage from within the runtime.</p>
+</div>
+<div id="defn-child-storage-type" class="exampleblock">
+<div class="title">Definition 206. <a href="chap-host-api.html#defn-child-storage-type">Child Storage</a></div>
+<div class="content">
+<div class="paragraph">
+<p><strong>Child storage</strong> key is a unprefixed location of the child trie in the main trie.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_set"><a class="anchor" href="#id-ext_default_child_storage_set"></a><a class="link" href="#id-ext_default_child_storage_set">B.3.1. <code>ext_default_child_storage_set</code></a></h4>
+<div class="paragraph">
+<p>Sets the value under a given key into the child storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-13"><a class="anchor" href="#id-version-1-prototype-13"></a><a class="link" href="#id-version-1-prototype-13">B.3.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_set_version_1
+	(param $child_storage_key i64) (param $key i64) (param $value i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code> : a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the value.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_get"><a class="anchor" href="#id-ext_default_child_storage_get"></a><a class="link" href="#id-ext_default_child_storage_get">B.3.2. <code>ext_default_child_storage_get</code></a></h4>
+<div class="paragraph">
+<p>Retrieves the value associated with the given key from the child storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-14"><a class="anchor" href="#id-version-1-prototype-14"></a><a class="link" href="#id-version-1-prototype-14">B.3.2.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_get_version_1
+	(param $child_storage_key i64) (param $key i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the value.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_read"><a class="anchor" href="#id-ext_default_child_storage_read"></a><a class="link" href="#id-ext_default_child_storage_read">B.3.3. <code>ext_default_child_storage_read</code></a></h4>
+<div class="paragraph">
+<p>Gets the given key from storage, placing the value into a buffer and returning
+the number of bytes that the entry in storage has beyond the offset.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-15"><a class="anchor" href="#id-version-1-prototype-15"></a><a class="link" href="#id-version-1-prototype-15">B.3.3.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_read_version_1
+	(param $child_storage_key i64) (param $key i64) (param $value_out i64)
+	(param $offset i32) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>value_out</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the buffer
+to which the value will be written to. This function will never write more then
+the length of the buffer, even if the value’s length is bigger.</p>
+</li>
+<li>
+<p><code>offset</code>: an u32 integer (typed as i32 due to wasm types) containing the offset beyond the value should be read
+from.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the number of bytes
+written into the <strong>value_out</strong> buffer. Returns if the entry does not exists.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_clear"><a class="anchor" href="#id-ext_default_child_storage_clear"></a><a class="link" href="#id-ext_default_child_storage_clear">B.3.4. <code>ext_default_child_storage_clear</code></a></h4>
+<div class="paragraph">
+<p>Clears the storage of the given key and its value from the child storage.
+Non-existent entries are silently ignored.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-16"><a class="anchor" href="#id-version-1-prototype-16"></a><a class="link" href="#id-version-1-prototype-16">B.3.4.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_clear_version_1
+	(param $child_storage_key i64) (param $key i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_storage_kill"><a class="anchor" href="#id-ext_default_child_storage_storage_kill"></a><a class="link" href="#id-ext_default_child_storage_storage_kill">B.3.5. <code>ext_default_child_storage_storage_kill</code></a></h4>
+<div class="paragraph">
+<p>Clears an entire child storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-17"><a class="anchor" href="#id-version-1-prototype-17"></a><a class="link" href="#id-version-1-prototype-17">B.3.5.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_storage_kill_version_1
+	(param $child_storage_key i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-2"><a class="anchor" href="#id-version-2-prototype-2"></a><a class="link" href="#id-version-2-prototype-2">B.3.5.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_storage_kill_version_2
+	(param $child_storage_key i64) (param $limit i64)
+	(return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>limit</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an <em>Option</em> type
+(<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is <em>None</em>.
+Any keys created during the current block execution do not count towards the
+limit.</p>
+</li>
+<li>
+<p><code>return</code>: a value equal to <em>1</em> if all the keys of the child storage have been
+deleted or a value equal to <em>0</em> if there are remaining keys.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-3-prototype"><a class="anchor" href="#id-version-3-prototype"></a><a class="link" href="#id-version-3-prototype">B.3.5.3. Version 3 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_storage_kill_version_3
+	(param $child_storage_key i64) (param $limit i64)
+	(return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>limit</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an <em>Option</em> type
+(<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is <em>None</em>.
+Any keys created during the current block execution do not count towards the
+limit.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the following variant, \$k\$:</p>
+<div class="stemblock">
+<div class="content">
+\$k = {(0,-&gt; c),(1,-&gt; c):}\$
+</div>
+</div>
+<div class="paragraph">
+<p>where <em>0</em> indicates that all keys of the child storage have been removed,
+followed by the number of removed keys, \$c\$. The variant <em>1</em> indicates that
+there are remaining keys, followed by the number of removed keys.</p>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_exists"><a class="anchor" href="#id-ext_default_child_storage_exists"></a><a class="link" href="#id-ext_default_child_storage_exists">B.3.6. <code>ext_default_child_storage_exists</code></a></h4>
+<div class="paragraph">
+<p>Checks whether the given key exists in the child storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-18"><a class="anchor" href="#id-version-1-prototype-18"></a><a class="link" href="#id-version-1-prototype-18">B.3.6.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_exists_version_1
+	(param $child_storage_key i64) (param $key i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>return</code>: an i32 integer value equal to <em>1</em> if the key exists or a value equal
+to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_clear_prefix"><a class="anchor" href="#id-ext_default_child_storage_clear_prefix"></a><a class="link" href="#id-ext_default_child_storage_clear_prefix">B.3.7. <code>ext_default_child_storage_clear_prefix</code></a></h4>
+<div class="paragraph">
+<p>Clears the child storage of each key/value pair where the key starts with the
+given prefix.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-19"><a class="anchor" href="#id-version-1-prototype-19"></a><a class="link" href="#id-version-1-prototype-19">B.3.7.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_clear_prefix_version_1
+	(param $child_storage_key i64) (param $prefix i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>prefix</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+prefix.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-3"><a class="anchor" href="#id-version-2-prototype-3"></a><a class="link" href="#id-version-2-prototype-3">B.3.7.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_clear_prefix_version_2
+	(param $child_storage_key i64) (param $prefix i64)
+	(param $limit i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>prefix</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+prefix.</p>
+</li>
+<li>
+<p><code>limit</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an <em>Option</em> type
+(<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is <em>None</em>.
+Any keys created during the current block execution do not count towards the
+limit.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the following variant, \$k\$:</p>
+<div class="stemblock">
+<div class="content">
+\$k = {(0,-&gt; c),(1,-&gt; c):}\$
+</div>
+</div>
+<div class="paragraph">
+<p>where <em>0</em> indicates that all keys of the child storage have been removed,
+followed by the number of removed keys, \$c\$. The variant <em>1</em> indicates that
+there are remaining keys, followed by the number of removed keys.</p>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_root"><a class="anchor" href="#id-ext_default_child_storage_root"></a><a class="link" href="#id-ext_default_child_storage_root">B.3.8. <code>ext_default_child_storage_root</code></a></h4>
+<div class="paragraph">
+<p>Commits all existing operations and computes the resulting child storage
+root.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-20"><a class="anchor" href="#id-version-1-prototype-20"></a><a class="link" href="#id-version-1-prototype-20">B.3.8.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_root_version_1
+	(param $child_storage_key i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+SCALE encoded storage root.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-4"><a class="anchor" href="#id-version-2-prototype-4"></a><a class="link" href="#id-version-2-prototype-4">B.3.8.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_root_version_2
+	(param $child_storage_key i64) (param $version i32)
+	(return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>version</code>: the state version (<a href="chap-host-api.html#defn-state-version">Definition 205</a>).</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit Blake2 storage
+root.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_default_child_storage_next_key"><a class="anchor" href="#id-ext_default_child_storage_next_key"></a><a class="link" href="#id-ext_default_child_storage_next_key">B.3.9. <code>ext_default_child_storage_next_key</code></a></h4>
+<div class="paragraph">
+<p>Gets the next key in storage after the given one in lexicographic order
+(<a href="chap-host-api.html#defn-lexicographic-ordering">Definition 204</a>).
+The key provided to this function may or may not exist in storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-21"><a class="anchor" href="#id-version-1-prototype-21"></a><a class="link" href="#id-version-1-prototype-21">B.3.9.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_default_child_storage_next_key_version_1
+	(param $child_storage_key i64) (param $key i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>child_storage_key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+child storage key (<a href="chap-host-api.html#defn-child-storage-type">Definition 206</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded as defined in <a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>
+containing the next key in lexicographic order. Returns if the entry cannot be
+found.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-crypto-api"><a class="anchor" href="#sect-crypto-api"></a><a class="link" href="#sect-crypto-api">B.4. Crypto</a></h3>
+<div class="paragraph">
+<p>Interfaces for working with crypto related types from within the runtime.</p>
+</div>
+<div id="defn-key-type-id" class="exampleblock">
+<div class="title">Definition 207. <a href="chap-host-api.html#defn-key-type-id">Key Type Identifier</a></div>
+<div class="content">
+<div class="paragraph">
+<p>Cryptographic keys are stored in separate key stores based on their intended use
+case. The separate key stores are identified by a 4-byte ASCII <strong>key type
+identifier</strong>. The following known types are available:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 4. Table of known key type identifiers</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">acco</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key type for the controlling accounts</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">babe</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key type for the Babe module</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gran</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key type for the Grandpa module</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">imon</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key type for the ImOnline module</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">audi</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key type for the AuthorityDiscovery module</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">para</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key type for the Parachain Validator Key</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">asgn</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Key type for the Parachain Assignment Key</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="defn-ecdsa-verify-error" class="exampleblock">
+<div class="title">Definition 208. <a href="chap-host-api.html#defn-ecdsa-verify-error">ECDSA Verify Error</a></div>
+<div class="content">
+<div class="paragraph">
+<p><strong>EcdsaVerifyError</strong> is a varying data type (<a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>) that
+specifies the error type when using ECDSA recovery functionality. Following
+values are possible:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 5. Table of error types in ECDSA recovery</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Id</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Incorrect value of R or S</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Incorrect value of V</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Invalid signature</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_ed25519_public_keys"><a class="anchor" href="#id-ext_crypto_ed25519_public_keys"></a><a class="link" href="#id-ext_crypto_ed25519_public_keys">B.4.1. <code>ext_crypto_ed25519_public_keys</code></a></h4>
+<div class="paragraph">
+<p>Returns all <em>ed25519</em> public keys for the given key identifier from the keystore.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-22"><a class="anchor" href="#id-version-1-prototype-22"></a><a class="link" href="#id-version-1-prototype-22">B.4.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ed25519_public_keys_version_1
+	(param $key_type_id i32) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key type identifier
+(<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an SCALE encoded
+256-bit public keys.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_ed25519_generate"><a class="anchor" href="#id-ext_crypto_ed25519_generate"></a><a class="link" href="#id-ext_crypto_ed25519_generate">B.4.2. <code>ext_crypto_ed25519_generate</code></a></h4>
+<div class="paragraph">
+<p>Generates an <em>ed25519</em> key for the given key type using an optional BIP-39 seed and stores
+it in the keystore.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Panics if the key cannot be generated, such as when an invalid key type
+or invalid seed was provided.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-23"><a class="anchor" href="#id-version-1-prototype-23"></a><a class="link" href="#id-version-1-prototype-23">B.4.2.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ed25519_generate_version_1
+	(param $key_type_id i32) (param $seed i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key type identifier
+(<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>seed</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE encoded
+<em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the BIP-39 seed which must be
+valid UTF8.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit public key.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_ed25519_sign"><a class="anchor" href="#id-ext_crypto_ed25519_sign"></a><a class="link" href="#id-ext_crypto_ed25519_sign">B.4.3. <code>ext_crypto_ed25519_sign</code></a></h4>
+<div class="paragraph">
+<p>Signs the given message with the <code>ed25519</code> key that corresponds to the given public key
+and key type in the keystore.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-24"><a class="anchor" href="#id-version-1-prototype-24"></a><a class="link" href="#id-version-1-prototype-24">B.4.3.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ed25519_sign_version_1
+	(param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key type identifier
+(<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 256-bit public key.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be signed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the 64-byte signature.
+This function returns if the public key cannot be found in the key store.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-crypto-ed25519-verify"><a class="anchor" href="#sect-ext-crypto-ed25519-verify"></a><a class="link" href="#sect-ext-crypto-ed25519-verify">B.4.4. <code>ext_crypto_ed25519_verify</code></a></h4>
+<div class="paragraph">
+<p>Verifies an <em>ed25519</em> signature.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-25"><a class="anchor" href="#id-version-1-prototype-25"></a><a class="link" href="#id-version-1-prototype-25">B.4.4.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ed25519_verify_version_1
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 64-byte signature.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 256-bit public key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal to <em>1</em> if the signature is valid or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-crypto-ed25519-batch-verify"><a class="anchor" href="#sect-ext-crypto-ed25519-batch-verify"></a><a class="link" href="#sect-ext-crypto-ed25519-batch-verify">B.4.5. <code>ext_crypto_ed25519_batch_verify</code></a></h4>
+<div class="paragraph">
+<p>Registers a ed25519 signature for batch verification. Batch verification is
+enabled by calling <code>ext_crypto_start_batch_verify</code>
+(<a href="chap-host-api.html#sect-ext-crypto-start-batch-verify">Section B.4.20</a>). The result of the verification is
+returned by <code>ext_crypto_finish_batch_verify</code>
+(<a href="chap-host-api.html#sect-ext-crypto-finish-batch-verify">Section B.4.21</a>). If batch verification is not enabled,
+the signature is verified immediately.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1"><a class="anchor" href="#id-version-1"></a><a class="link" href="#id-version-1">B.4.5.1. Version 1</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ed25519_batch_verify_version_1
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 64-byte signature.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 256-bit public key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal to <em>1</em> if the signature is valid or
+batched or a value equal <em>0</em> to if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_sr25519_public_keys"><a class="anchor" href="#id-ext_crypto_sr25519_public_keys"></a><a class="link" href="#id-ext_crypto_sr25519_public_keys">B.4.6. <code>ext_crypto_sr25519_public_keys</code></a></h4>
+<div class="paragraph">
+<p>Returns all <em>sr25519</em> public keys for the given key id from the keystore.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-26"><a class="anchor" href="#id-version-1-prototype-26"></a><a class="link" href="#id-version-1-prototype-26">B.4.6.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_sr25519_public_keys_version_1
+	(param $key_type_id i32) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key type identifier
+(<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+SCALE encoded 256-bit public keys.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_sr25519_generate"><a class="anchor" href="#id-ext_crypto_sr25519_generate"></a><a class="link" href="#id-ext_crypto_sr25519_generate">B.4.7. <code>ext_crypto_sr25519_generate</code></a></h4>
+<div class="paragraph">
+<p>Generates an <em>sr25519</em> key for the given key type using an optional BIP-39 seed
+and stores it in the keystore.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Panics if the key cannot be generated, such as when an invalid key type
+or invalid seed was provided.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-27"><a class="anchor" href="#id-version-1-prototype-27"></a><a class="link" href="#id-version-1-prototype-27">B.4.7.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_sr25519_generate_version_1
+	(param $key_type_id i32) (param $seed i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key identifier (<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>seed</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE encoded
+<em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the BIP-39 seed which must be
+valid UTF8.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit public key.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_sr25519_sign"><a class="anchor" href="#id-ext_crypto_sr25519_sign"></a><a class="link" href="#id-ext_crypto_sr25519_sign">B.4.8. <code>ext_crypto_sr25519_sign</code></a></h4>
+<div class="paragraph">
+<p>Signs the given message with the <em>sr25519</em> key that corresponds to the given
+public key and key type in the keystore.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-28"><a class="anchor" href="#id-version-1-prototype-28"></a><a class="link" href="#id-version-1-prototype-28">B.4.8.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_sr25519_sign_version_1
+	(param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key identifier (<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 256-bit public key.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be signed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the 64-byte signature.
+This function returns <em>None</em> if the public key cannot be found in the key store.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-crypto-sr25519-verify"><a class="anchor" href="#sect-ext-crypto-sr25519-verify"></a><a class="link" href="#sect-ext-crypto-sr25519-verify">B.4.9. <code>ext_crypto_sr25519_verify</code></a></h4>
+<div class="paragraph">
+<p>Verifies an sr25519 signature.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-29"><a class="anchor" href="#id-version-1-prototype-29"></a><a class="link" href="#id-version-1-prototype-29">B.4.9.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_sr25519_verify_version_1
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 64-byte signature.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 256-bit public key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal to <em>1</em> if the signature is valid or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-5"><a class="anchor" href="#id-version-2-prototype-5"></a><a class="link" href="#id-version-2-prototype-5">B.4.9.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_sr25519_verify_version_2
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 64-byte signature.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 256-bit public key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal to <em>1</em> if the signature is valid or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-crypto-sr25519-batch-verify"><a class="anchor" href="#sect-ext-crypto-sr25519-batch-verify"></a><a class="link" href="#sect-ext-crypto-sr25519-batch-verify">B.4.10. <code>ext_crypto_sr25519_batch_verify</code></a></h4>
+<div class="paragraph">
+<p>Registers a sr25519 signature for batch verification. Batch verification is
+enabled by calling <code>ext_crypto_start_batch_verify</code>
+(<a href="chap-host-api.html#sect-ext-crypto-start-batch-verify">Section B.4.20</a>). The result of the verification is
+returned by <code>ext_crypto_finish_batch_verify</code>
+(<a href="chap-host-api.html#sect-ext-crypto-finish-batch-verify">Section B.4.21</a>). If batch verification is not enabled,
+the signature is verified immediately.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-2"><a class="anchor" href="#id-version-1-2"></a><a class="link" href="#id-version-1-2">B.4.10.1. Version 1</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_sr25519_batch_verify_version_1
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 64-byte signature.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 256-bit public key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal to <em>1</em> if the signature is valid or
+batched or a value equal <em>0</em> to if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_ecdsa_public_keys"><a class="anchor" href="#id-ext_crypto_ecdsa_public_keys"></a><a class="link" href="#id-ext_crypto_ecdsa_public_keys">B.4.11. <code>ext_crypto_ecdsa_public_keys</code></a></h4>
+<div class="paragraph">
+<p>Returns all <em>ecdsa</em> public keys for the given key id from the keystore.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-30"><a class="anchor" href="#id-version-1-prototype-30"></a><a class="link" href="#id-version-1-prototype-30">B.4.11.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ecdsa_public_key_version_1
+	(param $key_type_id i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key type identifier (<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+SCALE encoded 33-byte compressed public keys.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_ecdsa_generate"><a class="anchor" href="#id-ext_crypto_ecdsa_generate"></a><a class="link" href="#id-ext_crypto_ecdsa_generate">B.4.12. <code>ext_crypto_ecdsa_generate</code></a></h4>
+<div class="paragraph">
+<p>Generates an <em>ecdsa</em> key for the given key type using an optional BIP-39 seed
+and stores it in the keystore.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Panics if the key cannot be generated, such as when an invalid key type
+or invalid seed was provided.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-31"><a class="anchor" href="#id-version-1-prototype-31"></a><a class="link" href="#id-version-1-prototype-31">B.4.12.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ecdsa_generate_version_1
+	(param $key_type_id i32) (param $seed i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key identifier (<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>seed</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE encoded
+<em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the BIP-39 seed which must be
+valid UTF8.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 33-byte compressed
+public key.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_ecdsa_sign"><a class="anchor" href="#id-ext_crypto_ecdsa_sign"></a><a class="link" href="#id-ext_crypto_ecdsa_sign">B.4.13. <code>ext_crypto_ecdsa_sign</code></a></h4>
+<div class="paragraph">
+<p>Signs the hash of the given message with the <em>ecdsa</em> key that corresponds to the
+given public key and key type in the keystore.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-32"><a class="anchor" href="#id-version-1-prototype-32"></a><a class="link" href="#id-version-1-prototype-32">B.4.13.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ecdsa_sign_version_1
+	(param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key identifier (<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 33-byte compressed public
+key.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be signed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the signature. The
+signature is 65-bytes in size, where the first 512-bits represent the signature
+and the other 8 bits represent the recovery ID. This function returns if the
+public key cannot be found in the key store.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_ecdsa_sign_prehashed"><a class="anchor" href="#id-ext_crypto_ecdsa_sign_prehashed"></a><a class="link" href="#id-ext_crypto_ecdsa_sign_prehashed">B.4.14. <code>ext_crypto_ecdsa_sign_prehashed</code></a></h4>
+<div class="paragraph">
+<p>Signs the prehashed message with the <em>ecdsa</em> key that corresponds to the given
+public key and key type in the keystore.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-33"><a class="anchor" href="#id-version-1-prototype-33"></a><a class="link" href="#id-version-1-prototype-33">B.4.14.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ecdsa_sign_prehashed_version_1
+	(param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>key_type_id</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the key identifier
+(<a href="chap-host-api.html#defn-key-type-id">Definition 207</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 33-byte compressed public key.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be signed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the signature. The
+signature is 65-bytes in size, where the first 512-bits represent the signature
+and the other 8 bits represent the recovery ID. This function returns if the
+public key cannot be found in the key store.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-crypto-ecdsa-verify"><a class="anchor" href="#sect-ext-crypto-ecdsa-verify"></a><a class="link" href="#sect-ext-crypto-ecdsa-verify">B.4.15. <code>ext_crypto_ecdsa_verify</code></a></h4>
+<div class="paragraph">
+<p>Verifies the hash of the given message against a ECDSA signature.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-34"><a class="anchor" href="#id-version-1-prototype-34"></a><a class="link" href="#id-version-1-prototype-34">B.4.15.1. Version 1 - Prototype</a></h5>
+<div class="paragraph">
+<p>This function allows the verification of non-standard, overflowing ECDSA signatures, an
+implemenation specific mechanism of the Rust
+<a href="https://github.com/paritytech/libsecp256k1"><code>libsecp256k1</code> library</a>, specifically
+the
+<a href="https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing"><code>parse_overflowing</code></a>
+function.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ecdsa_verify_version_1
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 65-byte signature. The
+signature is 65-bytes in size, where the first 512-bits represent the signature
+and the other 8 bits represent the recovery ID.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 33-byte compressed public
+key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal <em>1</em> to if the signature is valid or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-6"><a class="anchor" href="#id-version-2-prototype-6"></a><a class="link" href="#id-version-2-prototype-6">B.4.15.2. Version 2 - Prototype</a></h5>
+<div class="paragraph">
+<p>Does not allow the verification of non-standard, overflowing ECDSA signatures.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ecdsa_verify_version_2
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 65-byte signature. The
+signature is 65-bytes in size, where the first 512-bits represent the signature
+and the other 8 bits represent the recovery ID.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 33-byte compressed public
+key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal <em>1</em> to if the signature is valid or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_ecdsa_verify_prehashed"><a class="anchor" href="#id-ext_crypto_ecdsa_verify_prehashed"></a><a class="link" href="#id-ext_crypto_ecdsa_verify_prehashed">B.4.16. <code>ext_crypto_ecdsa_verify_prehashed</code></a></h4>
+<div class="paragraph">
+<p>Verifies the prehashed message against a ECDSA signature.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-35"><a class="anchor" href="#id-version-1-prototype-35"></a><a class="link" href="#id-version-1-prototype-35">B.4.16.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ecdsa_verify_prehashed_version_1
+	(param $sig i32) (param $msg i32) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 65-byte signature. The
+signature is 65-bytes in size, where the first 512-bits represent the signature
+and the other 8 bits represent the recovery ID.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer to the 32-bit prehashed message to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the 33-byte compressed public key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal <em>1</em> to if the signature is valid or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-crypto-ecdsa-batch-verify"><a class="anchor" href="#sect-ext-crypto-ecdsa-batch-verify"></a><a class="link" href="#sect-ext-crypto-ecdsa-batch-verify">B.4.17. <code>ext_crypto_ecdsa_batch_verify</code></a></h4>
+<div class="paragraph">
+<p>Registers a ECDSA signature for batch verification. Batch verification is
+enabled by calling <code>ext_crypto_start_batch_verify</code>
+(<a href="chap-host-api.html#sect-ext-crypto-start-batch-verify">Section B.4.20</a>). The result of the verification is
+returned by <code>ext_crypto_finish_batch_verify</code>
+(<a href="chap-host-api.html#sect-ext-crypto-finish-batch-verify">Section B.4.21</a>). If batch verification is not enabled,
+the signature is verified immediately.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-3"><a class="anchor" href="#id-version-1-3"></a><a class="link" href="#id-version-1-3">B.4.17.1. Version 1</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_ecdsa_batch_verify_version_1
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 64-byte signature.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+message that is to be verified.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer to the buffer containing the 256-bit public key.</p>
+</li>
+<li>
+<p><code>return</code>: a i32 integer value equal to <em>1</em> if the signature is valid or
+batched or a value equal <em>0</em> to if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_secp256k1_ecdsa_recover"><a class="anchor" href="#id-ext_crypto_secp256k1_ecdsa_recover"></a><a class="link" href="#id-ext_crypto_secp256k1_ecdsa_recover">B.4.18. <code>ext_crypto_secp256k1_ecdsa_recover</code></a></h4>
+<div class="paragraph">
+<p>Verify and recover a <em>secp256k1</em> ECDSA signature.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-36"><a class="anchor" href="#id-version-1-prototype-36"></a><a class="link" href="#id-version-1-prototype-36">B.4.18.1. Version 1 - Prototype</a></h5>
+<div class="paragraph">
+<p>This function can handle non-standard, overflowing ECDSA signatures, an
+implemenation specific mechanism of the Rust
+<a href="https://github.com/paritytech/libsecp256k1"><code>libsecp256k1</code> library</a>, specifically
+the
+<a href="https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing"><code>parse_overflowing</code></a>
+function.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_secp256k1_ecdsa_recover_version_1
+	(param $sig i32) (param $msg i32) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 65-byte signature in RSV
+format. V should be either <code>0/1</code> or <code>27/28</code>.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit Blake2 hash of
+the message.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Result</em> (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). On success it contains the 64-byte
+recovered public key or an error type (<a href="chap-host-api.html#defn-ecdsa-verify-error">Definition 208</a>) on failure.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-7"><a class="anchor" href="#id-version-2-prototype-7"></a><a class="link" href="#id-version-2-prototype-7">B.4.18.2. Version 2 - Prototype</a></h5>
+<div class="paragraph">
+<p>Does not handle non-standard, overflowing ECDSA signatures.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_secp256k1_ecdsa_recover_version_2
+	(param $sig i32) (param $msg i32) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 65-byte signature in RSV
+format. V should be either or .</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit Blake2 hash of
+the message.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Result</em> (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). On success it contains the 64-byte
+recovered public key or an error type (<a href="chap-host-api.html#defn-ecdsa-verify-error">Definition 208</a>) on failure.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_crypto_secp256k1_ecdsa_recover_compressed"><a class="anchor" href="#id-ext_crypto_secp256k1_ecdsa_recover_compressed"></a><a class="link" href="#id-ext_crypto_secp256k1_ecdsa_recover_compressed">B.4.19. <code>ext_crypto_secp256k1_ecdsa_recover_compressed</code></a></h4>
+<div class="paragraph">
+<p>Verify and recover a <em>secp256k1</em> ECDSA signature.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-37"><a class="anchor" href="#id-version-1-prototype-37"></a><a class="link" href="#id-version-1-prototype-37">B.4.19.1. Version 1 - Prototype</a></h5>
+<div class="paragraph">
+<p>This function can handle non-standard, overflowing ECDSA signatures, an
+implemenation specific mechanism of the Rust
+<a href="https://github.com/paritytech/libsecp256k1"><code>libsecp256k1</code> library</a>, specifically
+the
+<a href="https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing"><code>parse_overflowing</code></a>
+function.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_1
+	(param $sig i32) (param $msg i32) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 65-byte signature in RSV
+format. V should be either <code>0/1</code> or <code>27/28</code>.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit Blake2 hash of
+the message.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <code>Result</code> value (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). On success it contains the
+33-byte recovered public key in compressed form on success or an error type
+(<a href="chap-host-api.html#defn-ecdsa-verify-error">Definition 208</a>) on failure.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-8"><a class="anchor" href="#id-version-2-prototype-8"></a><a class="link" href="#id-version-2-prototype-8">B.4.19.2. Version 2 - Prototype</a></h5>
+<div class="paragraph">
+<p>Does not handle non-standard, overflowing ECDSA signatures.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_2
+	(param $sig i32) (param $msg i32) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>sig</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 65-byte signature in RSV
+format. V should be either <code>0/1</code> or <code>27/28</code>.</p>
+</li>
+<li>
+<p><code>msg</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit Blake2 hash of
+the message.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <code>Result</code> value (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). On success it contains the
+33-byte recovered public key in compressed form on success or an error type
+(<a href="chap-host-api.html#defn-ecdsa-verify-error">Definition 208</a>) on failure.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-crypto-start-batch-verify"><a class="anchor" href="#sect-ext-crypto-start-batch-verify"></a><a class="link" href="#sect-ext-crypto-start-batch-verify">B.4.20. <code>ext_crypto_start_batch_verify</code></a></h4>
+<div class="paragraph">
+<p>Starts the verification extension. The extension is a separate background
+process and is used to parallel-verify signatures which are pushed to the batch
+with
+<code>ext_crypto_ed25519_batch_verify</code>(<a href="chap-host-api.html#sect-ext-crypto-ed25519-batch-verify">Section B.4.5</a>),
+<code>ext_crypto_sr25519_batch_verify</code> (<a href="chap-host-api.html#sect-ext-crypto-sr25519-batch-verify">Section B.4.10</a>) or
+<code>ext_crypto_ecdsa_batch_verify</code> (<a href="chap-host-api.html#sect-ext-crypto-ecdsa-batch-verify">Section B.4.17</a>).
+Verification will start immediately and the Runtime can retrieve the result when
+calling <code>ext_crypto_finish_batch_verify</code>
+(<a href="chap-host-api.html#sect-ext-crypto-finish-batch-verify">Section B.4.21</a>).</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-38"><a class="anchor" href="#id-version-1-prototype-38"></a><a class="link" href="#id-version-1-prototype-38">B.4.20.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_start_batch_verify_version_1)</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>None.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-crypto-finish-batch-verify"><a class="anchor" href="#sect-ext-crypto-finish-batch-verify"></a><a class="link" href="#sect-ext-crypto-finish-batch-verify">B.4.21. <code>ext_crypto_finish_batch_verify</code></a></h4>
+<div class="paragraph">
+<p>Finish verifying the batch of signatures since the last call to this function.
+Blocks until all the signatures are verified.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Panics if <code>ext_crypto_start_batch_verify</code>
+(<a href="chap-host-api.html#sect-ext-crypto-start-batch-verify">Section B.4.20</a>) was not called.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-39"><a class="anchor" href="#id-version-1-prototype-39"></a><a class="link" href="#id-version-1-prototype-39">B.4.21.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_crypto_finish_batch_verify_version_1
+	(return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>return</code>: an i32 integer value equal to <em>1</em> if all the signatures are valid or
+a value equal to <em>0</em> if one or more of the signatures are invalid.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-hashing-api"><a class="anchor" href="#sect-hashing-api"></a><a class="link" href="#sect-hashing-api">B.5. Hashing</a></h3>
+<div class="paragraph">
+<p>Interface that provides functions for hashing with different algorithms.</p>
+</div>
+<div class="sect3">
+<h4 id="id-ext_hashing_keccak_256"><a class="anchor" href="#id-ext_hashing_keccak_256"></a><a class="link" href="#id-ext_hashing_keccak_256">B.5.1. <code>ext_hashing_keccak_256</code></a></h4>
+<div class="paragraph">
+<p>Conducts a 256-bit Keccak hash.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-40"><a class="anchor" href="#id-version-1-prototype-40"></a><a class="link" href="#id-version-1-prototype-40">B.5.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_hashing_keccak_256_version_1
+	(param $data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the data
+to be hashed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit hash result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_hashing_keccak_512"><a class="anchor" href="#id-ext_hashing_keccak_512"></a><a class="link" href="#id-ext_hashing_keccak_512">B.5.2. <code>ext_hashing_keccak_512</code></a></h4>
+<div class="paragraph">
+<p>Conducts a 512-bit Keccak hash.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-41"><a class="anchor" href="#id-version-1-prototype-41"></a><a class="link" href="#id-version-1-prototype-41">B.5.2.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_hashing_keccak_512_version_1
+	(param $data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the data
+to be hashed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 512-bit hash result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_hashing_sha2_256"><a class="anchor" href="#id-ext_hashing_sha2_256"></a><a class="link" href="#id-ext_hashing_sha2_256">B.5.3. <code>ext_hashing_sha2_256</code></a></h4>
+<div class="paragraph">
+<p>Conducts a 256-bit Sha2 hash.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-42"><a class="anchor" href="#id-version-1-prototype-42"></a><a class="link" href="#id-version-1-prototype-42">B.5.3.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_hashing_sha2_256_version_1
+	(param $data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the data
+to be hashed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit hash result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_hashing_blake2_128"><a class="anchor" href="#id-ext_hashing_blake2_128"></a><a class="link" href="#id-ext_hashing_blake2_128">B.5.4. <code>ext_hashing_blake2_128</code></a></h4>
+<div class="paragraph">
+<p>Conducts a 128-bit Blake2 hash.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-43"><a class="anchor" href="#id-version-1-prototype-43"></a><a class="link" href="#id-version-1-prototype-43">B.5.4.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_hashing_blake2_128_version_1
+	(param $data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the data
+to be hashed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 128-bit hash result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_hashing_blake2_256"><a class="anchor" href="#id-ext_hashing_blake2_256"></a><a class="link" href="#id-ext_hashing_blake2_256">B.5.5. <code>ext_hashing_blake2_256</code></a></h4>
+<div class="paragraph">
+<p>Conducts a 256-bit Blake2 hash.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-44"><a class="anchor" href="#id-version-1-prototype-44"></a><a class="link" href="#id-version-1-prototype-44">B.5.5.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_hashing_blake2_256_version_1
+	(param $data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the data
+to be hashed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit hash result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_hashing_twox_64"><a class="anchor" href="#id-ext_hashing_twox_64"></a><a class="link" href="#id-ext_hashing_twox_64">B.5.6. <code>ext_hashing_twox_64</code></a></h4>
+<div class="paragraph">
+<p>Conducts a 64-bit xxHash hash.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-45"><a class="anchor" href="#id-version-1-prototype-45"></a><a class="link" href="#id-version-1-prototype-45">B.5.6.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_hashing_twox_64_version_1
+	(param $data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the data
+to be hashed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 64-bit hash result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_hashing_twox_128"><a class="anchor" href="#id-ext_hashing_twox_128"></a><a class="link" href="#id-ext_hashing_twox_128">B.5.7. <code>ext_hashing_twox_128</code></a></h4>
+<div class="paragraph">
+<p>Conducts a 128-bit xxHash hash.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-46"><a class="anchor" href="#id-version-1-prototype-46"></a><a class="link" href="#id-version-1-prototype-46">B.5.7.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_hashing_twox_128
+	(param $data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the data
+to be hashed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 128-bit hash result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_hashing_twox_256"><a class="anchor" href="#id-ext_hashing_twox_256"></a><a class="link" href="#id-ext_hashing_twox_256">B.5.8. <code>ext_hashing_twox_256</code></a></h4>
+<div class="paragraph">
+<p>Conducts a 256-bit xxHash hash.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-47"><a class="anchor" href="#id-version-1-prototype-47"></a><a class="link" href="#id-version-1-prototype-47">B.5.8.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_hashing_twox_256
+	(param $data i64) (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the data
+to be hashed.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit hash result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-offchain-api"><a class="anchor" href="#sect-offchain-api"></a><a class="link" href="#sect-offchain-api">B.6. Offchain</a></h3>
+<div class="paragraph">
+<p>The Offchain Workers allow the execution of long-running and possibly
+non-deterministic tasks (e.g. web requests, encryption/decryption and signing of
+data, random number generation, CPU-intensive computations,
+enumeration/aggregation of on-chain data, etc.) which could otherwise require
+longer than the block execution time. Offchain Workers have their own execution
+environment. This separation of concerns is to make sure that the block
+production is not impacted by the long-running tasks.</p>
+</div>
+<div class="paragraph">
+<p>All data and results generated by Offchain workers are unique per node and
+nondeterministic. Information can be propagated to other nodes by submitting a
+transaction that should be included in the next block. As Offchain workers runs
+on their own execution environment they have access to their own separate
+storage. There are two different types of storage available which are defined in
+<a href="chap-host-api.html#defn-offchain-persistent-storage">Definition 209</a> and <a href="chap-host-api.html#defn-offchain-local-storage">Definition 210</a>.</p>
+</div>
+<div id="defn-offchain-persistent-storage" class="exampleblock">
+<div class="title">Definition 209. <a href="chap-host-api.html#defn-offchain-persistent-storage">Persisted Storage</a></div>
+<div class="content">
+<div class="paragraph">
+<p><strong>Persistent storage</strong> is non-revertible and not fork-aware. It means that any value
+set by the offchain worker is persisted even if that block (at which the worker
+is called) is reverted as non-canonical (meaning that the block was surpassed by
+a longer chain). The value is available for the worker that is re-run at the new
+(different block with the same block number) and future blocks. This storage can
+be used by offchain workers to handle forks and coordinate offchain workers
+running on different forks.</p>
+</div>
+</div>
+</div>
+<div id="defn-offchain-local-storage" class="exampleblock">
+<div class="title">Definition 210. <a href="chap-host-api.html#defn-offchain-local-storage">Local Storage</a></div>
+<div class="content">
+<div class="paragraph">
+<p><strong>Local storage</strong> is revertible and fork-aware. It means that any value set by the
+offchain worker triggered at a certain block is reverted if that block is
+reverted as non-canonical. The value is NOT available for the worker that is
+re-run at the next or any future blocks.</p>
+</div>
+</div>
+</div>
+<div id="defn-http-status-code" class="exampleblock">
+<div class="title">Definition 211. <a href="chap-host-api.html#defn-http-status-code">HTTP Status Code</a></div>
+<div class="content">
+<div class="paragraph">
+<p><strong>HTTP status codes</strong> that can get returned by certain Offchain HTTP functions.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>0</code>: the specified request identifier is invalid.</p>
+</li>
+<li>
+<p><code>10</code>: the deadline for the started request was reached.</p>
+</li>
+<li>
+<p><code>20</code>: an error has occurred during the request, e.g. a timeout or the remote
+server has closed the connection. On returning this error code, the request is
+considered destroyed and must be reconstructed again.</p>
+</li>
+<li>
+<p><code>100</code>-<code>999</code>: the request has finished with the given HTTP status code.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="defn-http-error" class="exampleblock">
+<div class="title">Definition 212. <a href="chap-host-api.html#defn-http-error">HTTP Error</a></div>
+<div class="content">
+<div class="paragraph">
+<p>HTTP error, \$E\$, is a varying data type (<a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>) and
+specifies the error types of certain HTTP functions. Following values are
+possible:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$E = {(0,"The deadile was reached"),(1,"There was an IO error while processing the request"),(2,"The Id of the request is invalid"):}\$
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_is_validator"><a class="anchor" href="#id-ext_offchain_is_validator"></a><a class="link" href="#id-ext_offchain_is_validator">B.6.1. <code>ext_offchain_is_validator</code></a></h4>
+<div class="paragraph">
+<p>Check whether the local node is a potential validator. Even if this function
+returns <em>1</em>, it does not mean that any keys are configured or that the validator
+is registered in the chain.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-48"><a class="anchor" href="#id-version-1-prototype-48"></a><a class="link" href="#id-version-1-prototype-48">B.6.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_is_validator_version_1 (return i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>return</code>: a i32 integer which is equal to <em>1</em> if the local node is a potential
+validator or a integer equal to <em>0</em> if it is not.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="sect-ext-offchain-submit-transaction"><a class="anchor" href="#sect-ext-offchain-submit-transaction"></a><a class="link" href="#sect-ext-offchain-submit-transaction">B.6.2. <code>ext_offchain_submit_transaction</code></a></h4>
+<div class="paragraph">
+<p>Given a SCALE encoded extrinsic, this function submits the extrinsic to the
+Host&#8217;s transaction pool, ready to be propagated to remote peers.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-49"><a class="anchor" href="#id-version-1-prototype-49"></a><a class="link" href="#id-version-1-prototype-49">B.6.2.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_submit_transaction_version_1
+	(param $data i64) (return i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the byte array
+storing the encoded extrinsic.</p>
+</li>
+<li>
+<p><code>return</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Result</em> value (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). Neither on success or failure is
+there any additional data provided. The cause of a failure is implementation
+specific.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_network_state"><a class="anchor" href="#id-ext_offchain_network_state"></a><a class="link" href="#id-ext_offchain_network_state">B.6.3. <code>ext_offchain_network_state</code></a></h4>
+<div class="paragraph">
+<p>Returns the SCALE encoded, opaque information about the local node&#8217;s network state.</p>
+</div>
+<div id="defn-opaque-network-state" class="exampleblock">
+<div class="title">Definition 213. <a href="chap-host-api.html#defn-opaque-network-state">Opaque Network State</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>Opaque network state structure</strong>, \$S\$, is a SCALE encoded blob holding
+information about the the <em>libp2p PeerId</em>, \$P_("id")\$, of the local node
+and a list of <em>libp2p Multiaddresses</em>, \$(M_0, ... M_n)\$, the node knows it
+can be reached at:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$S = (P_("id"),(M_0, ... M_n))\$
+</div>
+</div>
+<div class="paragraph">
+<p>where</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$P_("id") = (b_0,... b_n)
+M = (b_0, ... b_n)\$
+</div>
+</div>
+<div class="paragraph">
+<p>The information contained in this structure is naturally opaque to the caller of
+this function.</p>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-50"><a class="anchor" href="#id-version-1-prototype-50"></a><a class="link" href="#id-version-1-prototype-50">B.6.3.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_network_state_version_1 (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <code>Result</code> value (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). On success it contains the
+<em>Opaque network state</em> structure (<a href="chap-host-api.html#defn-opaque-network-state">Definition 213</a>). On failure, an
+empty value is yielded where its cause is implementation specific.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_timestamp"><a class="anchor" href="#id-ext_offchain_timestamp"></a><a class="link" href="#id-ext_offchain_timestamp">B.6.4. <code>ext_offchain_timestamp</code></a></h4>
+<div class="paragraph">
+<p>Returns the current timestamp.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-51"><a class="anchor" href="#id-version-1-prototype-51"></a><a class="link" href="#id-version-1-prototype-51">B.6.4.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_timestamp_version_1 (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>result</code>: an u64 integer (typed as i64 due to wasm types) indicating the
+current UNIX timestamp (<a href="id-cryptography-encoding.html#defn-unix-time">Definition 181</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_sleep_until"><a class="anchor" href="#id-ext_offchain_sleep_until"></a><a class="link" href="#id-ext_offchain_sleep_until">B.6.5. <code>ext_offchain_sleep_until</code></a></h4>
+<div class="paragraph">
+<p>Pause the execution until the <code>deadline</code> is reached.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-52"><a class="anchor" href="#id-version-1-prototype-52"></a><a class="link" href="#id-version-1-prototype-52">B.6.5.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_sleep_until_version_1 (param $deadline i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>deadline</code>: an u64 integer (typed as i64 due to wasm types) specifying the
+UNIX timestamp (<a href="id-cryptography-encoding.html#defn-unix-time">Definition 181</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_random_seed"><a class="anchor" href="#id-ext_offchain_random_seed"></a><a class="link" href="#id-ext_offchain_random_seed">B.6.6. <code>ext_offchain_random_seed</code></a></h4>
+<div class="paragraph">
+<p>Generates a random seed. This is a truly random non deterministic seed generated
+by the host environment.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-53"><a class="anchor" href="#id-version-1-prototype-53"></a><a class="link" href="#id-version-1-prototype-53">B.6.6.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_random_seed_version_1 (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit seed.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_local_storage_set"><a class="anchor" href="#id-ext_offchain_local_storage_set"></a><a class="link" href="#id-ext_offchain_local_storage_set">B.6.7. <code>ext_offchain_local_storage_set</code></a></h4>
+<div class="paragraph">
+<p>Sets a value in the local storage. This storage is not part of the consensus,
+it&#8217;s only accessible by the offchain worker tasks running on the same machine
+and is persisted between runs.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-54"><a class="anchor" href="#id-version-1-prototype-54"></a><a class="link" href="#id-version-1-prototype-54">B.6.7.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_local_storage_set_version_1
+	(param $kind i32) (param $key i64) (param $value i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>kind</code>: an i32 integer indicating the storage kind. A value equal to <em>1</em> is
+used for a persistent storage (<a href="chap-host-api.html#defn-offchain-persistent-storage">Definition 209</a>) and a value
+equal to <em>2</em> for local storage (<a href="chap-host-api.html#defn-offchain-local-storage">Definition 210</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the value.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_local_storage_clear"><a class="anchor" href="#id-ext_offchain_local_storage_clear"></a><a class="link" href="#id-ext_offchain_local_storage_clear">B.6.8. <code>ext_offchain_local_storage_clear</code></a></h4>
+<div class="paragraph">
+<p>Remove a value from the local storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-55"><a class="anchor" href="#id-version-1-prototype-55"></a><a class="link" href="#id-version-1-prototype-55">B.6.8.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_local_storage_clear_version_1
+	(param $kind i32) (param $key i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>kind</code>: an i32 integer indicating the storage kind. A value equal to <em>1</em> is
+used for a persistent storage (<a href="chap-host-api.html#defn-offchain-persistent-storage">Definition 209</a>) and a value
+equal to <em>2</em> for local storage (<a href="chap-host-api.html#defn-offchain-local-storage">Definition 210</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_local_storage_compare_and_set"><a class="anchor" href="#id-ext_offchain_local_storage_compare_and_set"></a><a class="link" href="#id-ext_offchain_local_storage_compare_and_set">B.6.9. <code>ext_offchain_local_storage_compare_and_set</code></a></h4>
+<div class="paragraph">
+<p>Sets a new value in the local storage if the condition matches the current value.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-56"><a class="anchor" href="#id-version-1-prototype-56"></a><a class="link" href="#id-version-1-prototype-56">B.6.9.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(fund $ext_offchain_local_storage_compare_and_set_version_1
+	(param $kind i32) (param $key i64) (param $old_value i64)
+	(param $new_value i64) (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>kind</code>: an i32 integer indicating the storage kind. A value equal to <em>1</em> is
+used for a persistent storage (<a href="chap-host-api.html#defn-offchain-persistent-storage">Definition 209</a>) and a value
+equal to <em>2</em> for local storage (<a href="chap-host-api.html#defn-offchain-local-storage">Definition 210</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>old_value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the old key.</p>
+</li>
+<li>
+<p><code>new_value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the new value.</p>
+</li>
+<li>
+<p><code>result</code>: an i32 integer equal to <em>1</em> if the new value has been set or a value
+equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_local_storage_get"><a class="anchor" href="#id-ext_offchain_local_storage_get"></a><a class="link" href="#id-ext_offchain_local_storage_get">B.6.10. <code>ext_offchain_local_storage_get</code></a></h4>
+<div class="paragraph">
+<p>Gets a value from the local storage.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-57"><a class="anchor" href="#id-version-1-prototype-57"></a><a class="link" href="#id-version-1-prototype-57">B.6.10.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_local_storage_get_version_1
+	(param $kind i32) (param $key i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>kind</code>: an i32 integer indicating the storage kind. A value equal to <em>1</em> is
+used for a persistent storage (<a href="chap-host-api.html#defn-offchain-persistent-storage">Definition 209</a>) and a value
+equal to <em>2</em> for local storage (<a href="chap-host-api.html#defn-offchain-local-storage">Definition 210</a>).</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the value or the
+corresponding key.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_http_request_start"><a class="anchor" href="#id-ext_offchain_http_request_start"></a><a class="link" href="#id-ext_offchain_http_request_start">B.6.11. <code>ext_offchain_http_request_start</code></a></h4>
+<div class="paragraph">
+<p>Initiates a HTTP request given by the HTTP method and the URL. Returns the Id of
+a newly started request.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-58"><a class="anchor" href="#id-version-1-prototype-58"></a><a class="link" href="#id-version-1-prototype-58">B.6.11.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_http_request_start_version_1
+  (param $method i64) (param $uri i64) (param $meta i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>method</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the HTTP
+method. Possible values are “GET” and “POST”.</p>
+</li>
+<li>
+<p><code>uri</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the URI.</p>
+</li>
+<li>
+<p><code>meta</code>: a future-reserved field containing additional, SCALE encoded
+parameters. Currently, an empty array should be passed.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Result</em> value (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>) containing the i16 ID of the newly
+started request. On failure no additionally data is provided. The cause of
+failure is implementation specific.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_http_request_add_header"><a class="anchor" href="#id-ext_offchain_http_request_add_header"></a><a class="link" href="#id-ext_offchain_http_request_add_header">B.6.12. <code>ext_offchain_http_request_add_header</code></a></h4>
+<div class="paragraph">
+<p>Append header to the request. Returns an error if the request identifier is
+invalid, <code>http_response_wait</code> has already been called on the specified request
+identifier, the deadline is reached or an I/O error has happened (e.g. the
+remote has closed the connection).</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-59"><a class="anchor" href="#id-version-1-prototype-59"></a><a class="link" href="#id-version-1-prototype-59">B.6.12.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_http_request_add_header_version_1
+	(param $request_id i32) (param $name i64) (param $value i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>request_id</code>: an i32 integer indicating the ID of the started request.</p>
+</li>
+<li>
+<p><code>name</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the HTTP header name.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the HTTP header value.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Result</em> value (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). Neither on success or failure is
+there any additional data provided. The cause of failure is implementation
+specific.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_http_request_write_body"><a class="anchor" href="#id-ext_offchain_http_request_write_body"></a><a class="link" href="#id-ext_offchain_http_request_write_body">B.6.13. <code>ext_offchain_http_request_write_body</code></a></h4>
+<div class="paragraph">
+<p>Writes a chunk of the request body. Returns a non-zero value in case the
+deadline is reached or the chunk could not be written.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-60"><a class="anchor" href="#id-version-1-prototype-60"></a><a class="link" href="#id-version-1-prototype-60">B.6.13.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_http_request_write_body_version_1
+	(param $request_id i32) (param $chunk i64) (param $deadline i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>request_id</code>: an i32 integer indicating the ID of the started request.</p>
+</li>
+<li>
+<p><code>chunk</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the chunk of
+bytes. Writing an empty chunk finalizes the request.</p>
+</li>
+<li>
+<p><code>deadline</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the UNIX timestamp
+(<a href="id-cryptography-encoding.html#defn-unix-time">Definition 181</a>). Passing <em>None</em> blocks indefinitely.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Result</em> value (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). On success, no additional data is
+provided. On error it contains the HTTP error type (<a href="chap-host-api.html#defn-http-error">Definition 212</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_http_response_wait"><a class="anchor" href="#id-ext_offchain_http_response_wait"></a><a class="link" href="#id-ext_offchain_http_response_wait">B.6.14. <code>ext_offchain_http_response_wait</code></a></h4>
+<div class="paragraph">
+<p>Returns an array of request statuses (the length is the same as IDs). Note that
+if deadline is not provided the method will block indefinitely, otherwise
+unready responses will produce DeadlineReached status.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-61"><a class="anchor" href="#id-version-1-prototype-61"></a><a class="link" href="#id-version-1-prototype-61">B.6.14.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_http_response_wait_version_1
+	(param $ids i64) (param $deadline i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ids</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded array of started request IDs.</p>
+</li>
+<li>
+<p><code>deadline</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the UNIX timestamp
+(<a href="id-cryptography-encoding.html#defn-unix-time">Definition 181</a>). Passing None blocks indefinitely.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded array of request statuses (<a href="chap-host-api.html#defn-http-status-code">Definition 211</a>).</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_http_response_headers"><a class="anchor" href="#id-ext_offchain_http_response_headers"></a><a class="link" href="#id-ext_offchain_http_response_headers">B.6.15. <code>ext_offchain_http_response_headers</code></a></h4>
+<div class="paragraph">
+<p>Read all HTTP response headers. Returns an array of key/value pairs. Response
+headers must be read before the response body.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-62"><a class="anchor" href="#id-version-1-prototype-62"></a><a class="link" href="#id-version-1-prototype-62">B.6.15.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_http_response_headers_version_1
+	(param $request_id i32) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>request_id</code>: an i32 integer indicating the ID of the started request.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to a SCALE encoded array of key/value pairs.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_offchain_http_response_read_body"><a class="anchor" href="#id-ext_offchain_http_response_read_body"></a><a class="link" href="#id-ext_offchain_http_response_read_body">B.6.16. <code>ext_offchain_http_response_read_body</code></a></h4>
+<div class="paragraph">
+<p>Reads a chunk of body response to the given buffer. Returns the number of bytes
+written or an error in case a deadline is reached or the server closed the
+connection. If 0 is returned it means that the response has been fully consumed
+and the request_id is now invalid. This implies that response headers must be
+read before draining the body.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-63"><a class="anchor" href="#id-version-1-prototype-63"></a><a class="link" href="#id-version-1-prototype-63">B.6.16.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_offchain_http_response_read_body_version_1
+	(param $request_id i32) (param $buffer i64) (param $deadline i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>request_id</code>: an i32 integer indicating the ID of the started request.</p>
+</li>
+<li>
+<p><code>buffer</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the buffer
+where the body gets written to.</p>
+</li>
+<li>
+<p><code>deadline</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the UNIX timestamp
+(<a href="id-cryptography-encoding.html#defn-unix-time">Definition 181</a>). Passing <em>None</em> will block indefinitely.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Result</em> value (<a href="id-cryptography-encoding.html#defn-result-type">Definition 191</a>). On success it contains an i32
+integer specifying the number of bytes written or a HTTP error type
+(<a href="chap-host-api.html#defn-http-error">Definition 212</a>) on failure.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-trie-api"><a class="anchor" href="#sect-trie-api"></a><a class="link" href="#sect-trie-api">B.7. Trie</a></h3>
+<div class="paragraph">
+<p>Interface that provides trie related functionality.</p>
+</div>
+<div class="sect3">
+<h4 id="id-ext_trie_blake2_256_root"><a class="anchor" href="#id-ext_trie_blake2_256_root"></a><a class="link" href="#id-ext_trie_blake2_256_root">B.7.1. <code>ext_trie_blake2_256_root</code></a></h4>
+<div class="paragraph">
+<p>Compute a 256-bit Blake2 trie root formed from the iterated items.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-64"><a class="anchor" href="#id-version-1-prototype-64"></a><a class="link" href="#id-version-1-prototype-64">B.7.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_blake2_256_root_version_1
+	(param $data i64) (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+iterated items from which the trie root gets formed. The items consist of a
+SCALE encoded array containing arbitrary key/value pairs (tuples).</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit trie root.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-9"><a class="anchor" href="#id-version-2-prototype-9"></a><a class="link" href="#id-version-2-prototype-9">B.7.1.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_blake2_256_root_version_2
+	(param $data i64) (param $version i32)
+	(result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+iterated items from which the trie root gets formed. The items consist of a
+SCALE encoded array containing arbitrary key/value pairs (tuples).</p>
+</li>
+<li>
+<p><code>version</code>: the state version (<a href="chap-host-api.html#defn-state-version">Definition 205</a>).</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit trie root.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_trie_blake2_256_ordered_root"><a class="anchor" href="#id-ext_trie_blake2_256_ordered_root"></a><a class="link" href="#id-ext_trie_blake2_256_ordered_root">B.7.2. <code>ext_trie_blake2_256_ordered_root</code></a></h4>
+<div class="paragraph">
+<p>Compute a 256-bit Blake2 trie root formed from the enumerated items.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-65"><a class="anchor" href="#id-version-1-prototype-65"></a><a class="link" href="#id-version-1-prototype-65">B.7.2.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_blake2_256_ordered_root_version_1
+	(param $data i64) (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the enumerated
+items from which the trie root gets formed. The items consist of a SCALE encoded
+array containing only values, where the corresponding key of each value is the
+index of the item in the array, starting at 0. The keys are compact encoded
+integers (<a href="id-cryptography-encoding.html#defn-sc-len-encoding">Definition 198</a>).</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit trie root
+result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-10"><a class="anchor" href="#id-version-2-prototype-10"></a><a class="link" href="#id-version-2-prototype-10">B.7.2.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_blake2_256_ordered_root_version_2
+	(param $data i64) (param $version i32)
+	(result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the enumerated
+items from which the trie root gets formed. The items consist of a SCALE encoded
+array containing only values, where the corresponding key of each value is the
+index of the item in the array, starting at 0. The keys are compact encoded
+integers (<a href="id-cryptography-encoding.html#defn-sc-len-encoding">Definition 198</a>).</p>
+</li>
+<li>
+<p><code>version</code>: the state version (<a href="chap-host-api.html#defn-state-version">Definition 205</a>).</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit trie root
+result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_trie_keccak_256_root"><a class="anchor" href="#id-ext_trie_keccak_256_root"></a><a class="link" href="#id-ext_trie_keccak_256_root">B.7.3. <code>ext_trie_keccak_256_root</code></a></h4>
+<div class="paragraph">
+<p>Compute a 256-bit Keccak trie root formed from the iterated items.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-66"><a class="anchor" href="#id-version-1-prototype-66"></a><a class="link" href="#id-version-1-prototype-66">B.7.3.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_keccak_256_root_version_1
+	(param $data i64) (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+iterated items from which the trie root gets formed. The items consist of a
+SCALE encoded array containing arbitrary key/value pairs.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit trie root.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-11"><a class="anchor" href="#id-version-2-prototype-11"></a><a class="link" href="#id-version-2-prototype-11">B.7.3.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_keccak_256_root_version_2
+	(param $data i64) (param $version i32)
+	(result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+iterated items from which the trie root gets formed. The items consist of a
+SCALE encoded array containing arbitrary key/value pairs.</p>
+</li>
+<li>
+<p><code>version</code>: the state version (<a href="chap-host-api.html#defn-state-version">Definition 205</a>).</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit trie root.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_trie_keccak_256_ordered_root"><a class="anchor" href="#id-ext_trie_keccak_256_ordered_root"></a><a class="link" href="#id-ext_trie_keccak_256_ordered_root">B.7.4. <code>ext_trie_keccak_256_ordered_root</code></a></h4>
+<div class="paragraph">
+<p>Compute a 256-bit Keccak trie root formed from the enumerated items.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-67"><a class="anchor" href="#id-version-1-prototype-67"></a><a class="link" href="#id-version-1-prototype-67">B.7.4.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_keccak_256_ordered_root_version_1
+	(param $data i64) (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the enumerated
+items from which the trie root gets formed. The items consist of a SCALE encoded
+array containing only values, where the corresponding key of each value is the
+index of the item in the array, starting at 0. The keys are compact encoded
+integers (<a href="id-cryptography-encoding.html#defn-sc-len-encoding">Definition 198</a>).</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit trie root
+result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-12"><a class="anchor" href="#id-version-2-prototype-12"></a><a class="link" href="#id-version-2-prototype-12">B.7.4.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_keccak_256_ordered_root_version_2
+	(param $data i64) (param $version i32)
+	(result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the enumerated
+items from which the trie root gets formed. The items consist of a SCALE encoded
+array containing only values, where the corresponding key of each value is the
+index of the item in the array, starting at 0. The keys are compact encoded
+integers (<a href="id-cryptography-encoding.html#defn-sc-len-encoding">Definition 198</a>).</p>
+</li>
+<li>
+<p><code>version</code>: the state version (<a href="chap-host-api.html#defn-state-version">Definition 205</a>).</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the buffer containing the 256-bit trie root
+result.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_trie_blake2_256_verify_proof"><a class="anchor" href="#id-ext_trie_blake2_256_verify_proof"></a><a class="link" href="#id-ext_trie_blake2_256_verify_proof">B.7.5. <code>ext_trie_blake2_256_verify_proof</code></a></h4>
+<div class="paragraph">
+<p>Verifies a key/value pair against a Blake2 256-bit merkle root.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-68"><a class="anchor" href="#id-version-1-prototype-68"></a><a class="link" href="#id-version-1-prototype-68">B.7.5.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_blake2_256_verify_proof_version_1
+	(param $root i32) (param $proof i64)
+	(param $key i64) (param $value i64)
+	(result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>root</code>: a pointer to the 256-bit merkle root.</p>
+</li>
+<li>
+<p><code>proof</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an array containing
+the node proofs.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the value.</p>
+</li>
+<li>
+<p><code>return</code>: a value equal to <em>1</em> if the proof could be successfully verified or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-13"><a class="anchor" href="#id-version-2-prototype-13"></a><a class="link" href="#id-version-2-prototype-13">B.7.5.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_blake2_256_verify_proof_version_2
+	(param $root i32) (param $proof i64)
+	(param $key i64) (param $value i64)
+	(param $version i32) (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>root</code>: a pointer to the 256-bit merkle root.</p>
+</li>
+<li>
+<p><code>proof</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an array containing
+the node proofs.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the value.</p>
+</li>
+<li>
+<p><code>version</code>: the state version (<a href="chap-host-api.html#defn-state-version">Definition 205</a>).</p>
+</li>
+<li>
+<p><code>return</code>: a value equal to <em>1</em> if the proof could be successfully verified or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_trie_keccak_256_verify_proof"><a class="anchor" href="#id-ext_trie_keccak_256_verify_proof"></a><a class="link" href="#id-ext_trie_keccak_256_verify_proof">B.7.6. <code>ext_trie_keccak_256_verify_proof</code></a></h4>
+<div class="paragraph">
+<p>Verifies a key/value pair against a Keccak 256-bit merkle root.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-69"><a class="anchor" href="#id-version-1-prototype-69"></a><a class="link" href="#id-version-1-prototype-69">B.7.6.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_keccak_256_verify_proof_version_1
+	(param $root i32) (param $proof i64)
+	(param $key i64) (param $value i64)
+	(result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>root</code>: a pointer to the 256-bit merkle root.</p>
+</li>
+<li>
+<p><code>proof</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an array containing
+the node proofs.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the value.</p>
+</li>
+<li>
+<p><code>return</code>: a value equal to <em>1</em> if the proof could be successfully verified or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect4">
+<h5 id="id-version-2-prototype-14"><a class="anchor" href="#id-version-2-prototype-14"></a><a class="link" href="#id-version-2-prototype-14">B.7.6.2. Version 2 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_trie_keccak_256_verify_proof_version_2
+	(param $root i32) (param $proof i64)
+	(param $key i64) (param $value i64)
+	(param $version i32) (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>root</code>: a pointer to the 256-bit merkle root.</p>
+</li>
+<li>
+<p><code>proof</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to an array containing
+the node proofs.</p>
+</li>
+<li>
+<p><code>key</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the key.</p>
+</li>
+<li>
+<p><code>value</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the value.</p>
+</li>
+<li>
+<p><code>version</code>: the state version (<a href="chap-host-api.html#defn-state-version">Definition 205</a>).</p>
+</li>
+<li>
+<p><code>return</code>: a value equal to <em>1</em> if the proof could be successfully verified or a
+value equal to <em>0</em> if otherwise.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-misc-api"><a class="anchor" href="#sect-misc-api"></a><a class="link" href="#sect-misc-api">B.8. Miscellaneous</a></h3>
+<div class="paragraph">
+<p>Interface that provides miscellaneous functions for communicating between the
+runtime and the node.</p>
+</div>
+<div class="sect3">
+<h4 id="id-ext_misc_print_num"><a class="anchor" href="#id-ext_misc_print_num"></a><a class="link" href="#id-ext_misc_print_num">B.8.1. <code>ext_misc_print_num</code></a></h4>
+<div class="paragraph">
+<p>Print a number.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-70"><a class="anchor" href="#id-version-1-prototype-70"></a><a class="link" href="#id-version-1-prototype-70">B.8.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_misc_print_num_version_1 (param $value i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>value</code>: the number to be printed.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_misc_print_utf8"><a class="anchor" href="#id-ext_misc_print_utf8"></a><a class="link" href="#id-ext_misc_print_utf8">B.8.2. <code>ext_misc_print_utf8</code></a></h4>
+<div class="paragraph">
+<p>Print a valid UTF8 encoded buffer.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-71"><a class="anchor" href="#id-version-1-prototype-71"></a><a class="link" href="#id-version-1-prototype-71">B.8.2.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_misc_print_utf8_version_1 (param $data i64))</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Arguments</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to
+the valid buffer to be printed.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_misc_print_hex"><a class="anchor" href="#id-ext_misc_print_hex"></a><a class="link" href="#id-ext_misc_print_hex">B.8.3. <code>ext_misc_print_hex</code></a></h4>
+<div class="paragraph">
+<p>Print any buffer in hexadecimal representation.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-72"><a class="anchor" href="#id-version-1-prototype-72"></a><a class="link" href="#id-version-1-prototype-72">B.8.3.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_misc_print_hex_version_1 (param $data i64))</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Arguments</strong>:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to
+the buffer to be printed.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_misc_runtime_version"><a class="anchor" href="#id-ext_misc_runtime_version"></a><a class="link" href="#id-ext_misc_runtime_version">B.8.4. <code>ext_misc_runtime_version</code></a></h4>
+<div class="paragraph">
+<p>Extract the Runtime version of the given Wasm blob by calling <code>Core_version</code>
+(<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>). Returns the SCALE encoded runtime version or <em>None</em>
+(<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) if the call fails. This function gets primarily used when
+upgrading Runtimes.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Calling this function is very expensive and should only be done very
+occasionally. For getting the runtime version, it requires instantiating the
+Wasm blob (<a href="chap-state.html#sect-loading-runtime-code">Section 2.6.2</a>) and calling the <code>Core_version</code>
+function (<a href="chap-runtime-api.html#defn-rt-core-version">Section C.4.1</a>) in this blob.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-73"><a class="anchor" href="#id-version-1-prototype-73"></a><a class="link" href="#id-version-1-prototype-73">B.8.4.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_misc_runtime_version_version_1 (param $data i64) (result i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>data</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the Wasm
+blob.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the SCALE
+encoded <em>Option</em> value (<a href="id-cryptography-encoding.html#defn-option-type">Definition 190</a>) containing the Runtime version of
+the given Wasm blob which is encoded as a byte array.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-allocator-api"><a class="anchor" href="#sect-allocator-api"></a><a class="link" href="#sect-allocator-api">B.9. Allocator</a></h3>
+<div class="paragraph">
+<p>The Polkadot Runtime does not include a memory allocator and relies on the Host
+API for all heap allocations. The beginning of this heap is marked by the
+<code>__heap_base</code> symbol exported by the Polkadot Runtime. No memory should be
+allocated below that address, to avoid clashes with the stack and data section.
+The same allocator made accessible by this Host API should be used for any other
+WASM memory allocations and deallocations outside the runtime e.g. when passing
+the SCALE-encoded parameters to Runtime API calls.</p>
+</div>
+<div class="sect3">
+<h4 id="id-ext_allocator_malloc"><a class="anchor" href="#id-ext_allocator_malloc"></a><a class="link" href="#id-ext_allocator_malloc">B.9.1. <code>ext_allocator_malloc</code></a></h4>
+<div class="paragraph">
+<p>Allocates the given number of bytes and returns the pointer to that memory
+location.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-74"><a class="anchor" href="#id-version-1-prototype-74"></a><a class="link" href="#id-version-1-prototype-74">B.9.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_allocator_malloc_version_1 (param $size i32) (result i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>size</code>: the size of the buffer to be allocated.</p>
+</li>
+<li>
+<p><code>result</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the allocated buffer.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_allocator_free"><a class="anchor" href="#id-ext_allocator_free"></a><a class="link" href="#id-ext_allocator_free">B.9.2. <code>ext_allocator_free</code></a></h4>
+<div class="paragraph">
+<p>Free the given pointer.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-75"><a class="anchor" href="#id-version-1-prototype-75"></a><a class="link" href="#id-version-1-prototype-75">B.9.2.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_allocator_free_version_1 (param $ptr i32))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>ptr</code>: a pointer (<a href="chap-host-api.html#defn-runtime-pointer">Definition 202</a>) to the memory buffer to be freed.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="sect-logging-api"><a class="anchor" href="#sect-logging-api"></a><a class="link" href="#sect-logging-api">B.10. Logging</a></h3>
+<div class="paragraph">
+<p>Interface that provides functions for logging from within the runtime.</p>
+</div>
+<div id="defn-logging-log-level" class="exampleblock">
+<div class="title">Definition 214. <a href="chap-host-api.html#defn-logging-log-level">Log Level</a></div>
+<div class="content">
+<div class="paragraph">
+<p>The <strong>Log Level</strong>, \$L\$, is a varying data type (<a href="id-cryptography-encoding.html#defn-varrying-data-type">Definition 188</a>)
+and implies the emergency of the log. Possible log levels and the corresponding
+identifier is as follows:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\$L = {(0,"Error = 1"),(1,"Warn = 2"),(2,"Info = 3"),(3, "Debug = 4"),(4,"Trace = 5"):}\$
+</div>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="id-ext_logging_log"><a class="anchor" href="#id-ext_logging_log"></a><a class="link" href="#id-ext_logging_log">B.10.1. <code>ext_logging_log</code></a></h4>
+<div class="paragraph">
+<p>Request to print a log message on the host. Note that this will be only
+displayed if the host is enabled to display log messages with given level and
+target.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-76"><a class="anchor" href="#id-version-1-prototype-76"></a><a class="link" href="#id-version-1-prototype-76">B.10.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_logging_log_version_1
+	(param $level i32) (param $target i64) (param $message i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>level</code>: the log level (<a href="chap-host-api.html#defn-logging-log-level">Definition 214</a>).</p>
+</li>
+<li>
+<p><code>target</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the
+string which contains the path, module or location from where the log was
+executed.</p>
+</li>
+<li>
+<p><code>message</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the UTF-8 encoded
+log message.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="id-abort-handler"><a class="anchor" href="#id-abort-handler"></a><a class="link" href="#id-abort-handler">B.11. Abort Handler</a></h3>
+<div class="paragraph">
+<p>Interface for aborting the execution of the runtime.</p>
+</div>
+<div class="sect3">
+<h4 id="id-ext_panic_handler_abort_on_panic"><a class="anchor" href="#id-ext_panic_handler_abort_on_panic"></a><a class="link" href="#id-ext_panic_handler_abort_on_panic">B.11.1. <code>ext_panic_handler_abort_on_panic</code></a></h4>
+<div class="paragraph">
+<p>Aborts the execution of the runtime with a given message. Note that the message
+will be only displayed if the host is enabled to display those types of
+messages, which is implementation specific.</p>
+</div>
+<div class="sect4">
+<h5 id="id-version-1-prototype-77"><a class="anchor" href="#id-version-1-prototype-77"></a><a class="link" href="#id-version-1-prototype-77">B.11.1.1. Version 1 - Prototype</a></h5>
+<div class="listingblock">
+<div class="content">
+<pre>(func $ext_panic_handler_abort_on_panic_version_1
+	(param $message i64))</pre>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Arguments</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><code>message</code>: a pointer-size (<a href="chap-host-api.html#defn-runtime-pointer-size">Definition 203</a>) to the UTF-8 encoded
+message.</p>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="paragraph nav-footer">
+<p>← Previous: <a href="id-cryptography-encoding.html">Appendix A: Cryptography &amp; Encoding</a> | ↑ Up: <a href="polkadot-spec.html">Polkadot Protocol Specification</a> | Next: <a href="chap-runtime-api.html">Appendix C: Runtime API</a> →</p>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Version 0.2.1<br>
+Last updated 2023-03-09 11:37:31 +0100
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>
