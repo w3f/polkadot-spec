@@ -665,4 +665,4 @@ The `Update Multiplier` defines how the multiplier can change. The Polkadot Runt
 
 $\begin{aligned} diff &=& (target$ weight - previous$ block$ weight) $ v &=& 0.00004 $ next$ weight &=& weight \times (1 + (v \times diff) + (v \times diff)^2 / 2) $ \end{aligned}$
 
-Polkadot defines the `target_weight` as 0.25 (25%). More information about this algorithm is described in the [Web3 Foundation research paper](https://research.web3.foundation/en/latest/polkadot/Token%20Economics.html#relay-chain-transaction-fees-and-per-block-transaction-limits).
+Polkadot defines the `target_weight` as 0.25 (25%). More information about this algorithm is described in the [Web3 Foundation research paper](https://research.web3.foundation/en/latest/polkadot/overview/2-token-economics.html#relay-chain-transaction-fees-and-per-block-transaction-limits).
