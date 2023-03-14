@@ -383,12 +383,12 @@ Definition 44. [GRANDPA Vote Messages](chap-networking.html#defn-grandpa-vote-ms
 
 A **GRANDPA vote message** by voter $v$, $M_v^(r,"stage")$, is gossip to the network by voter $v$ with the following structure:
 
-$M_v^(r,"stage")(B) := "Enc"\_("SC")(r,"id"\_(bbb V),"SigMsg")$ $"SigMsg" := ("msg","Sig"\_(v_i)^(r,"stage"),v\_("id"))$ $"msg" := "Enc"\_("SC")("stage",V_v^(r,"stage")(B))$
+$M_v^(r,"stage")(B) := "Enc"\_("SC")(r,"id"\_(\mathbb V),"SigMsg")$ $"SigMsg" := ("msg","Sig"\_(v_i)^(r,"stage"),v\_("id"))$ $"msg" := "Enc"\_("SC")("stage",V_v^(r,"stage")(B))$
 
 where  
 - $r$ is an unsigned 64-bit integer indicating the Grandpa round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
 
-- $"id"\_(bbb V)$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition 33](chap-sync.html#defn-authority-list)).
+- $"id"\_(\mathbb V)$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
 - $"Sig"\_(v_i)^(r,"stage")$ is a 512-bit byte array containing the signature of the authority ([Definition 77](sect-finality.html#defn-sign-round-vote)).
 
@@ -417,12 +417,12 @@ Definition 46. [GRANDPA Commit Message](chap-networking.html#defn-grandpa-commit
 
 A **GRANDPA commit message** for block $B$ in round $r$, $M_v^(r,"Fin")(B)$, is a message broadcasted by voter $v$ to the network indicating that voter $v$ has finalized block $B$ in round $r$. It has the following structure:
 
-$M_v^(r,"Fin")(B) := "Enc"\_("SC")(r,"id"\_(bbb V),V_v^r(B),J\_(v\_(0,...n))^(r,"comp"))$
+$M_v^(r,"Fin")(B) := "Enc"\_("SC")(r,"id"\_(\mathbb V),V_v^r(B),J\_(v\_(0,...n))^(r,"comp"))$
 
 where  
 - $r$ is an unsigned 64-bit integer indicating the round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
 
-- $id\_(bbb V)$ is the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
+- $id\_(\mathbb V)$ is the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
 - $V_v^r(B)$ is a 256-bit array containing the GRANDPA vote for block $B$ ([Definition 75](sect-finality.html#defn-vote)).
 
@@ -438,14 +438,14 @@ Definition 47. [GRANDPA Neighbor Message](chap-networking.html#defn-grandpa-neig
 
 A **GRANDPA Neighbor Message** is defined as:
 
-$M^("neigh") := "Enc"\_("SC")(v,r,"id"\_(bbb V),H_i(B\_("last")))$
+$M^("neigh") := "Enc"\_("SC")(v,r,"id"\_(\mathbb V),H_i(B\_("last")))$
 
 where  
 - $v$ is an unsigned 8-bit integer indicating the version of the neighbor message, currently *1*.
 
 - $r$ is an unsigned 64-bit integer indicating the round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
 
-- $"id"\_(bbb V)$ is an unsigned 64-bit integer indicating the authority Id ([Definition 33](chap-sync.html#defn-authority-list)).
+- $"id"\_(\mathbb V)$ is an unsigned 64-bit integer indicating the authority Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
 - $H_i(B\_("last"))$ is an unsigned 32-bit integer indicating the block number of the last finalized block $B\_("last")$.
 
@@ -459,17 +459,17 @@ In particular, this procedure involves sending a *catch-up request* and processi
 
 Definition 48. [Catch-Up Request Message](chap-networking.html#defn-grandpa-catchup-request-msg)
 
-A **GRANDPA catch-up request message** for round $r$, $M\_(i,v)^("Cat"-q)("id"\_(bbb V),r)$, is a message sent from node $i$ to its voting peer node $v$ requesting the latest status of a GRANDPA round $r' \>r$ of the authority set $bbb V\_("id")$ along with the justification of the status and has the following structure:
+A **GRANDPA catch-up request message** for round $r$, $M\_(i,v)^("Cat"-q)("id"\_(\mathbb V),r)$, is a message sent from node $i$ to its voting peer node $v$ requesting the latest status of a GRANDPA round $r' \>r$ of the authority set $\mathbb V\_("id")$ along with the justification of the status and has the following structure:
 
-$M\_(i,v)^(r,"Cat"-q) := "Enc"\_("SC")(r,"id"\_(bbb V))$
+$M\_(i,v)^(r,"Cat"-q) := "Enc"\_("SC")(r,"id"\_(\mathbb V))$
 
 This message is the sub-component of the GRANDPA Gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *3*.
 
 Definition 49. [Catch-Up Response Message](chap-networking.html#defn-grandpa-catchup-response-msg)
 
-A **GRANDPA catch-up response message** for round $r$, $M\_(v,i)^("Cat"-s)("id"\_(bbb V),r)$, is a message sent by a node $v$ to node $i$ in response of a catch-up request $M\_(v,i)^("Cat"-q)("id"\_(bbb V),r')$ in which $r \>= r'$ is the latest GRANDPA round which v has prove of its finalization and has the following structure:
+A **GRANDPA catch-up response message** for round $r$, $M\_(v,i)^("Cat"-s)("id"\_(\mathbb V),r)$, is a message sent by a node $v$ to node $i$ in response of a catch-up request $M\_(v,i)^("Cat"-q)("id"\_(\mathbb V),r')$ in which $r \>= r'$ is the latest GRANDPA round which v has prove of its finalization and has the following structure:
 
-$M\_(v,i)^("Cat"-s) := "Enc"\_("SC")("id"\_(bbb V), r, J\_(0,...n)^(r,"pv")(B), J\_(0,...m)^(r,"pc")(B),H_h(B'),H_i(B'))$
+$M\_(v,i)^("Cat"-s) := "Enc"\_("SC")("id"\_(\mathbb V), r, J\_(0,...n)^(r,"pv")(B), J\_(0,...m)^(r,"pc")(B),H_h(B'),H_i(B'))$
 
 Where $B$ is the highest block which $v$ believes to be finalized in round $r$ ([Definition 76](sect-finality.html#defn-voting-rounds)). $B'$ is the highest ancestor of all blocks voted on in the arrays of justifications $J\_(0,...n)^(r,"pv")(B)$ and $J\_(0,...m)^(r,"pc")(B)$ ([Definition 78](sect-finality.html#defn-grandpa-justification)) with the exception of the equivocatory votes.
 
@@ -487,14 +487,14 @@ Definition 50. [Commitment](chap-networking.html#defn-grandpa-beefy-commitment)
 
 A **commitment**, $C$, contains the information extracted from the finalized block at height $H_i(B\_("last"))$ as specified in the message body and a datastructure of the following format:
 
-$C = (R_h,H_i(B\_("last")),"id"\_(bbb V))$
+$C = (R_h,H_i(B\_("last")),"id"\_(\mathbb V))$
 
 where  
 - $R_h$ is the MMR root of all the block header hashes leading up to the latest, finalized block.
 
 - $H_i(B\_("last"))$ is the block number this commitment is for. Namely the latest, finalized block.
 
-- $"id"\_(bbb V)$ is the current authority set Id ([Definition 73](sect-finality.html#defn-authority-set-id)).
+- $"id"\_(\mathbb V)$ is the current authority set Id ([Definition 73](sect-finality.html#defn-authority-set-id)).
 
 Definition 51. [Vote Message](chap-networking.html#defn-msg-beefy-gossip)
 
@@ -518,7 +518,7 @@ $M\_("SC") = "Enc"\_("SC")(C,S_n)$ $S_n = (A_0^("sig"),... A_n^("sig"))$
 where  
 - $C$ is the BEEFY commitment ([Definition 50](chap-networking.html#defn-grandpa-beefy-commitment)).
 
-- $S_n$ is an array where its exact size matches the number of validators in the current authority set as specified by $"id"\_(bbb V)$ ([Definition 73](sect-finality.html#defn-authority-set-id)) in $C$. Individual items are of the type *Option* ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain a signature of a validator which signed the same statement ($R_h$ in $C$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
+- $S_n$ is an array where its exact size matches the number of validators in the current authority set as specified by $"id"\_(\mathbb V)$ ([Definition 73](sect-finality.html#defn-authority-set-id)) in $C$. Individual items are of the type *Option* ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain a signature of a validator which signed the same statement ($R_h$ in $C$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
 
   For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in $S_n$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition 190](id-cryptography-encoding.html#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
 
@@ -533,7 +533,7 @@ $M\_("SC")^w = "Enc"\_("SC")(C,V\_(0,... n), R\_("sig"))$
 where  
 - $C$ is the BEEFY commitment ([Definition 50](chap-networking.html#defn-grandpa-beefy-commitment)).
 
-- $V\_(0,... n)$ is an array where its exact size matches the number of validators in the current authority set as specified by $"id"\_(bbb V)$ in $C$. Individual items are booleans which indicate whether the validator has signed the statement (*true*) or not (*false*). It’s critical that the boolean indicators are sorted based on their corresponding public key entry in the authority set.
+- $V\_(0,... n)$ is an array where its exact size matches the number of validators in the current authority set as specified by $"id"\_(\mathbb V)$ in $C$. Individual items are booleans which indicate whether the validator has signed the statement (*true*) or not (*false*). It’s critical that the boolean indicators are sorted based on their corresponding public key entry in the authority set.
 
   For example, the boolean indicator of the validator at index 3 in the authority set must be placed at index *3* in $V_n$. This sorting allows clients to map public keys to their corresponding boolean indicators.
 

@@ -8,7 +8,9 @@ Definition 1. [Discrete State Machine (DSM)](chap-state.html#defn-state-machine)
 
 A **Discrete State Machine (DSM)** is a state transition system that admits a starting state and whose set of states and set of transitions are countable. Formally, it is a tuple of
 
-$(\Sigma, S, s_0, \delta)$
+$$
+(\Sigma, S, s_0, \delta)
+$$
 
 where
 
@@ -16,21 +18,25 @@ where
 
 - $S$ is a countable set of all possible states.
 
-- $s_0 in S$ is the initial state.
+- $s_0 \in S$ is the initial state.
 
 - $\delta$ is the state-transition function, known as **Runtime** in the Polkadot vocabulary, such that
 
-$\delta : S \times \Sigma \rightarrow S$
+$$
+\delta : S \times \Sigma \rightarrow S
+$$
 
 Definition 2. [Path Graph](chap-state.html#defn-path-graph)
 
-A **path graph** or a **path** of $n$ nodes formally referred to as **$P_n$**, is a tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex degree 2. Therefore, $P_n$ can be represented by sequences of $(v_1, \ldots, v_n)$ where $e_i = (v_i, v\_{i + 1})$ for $1 \<= i \<= n - 1$ is the edge which connect $v_i$ and $v\_{i + 1}$.
+A **path graph** or a **path** of $n$ nodes formally referred to as **$P_n$**, is a tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex degree 2. Therefore, $P_n$ can be represented by sequences of $(v_1, \ldots, v_n)$ where $e_i = (v_i, v_{i + 1})$ for $1 <= i <= n - 1$ is the edge which connect $v_i$ and $v_{i + 1}$.
 
 Definition 3. [Blockchain](chap-state.html#defn-blockchain)
 
-A **blockchain** $C$ is a [directed path graph](https://en.wikipedia.org/wiki/Directed_graph). Each node of the graph is called **Block** and indicated by **$B$**. The unique sink of $C$ is called **Genesis Block**, and the source is called the $"Head"$ of $C$. For any vertex $(B_1, B_2)$ where $B_1 -\> B_2$ we say $B_2$ is the **parent** of $B_1$, which is the **child** of $B_2$, respectively. We indicate that by:
+A **blockchain** $C$ is a [directed path graph](https://en.wikipedia.org/wiki/Directed_graph). Each node of the graph is called **Block** and indicated by **$B$**. The unique sink of $C$ is called **Genesis Block**, and the source is called the $\text{Head}$ of $C$. For any vertex $(B_1, B_2)$ where $B_1 -\> B_2$ we say $B_2$ is the **parent** of $B_1$, which is the **child** of $B_2$, respectively. We indicate that by:
 
-$B_2 := P(B_1)$
+$$
+B_2 := P(B_1)
+$$
 
 The parent refers to the child by its hash value ([Definition 10](chap-state.html#defn-block-header)), making the path graph tamper proof since any modifications to the child would result in its hash value being changed.
 
@@ -50,33 +56,33 @@ When a block in the block tree gets finalized, there is an opportunity to prune 
 
 Definition 5. [Pruned Block Tree](chap-state.html#defn-pruned-tree)
 
-By **Pruned Block Tree**, denoted by $"PBT"$, we refer to a subtree of the block tree obtained by eliminating all branches which do not contain the most recent finalized blocks ([Definition 90](sect-finality.html#defn-finalized-block)). By **pruning**, we refer to the procedure of $BT larr "PBT"$. When there is no risk of ambiguity and is safe to prune BT, we use $"BT"$ to refer to $"PBT"$.
+By **Pruned Block Tree**, denoted by $\text{PBT}$, we refer to a subtree of the block tree obtained by eliminating all branches which do not contain the most recent finalized blocks ([Definition 90](sect-finality.html#defn-finalized-block)). By **pruning**, we refer to the procedure of $BT \larr \text{PBT}$. When there is no risk of ambiguity and is safe to prune BT, we use $\text{BT}$ to refer to $\text{PBT}$.
 
 [Definition 6](chap-state.html#defn-chain-subchain) gives the means to highlight various branches of the block tree.
 
 Definition 6. [Subchain](chap-state.html#defn-chain-subchain)
 
-Let $G$ be the root of the block tree and $B$ be one of its nodes. By $"Chain"(B)$, we refer to the path graph from $G$ to $B$ in $"BT"$. Conversely, for a chain $C = "Chain"(B)$, we define **the head of $C$** to be $B$, formally noted as $B := bar C$. We define $\|C\|$, the length of $C$ as a path graph.
+Let $G$ be the root of the block tree and $B$ be one of its nodes. By $\text{Chain}(B)$, we refer to the path graph from $G$ to $B$ in $\text{BT}$. Conversely, for a chain $C = |\text{Chain}(B)$, we define **the head of $C$** to be $B$, formally noted as $B := \bar C$. We define $\|C\|$, the length of $C$ as a path graph.
 
-If $B'$ is another node on $"Chain"(B)$, then by $"SubChain"(B', B)$ we refer to the subgraph of $"Chain"(B)$ path graph which contains $B$ and ends at $B'$ and by $\|"SubChain"(B', B)\|$ we refer to its length.
+If $B'$ is another node on $\text{Chain}(B)$, then by $\text{SubChain}(B', B)$ we refer to the subgraph of $\text{Chain}(B)$ path graph which contains $B$ and ends at $B'$ and by $\|\text{SubChain}(B', B)\|$ we refer to its length.
 
-Accordingly, $bbb C\_(B')(BT)$ is the set of all subchains of $BT$ rooted at $B'$. The set of all chains of $BT$, $bbb C_G(BT))$ is denoted by $bbb C(BT)$ or simply $bbb C$, for the sake of brevity.
+Accordingly, $\mathbb C_{B'}(BT)$ is the set of all subchains of $BT$ rooted at $B'$. The set of all chains of $BT$, $\mathbb C_G(BT)$ is denoted by $\mathbb C(BT)$ or simply $\mathbb C$, for the sake of brevity.
 
 Definition 7. [Longest Chain](chap-state.html#defn-longest-chain)
 
-We define the following complete order over $bbb C$ as follows. For chains $C_1, C_2 in bbb C$ we have that $C_1 \> C_2$ if either $\|C_1\| \> \|C_2\|$ or $\|C_1\| = \|C_2\|$.
+We define the following complete order over $\mathbb C$ as follows. For chains $C_1, C_2 \in \mathbb C$ we have that $C_1 \> C_2$ if either $\|C_1\| \> \|C_2\|$ or $\|C_1\| = \|C_2\|$.
 
-If $\|C_1\| =\| C_2\|$ we say $C_1 \> C_2$ if and only if the block arrival time ([Definition 67](sect-block-production.html#defn-block-time)) of $bar C_1$ is less than the block arrival time of $bar C_2$, from the *subjective perspective* of the Host. We define the $"Longest-Chain"(BT)$ to be the maximum chain given by this order.
+If $\|C_1\| =\| C_2\|$ we say $C_1 \> C_2$ if and only if the block arrival time ([Definition 67](sect-block-production.html#defn-block-time)) of $\bar C_1$ is less than the block arrival time of $\bar C_2$, from the *subjective perspective* of the Host. We define the $\text{Longest-Chain}(BT)$ to be the maximum chain given by this order.
 
 Definition 8. [Longest Path](chap-state.html#defn-longest-path)
 
-$"Longest-Path"(BT)$ returns the path graph of $BT$ which is the longest among all paths in $BT$ and has the earliest block arrival time ([Definition 67](sect-block-production.html#defn-block-time)). $"Deepest-Leaf"(BT)$ returns the head of $"Longest-Path"(BT)$ chain.
+$\text{Longest-Path}(BT)$ returns the path graph of $BT$ which is the longest among all paths in $BT$ and has the earliest block arrival time ([Definition 67](sect-block-production.html#defn-block-time)). $\text{Deepest-Leaf}(BT)$ returns the head of $\text{Longest-Path}(BT)$ chain.
 
 Because every block in the blockchain contains a reference to its parent, it is easy to see that the block tree is de facto a tree. A block tree naturally imposes partial order relationships on the blocks as follows:
 
 Definition 9. [Descendant and Ancestor](chap-state.html#defn-descendant-ancestor)
 
-We say $B$ is **descendant** of $B'$, formally noted as $B \> B'$, if $(\|B\| \> \|B'\|) in C$. Respectively, we say that $B'$ is an **ancestor** of $B$, formally noted as $B \< B'$, if $(\|B\| \< \|B'\|) in C$.
+We say $B$ is **descendant** of $B'$, formally noted as $B \> B'$, if $(\|B\| \> \|B'\|) in C$. Respectively, we say that $B'$ is an **ancestor** of $B$, formally noted as $B < B'$, if $(\|B\| < \|B'\|) in C$.
 
 ## [](#sect-state-replication)[2.2. State Replication](#sect-state-replication)
 
@@ -108,16 +114,25 @@ Definition 11. [Header Digest](chap-state.html#defn-digest)
 
 The header **digest** of block $B$ formally referred to by $H_d (B)$ is an array of **digest items** $H_d^i$’s, known as digest items of varying data type ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) such that:
 
-$H_d(B) := H_d^1, ..., H_d^n$
+$$
+H_d(B) := H_d^1, ..., H_d^n
+$$
 
 where each digest item can hold one of the following type identifiers:
 
-$H_d^i = { (4, to, (t, "id", m)), (5, to, (t, "id", m)), (6, to, (t, "id", m)), (8, to, (t)) :}$
+$$
+H_d^i = \begin{cases}
+4 \text{ } \rarr \text{ } (t, \text{id}, m) \\
+5 \text{ } \rarr \text{ } (t, \text{id}, m) \\
+6 \text{ } \rarr \text{ } (t, \text{id}, m) \\
+8 \text{ } \rarr \text{ } (t)
+\end{cases}
+$$
 
 where  
-- $"id"$ is a 4-byte ASCII encoded consensus engine identifier
+- $\text{id}$ is a 4-byte ASCII encoded consensus engine identifier
 
-- $"m"$ is a scale encoded byte array containing the message payload
+- $\text{m}$ is a scale encoded byte array containing the message payload
 
 [TABLE]
 
@@ -127,15 +142,19 @@ Definition 12. [Header Hash](chap-state.html#defn-block-header-hash)
 
 The **block header hash of block $B$**, $H_h(B)$, is the hash of the header of block $B$ encoded by simple codec:
 
-$H_h(B) := "Blake2b"("Enc"\_(SC)("Head"(B)))$
+$$
+H_h(B) := "Blake2b"("Enc"\_(SC)("Head"(B)))
+$$
 
 Definition 13. [Block Body](chap-state.html#defn-block-body)
 
 The block body consists of an sequence of extrinsics, each encoded as a byte array. The content of an extrinsic is completely opaque to the Polkadot Host. As such, from the point of the Polkadot Host, and is simply a SCALE encoded array of byte arrays. The **body of Block** $B$ represented as $"Body"(B)$ is defined to be:
 
-$"Body"(B) := "Enc"\_(SC)(E_1,...,E_n)$
+$$
+\text{Body}(B) := \text{Enc}_{SC}(E_1,...,E_n)
+$$
 
-Where each $E_i in bbb B$ is a SCALE encoded extrinsic.
+Where each $E_i \in \mathbb B$ is a SCALE encoded extrinsic.
 
 seq: - id: num_transactions type: scale::compact_int - id: transactions type: transaction repeat: expr repeat-expr: num_transactions.value types: transaction: seq: - id: len_data type: scale::compact_int - id: data size: len_data.value
 
@@ -172,7 +191,7 @@ Furthermore [Validate-Transactions-and-Store](chap-state.html#algo-validate-tran
 where  
 - $M_T$ is the transaction message (offchain transactions?)
 
-- $"Dec"\_(SC)$ decodes the SCALE encoded message.
+- $\text{Dec}_{SC}$ decodes the SCALE encoded message.
 
 - $"Longest-Chain"$ is defined in [Definition 7](chap-state.html#defn-longest-chain).
 
@@ -220,11 +239,20 @@ The Polkadot Host implements various functions to facilitate access to the syste
 
 Definition 16. [Stored Value](chap-state.html#defn-stored-value)
 
-The $sf "StoredValue"$ function retrieves the value stored under a specific key in the state storage and is formally defined as:
+The $\sf \text{StoredValue}$ function retrieves the value stored under a specific key in the state storage and is formally defined as:
 
-$sf "StoredValue" ": "cc K -\> cc V$ $k -\> {(v,"if " (k,v), "exists in state storage"),(phi,,"otherwise"):}$
+$$
+\sf \text{StoredValue: } \mathcal K \rarr \mathcal V
+$$
 
-where $cc K sub bbb B$ and $cc V sub bbb B$ are respectively the set of all keys and values stored in the state storage. $cc V$ can be an empty value.
+$$
+k \rarr \begin{cases}
+v \text{ if } (k,v) \text{ exists in state storage} \\
+\phi \text{ otherwise}
+\end{cases}
+$$
+
+where $\mathcal K \sub \mathbb B$ and $\mathcal V \sub \mathbb B$ are respectively the set of all keys and values stored in the state storage. $\mathcal V$ can be an empty value.
 
 ### [](#id-general-structure)[2.4.2. General Structure](#id-general-structure)
 
@@ -256,7 +284,7 @@ $k\_("enc") := (k\_("enc"\_1), ..., k\_("enc"\_(2n))) := sf "KeyEncode"(k)$
 
 such that:
 
-$sf "KeyEncode": bbb B -\> "Nibbles"^4$ $k \|-\> (k\_("enc"\_1),...,k\_("enc"\_(2n)))$ $(b_1,...,b_n) \|-\> (b_1^(1),b_1^2,b_2^1,b_2^2,...,b_n^1,b_n^2 )$
+$sf "KeyEncode": \mathbb B -\> "Nibbles"^4$ $k \|-\> (k\_("enc"\_1),...,k\_("enc"\_(2n)))$ $(b_1,...,b_n) \|-\> (b_1^(1),b_1^2,b_2^1,b_2^2,...,b_n^1,b_n^2 )$
 
 where $"Nibble"^4$ is the set of all nibbles of 4-bit arrays and $b_i^1$ and $b_i^2$ are 4-bit nibbles, which are the big endian representations of $b_i$:
 
@@ -272,7 +300,7 @@ In this subsection, we specify the structure of the nodes in the trie as well as
 
 Definition 19. [Set of Nodes](chap-state.html#defn-trie-nodeset)
 
-We refer to the **set of the nodes of Polkadot state trie** by $cc N$. By $N in cc N$ to refer to an individual node in the trie.
+We refer to the **set of the nodes of Polkadot state trie** by $\mathcal N$. By $N in \mathcal N$ to refer to an individual node in the trie.
 
 Definition 20. [State Trie](chap-state.html#defn-nodetype)
 
@@ -286,19 +314,19 @@ and, at least one of the following statements holds:
 
 - $N$ has more than one child.
 
-Conversely, if $(k, v)$ is an entry in the state trie then there is a node $N in cc N$ such that $k_N = k$.
+Conversely, if $(k, v)$ is an entry in the state trie then there is a node $N in \mathcal N$ such that $k_N = k$.
 
 Definition 21. [Branch](chap-state.html#defn-trie-branch)
 
-A **branch** node $N_b in cc N_b$ is a node which has one child or more. A branch node can have at most 16 children. A **leaf** node $N_l in cc N_l$ is a childless node. Accordingly:
+A **branch** node $N_b in \mathcal N_b$ is a node which has one child or more. A branch node can have at most 16 children. A **leaf** node $N_l in \mathcal N_l$ is a childless node. Accordingly:
 
-$cc N_b := {N_b in cc N \| N_b " is a branch node"}$ $cc N_l := {N_l in cc N \| N_l " is a leaf node"}$
+$\mathcal N_b := {N_b in \mathcal N \| N_b " is a branch node"}$ $\mathcal N_l := {N_l in \mathcal N \| N_l " is a leaf node"}$
 
 For each node, part of $k_N$ is built while the trie is traversed from the root to $N$ and another part of $k_N$ is stored in $N$ ([Definition 22](chap-state.html#defn-node-key)).
 
 Definition 22. [Aggregated Prefix Key](chap-state.html#defn-node-key)
 
-For any $N in cc N$, its key $k_N$ is divided into an **aggregated prefix key, $"pk"\_N^("Agr")$**, aggregated by [Aggregate-Key](chap-state.html#algo-aggregate-key) and a **partial key**, **$"pk"\_N$** of length $0 \<= l\_("pk"\_N)$ in nibbles such that:
+For any $N in \mathcal N$, its key $k_N$ is divided into an **aggregated prefix key, $"pk"\_N^("Agr")$**, aggregated by [Aggregate-Key](chap-state.html#algo-aggregate-key) and a **partial key**, **$"pk"\_N$** of length $0 \<= l\_("pk"\_N)$ in nibbles such that:
 
 $"pk"\_N := (k\_("enc"\_i),...,k\_("enc"\_(i+l\_("pk"\_N))))$
 
@@ -310,9 +338,9 @@ Part of $"pk"\_N^("Agr")$ is explicitly stored in $N$’s ancestors. Additionall
 
 Definition 23. [Index](chap-state.html#defn-index-function)
 
-For $N in cc N_b$ and $N_c$ child of $N$, we define $sf "Index"\_N$ function as:
+For $N in \mathcal N_b$ and $N_c$ child of $N$, we define $sf "Index"\_N$ function as:
 
-$sf "Index"\_N: {N_C in cc N \| N_c " is a child of " N} -\> "Nibbles"\_1^4$ $N_c -\> i$
+$sf "Index"\_N: {N_C in \mathcal N \| N_c " is a child of " N} -\> "Nibbles"\_1^4$ $N_c -\> i$
 
 such that
 
@@ -324,7 +352,7 @@ Assuming that $P_N$ is the path ([Definition 2](chap-state.html#defn-path-graph)
 
 Definition 24. [Node Value](chap-state.html#defn-node-value)
 
-A node $N in cc N$ stores the **node value**, $v_N$, which consists of the following concatenated data:
+A node $N in \mathcal N$ stores the **node value**, $v_N$, which consists of the following concatenated data:
 
 $"Node Header"\|\|"Partial Key"\|\|"Node Subvalue"$
 
@@ -345,7 +373,7 @@ Definition 25. [Node Header](chap-state.html#defn-node-header)
 
 The **node header**, consisting of $\>= 1$ bytes, $N_1...N_n$, specifies the node variant and the partial key length ([Definition 22](chap-state.html#defn-node-key)). Both pieces of information can be represented in bits within a single byte, $N_1$, where the amount of bits of the variant, $v$, and the bits of the partial key length, $p_l$ varies.
 
-$v = { (01, "Leaf", p_l = 2^6), (10, "Branch Node with " k_N !in cc K, p_l = 2^6), (11, "Branch Node with " k_N in cc K, p_l = 2^6), (001, "Leaf containing a hashed subvalue", p_l = 2^5), (0001, "Branch containing a hashed subvalue", p_l = 2^4), (0000 0000, "Empty", p_l = 0), (0000 0001, "Reserved for compact encoding",) :}$
+$v = { (01, "Leaf", p_l = 2^6), (10, "Branch Node with " k_N !in \mathcal K, p_l = 2^6), (11, "Branch Node with " k_N in \mathcal K, p_l = 2^6), (001, "Leaf containing a hashed subvalue", p_l = 2^5), (0001, "Branch containing a hashed subvalue", p_l = 2^4), (0000 0000, "Empty", p_l = 0), (0000 0001, "Reserved for compact encoding",) :}$
 
 If the value of $p_l$ is equal to the maximum possible value the bits can hold, such as 63 ($2^6-1$) in case of the $01$ variant, then the value of the next 8 bits ($N_2$) are added the the length. This process is repeated for every $N_n$ where $N_n = 2^8-1$. Any value smaller than the maximum possible value of $N_n$ implies that the next value of $N\_(n+1)$ should not be added to the length. The hashed subvalue for variants $001$ and $0001$ is described in [Definition 28](chap-state.html#defn-hashed-subvalue).
 
@@ -365,13 +393,13 @@ We use the auxiliary function introduced in [Definition 26](chap-state.html#defn
 
 Definition 26. [Children Bitmap](chap-state.html#defn-children-bitmap)
 
-Suppose $N_b, N_c in cc N$ and $N_c$ is a child of $N_b$. We define bit $b_i : = 1$ if and only if $N_b$ has a child with index $i$, therefore we define **ChildrenBitmap** functions as follows:
+Suppose $N_b, N_c in \mathcal N$ and $N_c$ is a child of $N_b$. We define bit $b_i : = 1$ if and only if $N_b$ has a child with index $i$, therefore we define **ChildrenBitmap** functions as follows:
 
-$"ChildrenBitmap:"$ $cc N_b -\> bbb B_2$ $N_b -\> (b\_(15), ...,b_8,b_7,...,b_0)\_2$
+$"ChildrenBitmap:"$ $\mathcal N_b -\> \mathbb B_2$ $N_b -\> (b\_(15), ...,b_8,b_7,...,b_0)\_2$
 
 where
 
-$b_i := {(1, EE N_c in cc N: k\_(N_c) = k\_(N_b)\|\|i\|\|pk\_(N_c)),(0, "otherwise"):}$
+$b_i := {(1, EE N_c in \mathcal N: k\_(N_c) = k\_(N_b)\|\|i\|\|pk\_(N_c)),(0, "otherwise"):}$
 
 Definition 27. [Subvalue](chap-state.html#defn-node-subvalue)
 
@@ -403,7 +431,7 @@ Definition 29. [Merkle Value](chap-state.html#defn-merkle-value)
 
 For a given node $N$, the **Merkle value** of $N$, denoted by $H(N)$ is defined as follows:
 
-$H: bbb B -\> U\_(i -\> 0)^(32) bbb B_32$ $H(N): {(v_N,\|\|v_N\|\| \< 32 " and " N != R),("Blake2b"(v_n),\|\|v_N\|\| \>= 32 " or " N = R):}$
+$H: \mathbb B -\> U\_(i -\> 0)^(32) \mathbb B_32$ $H(N): {(v_N,\|\|v_N\|\| \< 32 " and " N != R),("Blake2b"(v_n),\|\|v_N\|\| \>= 32 " or " N = R):}$
 
 Where $v_N$ is the node value of $N$ ([Definition 24](chap-state.html#defn-node-value)) and $R$ is the root of the trie. The **Merkle hash** of the trie is defined to be $H(R)$.
 

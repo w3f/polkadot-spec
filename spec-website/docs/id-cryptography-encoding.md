@@ -229,9 +229,9 @@ By a **sequences of bytes** or a **byte array**, $b$, of length $n$, we refer to
 
 $b := (b_0, b_1, ..., b\_{n - 1}) " such that " 0 \<= b_i \<= 255$
 
-We define $bbb B_n$ to be the **set of all byte arrays of length $n$**. Furthermore, we define:
+We define $\mathbb B_n$ to be the **set of all byte arrays of length $n$**. Furthermore, we define:
 
-$bbb B := uuu\_(i=0)^infty bbb B_i$
+$\mathbb B := uuu\_(i=0)^infty \mathbb B_i$
 
 We represent the concatenation of byte arrays $a :=(a_0, ..., a_n)$ and $b :=(b_0, ..., b_m)$ by:
 
@@ -259,7 +259,7 @@ $b_i :=B_i$
 
 Accordingly, we define the function $sf "Enc"\_(sf "LE")$:
 
-$sf "Enc"\_(sf "LE"): bbb Z^+ -\> bbb B; (B_n ... B_0)\_256 \|-\> (B\_{0,} B_1, ... , B_n)$
+$sf "Enc"\_(sf "LE"): \mathbb Z^+ -\> \mathbb B; (B_n ... B_0)\_256 \|-\> (B\_{0,} B_1, ... , B_n)$
 
 Definition 185. [UINT32](id-cryptography-encoding.html#defn-uint32)
 
@@ -295,21 +295,21 @@ Definition 188. [Varying Data Type](id-cryptography-encoding.html#defn-varrying-
 
 We define a **varying data** type to be an ordered set of data types.
 
-$cc T = {T_1, ..., T_n}$
+$\mathcal T = {T_1, ..., T_n}$
 
-A value $A$ of varying date type is a pair $(A\_("Type"),A\_("Value"))$ where $A\_("Type") = T_i$ for some $T_i in cc T$ and $A\_("Value")$ is its value of type $T_i$, which can be empty. We define $"idx"(T_i) = i - 1$, unless it is explicitly defined as another value in the definition of a particular varying data type.
+A value $A$ of varying date type is a pair $(A\_("Type"),A\_("Value"))$ where $A\_("Type") = T_i$ for some $T_i \in \mathcal T$ and $A\_("Value")$ is its value of type $T_i$, which can be empty. We define $"idx"(T_i) = i - 1$, unless it is explicitly defined as another value in the definition of a particular varying data type.
 
 In particular, we define two specific varying data which are frequently used in various part of Polkadot protocol: *Option* ([Definition 190](id-cryptography-encoding.html#defn-option-type)) and *Result* ([Definition 191](id-cryptography-encoding.html#defn-result-type)).
 
 Definition 189. [Encoding of Varying Data Type](id-cryptography-encoding.html#defn-scale-variable-type)
 
-The SCALE codec for value $A = (A\_("Type"), A\_("Value"))$ of varying data type $cc T = {T_i, ... T_n}$, formally referred to as $"Enc"\_("SC")(A)$ is defined as follows:
+The SCALE codec for value $A = (A\_("Type"), A\_("Value"))$ of varying data type $\mathcal T = {T_i, ... T_n}$, formally referred to as $"Enc"\_("SC")(A)$ is defined as follows:
 
 $"Enc"\_("SC")(A) := "Enc"\_("SC")("idx"(A\_("Type")) "\|\|" "Enc"\_("SC")(A\_("Value")))$
 
 Where $"idx"$ is a 8-bit integer determining the type of $A$. In particular, for the optional type defined in [Definition 188](id-cryptography-encoding.html#defn-varrying-data-type), we have:
 
-$"Enc"\_("SC")("None", phi) := 0\_(bbb B_1)$
+$"Enc"\_("SC")("None", phi) := 0\_(\mathbb B_1)$
 
 The SCALE codec does not encode the correspondence between the value and the data type it represents; the decoder needs prior knowledge of such correspondence to decode the data.
 
@@ -351,7 +351,7 @@ Definition 194. [Boolean](id-cryptography-encoding.html#defn-scale-boolean)
 
 The SCALE codec for a **boolean value** $b$ defined as a byte as follows:
 
-$"Enc"\_("SC"): {"False", "True"} -\> bbb B_1$ $b -\> {(0, b="False"),(1, b="True"):}$
+$"Enc"\_("SC"): {"False", "True"} -\> \mathbb B_1$ $b -\> {(0, b="False"),(1, b="True"):}$
 
 Definition 195. [String](id-cryptography-encoding.html#defn-scale-string)
 
@@ -373,7 +373,7 @@ Definition 198. [Length Encoding](id-cryptography-encoding.html#defn-sc-len-enco
 
 **SCALE Length encoding**, $"Enc"\_("SC")^("Len")$, also known as a *compact encoding*, of a non-negative number $n$ is defined as follows:
 
-$"Enc"\_("SC")^("Len"): bbb N -\> bbb B$ $n -\> b := {(l_1, 0 \<= n \< 2^6),(i_1 i_2, 2^6 \<= n \< 2^14),(j_1 j_2 j_3, 2^14 \<= n \< 2^30),(k_1 k_2 ... k_m, 2^30\<=n):}$
+$"Enc"\_("SC")^("Len"): \mathbb N -\> \mathbb B$ $n -\> b := {(l_1, 0 \<= n \< 2^6),(i_1 i_2, 2^6 \<= n \< 2^14),(j_1 j_2 j_3, 2^14 \<= n \< 2^30),(k_1 k_2 ... k_m, 2^30\<=n):}$
 
 in where the least significant bits of the first byte of byte array b are defined as follows:
 
@@ -395,7 +395,7 @@ Definition 199. [Hex Encoding](id-cryptography-encoding.html#defn-hex-encoding)
 
 Suppose that $"PK" = (k_1, ... k_n)$ is a sequence of nibbles, then:
 
-$"Enc"\_("HE")("PK") := {("Nibbles"\_4,-\>, bbb B),("PK" = (k_1, ... k_n),-\>,{((16k_1+k_2,...,16k\_(2i-1)+k\_(2i)),n=2i),((k_1,16k_2+k_3,...,16k\_(2i)+k\_(2i+1)),n = 2i+1):}):}$
+$"Enc"\_("HE")("PK") := {("Nibbles"\_4,-\>, \mathbb B),("PK" = (k_1, ... k_n),-\>,{((16k_1+k_2,...,16k\_(2i-1)+k\_(2i)),n=2i),((k_1,16k_2+k_3,...,16k\_(2i)+k\_(2i+1)),n = 2i+1):}):}$
 
 ## [](#chapter-genesis)[A.3. Genesis State](#chapter-genesis)
 

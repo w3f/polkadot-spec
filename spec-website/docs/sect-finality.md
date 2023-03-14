@@ -8,28 +8,28 @@ The Polkadot Host uses GRANDPA Finality protocol to finalize blocks. Finality is
 
 Definition 72. [GRANDPA Voter](sect-finality.html#defn-grandpa-voter)
 
-A **GRANDPA Voter**, $v$, represented by a key pair $(K_v^("pr"),v\_("id"))$ where $k_v^("pr")$ represents an *ed25519* private key, is a node running a GRANDPA protocol and broadcasting votes to finalize blocks in a Polkadot Host-based chain. The **set of all GRANDPA voters** for a given block B is indicated by $bbb V_B$. In that regard, we have \[To do: change function name, only call at genesis, adjust V_B over the sections\]
+A **GRANDPA Voter**, $v$, represented by a key pair $(K_v^("pr"),v\_("id"))$ where $k_v^("pr")$ represents an *ed25519* private key, is a node running a GRANDPA protocol and broadcasting votes to finalize blocks in a Polkadot Host-based chain. The **set of all GRANDPA voters** for a given block B is indicated by $\mathbb V_B$. In that regard, we have \[To do: change function name, only call at genesis, adjust V_B over the sections\]
 
-$bbb V = tt "grandpa_authorities"(B)$
+$\mathbb V = tt "grandpa_authorities"(B)$
 
-where $tt "grandpa_authorities"$ is a function entrypoint of the Runtime described in [Section C.10.1](chap-runtime-api.html#sect-rte-grandpa-auth). We refer to $bbb V_B$ as $bbb V$ when there is no chance of ambiguity.
+where $tt "grandpa_authorities"$ is a function entrypoint of the Runtime described in [Section C.10.1](chap-runtime-api.html#sect-rte-grandpa-auth). We refer to $\mathbb V_B$ as $\mathbb V$ when there is no chance of ambiguity.
 
-Analogously we say that a Polkadot node is a **non-voter node** for block $B$, if it does not own any of the key pairs in $bbb V_B$.
+Analogously we say that a Polkadot node is a **non-voter node** for block $B$, if it does not own any of the key pairs in $\mathbb V_B$.
 
 Definition 73. [Authority Set Id](sect-finality.html#defn-authority-set-id)
 
-The **authority set Id** ($"id"\_(bbb V)$) is an incremental counter which tracks the amount of authority list changes that occurred ([Definition 86](sect-finality.html#defn-consensus-message-grandpa)). Starting with the value of zero at genesis, the Polkadot Host increments this value by one every time a **Scheduled Change** or a **Forced Change** occurs. The authority set Id is an unsigned 64-bit integer.
+The **authority set Id** ($"id"\_(\mathbb V)$) is an incremental counter which tracks the amount of authority list changes that occurred ([Definition 86](sect-finality.html#defn-consensus-message-grandpa)). Starting with the value of zero at genesis, the Polkadot Host increments this value by one every time a **Scheduled Change** or a **Forced Change** occurs. The authority set Id is an unsigned 64-bit integer.
 
 Definition 74. [GRANDPA State](sect-finality.html#defn-grandpa-state)
 
 The **GRANDPA state**, $"GS"$, is defined as:
 
-$"GS" := {bbb V, "id"\_(bbb V),r}$
+$"GS" := {\mathbb V, "id"\_(\mathbb V),r}$
 
 where  
-- $bbb V$: is the set of voters.
+- $\mathbb V$: is the set of voters.
 
-- $"id"\_(bbb V)$: is the authority set ID ([Definition 73](sect-finality.html#defn-authority-set-id)).
+- $"id"\_(\mathbb V)$: is the authority set ID ([Definition 73](sect-finality.html#defn-authority-set-id)).
 
 - $r$: is the voting round number.
 
@@ -53,14 +53,14 @@ Definition 77. [Vote Signature](sect-finality.html#defn-sign-round-vote)
 
 $"Sign"\_(v_i)^(r,"stage")$ refers to the signature of a voter for a specific message in a round and is formally defined as:
 
-$"Sign"\_(v_i)^(r,"stage") := "Sig"\_("ed25519")("msg",r,"id"\_(bbb V))$
+$"Sign"\_(v_i)^(r,"stage") := "Sig"\_("ed25519")("msg",r,"id"\_(\mathbb V))$
 
 where  
 - $"msg"$: is an byte array containing the message to be signed ([Definition 75](sect-finality.html#defn-vote)).
 
 - $r$: is an unsigned 64-bit integer is the round number.
 
-- $"id"\_(bbb V)$: is an unsigned 64-bit integer indicating the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
+- $"id"\_(\mathbb V)$: is an unsigned 64-bit integer indicating the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
 Definition 78. [Justification](sect-finality.html#defn-grandpa-justification)
 
@@ -74,11 +74,11 @@ $B' \>= B$
 
 or $V\_(v_i)^(r,"pc")(B')$ is an equivocatory vote.
 
-In all cases, $"Sign"\_(v_i)^(r,"stage")(B')$ is the signature ([Definition 77](sect-finality.html#defn-sign-round-vote)) of voter $v\_("id") in bbb V_B$ broadcasted during either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round r. A **valid justification** must only contain up-to-one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
+In all cases, $"Sign"\_(v_i)^(r,"stage")(B')$ is the signature ([Definition 77](sect-finality.html#defn-sign-round-vote)) of voter $v\_("id") in \mathbb V_B$ broadcasted during either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round r. A **valid justification** must only contain up-to-one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
 
 Definition 79. [Finalizing Justification](sect-finality.html#defn-finalizing-justification)
 
-We say $J^(r,"pc")(B)$ **justifies the finalization** of $B' \>= B$ **for a non-voter node** $n$ if the number of valid signatures in $J^(r,"pc")(B)$ for $B'$ is greater than $2/3\|bbb V_B\|$.
+We say $J^(r,"pc")(B)$ **justifies the finalization** of $B' \>= B$ **for a non-voter node** $n$ if the number of valid signatures in $J^(r,"pc")(B)$ for $B'$ is greater than $2/3\|\mathbb V_B\|$.
 
 Note that $J^(r,"pc")(B)$ can only be used by a non-voter node to finalize a block. In contrast, a voter node can only be assured of the finality ([Definition 90](sect-finality.html#defn-finalized-block)) of block $B$ by actively participating in the voting process. That is by invoking [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round).
 
@@ -88,11 +88,11 @@ Definition 80. [Equivocation](sect-finality.html#defn-equivocation)
 
 Voter $v$ **equivocates** if they broadcast two or more valid votes to blocks during one voting sub-round. In such a situation, we say that $v$ is an **equivocator** and any vote $V_v^(r,"stage")(B)$ cast by $v$ in that sub-round is an **equivocatory vote**, and
 
-$cc E^(r,"stage")$
+$\mathcal E^(r,"stage")$
 
 represents the set of all equivocators voters in sub-round *stage* of round $r$. When we want to refer to the number of equivocators whose equivocation has been observed by voter $v$ we refer to it by:
 
-$cc E\_("obs"(v))^(r,"stage")$
+$\mathcal E\_("obs"(v))^(r,"stage")$
 
 The Polkadot Host must detect equivocations committed by other validators and submit those to the Runtime as described in [Section C.10.2](chap-runtime-api.html#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic).
 
@@ -104,7 +104,7 @@ A vote $V_v^(r,"stage") = V(B)$ is **invalid** if
 
 - $M_v^(r,"stage")$ does not bear a valid signature.
 
-- $"id"\_(bbb V)$ does no match the current $bbb V$.
+- $"id"\_(\mathbb V)$ does no match the current $\mathbb V$.
 
 - $V_v^(r,"stage")$ is an equivocatory vote.
 
@@ -120,19 +120,19 @@ We refer to **the set of total votes observed by voter $v$ in sub-round *stage* 
 
 The **set of all observed votes by $v$ in the sub-round stage of round $r$ for block $B$**, **$V\_("obs"(v))^(r,"stage")$** is equal to all of the observed direct votes cast for block $B$ and all of the $B$’s descendants defined formally as:
 
-$V\_("obs"(v))^(r,"stage")(B) := uuu\_(v_i in bbb V, B \< B') "VD"\_("obs"(v))^(r,"stage")(B')$
+$V\_("obs"(v))^(r,"stage")(B) := uuu\_(v_i in \mathbb V, B \< B') "VD"\_("obs"(v))^(r,"stage")(B')$
 
 The **total number of observed votes for Block $B$ in round $r$** is defined to be the size of that set plus the total number of equivocator voters:
 
-$#V\_("obs"(v))^(r,"stage")(B) := \|V\_("obs"(v))^(r,"stage")(B)\|+\|cc E\_("obs"(v))^(r,"stage")\|$
+$V_{\text{obs}(v)}^{r,\text{stage}}(B) := \|V_{\text{obs}(v)}^{r,\text{stage}}(B)\|+\|\mathcal E_{\text{obs}(v)}^{r,\text{stage}}\|$
 
-Note that for genesis state we always have $#V\_("obs"(v))^(r,"pv")(B) = \|bbb V\|$.
+Note that for genesis state we always have $#V\_("obs"(v))^(r,"pv")(B) = \|\mathbb V\|$.
 
 Definition 83. [Set of Total Potential Votes](sect-finality.html#defn-total-potential-votes)
 
 Let $V\_("unobs"(v))^(r,"stage")$ be the set of voters whose vote in the given stage has not been received. We define the **total number of potential votes for Block $B$ in round $r$** to be:
 
-$#V\_("obs"(v),"pot")^(r,"stage")(B) := \|V\_("obs"(v))^(r,"stage")(B)\|+\|V\_("unobs"(v))^(r,"stage")\|+"Min"(1/3\|bbb V\|,\|bbb V\|-\|V\_("obs"(v))^(r,"stage")(B)\|-\|V\_("unobs"(v))^(r,"stage")\|)$
+$#V\_("obs"(v),"pot")^(r,"stage")(B) := \|V\_("obs"(v))^(r,"stage")(B)\|+\|V\_("unobs"(v))^(r,"stage")\|+"Min"(1/3\|\mathbb V\|,\|\mathbb V\|-\|V\_("obs"(v))^(r,"stage")(B)\|-\|V\_("unobs"(v))^(r,"stage")\|)$
 
 Definition 84. [Current Pre-Voted Block](sect-finality.html#defn-grandpa-ghost)
 
@@ -144,9 +144,9 @@ Finally, we define when a voter $v$ sees a round as completable, that is when th
 
 Definition 85. [Completable Round](sect-finality.html#defn-grandpa-completable)
 
-We say that round $r$ is **completable** if $\|V\_("obs"(v))^(r,"pc")\|+ cc E\_("obs"(v))^(r,"pc") \> 2/3 bbb V$ and for all $B' \> B_v^(r,"pv")$:
+We say that round $r$ is **completable** if $\|V\_("obs"(v))^(r,"pc")\|+ \mathcal E\_("obs"(v))^(r,"pc") \> 2/3 \mathbb V$ and for all $B' \> B_v^(r,"pv")$:
 
-$\|V\_("obs"(v))^(r,"pc")\|- cc E\_("obs"(v))^(r,"pc") - \|V\_("obs"(v))^(r,"pc")(B')\|\> 2/3\|bbb V\|$
+$\|V\_("obs"(v))^(r,"pc")\|- \mathcal E\_("obs"(v))^(r,"pc") - \|V\_("obs"(v))^(r,"pc")(B')\|\> 2/3\|\mathbb V\|$
 
 Note that in practice we only need to check the inequality for those $B' \> B_v^(r,"pv")$ where $\|V\_("obs"(v))^(r,"pc")(B')\| \> 0$.
 
@@ -296,7 +296,7 @@ Definition 90. [Finalized](sect-finality.html#defn-finalized-block)
 
 A Polkadot relay chain node $n$ should consider block $B$ as **finalized** if any of the following criteria hold for $B' \>= B$:
 
-- $V\_("obs"(n))^(r,"pc")(B') \> 2/3\|bbb V\_(B')\|$.
+- $V\_("obs"(n))^(r,"pc")(B') \> 2/3\|\mathbb V\_(B')\|$.
 
 - It receives a $M_v^(r,"Fin")(B')$ message in which $J^r(B)$ justifies the finalization ([Definition 78](sect-finality.html#defn-grandpa-justification)).
 
@@ -331,17 +331,17 @@ Only GRANDPA voter nodes are required to respond to the catch-up requests. Addit
 \input \$M\_{i, v}^\text{Cat-q}(\text{id}\_\mathbb{V}, r)\$ \if{\$M\_{i, v}^\text{Cat-q}(\text{id}\_\mathbb{V}, r).\text{id}\_\mathbb{V} \neq \text{id}\_\mathbb{V}\$} \state \textbf{error} \`\`Catching up on different set'' \endif \if{\$i \notin \mathbb{P}\$} \state \textbf{error} \`\`Requesting catching up from a non-peer'' \endif \if{\$r \>\$ \textsc{Last-Completed-Round}} \state \textbf{error} \`\`Catching up on a round in the future'' \endif \state \call{Send}{\$i, M\_{v, i}^\text{Cat-s}(\text{id}\_\mathbb{V}, r)\$}
 
 where  
-- $M\_(i,v)^("Cat"-q)("id"\_(bbb V),r)$ is the catch-up message received from peer $i$ ([Definition 48](chap-networking.html#defn-grandpa-catchup-request-msg)).
+- $M\_(i,v)^("Cat"-q)("id"\_(\mathbb V),r)$ is the catch-up message received from peer $i$ ([Definition 48](chap-networking.html#defn-grandpa-catchup-request-msg)).
 
-- $"id"\_(bbb V)$ is the voter set id with which the serving node is operating
+- $"id"\_(\mathbb V)$ is the voter set id with which the serving node is operating
 
 - $r$ is the round number for which the catch-up is requested for.
 
-- $bbb P$ is the set of immediate peers of node $v$.
+- $\mathbb P$ is the set of immediate peers of node $v$.
 
 - $tt "Last-Completed-Round"$ is initiated in [Initiate-Grandpa](sect-finality.html#algo-initiate-grandpa) and gets updated by [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round).
 
-- $M\_(v,i)^("Cat"-s)("id"\_(bbb V),r)$ is the catch-up response ([Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg)).
+- $M\_(v,i)^("Cat"-s)("id"\_(\mathbb V),r)$ is the catch-up response ([Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg)).
 
 #### [](#id-processing-catch-up-responses)[6.6.1.3. Processing catch-up responses](#id-processing-catch-up-responses)
 
@@ -349,7 +349,7 @@ A Catch-up response message contains critical information for the requester node
 
 \input \$M\_{v,i}^\text{Cat-s}(\text{id}\_{\mathbb{V}}, r)\$ \state \$M\_{v,i}^\text{Cat-s}(\text{id}\_{\mathbb{V}}, r).\text{id}\_{\mathbb{V}}, r, J^{r, pv}(B), J^{r, pc}(B), H_h(B'), H_i(B') \leftarrow \text{Dec}\_{SC}(M\_{v, i}^{Cat-s}(\text{id}\_{\mathbb{V}}, r)\$ \if{\$M\_{v, i}^\text{Cat-s}(\text{id}\_{\mathbb{V}}, r).\text{id}\_{\mathbb{V}} \neq \text{id}\_{\mathbb{V}}\$} \state \textbf{error} \`\`Catching up on different set'' \endif \if{\$r \leqslant\$ \textsc{Leading-Round}} \state \textbf{error} \`\`Catching up in to the past'' \endif \if{\$J^{r, pv}(B)\$ \textbf{is not} valid} \state \textbf{error} \`\`Invalid pre-vote justification'' \endif \if{\$J^{r, pc}(B)\$ \textbf{is not} valid} \state \textbf{error} \`\`Invalid pre-commit justification'' \endif \state \$G \leftarrow\$ \call{GRANDPA-GHOST}{\$J^{r, pv}(B)\$} \if{\$G = \phi\$} \state \textbf{error} \`\`GHOST-less Catch-up'' \endif \if{\$r\$ \textbf{is not} completable} \state \textbf{error} \`\`Catch-up round is not completable'' \endif \if{\$J^{r, pc}(B)\$ justifies \$B'\$ finalization} \state \textbf{error} \`\`Unjustified Catch-up target finalization'' \endif \state \textsc{Last-Completed-Round} \$\leftarrow r\$ \if{\$i \in \mathbb{V}\$} \state \call{Play-Grandpa-round}{\$r + 1\$} \endif
 
-where $M\_(v,i)^("Cat"-s)("id"\_(bbb V),r)$ is the catch-up response received from node $v$ ([Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg)).
+where $M\_(v,i)^("Cat"-s)("id"\_(\mathbb V),r)$ is the catch-up response received from node $v$ ([Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg)).
 
 ## [](#sect-grandpa-beefy)[6.7. Bridge design (BEEFY)](#sect-grandpa-beefy)
 
