@@ -30,7 +30,7 @@ The **Runtime API Call Convention** describes that all functions receive and ret
 
 ``` rouge
 (func $generic_runtime_entry
-  (param $ptr i32) (parm $len i32) (result i64))
+  (param ${p}{t}{r}{i}{32}{)}{\left({p}{a}{r}{m}$\right.}len i32) (result i64))
 ```
 
 where `ptr` points to the SCALE encoded tuple of the parameters passed to the function and `len` is the length of this data, while `result` is a pointer-size (Definition [Definition 203](chap-host-api.html#defn-runtime-pointer-size)) to the SCALE-encoded return data.
@@ -74,7 +74,7 @@ Definition 216. ApiVersions
 
 **ApiVersions** is a specialized type for the ([Section C.4.1](chap-runtime-api.html#defn-rt-core-version)) function entry. It represents an array of tuples, where the first value of the tuple is an array of 8-bytes containing the Blake2b hash of the API name. The second value of the tuple is the version number of the corresponding API.
 
-$\begin{aligned} \mathrm{ApiVersions} :=& (T_0, \ldots, T_n)$ T :=& ((b_0, \ldots, b_7), \mathrm{UINT32}) \end{aligned}$
+${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{m}{a}{t}{h}{r}{m}{\left\lbrace{A}\pi{V}{e}{r}{s}{i}{o}{n}{s}\right\rbrace}\:=&{\left({T}_{{0}},\ldots,{T}_{{n}}\right)}$ T :=& ((b_0, \ldots, b_7), \mathrm{UINT32}) \end{aligned}$
 
 Requires `Core_initialize_block` to be called beforehand.
 
@@ -97,7 +97,7 @@ Return
 Sets up the environment required for building a new block as described in [Build-Block](sect-block-production.html#algo-build-block).
 
 Arguments  
-- The header of the new block as defined in [Definition 10](chap-state.html#defn-block-header). The values $H_r$, $H_e$ and $H_d$ are left empty.
+- The header of the new block as defined in [Definition 10](chap-state.html#defn-block-header). The values ${H}_{{r}}$, ${H}_{{e}}$ and ${H}_{{d}}$ are left empty.
 
 Return  
 - None.
@@ -265,14 +265,16 @@ Arguments
 Return  
 - A data structure of the following format:
 
-  $(o, f_e, e)$
+  $$
+  {\left({o},{{f}_{{e}},}{e}\right)}
+  $$
 
   where  
-  - $o$ is a boolean indicating whether the check was successful.
+  - ${o}$ is a boolean indicating whether the check was successful.
 
-  - $f_e$ is a boolean indicating whether a fatal error was encountered.
+  - ${f_e}$ is a boolean indicating whether a fatal error was encountered.
 
-  - $e$ is a Inherents-Data structure as defined in [Definition 15](chap-state.html#defn-inherent-data) containing any errors created by this Runtime function.
+  - ${e}$ is a Inherents-Data structure as defined in [Definition 15](chap-state.html#defn-inherent-data) containing any errors created by this Runtime function.
 
 ### [](#id-blockbuilder_random_seed)[C.6.5. `BlockBuilder_random_seed`](#id-blockbuilder_random_seed)
 
@@ -382,18 +384,26 @@ Arguments
 - None
 
 Return  
-- An array of tuples, $T$, of the following format:
+- An array of tuples, ${T}$, of the following format:
 
-  $T = (I,G)$ $I = (v_n,…v_m)$ $G = (B_s,f,B_c)$
+  $$
+  {T}={\left({I},{G}\right)}
+  $$
+  $$
+  {I}={\left({v}_{{n}},…{v}_{{m}}\right)}
+  $$
+  $$
+  {G}={\left({B}_{{s}},{f},{B}_{{c}}\right)}
+  $$
 
   where  
-  - $I$ is an array the validator set Ids ([Definition 33](chap-sync.html#defn-authority-list)).
+  - ${I}$ is an array the validator set Ids ([Definition 33](chap-sync.html#defn-authority-list)).
 
-  - $B_s$ indicates the block number where the session started.
+  - ${B}_{{s}}$ indicates the block number where the session started.
 
-  - $f$ indicates how often groups rotate. 0 means never.
+  - ${f}$ indicates how often groups rotate. 0 means never.
 
-  - $B_c$ indicates the current block number.
+  - ${B}_{{c}}$ indicates the current block number.
 
 ### [](#sect-rt-api-availability-cores)[C.9.3. `ParachainHost_availability_cores`](#sect-rt-api-availability-cores)
 
@@ -405,28 +415,36 @@ Arguments
 Return  
 - An array of core states, S, of the following format:
 
-  $S = {(0,-\>,C_o),(1,-\>,C_s),(2,-\>,phi):}$ $C_o = (n_u,B_o,B_t,n_t,b,G_i,C_h,C_d)$ $C_s = (P_id,C_i)$
+  $$
+  {S}={\left\lbrace\begin{matrix}{0}&->&{C}_{{o}}\\{1}&->&{C}_{{s}}\\{2}&->&\phi\end{matrix}\right.}
+  $$ 
+  $$
+  {C}_{{o}}={\left({n}_{{u}},{B}_{{o}},{B}_{{t}},{n}_{{t}},{b},{G}_{{i}},{C}_{{h}},{C}_{{d}}\right)}
+  $$ 
+  $$
+  {C}_{{s}}={\left({P}_{{i}}{d},{C}_{{i}}\right)}
+  $$
 
   where  
-  - $S$ specifies the core state. *0* indicates that the core is occupied, *1* implies it’s currently free but scheduled and given the opportunity to occupy and *2* implies it’s free and there’s nothing scheduled.
+  - ${S}$ specifies the core state. *0* indicates that the core is occupied, *1* implies it’s currently free but scheduled and given the opportunity to occupy and *2* implies it’s free and there’s nothing scheduled.
 
-  - $n_u$ is an *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain a $C_s$ value if the core was freed by the Runtime and indicates the assignment that is next scheduled on this core. An empty value indicates there is nothing scheduled.
+  - ${n}_{{u}}$ is an *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain a ${C}_{{s}}$ value if the core was freed by the Runtime and indicates the assignment that is next scheduled on this core. An empty value indicates there is nothing scheduled.
 
-  - $B_o$ indicates the relay chain block number at which the core got occupied.
+  - ${B}_{{o}}$ indicates the relay chain block number at which the core got occupied.
 
-  - $B_t$ indicates the relay chain block number the core will time-out at, if any.
+  - ${B}_{{t}}$ indicates the relay chain block number the core will time-out at, if any.
 
-  - $n_t$ is an *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain a $C_s$ value if the core is freed by a time-out and indicates the assignment that is next scheduled on this core. An empty value indicates there is nothing scheduled.
+  - ${n}_{{t}}$ is an *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain a ${C}_{{s}}$ value if the core is freed by a time-out and indicates the assignment that is next scheduled on this core. An empty value indicates there is nothing scheduled.
 
-  - $b$ is a bitfield array ([Definition 141](chapter-anv.html#defn-bitfield-array)). A $\>2/3$ majority of assigned validators voting with $1$ values means that the core is available.
+  - ${b}$ is a bitfield array ([Definition 141](chapter-anv.html#defn-bitfield-array)). A $>\frac{{2}}{{3}}$ majority of assigned validators voting with ${1}$ values means that the core is available.
 
-  - $G_i$ indicates the assigned validator group index ([Definition 136](chapter-anv.html#defn-validator-groups)) is to distribute availability pieces of this candidate.
+  - ${G}_{{i}}$ indicates the assigned validator group index ([Definition 136](chapter-anv.html#defn-validator-groups)) is to distribute availability pieces of this candidate.
 
-  - $C_h$ indicates the hash of the candidate occupying the core.
+  - ${C}_{{h}}$ indicates the hash of the candidate occupying the core.
 
-  - $C_d$ is the candidate descriptor ([Definition 106](chapter-anv.html#defn-candidate-descriptor)).
+  - ${C}_{{d}}$ is the candidate descriptor ([Definition 106](chapter-anv.html#defn-candidate-descriptor)).
 
-  - $C_i$ is an *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain the collators public key indicating who should author the block.
+  - ${C}_{{i}}$ is an *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain the collators public key indicating who should author the block.
 
 ### [](#sect-rt-api-persisted-validation-data)[C.9.4. `ParachainHost_persisted_validation_data`](#sect-rt-api-persisted-validation-data)
 
@@ -438,13 +456,15 @@ Arguments
 - An occupied core assumption ([Definition 226](chap-runtime-api.html#defn-occupied-core-assumption)).
 
 Return  
-- An *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain the persisted validation data ([Definition 227](chap-runtime-api.html#defn-persisted-validation-data)). The value is empty if the parachain Id is not registered or the core assumption is of index $2$, meaning that the core was freed.
+- An *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain the persisted validation data ([Definition 227](chap-runtime-api.html#defn-persisted-validation-data)). The value is empty if the parachain Id is not registered or the core assumption is of index ${2}$, meaning that the core was freed.
 
 Definition 226. [Occupied Core Assumption](chap-runtime-api.html#defn-occupied-core-assumption)
 
 A occupied core assumption is used for fetching certain pieces of information about a parachain by using the relay chain API. The assumption indicates how the Runtime API should compute the result. The assumptions, A, is a varying datatype of the following format:
 
-$A = {(0,-\>,phi),(1,-\>,phi),(2,-\>,phi):}$
+$$
+{A}={\left\lbrace\begin{matrix}{0}&->&\phi\\{1}&->&\phi\\{2}&->&\phi\end{matrix}\right.}
+$$
 
 where *0* indicates that the candidate occupying the core was made available and included to free the core, *1* indicates that it timed-out and freed the core without advancing the parachain and *2* indicates that the core was not occupied to begin with.
 
@@ -452,18 +472,20 @@ Definition 227. [Persisted Validation Data](chap-runtime-api.html#defn-persisted
 
 The persisted validation data provides information about how to create the inputs for the validation of a candidate by calling the Runtime. This information is derived from the parachain state and will vary from parachain to parachain, although some of the fields may be the same for every parachain. This validation data acts as a way to authorize the additional data (such as messages) the collator needs to pass to the validation function.
 
-The persisted validation data, $D\_{pv}$, is a datastructure of the following format:
+The persisted validation data, ${D}_{{{p}{v}}}$, is a datastructure of the following format:
 
-$D\_{pv} = (P_h,H_i,H_r,m_b)$
+$$
+{D}_{{{p}{v}}}={\left({P}_{{h}},{H}_{{i}},{H}_{{r}},{m}_{{b}}\right)}
+$$
 
 where  
-- $P_h$ is the parent head data ([Definition 133](chapter-anv.html#defn-head-data)).
+- ${P}_{{h}}$ is the parent head data ([Definition 133](chapter-anv.html#defn-head-data)).
 
-- $H_i$ is the relay chain block number this is in the context of.
+- ${H}_{{i}}$ is the relay chain block number this is in the context of.
 
-- $H_r$ is the relay chain storage root this is in the context of.
+- ${H}_{{r}}$ is the relay chain storage root this is in the context of.
 
-- $m_b$ is the maximum legal size of the PoV block, in bytes.
+- ${m}_{{b}}$ is the maximum legal size of the PoV block, in bytes.
 
 The persisted validation data is fetched via the Runtime API ([Section C.9.4](chap-runtime-api.html#sect-rt-api-persisted-validation-data)).
 
@@ -535,18 +557,23 @@ Arguments
 Return  
 - An array of single candidate events, E, of the following format:
 
-  $E = {(0,-\>,d),(1,-\>,d),(2,-\>,(C_r,h,I_c)):}$ $d = (C_r,h,I_c,G_i)$
+  $$
+  {E}={\left\lbrace\begin{matrix}{0}&->&{d}\\{1}&->&{d}\\{2}&->&{\left({C}_{{r}},{h},{I}_{{c}}\right)}\end{matrix}\right.}
+  $$
+  $$
+  {d}={\left({C}_{{r}},{h},{I}_{{c}},{G}_{{i}}\right)}
+  $$
 
   where  
-  - $E$ specifies the the event type of the candidate. *0* indicates that the candidate receipt was backed in the latest relay chain block, *1* indicates that it was included and became a parachain block at the latest relay chain block and *2* indicates that the candidate receipt was not made available and timed-out.
+  - ${E}$ specifies the the event type of the candidate. *0* indicates that the candidate receipt was backed in the latest relay chain block, *1* indicates that it was included and became a parachain block at the latest relay chain block and *2* indicates that the candidate receipt was not made available and timed-out.
 
-  - $C_r$ is the candidate receipt ([Definition 104](chapter-anv.html#defn-candidate-receipt)).
+  - ${C}_{{r}}$ is the candidate receipt ([Definition 104](chapter-anv.html#defn-candidate-receipt)).
 
-  - $h$ is the parachain head data ([Definition 133](chapter-anv.html#defn-head-data)).
+  - ${h}$ is the parachain head data ([Definition 133](chapter-anv.html#defn-head-data)).
 
-  - $I_c$ is the index of the availability core as can be retrieved in [Section C.9.3](chap-runtime-api.html#sect-rt-api-availability-cores) that the candidate is occupying. If $E$ is of variant $2$, then this indicates the core index the candidate *was* occupying.
+  - ${I}_{{c}}$ is the index of the availability core as can be retrieved in [Section C.9.3](chap-runtime-api.html#sect-rt-api-availability-cores) that the candidate is occupying. If ${E}$ is of variant ${2}$, then this indicates the core index the candidate *was* occupying.
 
-  - $G_i$ is the group index ([Definition 136](chapter-anv.html#defn-validator-groups)) that is responsible of backing the candidate.
+  - ${G}_{{i}}$ is the group index ([Definition 136](chapter-anv.html#defn-validator-groups)) that is responsible of backing the candidate.
 
 ### [](#sect-rt-api-session-info)[C.9.11. `ParachainHost_session_info`](#sect-rt-api-session-info)
 
@@ -556,34 +583,51 @@ Arguments
 - The unsigned 32-bit integer indicating the session index.
 
 Return  
-- An *Option* type ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain the session info structure, $S$, of the following format:
+- An *Option* type ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain the session info structure, ${S}$, of the following format:
 
-  $S = (A,D,K,G,c,z,s,d,x,a)$ $A = (v_n,…v_m)$ $D = (v\_(\_n),…v_m)$ $K = (v_n,…v_m)$ $G = (g_n,…g_m)$ $g = (A_n,…A_m)$
+  $$
+  {S}={\left({A},{D},{K},{G},{c},{z},{s},{d},{x},{a}\right)}
+  $$
+  $$
+  {A}={\left({v}_{{n}},…{v}_{{m}}\right)}
+  $$
+  $$
+  {D}={\left({v}_{{_{n}}},…{v}_{{m}}\right)}
+  $$
+  $$
+  {K}={\left({v}_{{n}},…{v}_{{m}}\right)}
+  $$
+  $$
+  {G}={\left({{g}_{{n}},}…{g}_{{m}}\right)}
+  $$
+  $$
+  {g}={\left({A}_{{n}},…{A}_{{m}}\right)}
+  $$
 
   where  
-  - $A$ indicates the validators of the current session, in canonical order. There might be more validators in the current session than validators participating in parachain consensus, as returned by the Runtime API ([Section C.9.1](chap-runtime-api.html#sect-rt-api-validators)).
+  - ${A}$ indicates the validators of the current session, in canonical order. There might be more validators in the current session than validators participating in parachain consensus, as returned by the Runtime API ([Section C.9.1](chap-runtime-api.html#sect-rt-api-validators)).
 
-  - $D$ indicates the validator authority discovery keys for the given session in canonical order. The first couple of validators are equal to the corresponding validators participating in the parachain consensus, as returned by the Runtime API ([Section C.9.1](chap-runtime-api.html#sect-rt-api-validators)). The remaining authorities are not participating in the parachain consensus.
+  - ${D}$ indicates the validator authority discovery keys for the given session in canonical order. The first couple of validators are equal to the corresponding validators participating in the parachain consensus, as returned by the Runtime API ([Section C.9.1](chap-runtime-api.html#sect-rt-api-validators)). The remaining authorities are not participating in the parachain consensus.
 
-  - $K$ indicates the assignment keys for validators. There might be more authorities in the session that validators participating in parachain consensus, as returned by the Runtime API ([Section C.9.1](chap-runtime-api.html#sect-rt-api-validators)).
+  - ${K}$ indicates the assignment keys for validators. There might be more authorities in the session that validators participating in parachain consensus, as returned by the Runtime API ([Section C.9.1](chap-runtime-api.html#sect-rt-api-validators)).
 
-  - $G$ indicates the validator groups in shuffled order.
+  - ${G}$ indicates the validator groups in shuffled order.
 
-  - $v_n$ is public key of the authority.
+  - ${v}_{{n}}$ is public key of the authority.
 
-  - $A_n$ is the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
+  - ${A}_{{n}}$ is the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
-  - $c$ is an unsigned 32-bit integer indicating the number of availability cores used by the protocol during the given session.
+  - ${c}$ is an unsigned 32-bit integer indicating the number of availability cores used by the protocol during the given session.
 
-  - $z$ is an unsigned 32-bit integer indicating the zeroth delay tranche width.
+  - ${z}$ is an unsigned 32-bit integer indicating the zeroth delay tranche width.
 
-  - $s$ is an unsigned 32-bit integer indicating the number of samples an assigned validator should do for approval voting.
+  - ${s}$ is an unsigned 32-bit integer indicating the number of samples an assigned validator should do for approval voting.
 
-  - $d$ is an unsigned 32-bit integer indicating the number of delay tranches in total.
+  - ${d}$ is an unsigned 32-bit integer indicating the number of delay tranches in total.
 
-  - $x$ is an unsigned 32-bit integer indicating how many BABE slots must pass before an assignment is considered a “no-show”.
+  - ${x}$ is an unsigned 32-bit integer indicating how many BABE slots must pass before an assignment is considered a “no-show”.
 
-  - $a$ is an unsigned 32-bit integer indicating the number of validators needed to approve a block.
+  - ${a}$ is an unsigned 32-bit integer indicating the number of validators needed to approve a block.
 
 ### [](#id-parachainhost_dmq_contents)[C.9.12. `ParachainHost_dmq_contents`](#id-parachainhost_dmq_contents)
 
@@ -630,28 +674,28 @@ A GRANDPA equivocation occurs when a validator votes for multiple blocks during 
 Arguments  
 - The equivocation proof of the following format:
 
-  $\begin{aligned} G\_{\mathrm{Ep}} =& (\mathrm{id}\_{\mathbb{V}}, e, r, A\_{\mathrm{id}}, B^1_h, B^1_n A^1\_{\mathrm{sig}}, B^2_h, B^2_n, A^2\_{\mathrm{sig}}) $ e =& \begin{cases} 0 &\quad \textrm{Equivocation at prevote stage} $ 1 &\quad \textrm{Equivocation at precommit stage} \end{cases} \end{aligned}$
+  ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{G}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{E}{p}\right\rbrace}}}=&{\left({m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}_{{{\mathbb{{{V}}}}}},{e},{r},{A}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}},{B}^{{1}}_{h},{B}^{{1}}_{n}{A}^{{1}}_{\left\lbrace{m}{a}{t}{h}{r}{m}{\left\lbrace{s}{i}{g}\right\rbrace}\right\rbrace},{B}^{{2}}_{h},{B}^{{2}}_{n},{A}^{{2}}_{\left\lbrace{m}{a}{t}{h}{r}{m}{\left\lbrace{s}{i}{g}\right\rbrace}\right\rbrace}\right)}$ e =& \begin{cases} 0 &\quad \textrm{Equivocation at prevote stage} ${1}&\quad\text{}{m}{\left\lbrace{E}{q}{u}{i}{v}{o}{c}{a}{t}{i}{o}{n}{a}{t}\prec{o}{m}{m}{i}{t}{s}{t}{a}\ge\right\rbrace}{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{e}{n}{d}{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}$
 
   where  
-  - $\mathrm{id}\_{\mathbb{V}}$ is the authority set id as defined in [Definition 73](sect-finality.html#defn-authority-set-id).
+  - ${m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}_{{{\mathbb{{{V}}}}}}$ is the authority set id as defined in [Definition 73](sect-finality.html#defn-authority-set-id).
 
-  - $e$ indicates the stage at which the equivocation occurred.
+  - ${e}$ indicates the stage at which the equivocation occurred.
 
-  - $r$ is the round number the equivocation occurred.
+  - ${r}$ is the round number the equivocation occurred.
 
-  - $A\_{\mathrm{id}}$ is the public key of the equivocator.
+  - ${A}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}}$ is the public key of the equivocator.
 
-  - $B^1_h$ is the block hash of the first block the equivocator voted for.
+  - ${B}^{{1}}_{h}$ is the block hash of the first block the equivocator voted for.
 
-  - $B^1_n$ is the block number of the first block the equivocator voted for.
+  - ${B}^{{1}}_{n}$ is the block number of the first block the equivocator voted for.
 
-  - $A^1\_{\mathrm{sig}}$ is the equivocators signature of the first vote.
+  - ${A}^{{1}}_{\left\lbrace{m}{a}{t}{h}{r}{m}{\left\lbrace{s}{i}{g}\right\rbrace}\right\rbrace}$ is the equivocators signature of the first vote.
 
-  - $B^2_h$ is the block hash of the second block the equivocator voted for.
+  - ${B}^{{2}}_{h}$ is the block hash of the second block the equivocator voted for.
 
-  - $B^2_n$ is the block number of the second block the equivocator voted for.
+  - ${B}^{{2}}_{n}$ is the block number of the second block the equivocator voted for.
 
-  - $A^2\_{\mathrm{sig}}$ is the equivocators signature of the second vote.
+  - ${A}^{{2}}_{\left\lbrace{m}{a}{t}{h}{r}{m}{\left\lbrace{s}{i}{g}\right\rbrace}\right\rbrace}$ is the equivocators signature of the second vote.
 
   - A proof of the key owner in an opaque form as described in [Section C.10.3](chap-runtime-api.html#sect-grandpaapi_generate_key_ownership_proof).
 
@@ -695,7 +739,7 @@ Return
   | *Constant*           | A constant value that is used in the threshold calculation formula as defined in [Definition 59](sect-block-production.html#defn-babe-constant).                                                                            | Tuple containing two unsigned 64bit integers                                                                            |
   | *GenesisAuthorities* | The authority list for the genesis epoch as defined in [Definition 33](chap-sync.html#defn-authority-list).                                                                                                                 | Array of tuples containing a 256-bit byte array and a unsigned 64bit integer                                            |
   | *Randomness*         | The randomness for the genesis epoch                                                                                                                                                                                        | 32-byte array                                                                                                           |
-  | *SecondarySlot*      | Whether this chain should run with round-robin-style secondary slot and if this secondary slot requires the inclusion of an auxiliary VRF output ([Section 5.2](sect-block-production.html#sect-block-production-lottery)). | A one-byte enum as defined in [Definition 58](sect-block-production.html#defn-consensus-message-babe) as $2\_("nd")$. |
+  | *SecondarySlot*      | Whether this chain should run with round-robin-style secondary slot and if this secondary slot requires the inclusion of an auxiliary VRF output ([Section 5.2](sect-block-production.html#sect-block-production-lottery)). | A one-byte enum as defined in [Definition 58](sect-block-production.html#defn-consensus-message-babe) as ${2}_{{\text{nd}}}$. |
 
   Table 16. The tuple provided by **BabeApi_configuration**.
 
@@ -719,18 +763,20 @@ Arguments
 Return  
 - A data structure of the following format:
 
-  $(e_i, s_s, d, A, r)$
+  $$
+  {\left({e}_{{i}},{s}_{{s}},{d},{A},{r}\right)}
+  $$
 
   where  
-  - $e_i$ is a unsigned 64-bit integer representing the epoch index.
+  - ${e}_{{i}}$ is a unsigned 64-bit integer representing the epoch index.
 
-  - $s_s$ is a unsigned 64-bit integer representing the starting slot of the epoch.
+  - ${s}_{{s}}$ is a unsigned 64-bit integer representing the starting slot of the epoch.
 
-  - $d$ is a unsigned 64-bit integer representing the duration of the epoch.
+  - ${d}$ is a unsigned 64-bit integer representing the duration of the epoch.
 
-  - $A$ is an authority list as defined in [Definition 33](chap-sync.html#defn-authority-list).
+  - ${A}$ is an authority list as defined in [Definition 33](chap-sync.html#defn-authority-list).
 
-  - $r$ is an 256-bit array containing the randomness for the epoch as defined in [Definition 71](sect-block-production.html#defn-epoch-randomness).
+  - ${r}$ is an 256-bit array containing the randomness for the epoch as defined in [Definition 71](sect-block-production.html#defn-epoch-randomness).
 
 ### [](#id-babeapi_next_epoch)[C.11.4. `BabeApi_next_epoch`](#id-babeapi_next_epoch)
 
@@ -765,16 +811,18 @@ A BABE equivocation occurs when a validator produces more than one block at the 
 Arguments  
 - The equivocation proof of the following format:
 
-  $B\_{\mathrm{Ep}} = (A\_{\mathrm{id}}, s, h_1, h_2)$
+  $$
+  {B}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{E}{p}\right\rbrace}}}={\left({A}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}},{s},{h}_{{1}},{h}_{{2}}\right)}
+  $$
 
   where  
-  - $A\_{\mathrm{id}}$ is the public key of the equivocator.
+  - ${A}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}}$ is the public key of the equivocator.
 
-  - $s$ is the slot as described in [Definition 54](sect-block-production.html#defn-epoch-slot) at which the equivocation occurred.
+  - ${s}$ is the slot as described in [Definition 54](sect-block-production.html#defn-epoch-slot) at which the equivocation occurred.
 
-  - $h_1$ is the block header of the first block produced by the equivocator.
+  - ${h}_{{1}}$ is the block header of the first block produced by the equivocator.
 
-  - $h_2$ is the block header of the second block produced by the equivocator.
+  - ${h}_{{2}}$ is the block header of the second block produced by the equivocator.
 
     Unlike during block execution, the Seal in both block headers is not removed before submission. The block headers are submitted in its full form.
 
@@ -829,9 +877,11 @@ Arguments
 Return  
 - An array of varying size containing tuple pairs of the following format:
 
-  $(k, k\_{\mathrm{id}})$
+  $$
+  {\left({k},{k}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}}\right)}
+  $$
 
-  where $k$ is an array of varying sizes containing the raw public key and $k\_{\mathrm{id}}$ is a 4-byte array indicating the key type.
+  where ${k}$ is an array of varying sizes containing the raw public key and ${k}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}}$ is a 4-byte array indicating the key type.
 
 ## [](#id-module-accountnonceapi)[C.12. Module AccountNonceApi](#id-module-accountnonceapi)
 
@@ -873,16 +923,18 @@ Arguments
 Return  
 - A data structure of the following format:
 
-  $(w, c, f)$
+  $$
+  {\left({w},{c},{f}\right)}
+  $$
 
   where  
-  - $w$ is the weight of the extrinsic.
+  - ${w}$ is the weight of the extrinsic.
 
-  - $c$ is the "class" of the extrinsic, where class is a varying data ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) type defined as:
+  - ${c}$ is the "class" of the extrinsic, where class is a varying data ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) type defined as:
 
-    $c = \left$\begin{array}{l} 0 \quad \textrm{Normal extrinsic}$ 1 \quad \textrm{Operational extrinsic}$ 2 \quad \textrm{Mandatory extrinsic, which is always included} \end{array}\right.$
+    ${c}=\le{f}{t}$\begin{array}{l} 0 \quad \textrm{Normal extrinsic}${1}\quad\text{}{m}{\left\lbrace{O}{p}{e}{r}{a}{t}{i}{o}{n}{a}{l}{e}{x}{t}{r}\in{s}{i}{c}\right\rbrace}$ 2 \quad \textrm{Mandatory extrinsic, which is always included} \end{array}\right.$
 
-  - $f$ is the inclusion fee of the extrinsic. This does not include a tip or anything else that depends on the signature.
+  - ${f}$ is the inclusion fee of the extrinsic. This does not include a tip or anything else that depends on the signature.
 
 #### [](#id-transactionpaymentapi_query_fee_details)[C.12.2.2. `TransactionPaymentApi_query_fee_details`](#id-transactionpaymentapi_query_fee_details)
 
@@ -896,18 +948,22 @@ Arguments
 Return  
 - A data structure of the following format:
 
-  $(f, t)$
+  $$
+  {\left({f},{t}\right)}
+  $$
 
   where  
-  - $f$ is a SCALE encoded as defined in [Definition 190](id-cryptography-encoding.html#defn-option-type) containing the following data structure:
+  - ${f}$ is a SCALE encoded as defined in [Definition 190](id-cryptography-encoding.html#defn-option-type) containing the following data structure:
 
-    $ f = (f_b, f_l, f_a)$
+    $$
+    {f}={\left({{f}_{{b}},}{{f}_{{l}},}{f}_{{a}}\right)}
+    $$
 
     where  
-    - $f_b$ is the minimum required fee for an extrinsic.
+    - ${f_b}$ is the minimum required fee for an extrinsic.
 
-    - $f_l$ is the length fee, the amount paid for the encoded length (in bytes) of the extrinsic.
+    - ${f_l}$ is the length fee, the amount paid for the encoded length (in bytes) of the extrinsic.
 
-    - $f_a$ is the “adjusted weight fee”, which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
+    - ${f_a}$ is the “adjusted weight fee”, which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
 
-  - $t$ is the tip for the block author.
+  - ${t}$ is the tip for the block author.

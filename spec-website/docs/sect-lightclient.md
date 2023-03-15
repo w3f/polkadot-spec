@@ -68,27 +68,27 @@ Eventually, the light client verifies the finality of the block returned by a fu
 
 We outline the warp sync process, abstracting out details of verifying the finality and how the full node to sync with is selected.
 
-\INPUT BlockHeader startblock, the initial block to start the sync. May not be the Genesis Block. \OUTPUT CommitmentRootHash \$root\$, State Tries Root hash of the latest finalized Block. \STATE \textsc{fullnode} \$\leftarrow\$ SelectFullNode \STATE \textsc{latestBlockHeader, grandpaJustifications} \$\leftarrow\$ SyncWithNode(\textsc{fullnode}) \STATE \textsc{isVerified} \$\leftarrow\$ verifyAuthoritySetChange(\textsc{grandpaJustifications}) \$\land\$ verifyFinality(\textsc{latestBlockHeader}) \IF{\textsc{isVerified}} \STATE \$return\$ \$SOME\$ getCommitmentRootHash(\textsc{latestBlockHeader}) \ENDIF \STATE {\$throw\$ \$ERROR\$}
+\INPUT BlockHeader startblock, the initial block to start the sync. May not be the Genesis Block. \OUTPUT CommitmentRootHash ${\sqrt[$]{}}, State Tries Root hash of the latest finalized Block. \STATE \textsc{fullnode} $\leftarrow$ SelectFullNode \STATE \textsc{latestBlockHeader, grandpaJustifications} $\leftarrow$ SyncWithNode(\textsc{fullnode}) \STATE \textsc{isVerified} $\leftarrow$ verifyAuthoritySetChange(\textsc{grandpaJustifications}) ${l}{\quad\text{and}\quad}$ verifyFinality(\textsc{latestBlockHeader}) \IF{\textsc{isVerified}} \STATE ${r}{e}{t}{u}{r}{n}$ ${S}{O}{M}{E}$ getCommitmentRootHash(\textsc{latestBlockHeader}) \ENDIF \STATE {${t}{h}{r}{o}{w}$ ${E}\mathbb{R}{O}{R}$}
 
 Abstraction of Warp Sync and verification of latest block’s finality.
 
-$SelectFullNode$: Determines the full node that the light client syncs with.
+${S}{e}\le{c}{t}{F}\underline{{l}}{N}{o}{d}{e}$: Determines the full node that the light client syncs with.
 
-$SyncSithNode$: Returns the header of latest finalized block and a list of Grandpa Justifications by the full node.
+${S}{y}{n}{c}{S}{i}{t}{h}{N}{o}{d}{e}$: Returns the header of latest finalized block and a list of Grandpa Justifications by the full node.
 
-$verifyAuthoritySetChange$: Verification algorithm which checks the authenticity of the header only at the end of an era where the authority set changes iteratively until reaching the latest era.
+${v}{e}{r}{\quad\text{if}\quad}{y}{A}{u}{t}{h}{\quad\text{or}\quad}{i}{t}{y}{S}{e}{t}{C}{h}{a}{n}\ge$: Verification algorithm which checks the authenticity of the header only at the end of an era where the authority set changes iteratively until reaching the latest era.
 
-$verifyFinalty$: Verifies the finalty of the latest block using the Grandpa Justifications messages.
+${v}{e}{r}{\quad\text{if}\quad}{y}{F}\in{a}\lt{y}$: Verifies the finalty of the latest block using the Grandpa Justifications messages.
 
 The warp syncing process is closely coupled with the state querying procedure used the light client. We outline the process of querying the state by a light client and validating the response.
 
-\INPUT Query q, BlockHeight h, CommitmentRootHash \$root\$ \OUTPUT Maybe Result \$res\$ \STATE (\$res\$, \$\pi\$) \$\leftarrow QueryFullNode (q, h)\$ \IF{\$validityCheck\_{root}(res, \pi)\$} \STATE \$return\$ \$SOME\$ \$res\$ \ENDIF \STATE {\$throw\$ \$ERROR\$}
+\INPUT Query q, BlockHeight h, CommitmentRootHash ${\sqrt[$]{}} \OUTPUT Maybe Result ${r}{e}{s}$ \STATE (${r}{e}{s}$, $\pi$) $\leftarrow{Q}{u}{e}{r}{y}{F}\underline{{l}}{N}{o}{d}{e}{\left({q},{h}\right)}$ \IF{${v}{a}{l}{i}{d}{i}{t}{y}{C}{h}{e}{c}{k}_{{{\root}}}{\left({r}{e}{s},\pi\right)}$} \STATE ${r}{e}{t}{u}{r}{n}$ ${S}{O}{M}{E}$ ${r}{e}{s}$ \ENDIF \STATE {${t}{h}{r}{o}{w}$ ${E}\mathbb{R}{O}{R}$}
 
 Querying State Algorithm.
 
-$QueryFullNode$: Returns the response to the query requested from the Full Node for the query $q$ at block height $h$.
+${Q}{u}{e}{r}{y}{F}\underline{{l}}{N}{o}{d}{e}$: Returns the response to the query requested from the Full Node for the query ${q}$ at block height ${h}$.
 
-$validityCheck\_{root}$: Predicate that checks the validity of response $res$ and associated merkle proof $\pi$ by matching it against the Commit Root Hash $root$ obtained as a result of warp sync.
+${v}{a}{l}{i}{d}{i}{t}{y}{C}{h}{e}{c}{k}_{{{\root}}}$: Predicate that checks the validity of response ${r}{e}{s}$ and associated merkle proof $\pi$ by matching it against the Commit Root Hash ${\sqrt[$]{}} obtained as a result of warp sync.
 
 ## [](#sect-runtime-environment-lightclient)[7.3. Runtime Environment for Light Clients](#sect-runtime-environment-lightclient)
 

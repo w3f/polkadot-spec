@@ -36,21 +36,41 @@ Each node must have its own unique ED25519 key pair. If two or more nodes use th
 
 Definition 34. [PeerId](chap-networking.html#defn-peer-id)
 
-The Polkadot node’s PeerId, formally referred to as $P\_(id)$, is derived from the ED25519 public key and is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/), but does not fully conform to the specification. Specifically, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519.
+The Polkadot node’s PeerId, formally referred to as ${P}_{{{i}{d}}}$, is derived from the ED25519 public key and is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/), but does not fully conform to the specification. Specifically, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519.
 
 The byte representation of the PeerId is always of the following bytes in this exact order:
 
-$b_0 = 0$ $b_1 = 36$ $b_2 = 8$ $b_3 = 1$ $b_4 = 18$ $b_5 = 32$ $b\_(6..37) = ...$
+$$
+{b}_{{0}}={0}
+$$
+$$
+{b}_{{1}}={36}
+$$
+$$
+{b}_{{2}}={8}
+$$
+$$
+{b}_{{3}}={1}
+$$
+$$
+{b}_{{4}}={18}
+$$
+$$
+{b}_{{5}}={32}
+$$
+$$
+{b}_{{{6}.{.37}}}=\ldots
+$$
 
 where
 
-- $b_0$ is the [multihash prefix](https://github.com/multiformats/multihash#multihash) of value $0$ (implying no hashing is used).
+- ${b}_{{0}}$ is the [multihash prefix](https://github.com/multiformats/multihash#multihash) of value ${0}$ (implying no hashing is used).
 
-- $b_1$ the length of the PeerId (remaining bytes).
+- ${b}_{{1}}$ the length of the PeerId (remaining bytes).
 
-- $b_2$ and $b_3$ are a protobuf encoded field-value pair [indicating the used key type](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys) (field $1$ of value $1$ implies *ED25519*).
+- ${b}_{{2}}$ and ${b}_{{3}}$ are a protobuf encoded field-value pair [indicating the used key type](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys) (field ${1}$ of value ${1}$ implies *ED25519*).
 
-- $b_4$, $b_5$ and $b\_(6..37)$ are a protobuf encoded field-value pair where $b_5$ indicates the length of the public key followed by the the raw ED25519 public key itself, which varies for each Polkadot Host and is always 32 bytes (field $2$ contains the public key, which has a field value length prefix).
+- ${b}_{{4}}$, ${b}_{{5}}$ and ${b}_{{{6}.{.37}}}$ are a protobuf encoded field-value pair where ${b}_{{5}}$ indicates the length of the public key followed by the the raw ED25519 public key itself, which varies for each Polkadot Host and is always 32 bytes (field ${2}$ contains the public key, which has a field value length prefix).
 
 ## [](#sect-discovery-mechanism)[4.4. Discovery mechanism](#sect-discovery-mechanism)
 
@@ -204,11 +224,24 @@ The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once esta
 
 The `BlockAnnounceHandshake` is a structure of the following format:
 
-$BA_h = "Enc"\_("SC")(R, N_B, h_B, h_G)$
+$$
+{B}{A}_{{h}}=\text{Enc}_{{\text{SC}}}{\left({R},{N}_{{B}},{h}_{{B}},{h}_{{G}}\right)}
+$$
 
 where:
 
-$R = {(1,"The node is a full node"),(2,"The node is a light client"),(4,"The node is a validator"):}$ $N_B = "Best block number according to the node"$ $h_B = "Best block hash according to the node"$ $h_G = "Genesis block hash according to the node"$
+$$
+{R}={\left\lbrace\begin{matrix}{1}&\text{The node is a full node}\\{2}&\text{The node is a light client}\\{4}&\text{The node is a validator}\end{matrix}\right.}
+$$
+$$
+{N}_{{B}}=\text{Best block number according to the node}
+$$
+$$
+{h}_{{B}}=\text{Best block hash according to the node}
+$$
+$$
+{h}_{{G}}=\text{Genesis block hash according to the node}
+$$
 
 Definition 36. [Block Announce](chap-networking.html#defn-block-announce)
 
@@ -216,11 +249,18 @@ The `BlockAnnounce` message is sent to the specified substream and indicates to 
 
 The message is a structure of the following format:
 
-$BA = "Enc"\_("SC")("Head"(B),b)$
+$$
+{B}{A}=\text{Enc}_{{\text{SC}}}{\left(\text{Head}{\left({B}\right)},{b}\right)}
+$$
 
 where:
 
-$"Head"(B) = "Header of the announced block"$ $b = {(0,"Is not part of the best chain"),(1,"Is the best block according to the node"):}$
+$$
+\text{Head}{\left({B}\right)}=\text{Header of the announced block}
+$$
+$$
+{b}={\left\lbrace\begin{matrix}{0}&\text{Is not part of the best chain}\\{1}&\text{Is the best block according to the node}\end{matrix}\right.}
+$$
 
 ### [](#sect-msg-block-request)[4.8.2. Requesting Blocks](#sect-msg-block-request)
 
@@ -232,13 +272,13 @@ The `BlockRequest` message is a Protobuf serialized structure of the following f
 
 | Type        | Id  | Description                                                       | Value   |
 |-------------|-----|-------------------------------------------------------------------|---------|
-| `uint32`    | 1   | Bits of block data to request                                     | $B_f$ |
-| `oneof`     |     | Start from this block                                             | $B_s$ |
+| `uint32`    | 1   | Bits of block data to request                                     | ${B}_{{f}}$ |
+| `oneof`     |     | Start from this block                                             | ${B}_{{s}}$ |
 | *Direction* | 5   | Sequence direction, interpreted as Id *0* (ascending) if missing. |         |
-| `uint32`    | 6   | Maximum amount (*optional*)                                       | $B_m$ |
+| `uint32`    | 6   | Maximum amount (*optional*)                                       | ${B}_{{m}}$ |
 
 where  
-- $B_f$ indicates all the fields that should be included in the request. its **big-endian** encoded bitmask that applies to all desired fields with bitwise OR operations. For example, the $B_f$ value to request *Header* and *Justification* is *0001 0001* (17).
+- ${B}_{{f}}$ indicates all the fields that should be included in the request. its **big-endian** encoded bitmask that applies to all desired fields with bitwise OR operations. For example, the ${B}_{{f}}$ value to request *Header* and *Justification* is *0001 0001* (17).
 
   | Field         | Value     |
   |---------------|-----------|
@@ -246,7 +286,7 @@ where
   | Body          | 0000 0010 |
   | Justification | 0001 0000 |
 
-- $B_s$ is a Protobuf structure indicating a varying data type (enum) of the following values:
+- ${B}_{{s}}$ is a Protobuf structure indicating a varying data type (enum) of the following values:
 
   | Type    | Id  | Description      |
   |---------|-----|------------------|
@@ -260,7 +300,7 @@ where
   | 0   | Enumerate in ascending order (from child to parent)            |
   | 1   | Enumerate in descending order (from parent to canonical child) |
 
-- $B_m$ is the number of blocks to be returned. An implementation defined maximum is used when unspecified.
+- ${B}_{{m}}$ is the number of blocks to be returned. An implementation defined maximum is used when unspecified.
 
 Definition 38. [Block Response](chap-networking.html#defn-msg-block-response)
 
@@ -328,15 +368,19 @@ See the the synchronization chapter for more information ([Chapter 3](chap-sync.
 
 Definition 41. [Warp Sync Proof](chap-networking.html#defn-warp-sync-proof)
 
-The **warp sync proof** message, $P$, is sent to the peer that initialized the state request ([Definition 39](chap-networking.html#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section 3.3.2](chap-sync.html#sect-consensus-message-digest)). It’s a datastructure of the following format:
+The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition 39](chap-networking.html#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section 3.3.2](chap-sync.html#sect-consensus-message-digest)). It’s a datastructure of the following format:
 
-$P = (f_x...f_y, c)$
+$$
+{P}={\left({{f}_{{x}}\ldots}{{f}_{{y}},}{c}\right)}
+$$
 
-$f_x...f_y$ is an array consisting of warp sync fragments of the following format:
+${{f}_{{x}}\ldots}{{f}_{{y}}$} is an array consisting of warp sync fragments of the following format:
 
-$f_x = (B_h, J^(r,"stage")(B))$
+$$
+{{f}_{{x}}=}{\left({B}_{{h}},{J}^{{{r},\text{stage}}}{\left({B}\right)}\right)}
+$$
 
-where $B_h$ is the last block header containing a digest item ([Definition 11](chap-state.html#defn-digest)) signaling an authority set change from which the next authority set change can be fetched from. $J^(r,"stage")(B)$ is the GRANDPA justification ([Definition 78](sect-finality.html#defn-grandpa-justification)) and $c$ is a boolean that indicates whether the warp sync has been completed.
+where ${B}_{{h}}$ is the last block header containing a digest item ([Definition 11](chap-state.html#defn-digest)) signaling an authority set change from which the next authority set change can be fetched from. ${J}^{{{r},\text{stage}}}{\left({B}\right)}$ is the GRANDPA justification ([Definition 78](sect-finality.html#defn-grandpa-justification)) and ${c}$ is a boolean that indicates whether the warp sync has been completed.
 
 ### [](#sect-msg-transactions)[4.8.5. Transactions](#sect-msg-transactions)
 
@@ -346,15 +390,18 @@ The mechanism for managing transactions is further described in Section [Section
 
 Definition 42. [Transaction Message](chap-networking.html#defn-transactions-message)
 
-The **transactions message** is the structure of how the transactions are sent over the network. It is represented by $M_T$ and is defined as follows:
+The **transactions message** is the structure of how the transactions are sent over the network. It is represented by ${M}_{{T}}$ and is defined as follows:
 
-$M_T := "Enc"\_("SC")(C_1,...,C_n)$
+$$
+{M}_{{T}}\:=\text{Enc}_{{\text{SC}}}{\left({C}_{{1}},\ldots,{C}_{{n}}\right)}
+$$
 
 in which:
 
-$C_i := "Enc"\_("SC")(E_i)$
+$$
+{C}_{{i}}\:=\text{Enc}_{{\text{SC}}}{\left({E}_{{i}}\right)}$$
 
-Where each $E_i$ is a byte array and represents a separate extrinsic. The Polkadot Host is agnostic about the content of an extrinsic and treats it as a blob of data.
+Where each ${E}_{{i}}$ is a byte array and represents a separate extrinsic. The Polkadot Host is agnostic about the content of an extrinsic and treats it as a blob of data.
 
 Transactions are sent over the `/dot/transactions/1` substream.
 
@@ -364,39 +411,49 @@ The exchange of GRANDPA messages is conducted on the substream. The process for 
 
 Definition 43. [Grandpa Gossip Message](chap-networking.html#defn-gossip-message)
 
-A **GRANDPA gossip message**, $M$, is a varying datatype ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) which identifies the message type that is cast by a voter followed by the message itself.
+A **GRANDPA gossip message**, ${M}$, is a varying datatype ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) which identifies the message type that is cast by a voter followed by the message itself.
 
-$M = {(0,"Vote message", V_m),(1,"Commit message", C_m),(2,"Neighbor message", N_m),(3,"Catch-up request message",R_m),(4,"Catch-up message",U_m):}$
+$$
+{M}={\left\lbrace\begin{matrix}{0}&\text{Vote message}&{V}_{{m}}\\{1}&\text{Commit message}&{C}_{{m}}\\{2}&\text{Neighbor message}&{N}_{{m}}\\{3}&\text{Catch-up request message}&{R}_{{m}}\\{4}&\text{Catch-up message}&{U}_{{m}}\end{matrix}\right.}
+$$
 
 where  
-- $V_m$ is defined in [Definition 44](chap-networking.html#defn-grandpa-vote-msg).
+- ${V}_{{m}}$ is defined in [Definition 44](chap-networking.html#defn-grandpa-vote-msg).
 
-- $C_m$ is defined in [Definition 46](chap-networking.html#defn-grandpa-commit-msg).
+- ${C}_{{m}}$ is defined in [Definition 46](chap-networking.html#defn-grandpa-commit-msg).
 
-- $N_m$ is defined in [Definition 47](chap-networking.html#defn-grandpa-neighbor-msg).
+- ${N}_{{m}}$ is defined in [Definition 47](chap-networking.html#defn-grandpa-neighbor-msg).
 
-- $R_m$ is defined in [Definition 48](chap-networking.html#defn-grandpa-catchup-request-msg).
+- ${R}_{{m}}$ is defined in [Definition 48](chap-networking.html#defn-grandpa-catchup-request-msg).
 
-- $U_M$ is defined in [Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg).
+- ${U}_{{M}}$ is defined in [Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg).
 
 Definition 44. [GRANDPA Vote Messages](chap-networking.html#defn-grandpa-vote-msg)
 
-A **GRANDPA vote message** by voter $v$, $M_v^(r,"stage")$, is gossip to the network by voter $v$ with the following structure:
+A **GRANDPA vote message** by voter ${v}$, ${{M}_{{v}}^{{{r},\text{stage}}}}$, is gossip to the network by voter ${v}$ with the following structure:
 
-$M_v^(r,"stage")(B) := "Enc"\_("SC")(r,"id"\_(\mathbb V),"SigMsg")$ $"SigMsg" := ("msg","Sig"\_(v_i)^(r,"stage"),v\_("id"))$ $"msg" := "Enc"\_("SC")("stage",V_v^(r,"stage")(B))$
+$$
+{{M}_{{v}}^{{{r},\text{stage}}}}{\left({B}\right)}\:=\text{Enc}_{{\text{SC}}}{\left({r},\text{id}_{{{\mathbb{{V}}}}},\text{SigMsg}\right)}
+$$
+$$
+\text{SigMsg}\:={\left(\text{msg},{\text{Sig}_{{{v}_{{i}}}}^{{{r},\text{stage}}}},{v}_{{\text{id}}}\right)}
+$$
+$$
+\text{msg}\:=\text{Enc}_{{\text{SC}}}{\left(\text{stage},{{V}_{{v}}^{{{r},\text{stage}}}}{\left({B}\right)}\right)}
+$$
 
 where  
-- $r$ is an unsigned 64-bit integer indicating the Grandpa round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
+- ${r}$ is an unsigned 64-bit integer indicating the Grandpa round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
 
-- $"id"\_(\mathbb V)$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition 33](chap-sync.html#defn-authority-list)).
+- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
-- $"Sig"\_(v_i)^(r,"stage")$ is a 512-bit byte array containing the signature of the authority ([Definition 77](sect-finality.html#defn-sign-round-vote)).
+- ${\text{Sig}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}$ is a 512-bit byte array containing the signature of the authority ([Definition 77](sect-finality.html#defn-sign-round-vote)).
 
-- $v\_(id)$ is a 256-bit byte array containing the *ed25519* public key of the authority.
+- ${v}_{{{i}{d}}}$ is a 256-bit byte array containing the *ed25519* public key of the authority.
 
-- $"stage"$ is a 8-bit integer of value *0* if it’s a pre-vote sub-round, *1* if it’s a pre-commit sub-round or *2* if it’s a primary proposal message.
+- $\text{stage}$ is a 8-bit integer of value *0* if it’s a pre-vote sub-round, *1* if it’s a pre-commit sub-round or *2* if it’s a primary proposal message.
 
-- $V_v^(r,"stage")(B)$ is the GRANDPA vote for block $B$ ([Definition 76](sect-finality.html#defn-voting-rounds)).
+- ${{V}_{{v}}^{{{r},\text{stage}}}}{\left({B}\right)}$ is the GRANDPA vote for block ${B}$ ([Definition 76](sect-finality.html#defn-voting-rounds)).
 
 This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id 0.
 
@@ -404,29 +461,33 @@ Definition 45. [GRANDPA Compact Justification Format](chap-networking.html#defn-
 
 The **GRANDPA compact justification format** is an optimized data structure to store a collection of pre-commits and their signatures to be submitted as part of a commit message. Instead of storing an array of justifications, it uses the following format:
 
-$J\_(v\_(0,...n))^(r,"comp") := ({V\_(v_0)^(r,pc),... V\_(v_n)^(r,pc)},{("Sig"\_(v_0)^(r,pc),v\_("id"\_0)), ... ("Sig"\_(v_n)^(r,pc),v\_("id"\_n))})$
+$$
+{{J}_{{{v}_{{{0},\ldots{n}}}}}^{{{r},\text{comp}}}}\:={\left({\left\lbrace{{V}_{{{v}_{{0}}}}^{{{r},{p}{c}}}},\ldots{{V}_{{{v}_{{n}}}}^{{{r},{p}{c}}}}\right\rbrace},{\left\lbrace{\left({\text{Sig}_{{{v}_{{0}}}}^{{{r},{p}{c}}}},{v}_{{\text{id}_{{0}}}}\right)},\ldots{\left({\text{Sig}_{{{v}_{{n}}}}^{{{r},{p}{c}}}},{v}_{{\text{id}_{{n}}}}\right)}\right\rbrace}\right)}
+$$
 
 where  
-- $V\_(v_i)^(r,pc)$ is a 256-bit byte array containing the pre-commit vote of authority $v_i$ ([Definition 76](sect-finality.html#defn-voting-rounds)).
+- ${{V}_{{{v}_{{i}}}}^{{{r},{p}{c}}}}$ is a 256-bit byte array containing the pre-commit vote of authority ${v}_{{i}}$ ([Definition 76](sect-finality.html#defn-voting-rounds)).
 
-- $"Sig"\_(v_i)^(r,pc)$ is a 512-bit byte array containing the pre-commit signature of authority $v_i$ ([Definition 77](sect-finality.html#defn-sign-round-vote)).
+- ${\text{Sig}_{{{v}_{{i}}}}^{{{r},{p}{c}}}}$ is a 512-bit byte array containing the pre-commit signature of authority ${v}_{{i}}$ ([Definition 77](sect-finality.html#defn-sign-round-vote)).
 
-- $v\_("id"\_n)$ is a 256-bit byte array containing the public key of authority $v_i$.
+- ${v}_{{\text{id}_{{n}}}}$ is a 256-bit byte array containing the public key of authority ${v}_{{i}}$.
 
 Definition 46. [GRANDPA Commit Message](chap-networking.html#defn-grandpa-commit-msg)
 
-A **GRANDPA commit message** for block $B$ in round $r$, $M_v^(r,"Fin")(B)$, is a message broadcasted by voter $v$ to the network indicating that voter $v$ has finalized block $B$ in round $r$. It has the following structure:
+A **GRANDPA commit message** for block ${B}$ in round ${r}$, ${{M}_{{v}}^{{{r},\text{Fin}}}}{\left({B}\right)}$, is a message broadcasted by voter ${v}$ to the network indicating that voter ${v}$ has finalized block ${B}$ in round ${r}$. It has the following structure:
 
-$M_v^(r,"Fin")(B) := "Enc"\_("SC")(r,"id"\_(\mathbb V),V_v^r(B),J\_(v\_(0,...n))^(r,"comp"))$
+$$
+{{M}_{{v}}^{{{r},\text{Fin}}}}{\left({B}\right)}\:=\text{Enc}_{{\text{SC}}}{\left({r},\text{id}_{{{\mathbb{{V}}}}},{{V}_{{v}}^{{r}}}{\left({B}\right)},{{J}_{{{v}_{{{0},\ldots{n}}}}}^{{{r},\text{comp}}}}\right)}
+$$
 
 where  
-- $r$ is an unsigned 64-bit integer indicating the round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
+- ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
 
-- $id\_(\mathbb V)$ is the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
+- ${i}{d}_{{{\mathbb{{V}}}}}$ is the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
-- $V_v^r(B)$ is a 256-bit array containing the GRANDPA vote for block $B$ ([Definition 75](sect-finality.html#defn-vote)).
+- ${{V}_{{v}}^{{r}}}{\left({B}\right)}$ is a 256-bit array containing the GRANDPA vote for block ${B}$ ([Definition 75](sect-finality.html#defn-vote)).
 
-- $J\_(v\_(0,...n))^(r,"comp")$ is the compacted GRANDPA justification containing observed pre-commit of authorities $v_0$ to $v_n$ ([Definition 45](chap-networking.html#defn-grandpa-justifications-compact)).
+- ${{J}_{{{v}_{{{0},\ldots{n}}}}}^{{{r},\text{comp}}}}$ is the compacted GRANDPA justification containing observed pre-commit of authorities ${v}_{{0}}$ to ${v}_{{n}}$ ([Definition 45](chap-networking.html#defn-grandpa-justifications-compact)).
 
 This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *1*.
 
@@ -438,16 +499,18 @@ Definition 47. [GRANDPA Neighbor Message](chap-networking.html#defn-grandpa-neig
 
 A **GRANDPA Neighbor Message** is defined as:
 
-$M^("neigh") := "Enc"\_("SC")(v,r,"id"\_(\mathbb V),H_i(B\_("last")))$
+$$
+{M}^{{\text{neigh}}}\:=\text{Enc}_{{\text{SC}}}{\left({v},{r},\text{id}_{{{\mathbb{{V}}}}},{H}_{{i}}{\left({B}_{{\text{last}}}\right)}\right)}
+$$
 
 where  
-- $v$ is an unsigned 8-bit integer indicating the version of the neighbor message, currently *1*.
+- ${v}$ is an unsigned 8-bit integer indicating the version of the neighbor message, currently *1*.
 
-- $r$ is an unsigned 64-bit integer indicating the round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
+- ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition 76](sect-finality.html#defn-voting-rounds)).
 
-- $"id"\_(\mathbb V)$ is an unsigned 64-bit integer indicating the authority Id ([Definition 33](chap-sync.html#defn-authority-list)).
+- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
-- $H_i(B\_("last"))$ is an unsigned 32-bit integer indicating the block number of the last finalized block $B\_("last")$.
+- ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ is an unsigned 32-bit integer indicating the block number of the last finalized block ${B}_{{\text{last}}}$.
 
 This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *2*.
 
@@ -459,19 +522,23 @@ In particular, this procedure involves sending a *catch-up request* and processi
 
 Definition 48. [Catch-Up Request Message](chap-networking.html#defn-grandpa-catchup-request-msg)
 
-A **GRANDPA catch-up request message** for round $r$, $M\_(i,v)^("Cat"-q)("id"\_(\mathbb V),r)$, is a message sent from node $i$ to its voting peer node $v$ requesting the latest status of a GRANDPA round $r' \>r$ of the authority set $\mathbb V\_("id")$ along with the justification of the status and has the following structure:
+A **GRANDPA catch-up request message** for round ${r}$, ${{M}_{{{i},{v}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$, is a message sent from node ${i}$ to its voting peer node ${v}$ requesting the latest status of a GRANDPA round ${r}'>{r}$ of the authority set ${\mathbb{{V}}}_{{\text{id}}}$ along with the justification of the status and has the following structure:
 
-$M\_(i,v)^(r,"Cat"-q) := "Enc"\_("SC")(r,"id"\_(\mathbb V))$
+$$
+{{M}_{{{i},{v}}}^{{{r},\text{Cat}-{q}}}}\:=\text{Enc}_{{\text{SC}}}{\left({r},\text{id}_{{{\mathbb{{V}}}}}\right)}
+$$
 
 This message is the sub-component of the GRANDPA Gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *3*.
 
 Definition 49. [Catch-Up Response Message](chap-networking.html#defn-grandpa-catchup-response-msg)
 
-A **GRANDPA catch-up response message** for round $r$, $M\_(v,i)^("Cat"-s)("id"\_(\mathbb V),r)$, is a message sent by a node $v$ to node $i$ in response of a catch-up request $M\_(v,i)^("Cat"-q)("id"\_(\mathbb V),r')$ in which $r \>= r'$ is the latest GRANDPA round which v has prove of its finalization and has the following structure:
+A **GRANDPA catch-up response message** for round ${r}$, ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$, is a message sent by a node ${v}$ to node ${i}$ in response of a catch-up request ${{M}_{{{v},{i}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}'\right)}$ in which ${r}\ge{r}'$ is the latest GRANDPA round which v has prove of its finalization and has the following structure:
 
-$M\_(v,i)^("Cat"-s) := "Enc"\_("SC")("id"\_(\mathbb V), r, J\_(0,...n)^(r,"pv")(B), J\_(0,...m)^(r,"pc")(B),H_h(B'),H_i(B'))$
+$$
+{{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}\:=\text{Enc}_{{\text{SC}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r},{{J}_{{{0},\ldots{n}}}^{{{r},\text{pv}}}}{\left({B}\right)},{{J}_{{{0},\ldots{m}}}^{{{r},\text{pc}}}}{\left({B}\right)},{H}_{{h}}{\left({B}'\right)},{H}_{{i}}{\left({B}'\right)}\right)}
+$$
 
-Where $B$ is the highest block which $v$ believes to be finalized in round $r$ ([Definition 76](sect-finality.html#defn-voting-rounds)). $B'$ is the highest ancestor of all blocks voted on in the arrays of justifications $J\_(0,...n)^(r,"pv")(B)$ and $J\_(0,...m)^(r,"pc")(B)$ ([Definition 78](sect-finality.html#defn-grandpa-justification)) with the exception of the equivocatory votes.
+Where ${B}$ is the highest block which ${v}$ believes to be finalized in round ${r}$ ([Definition 76](sect-finality.html#defn-voting-rounds)). ${B}'$ is the highest ancestor of all blocks voted on in the arrays of justifications ${{J}_{{{0},\ldots{n}}}^{{{r},\text{pv}}}}{\left({B}\right)}$ and ${{J}_{{{0},\ldots{m}}}^{{{r},\text{pc}}}}{\left({B}\right)}$ ([Definition 78](sect-finality.html#defn-grandpa-justification)) with the exception of the equivocatory votes.
 
 This message is the sub-component of the GRANDPA Gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *4*.
 
@@ -485,56 +552,67 @@ This section defines the messages required for the GRANDPA BEEFY protocol ([Sect
 
 Definition 50. [Commitment](chap-networking.html#defn-grandpa-beefy-commitment)
 
-A **commitment**, $C$, contains the information extracted from the finalized block at height $H_i(B\_("last"))$ as specified in the message body and a datastructure of the following format:
+A **commitment**, ${C}$, contains the information extracted from the finalized block at height ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ as specified in the message body and a datastructure of the following format:
 
-$C = (R_h,H_i(B\_("last")),"id"\_(\mathbb V))$
+$$
+{C}={\left({R}_{{h}},{H}_{{i}}{\left({B}_{{\text{last}}}\right)},\text{id}_{{{\mathbb{{V}}}}}\right)}
+$$
 
 where  
-- $R_h$ is the MMR root of all the block header hashes leading up to the latest, finalized block.
+- ${R}_{{h}}$ is the MMR root of all the block header hashes leading up to the latest, finalized block.
 
-- $H_i(B\_("last"))$ is the block number this commitment is for. Namely the latest, finalized block.
+- ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ is the block number this commitment is for. Namely the latest, finalized block.
 
-- $"id"\_(\mathbb V)$ is the current authority set Id ([Definition 73](sect-finality.html#defn-authority-set-id)).
+- $\text{id}_{{{\mathbb{{V}}}}}$ is the current authority set Id ([Definition 73](sect-finality.html#defn-authority-set-id)).
 
 Definition 51. [Vote Message](chap-networking.html#defn-msg-beefy-gossip)
 
-A **vote message**, $M_v$, is direct vote created by the Polkadot Host on every BEEFY round and is gossiped to its peers. The message is a datastructure of the following format:
+A **vote message**, ${M}_{{v}}$, is direct vote created by the Polkadot Host on every BEEFY round and is gossiped to its peers. The message is a datastructure of the following format:
 
-$M_v = "Enc"\_("SC")(C,A\_("id")^("bfy"),A\_("sig"))$
+$$
+{M}_{{v}}=\text{Enc}_{{\text{SC}}}{\left({C},{{A}_{{\text{id}}}^{{\text{bfy}}}},{A}_{{\text{sig}}}\right)}
+$$
 
 where  
-- $C$ is the BEEFY commitment ([Definition 50](chap-networking.html#defn-grandpa-beefy-commitment)).
+- ${C}$ is the BEEFY commitment ([Definition 50](chap-networking.html#defn-grandpa-beefy-commitment)).
 
-- $A\_("id")^("bfy")$ is the ECDSA public key of the Polkadot Host.
+- ${{A}_{{\text{id}}}^{{\text{bfy}}}}$ is the ECDSA public key of the Polkadot Host.
 
-- $A\_("sig")$ is the signature created with $A\_("id")^("bfy")$ by signing the statement $R_h$ in $C$.
+- ${A}_{{\text{sig}}}$ is the signature created with ${{A}_{{\text{id}}}^{{\text{bfy}}}}$ by signing the statement ${R}_{{h}}$ in ${C}$.
 
 Definition 52. [Signed Commitment](chap-networking.html#defn-grandpa-beefy-signed-commitment)
 
-A **signed commitment**, $M\_("sc")$, is a datastructure of the following format:
+A **signed commitment**, ${M}_{{\text{sc}}}$, is a datastructure of the following format:
 
-$M\_("SC") = "Enc"\_("SC")(C,S_n)$ $S_n = (A_0^("sig"),... A_n^("sig"))$
+$$
+{M}_{{\text{SC}}}=\text{Enc}_{{\text{SC}}}{\left({C},{S}_{{n}}\right)}
+$$
+$$
+{S}_{{n}}={\left({{A}_{{0}}^{{\text{sig}}}},\ldots{{A}_{{n}}^{{\text{sig}}}}\right)}
+$$
 
 where  
-- $C$ is the BEEFY commitment ([Definition 50](chap-networking.html#defn-grandpa-beefy-commitment)).
+- ${C}$ is the BEEFY commitment ([Definition 50](chap-networking.html#defn-grandpa-beefy-commitment)).
 
-- $S_n$ is an array where its exact size matches the number of validators in the current authority set as specified by $"id"\_(\mathbb V)$ ([Definition 73](sect-finality.html#defn-authority-set-id)) in $C$. Individual items are of the type *Option* ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain a signature of a validator which signed the same statement ($R_h$ in $C$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
+- ${S}_{{n}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ ([Definition 73](sect-finality.html#defn-authority-set-id)) in ${C}$. Individual items are of the type *Option* ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain a signature of a validator which signed the same statement (${R}_{{h}}$ in ${C}$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
 
-  For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in $S_n$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition 190](id-cryptography-encoding.html#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
+  For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in ${S}_{{n}}$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition 190](id-cryptography-encoding.html#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
 
 Definition 53. [Signed Commitment Witness](chap-networking.html#defn-grandpa-beefy-signed-commitment-witness)
 
-A **signed commitment witness**, $M\_("SC")^w$, is a light version of the signed BEEFY commitment ([Definition 52](chap-networking.html#defn-grandpa-beefy-signed-commitment)). Instead of containing the entire list of signatures, it only claims which validator signed the statement.
+A **signed commitment witness**, ${{M}_{{\text{SC}}}^{{w}}}$, is a light version of the signed BEEFY commitment ([Definition 52](chap-networking.html#defn-grandpa-beefy-signed-commitment)). Instead of containing the entire list of signatures, it only claims which validator signed the statement.
 
 The message is a datastructure of the following format:
 
-$M\_("SC")^w = "Enc"\_("SC")(C,V\_(0,... n), R\_("sig"))$
+$$
+{{M}_{{\text{SC}}}^{{w}}}=\text{Enc}_{{\text{SC}}}{\left({C},{V}_{{{0},\ldots{n}}},{R}_{{\text{sig}}}\right)}
+$$
 
 where  
-- $C$ is the BEEFY commitment ([Definition 50](chap-networking.html#defn-grandpa-beefy-commitment)).
+- ${C}$ is the BEEFY commitment ([Definition 50](chap-networking.html#defn-grandpa-beefy-commitment)).
 
-- $V\_(0,... n)$ is an array where its exact size matches the number of validators in the current authority set as specified by $"id"\_(\mathbb V)$ in $C$. Individual items are booleans which indicate whether the validator has signed the statement (*true*) or not (*false*). It’s critical that the boolean indicators are sorted based on their corresponding public key entry in the authority set.
+- ${V}_{{{0},\ldots{n}}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ in ${C}$. Individual items are booleans which indicate whether the validator has signed the statement (*true*) or not (*false*). It’s critical that the boolean indicators are sorted based on their corresponding public key entry in the authority set.
 
-  For example, the boolean indicator of the validator at index 3 in the authority set must be placed at index *3* in $V_n$. This sorting allows clients to map public keys to their corresponding boolean indicators.
+  For example, the boolean indicator of the validator at index 3 in the authority set must be placed at index *3* in ${V}_{{n}}$. This sorting allows clients to map public keys to their corresponding boolean indicators.
 
-- $R\_("sig")$ is the MMR root of the signatures in the original signed BEEFY commitment ([Definition 52](chap-networking.html#defn-grandpa-beefy-signed-commitment)).
+- ${R}_{{\text{sig}}}$ is the MMR root of the signatures in the original signed BEEFY commitment ([Definition 52](chap-networking.html#defn-grandpa-beefy-signed-commitment)).

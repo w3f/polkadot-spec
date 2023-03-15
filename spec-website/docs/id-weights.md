@@ -26,77 +26,83 @@ These concepts are formalized in [Definition 150](id-weights.html#defn-block-len
 
 Definition 150. Block Length
 
-For a block $B$ with $Head(B)$ and $Body(B)$ the block length of $B$, $Len(B)$, is defined as the amount of raw bytes of $B$.
+For a block ${B}$ with ${H}{e}{a}{d}{\left({B}\right)}$ and ${B}{o}{\left.{d}{y}\right.}{\left({B}\right)}$ the block length of ${B}$,${L}{e}{n}{\left({B}\right)}$, is defined as the amount of raw bytes of ${B}$.
 
 Definition 151. Target Time per Block
 
-Ṯargeted time per block denoted by $T(B)$ implies the amount of seconds that a new block should be produced by a validator. The transaction weights must consider $T(B)$ in order to set restrictions on time intensive transactions in order to saturate the block to its fullest potential until $T(B)$ is reached.
+Ṯargeted time per block denoted by ${T}{\left({B}\right)}$ implies the amount of seconds that a new block should be produced by a validator. The transaction weights must consider ${T}{\left({B}\right)}$ in order to set restrictions on time intensive transactions in order to saturate the block to its fullest potential until ${T}{\left({B}\right)}$ is reached.
 
 Definition 152. Block Target Time
 
-Available block ration reserved for normal, noted by $R(B)$, is defined as the maximum weight of none-operational transactions in the Body of $B$ divided by $Len(B)$.
+Available block ration reserved for normal, noted by ${R}{\left({B}\right)}$, is defined as the maximum weight of none-operational transactions in the Body of ${B}$ divided by ${L}{e}{n}{\left({B}\right)}$.
 
 Definition 153. Block Limits
 
-P̱olkadot block limits as defined here should be respected by each block producer for the produced block $B$ to be deemed valid:
+P̱olkadot block limits as defined here should be respected by each block producer for the produced block ${B}$ to be deemed valid:
 
-- $Len(B) \le 5 \times 1'024 \times 1'024 = 5'242'880$ Bytes
+- ${L}{e}{n}{\left({B}\right)}\le{5}\times{1}'{024}\times{1}'{024}={5}'{242}'{880}$ Bytes
 
-- $T(B) = 6$ seconds$
+- ${T}{\left({B}\right)}={6}$ seconds$
 
-- $R(B) \le 0.75$
+- ${R}{\left({B}\right)}\le{0.75}$
 
 Definition 154. Weight Function
 
-The P̱olkadot transaction weight function denoted by $\mathcal{W}$ as follows:
+The P̱olkadot transaction weight function denoted by ${\mathcal{{{W}}}}$ as follows:
 
-$\begin{aligned} \mathcal{W} &: \mathcal{E} \rightarrow \mathbb{N} $ \mathcal{W} &: E \mapsto w \end{aligned}$
+${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{\mathcal{{{W}}}}&:{\mathcal{{{E}}}}\rightarrow{\mathbb{{{N}}}}$ \mathcal{W} &: E \mapsto w \end{aligned}$
 
-where $w$ is a non-negative integer representing the weight of the extrinsic $E$. We define the weight of all inherent extrinsics as defined in the [Section 2.3.3](chap-state.html#sect-inherents) to be equal to 0. We extend the definition of $\mathcal{W}$ function to compute the weight of the block as sum of weight of all extrinsics it includes:
+where ${w}$ is a non-negative integer representing the weight of the extrinsic ${E}$. We define the weight of all inherent extrinsics as defined in the [Section 2.3.3](chap-state.html#sect-inherents) to be equal to 0. We extend the definition of ${\mathcal{{{W}}}}$ function to compute the weight of the block as sum of weight of all extrinsics it includes:
 
-$\begin{aligned} \mathcal{W} &: \mathcal{B}\rightarrow \mathbb{N} $ \mathcal{W} &: B \mapsto \sum\_{E\in B}(W(E)) \end{aligned}$
+${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{\mathcal{{{W}}}}&:{\mathcal{{{B}}}}\rightarrow{\mathbb{{{N}}}}$ \mathcal{W} &: B \mapsto \sum\_{E\in B}(W(E)) \end{aligned}$
 
 In the remainder of this section, we discuss the requirements to which the weight function needs to comply to.
 
-- Computations of function $\mathcal{W}(E)$ must be determined before execution of that $E$.
+- Computations of function ${\mathcal{{{W}}}}{\left({E}\right)}$ must be determined before execution of that ${E}$.
 
-- Due to the limited time window, computations of $\mathcal{W}$ must be done quickly and consume few resources themselves.
+- Due to the limited time window, computations of ${\mathcal{{{W}}}}$ must be done quickly and consume few resources themselves.
 
-- $\mathcal{W}$ must be self contained and must not require I/O on the chain state. $\mathcal{W}(E)$ must depend solely on the Runtime function representing $E$ and its parameters.
+- ${\mathcal{{{W}}}}$ must be self contained and must not require I/O on the chain state. ${\mathcal{{{W}}}}{\left({E}\right)}$ must depend solely on the Runtime function representing ${E}$ and its parameters.
 
-Heuristically, "heaviness" corresponds to the execution time of an extrinsic. In that way, the $\mathcal{W}$ value for various extrinsics should be proportional to their execution time. For example, if Extrinsic A takes three times longer to execute than Extrinsic B, then Extrinsic A should roughly weighs 3 times of Extrinsic B. Or:
+Heuristically, "heaviness" corresponds to the execution time of an extrinsic. In that way, the ${\mathcal{{{W}}}}$ value for various extrinsics should be proportional to their execution time. For example, if Extrinsic A takes three times longer to execute than Extrinsic B, then Extrinsic A should roughly weighs 3 times of Extrinsic B. Or:
 
-$\mathcal{W}(A) \approx 3 \times \mathcal{W}(B)$
+$$
+{\mathcal{{{W}}}}{\left({A}\right)}\approx{3}\times{\mathcal{{{W}}}}{\left({B}\right)}
+$$
 
-Nonetheless, $\mathcal{W}(E)$ can be manipulated depending on the priority of $E$ the chain is supposed to endorse.
+Nonetheless, ${\mathcal{{{W}}}}{\left({E}\right)}$ can be manipulated depending on the priority of ${E}$ the chain is supposed to endorse.
 
 ### [](#sect-limitations)[10.2.1. Limitations](#sect-limitations)
 
-In this section we discuss how applying the limitation defined in [Definition 153](id-weights.html#defn-polkadot-block-limits) can be translated to limitation $\mathcal{W}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition 155](id-weights.html#defn-block-weight):
+In this section we discuss how applying the limitation defined in [Definition 153](id-weights.html#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition 155](id-weights.html#defn-block-weight):
 
 Definition 155. Block Weight
 
-We define the block weight of block $B$, formally denoted as $\mathcal{W}(B)$, to be:
+We define the block weight of block ${B}$, formally denoted as ${\mathcal{{{W}}}}{\left({B}\right)}$, to be:
 
-$\mathcal{W}(B) = \sum^{\|\mathcal{E}\|}\_{n = 0} (W(E_n))$
+$$
+{\mathcal{{{W}}}}{\left({B}\right)}=\sum^{{{\left|{\mathcal{{{E}}}}\right|}}}_{\left\lbrace{n}={0}\right\rbrace}{\left({W}{\left({E}_{{n}}\right)}\right)}
+$$
 
 We require that:
 
-$\mathcal{W}(B) \< 2'000'000'000'000$
+$$
+{\mathcal{{{W}}}}{\left({B}\right)}<{2}'{000}'{000}'{000}'{000}
+$$
 
 The weights must fulfill the requirements as noted by the fundamentals and limitations, and can be assigned as the author sees fit. As a simple example, consider a maximum block weight of 1’000’000’000, an available ratio of 75% and a targeted transaction throughput of 500 transactions, we could assign the (average) weight for each transaction at about 1’500’000. Block producers have economic incentive to include as many extrinsics as possible (without exceeding limitations) into a block before reaching the targeted block time. Weights give indicators to block producers on which extrinsics to include in order to reach the blocks fullest potential.
 
 ## [](#sect-runtime-primitives)[10.3. Calculation of the weight function](#sect-runtime-primitives)
 
-In order to calculate weight of block $B$, $\mathcal{W}(B)$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as loops, I/O operations, and data manipulation. Subsequently the performance and execution time of each part will be evaluated based on variety of input parameters. Based on those observations, weights are assigned Runtime functions or parameters which contribute to long execution times. These sub component of the code are discussed in [Section 10.4.1](id-weights.html#sect-primitive-types).
+In order to calculate weight of block ${B}$, ${\mathcal{{{W}}}}{\left({B}\right)}$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as loops, I/O operations, and data manipulation. Subsequently the performance and execution time of each part will be evaluated based on variety of input parameters. Based on those observations, weights are assigned Runtime functions or parameters which contribute to long execution times. These sub component of the code are discussed in [Section 10.4.1](id-weights.html#sect-primitive-types).
 
-The general algorithm to calculate $\mathcal{W}(E)$ is described in the [Section 10.4](id-weights.html#sect-benchmarking).
+The general algorithm to calculate ${\mathcal{{{W}}}}{\left({E}\right)}$ is described in the [Section 10.4](id-weights.html#sect-benchmarking).
 
 ## [](#sect-benchmarking)[10.4. Benchmarking](#sect-benchmarking)
 
 Calculating the extrinsic weight solely based on theoretical complexity of the underlying implementation proves to be too complicated and unreliable at the same time. Certain decisions in the source code architecture, internal communication within the Runtime or other design choices could add enough overhead to make the asymptotic complexity practically meaningless.
 
-On the other hand, benchmarking an extrinsics in a black-box fashion could (using random parameters) most centainly results in missing corner cases and worst case scenarios. Instead, we benchmark all available Runtime functions which are invoked in the course of execution of extrinsics with a large collection of carefully selected input parameters and use the result of the benchmarking process to evaluate $\mathcal{W}(E)$.
+On the other hand, benchmarking an extrinsics in a black-box fashion could (using random parameters) most centainly results in missing corner cases and worst case scenarios. Instead, we benchmark all available Runtime functions which are invoked in the course of execution of extrinsics with a large collection of carefully selected input parameters and use the result of the benchmarking process to evaluate ${\mathcal{{{W}}}}{\left({E}\right)}$.
 
 In order to select useful parameters, the Runtime functions have to be analyzed to fully understand which behaviors or conditions can result in expensive execution times, which is described closer in [Section 10.4.1](id-weights.html#sect-primitive-types). Not every possible benchmarking outcome can be invoked by varying input parameters of the Runtime function. In some circumstances, preliminary work is required before a specific benchmark can be reliably measured, such as creating certain preexisting entries in the storage or other changes to the environment.
 
@@ -179,7 +185,7 @@ Information such as legal name must be verified by ID card or passport submissio
 
 The function `request_judgement` from the `identity` pallet allows users to request judgement from a specific registrar.
 
-    (func $request_judgement (param $req_index int) (param $max_fee int))
+    (func ${r}{e}{q}{u}{e}{s}{t}_{{j}}{u}{d}\ge{m}{e}{n}{t}{\left({p}{a}{r}{a}{m}$\right.}req_index int) (param $max_fee int))
 
 - `req_index`: the index which is assigned to the registrar.
 
@@ -240,40 +246,40 @@ The following points must be considered:
 
 The Polkadot Runtime specifies the `MaxRegistrars` constant, which will prevent the list of registrars of reaching an undesired length. This value should have some influence on the benchmarking process.
 
-The benchmarking implementation of for the function $request$judgement$ can be defined as follows:
+The benchmarking implementation of for the function ${r}{e}{q}{u}{e}{s}{t}$judgement$ can be defined as follows:
 
-\Ensure \$\mathcal{W}\$ \State \textbf{init} \$collection = $$\$ \For{\$amount \leftarrow 1,MaxRegistrars\$} \State \call{Generate-Registrars}{\$amount\$} \State \$caller \leftarrow\$ \call{Create-Account}{\$caller, 1\$} \State \call{Set-Balance}{\$caller, 100\$} \State \$time \leftarrow\$ \call{Timer}{\call{Request-Judgement}{\call{Random}{\$amount\$}\$, 100\$}} \State \call{Add-To}{\$collection, time\$} \EndFor \State \$\mathcal{W} \leftarrow\$ \call{Compute-Weight}{\$collection\$} \Return \$\mathcal{W}\$
+\Ensure ${\mathcal{{{W}}}}$ \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${a}{m}{o}{u}{n}{t}\leftarrow{1},{M}{a}{x}{R}{e}{g}{i}{s}{t}{r}{a}{r}{s}$} \State \call{Generate-Registrars}{${a}{m}{o}{u}{n}{t}${\rbrace}{S}{t}{a}{t}{e}${c}{a}{l}\le{r}\leftarrow$ \call{Create-Account}{${c}{a}{l}\le{r},{1}$} \State \call{Set-Balance}{${c}{a}{l}\le{r},{100}${\rbrace}{S}{t}{a}{t}{e}${t}{i}{m}{e}\leftarrow$ \call{Timer}{\call{Request-Judgement}{\call{Random}{${a}{m}{o}{u}{n}{t}${\rbrace}$,{100}$}} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}${\rbrace}{E}{n}{d}{F}{\quad\text{or}\quad}{S}{t}{a}{t}{e}${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$
 
 where  
-- Generate-Registrars($amount$)
+- Generate-Registrars(${a}{m}{o}{u}{n}{t}$)
 
   Creates number of registrars and inserts those records into storage.
 
-- Create-Account($name$, $index$)
+- Create-Account(${n}{a}{m}{e}$, $\in{d}{e}{x}$)
 
   Creates a Blake2 hash of the concatenated input of name and index represent- ing the address of a account. This function only creates an address and does not conduct any I/O.
 
-- Set-Balance($account$, $balance$)
+- Set-Balance(${a}{\mathcal{{o}}}{u}{n}{t}$, ${b}{a}{l}{a}{n}{c}{e}$)
 
   Sets a initial balance for the specified account in the storage state.
 
-- Timer($function$)
+- Timer(${f}{u}{n}{c}{t}{i}{o}{n}$)
 
   Measures the time from the start of the specified f unction to its completion.
 
-- Request-Judgement($registrar$index$, $max$fee$)
+- Request-Judgement(${r}{e}{g}{i}{s}{t}{r}{a}{r}$\in{d}{e}{x}$, $max${f}{e}{e}$)
 
   Calls the corresponding request_judgement Runtime function and passes on the required parameters.
 
-- Random($num$)
+- Random($\nu{m}$)
 
   Picks a random number between 0 and num. This should be used when the benchmark should account for unpredictable values.
 
-- Add-To($collection$, $time$)
+- Add-To(${c}{o}{l}\le{c}{t}{i}{o}{n}$, ${t}{i}{m}{e}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Compute-Weight($collection$)
+- Compute-Weight(${c}{o}{l}\le{c}{t}{i}{o}{n}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
@@ -365,46 +371,46 @@ Definition 158. Maximum Nominator Reward
 
 M̱aximum Nominator Rewarded Per Validator indicated as `MaxNominatorRewardedPerValidator`, specifies the maximum amount of the highest-staked nominators which will get a reward. Those values should have some influence in the benchmarking process.
 
-The benchmarking implementation for the function $payout$stakers$ can be defined as follows:
+The benchmarking implementation for the function ${p}{a}{y}{o}{u}{t}$stakers$ can be defined as follows:
 
-\Ensure \$\mathcal{W}\$ \State \textbf{init} \$collection = $$\$ \For{\$amount \leftarrow 1,MaxNominatorRewardedPerValidator\$} \For{\$era$depth \leftarrow 1,HistoryDepth\$} \State \$validator \leftarrow\$ \call{Generate-Validator}{} \State \call{Validate}{\$validator\$} \State \$nominators \leftarrow\$ \call{Generate-Nominators}{\$amount\$} \For{\$nominator \in nominators\$} \State \call{Nominate}{\$validator, nominator\$} \EndFor \State \$era$index \leftarrow\$ \call{Create-Rewards}{\$validator, nominators, era$depth\$} \State \$time \leftarrow\$ \call{Timer}{\call{Payout-Stakers}{\$validator\$}\$, era$index\$} \State \call{Add-To}{\$collection, time\$} \EndFor \EndFor \State \$\mathcal{W} \leftarrow\$ \call{Compute-Weight}{\$collection\$} \Return \$\mathcal{W}\$
+\Ensure ${\mathcal{{{W}}}}$ \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${a}{m}{o}{u}{n}{t}\leftarrow{1},{M}{a}{x}{N}{o}\min{a}\to{r}{R}{e}{w}{a}{r}{d}{e}{d}{P}{e}{r}{V}{a}{l}{i}{d}{a}\to{r}${\rbrace}{F}{\quad\text{or}\quad}{\left\lbrace$\right.}{e}{r}{a}$depth \leftarrow 1,HistoryDepth${\rbrace}{S}{t}{a}{t}{e}$validator \leftarrow${c}{a}{l}{l}{\left\lbrace{G}{e}\ne{r}{a}{t}{e}-{V}{a}{l}{i}{d}{a}\to{r}\right\rbrace}{\left\lbracenull\right\rbrace}{S}{t}{a}{t}{e}{c}{a}{l}{l}{\left\lbrace{V}{a}{l}{i}{d}{a}{t}{e}\right\rbrace}{\left\lbrace$\right.}validator$} \State $nominators \leftarrow${c}{a}{l}{l}{\left\lbrace{G}{e}\ne{r}{a}{t}{e}-{N}{o}\min{a}\to{r}{s}\right\rbrace}{\left\lbrace$\right.}amount$} \For{$nominator \in nominators${\rbrace}{S}{t}{a}{t}{e}{c}{a}{l}{l}{\left\lbrace{N}{o}\min{a}{t}{e}\right\rbrace}{\left\lbrace$\right.}validator, nominator$} \EndFor \State ${e}{r}{a}$\in{d}{e}{x}\leftarrow$ \call{Create-Rewards}{${v}{a}{l}{i}{d}{a}\to{r},{n}{o}\min{a}\to{r}{s},{e}{r}{a}$depth$} \State ${t}{i}{m}{e}\leftarrow${c}{a}{l}{l}{\left\lbrace{T}{i}{m}{e}{r}\right\rbrace}{\left\lbrace{c}{a}{l}{l}{\left\lbrace{P}{a}{y}{o}{u}{t}-{S}{t}{a}{k}{e}{r}{s}\right\rbrace}{\left\lbrace$\right.}\right.}validator$}$, era$\in{d}{e}{x}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$
 
 where  
 - Generate-Validator()
 
   Creates a validators with some unbonded balances.
 
-- Validate($validator$)
+- Validate(${v}{a}{l}{i}{d}{a}\to{r}$)
 
   Bonds balances of validator and bonds balances.
 
-- Generate-Nominators($amount$)
+- Generate-Nominators(${a}{m}{o}{u}{n}{t}$)
 
   Creates the amount of nominators with some unbonded balances.
 
-- Nominate($validator$, $nominator$)
+- Nominate(${v}{a}{l}{i}{d}{a}\to{r}$, ${n}{o}\min{a}\to{r}$)
 
   Starts nomination of nominator for validator by bonding balances.
 
-- Create-Rewards($validator$, $nominators$, $era$depth$)
+- Create-Rewards(${v}{a}{l}{i}{d}{a}\to{r}$, ${n}{o}\min{a}\to{r}{s}$, $era$depth$)
 
   Starts an Era and creates pending rewards for validator and nominators.
 
-- Timer($function$)
+- Timer(${f}{u}{n}{c}{t}{i}{o}{n}$)
 
   Measures the time from the start of the specified f unction to its completion.
 
-- Add-To($collection$, $time$)
+- Add-To(${c}{o}{l}\le{c}{t}{i}{o}{n}$, ${t}{i}{m}{e}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Compute-Weight($collection$)
+- Compute-Weight(${c}{o}{l}\le{c}{t}{i}{o}{n}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
 ### [](#id-practical-example-3-transfer)[10.5.3. Practical Example \#3: `transfer`](#id-practical-example-3-transfer)
 
-The $transfer$ function of the `balances` module is designed to move the specified balance by the sender to the receiver.
+The ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ function of the `balances` module is designed to move the specified balance by the sender to the receiver.
 
 #### [](#id-analysis-3)[10.5.3.1. Analysis](#id-analysis-3)
 
@@ -436,7 +442,7 @@ Specific parameters can could have a significant impact for this specific functi
 | Account index | `index` in…​   | 1        | 1000   | Used as a seed for account creation |
 | Balance       | `balance` in…​ | 2        | 1000   | Sender balance and transfer amount  |
 
-Executing a benchmark for each balance increment within the balance range for each index increment within the index range will generate too many variants ($1000 \times 999$) and highly increase execution time. Therefore, this benchmark is configured to first set the balance at value 1’000 and then to iterate from 1 to 1’000 for the index value. Once the index value reaches 1’000, the balance value will reset to 2 and iterate to 1’000 (see ["transfer" Runtime function benchmark](id-weights.html#algo-benchmark-transfer) for more detail):
+Executing a benchmark for each balance increment within the balance range for each index increment within the index range will generate too many variants (${1000}\times{999}$) and highly increase execution time. Therefore, this benchmark is configured to first set the balance at value 1’000 and then to iterate from 1 to 1’000 for the index value. Once the index value reaches 1’000, the balance value will reset to 2 and iterate to 1’000 (see ["transfer" Runtime function benchmark](id-weights.html#algo-benchmark-transfer) for more detail):
 
 - `index`: 1, `balance`: 1000
 
@@ -456,36 +462,36 @@ Executing a benchmark for each balance increment within the balance range for ea
 
 - …​
 
-The parameters itself do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The $transfer$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights.html#algo-benchmark-transfer).
+The parameters itself do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights.html#algo-benchmark-transfer).
 
 #### [](#id-benchmarking-framework-3)[10.5.3.3. Benchmarking Framework](#id-benchmarking-framework-3)
 
-The benchmarking implementation for the Polkadot Runtime function $transfer$ is defined as follows (starting with the Main function):
+The benchmarking implementation for the Polkadot Runtime function ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ is defined as follows (starting with the Main function):
 
-\Ensure{\$collection\$: a collection of time measurements of all benchmark iterations} \Function{Main}{} \State \textbf{init} \$collection = $ $\$ \State \textbf{init} \$balance = 1'000\$ \For{\$index \gets 1,1'000\$} \State \$time \leftarrow\$ \call{Run-Benchmark}{\$index, balance\$} \State \call{Add-To}{\$collection, time\$} \EndFor \State \textbf{init} \$index = 1'000\$ \For{\$balance \gets 2,1'000\$} \State \$time \leftarrow\$ \call{Run-Benchmark}{\$index, balance\$} \State \call{Add-To}{\$collection, time\$} \EndFor \State \$\mathcal{W} \leftarrow\$ \call{Compute-Weight}{\$collection\$} \Return \$\mathcal{W}\$ \EndFunction \Function{Run-Benchmark}{\$index\$, \$balance\$} \State \$sender \leftarrow\$ \call{Create-Account}{\$caller, index\$} \State \$recipient \leftarrow\$ \call{Create-Accouny}{\$recipient, index\$} \State \call{Set-Balance}{\$sender, balance\$} \State \$time \leftarrow\$ \call{Timer}{\call{Transfer}{\$sender, recipient, balance\$}} \Return \$time\$ \EndFunction
+\Ensure{${c}{o}{l}\le{c}{t}{i}{o}{n}$: a collection of time measurements of all benchmark iterations} \Function{Main}{} \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \State \textbf{init} ${b}{a}{l}{a}{n}{c}{e}={1}'{000}$ \For{$\in{d}{e}{x}\ge{t}{s}{1},{1}'{000}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Run-Benchmark}{$\in{d}{e}{x},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State \textbf{init} $\in{d}{e}{x}={1}'{000}$ \For{${b}{a}{l}{a}{n}{c}{e}\ge{t}{s}{2},{1}'{000}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Run-Benchmark}{$\in{d}{e}{x},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$ \EndFunction \Function{Run-Benchmark}{$\in{d}{e}{x}$, ${b}{a}{l}{a}{n}{c}{e}$} \State ${s}{e}{n}{d}{e}{r}\leftarrow$ \call{Create-Account}{${c}{a}{l}\le{r},\in{d}{e}{x}$} \State ${r}{e}{c}{i}\pi{e}{n}{t}\leftarrow$ \call{Create-Accouny}{${r}{e}{c}{i}\pi{e}{n}{t},\in{d}{e}{x}$} \State \call{Set-Balance}{${s}{e}{n}{d}{e}{r},{b}{a}{l}{a}{n}{c}{e}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Timer}{\call{Transfer}{${s}{e}{n}{d}{e}{r},{r}{e}{c}{i}\pi{e}{n}{t},{b}{a}{l}{a}{n}{c}{e}$}} \Return ${t}{i}{m}{e}$ \EndFunction
 
 where  
-- Create-Account($name$, $index$)
+- Create-Account(${n}{a}{m}{e}$, $\in{d}{e}{x}$)
 
   Creates a Blake2 hash of the concatenated input of name and index representing the address of a account. This function only creates an address and does not conduct any I/O.
 
-- Set-Balance($account$, $balance$)
+- Set-Balance(${a}{\mathcal{{o}}}{u}{n}{t}$, ${b}{a}{l}{a}{n}{c}{e}$)
 
   Sets a initial balance for the specified account in the storage state.
 
-- Transfer($sender$, $recipient$, $balance$)
+- Transfer(${s}{e}{n}{d}{e}{r}$, ${r}{e}{c}{i}\pi{e}{n}{t}$, ${b}{a}{l}{a}{n}{c}{e}$)
 
   Transfers the specified balance from sender to recipient by calling the corresponding Runtime function. This represents the target Runtime function to be benchmarked.
 
-- Add-To($collection$, $time$)
+- Add-To(${c}{o}{l}\le{c}{t}{i}{o}{n}$, ${t}{i}{m}{e}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Timer($function$)
+- Timer(${f}{u}{n}{c}{t}{i}{o}{n}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Compute-Weight($collection$)
+- Compute-Weight(${c}{o}{l}\le{c}{t}{i}{o}{n}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
@@ -578,22 +584,22 @@ Two important points in the `withdraw_unbonded` function must be considered. The
 
 The benchmarking implementation for the Polkadot Runtime function `withdraw_unbonded` is defined as follows:
 
-\Ensure \$\mathcal{W}\$ \Function{Main}{} \State \textbf{init} \$collection = $$\$ \For{\$balance \gets 1,100\$} \State \$stash \leftarrow\$ \call{Create-Account}{\$stash, 1\$} \State \$controller \leftarrow\$ \call{Create-Account}{\$controller, 1\$} \State \call{Set-Balance}{\$stash, 100\$} \State \call{Set-Balance}{\$controller, 1\$} \State \call{Bond}{\$stash, controller, balance\$} \State \call{Pass-Era}{} \State \call{UnBond}{\$controller, balance\$} \State \call{Pass-Era}{} \State \$time \leftarrow\$ \call{Timer}{\call{Withdraw-Unbonded}{\$controller\$}} \State \call{Add-To}{\$collection, time\$} \EndFor \State \$\mathcal{W} \leftarrow\$ \call{Compute-Weight}{\$collection\$} \Return \$\mathcal{W}\$ \EndFunction
+\Ensure ${\mathcal{{{W}}}}$ \Function{Main}{} \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${b}{a}{l}{a}{n}{c}{e}\ge{t}{s}{1},{100}$} \State ${s}{t}{a}{s}{h}\leftarrow$ \call{Create-Account}{${s}{t}{a}{s}{h},{1}$} \State ${c}{o}{n}{t}{r}{o}{l}\le{r}\leftarrow$ \call{Create-Account}{${c}{o}{n}{t}{r}{o}{l}\le{r},{1}$} \State \call{Set-Balance}{${s}{t}{a}{s}{h},{100}$} \State \call{Set-Balance}{${c}{o}{n}{t}{r}{o}{l}\le{r},{1}$} \State \call{Bond}{${s}{t}{a}{s}{h},{c}{o}{n}{t}{r}{o}{l}\le{r},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Pass-Era}{} \State \call{UnBond}{${c}{o}{n}{t}{r}{o}{l}\le{r},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Pass-Era}{} \State $time \leftarrow$ \call{Timer}{\call{Withdraw-Unbonded}{${c}{o}{n}{t}{r}{o}{l}\le{r}$}} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$ \EndFunction
 
 where  
-- Create-Account($name$, $index$)
+- Create-Account(${n}{a}{m}{e}$, $index$)
 
   Creates a Blake2 hash of the concatenated input of name and index representing the address of a account. This function only creates an address and does not conduct any I/O.
 
-- Set-Balance($account$, $balance$)
+- Set-Balance(${a}{\mathcal{{o}}}{u}{n}{t}$, ${b}{a}{l}{a}{n}{c}{e}$)
 
   Sets a initial balance for the specified account in the storage state.
 
-- Bond($stash$, $controller$, $amount$)
+- Bond(${s}{t}{a}{s}{h}$, ${c}{o}{n}{t}{r}{o}{l}\le{r}$, ${a}{m}{o}{u}{n}{t}$)
 
   Bonds the specified amount for the stash and controller pair.
 
-- UnBond($account$, $amount$)
+- UnBond(${a}{\mathcal{{o}}}{u}{n}{t}$, ${a}{m}{o}{u}{n}{t}$)
 
   Unbonds the specified amount for the given account.
 
@@ -601,19 +607,19 @@ where
 
   Pass one era. Forces the function `withdraw_unbonded` to update the ledger and eventually delete information.
 
-- Withdraw-Unbonded($controller$)
+- Withdraw-Unbonded(${c}{o}{n}{t}{r}{o}{l}\le{r}$)
 
   Withdraws the the full unbonded amount of the specified controller account. This represents the target Runtime function to be benchmarked.
 
-- Add-To($collection$, $time$)
+- Add-To(${c}{o}{l}\le{c}{t}{i}{o}{n}$, ${t}{i}{m}{e}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Timer($function$)
+- Timer(${f}{u}{n}{c}{t}{i}{o}{n}$)
 
   Measures the time from the start of the specified f unction to its completion.
 
-- Compute-Weight($collection$)
+- Compute-Weight(${c}{o}{l}\le{c}{t}{i}{o}{n}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
@@ -633,7 +639,7 @@ Polkadot fees consists of three parts:
 
 The final fee can be summarized as:
 
-$\begin{aligned} fee &= base$ fee $ &{} + length$ of$ transaction$ in$ bytes \times length$ fee $ &{} + weight$ to$ fee $ \end{aligned}$
+${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{f}{e}{e}&={b}{a}{s}{e}${f}{e}{e}$ &{} + length${\left\lbracenull\right\rbrace}+\le{n}\gt{h}$ of${t}{r}{a}{n}{s}{a}{c}{t}{i}{o}{n}$ in${b}{y}{t}{e}{s}\times\le{n}\gt{h}$ fee $ &{} + weight${\left\lbracenull\right\rbrace}+{w}{e}{i}{g}{h}{t}$ to$ fee $ \end{aligned}$
 
 ### [](#id-definitions-in-polkadot)[10.6.2. Definitions in Polkadot](#id-definitions-in-polkadot)
 
@@ -645,9 +651,9 @@ The Polkadot Runtime defines the following values:
 
 - Weight to fee conversion:
 
-  $weight$ fee = weight \times (100$ uDOTs \div (10 \times 10'000))$
+  ${w}{e}{i}{g}{h}{t}$ fee = weight \times (100${u}{D}{O}{T}{s}\div{\left({10}\times{10}'{000}\right)}{)}$
 
-  A weight of 10’000 (the smallest non-zero weight) is mapped to $\frac{1}{10}$ of 100 uDOT. This fee will never exceed the max size of an unsigned 128 bit integer.
+  A weight of 10’000 (the smallest non-zero weight) is mapped to ${\frac{{{1}}}{{{10}}}}$ of 100 uDOT. This fee will never exceed the max size of an unsigned 128 bit integer.
 
 ### [](#id-fee-multiplier)[10.6.3. Fee Multiplier](#id-fee-multiplier)
 
@@ -657,12 +663,14 @@ That additional fee is known as the `Fee Multiplier` and its value is defined by
 
 The final fee is calculated as:
 
-$final$ fee = fee \times Fee$ Multiplier$
+$$
+final fee = fee \times Fee Multiplier
+$$
 
 #### [](#id-update-multiplier)[10.6.3.1. Update Multiplier](#id-update-multiplier)
 
 The `Update Multiplier` defines how the multiplier can change. The Polkadot Runtime internally updates the multiplier after each block according the following formula:
 
-$\begin{aligned} diff &=& (target$ weight - previous$ block$ weight) $ v &=& 0.00004 $ next$ weight &=& weight \times (1 + (v \times diff) + (v \times diff)^2 / 2) $ \end{aligned}$
+${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{d}\Leftrightarrow&=&{\left({t}{a}{r}\ge{t}$\right.} weight - previous${b}{l}{o}{c}{k}$ weight) ${v}&=&{0.00004}$ next${w}{e}{i}{g}{h}{t}&=&{w}{e}{i}{g}{h}{t}\times{\left({1}+{\left({v}\times{d}\Leftrightarrow\right)}+\frac{{\left({v}\times{d}\Leftrightarrow\right)}^{{2}}}{{2}}\right)}$ \end{aligned}$
 
 Polkadot defines the `target_weight` as 0.25 (25%). More information about this algorithm is described in the [Web3 Foundation research paper](https://research.web3.foundation/en/latest/polkadot/overview/2-token-economics.html#relay-chain-transaction-fees-and-per-block-transaction-limits).

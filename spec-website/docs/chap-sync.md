@@ -26,17 +26,19 @@ Because Polkadot is a proof-of-stake protocol, each of its consensus engines has
 
 Definition 33. [Authority List](chap-sync.html#defn-authority-list)
 
-The **authority list** of block $B$ for consensus engine $C$ noted as $"Auth"\_C(B)$ is an array that contains the following pair of types for each of its authorities $A in "Auth"\_C(B)$:
+The **authority list** of block ${B}$ for consensus engine ${C}$ noted as $\text{Auth}_{{C}}{\left({B}\right)}$ is an array that contains the following pair of types for each of its authorities ${A}\in\text{Auth}_{{C}}{\left({B}\right)}$:
 
-$(pk_A,w_A)$
+$$
+{\left({p}{k}_{{A}},{w}_{{A}}\right)}
+$$
 
-$pk_A$ is the session public key ([Definition 180](id-cryptography-encoding.html#defn-session-key)) of authority $A$. And $w_A$ is an unsigned 64-bit integer indicating the authority weight. The value of $"Auth"\_C(B)$ is part of the Polkadot state. The value for $"Auth"\_C(B_0)$ is set in the genesis state ([Section A.3](id-cryptography-encoding.html#chapter-genesis)) and can be retrieved using a runtime entrypoint corresponding to consensus engine $C$.
+${p}{k}_{{A}}$ is the session public key ([Definition 180](id-cryptography-encoding.html#defn-session-key)) of authority ${A}$. And ${w}_{{A}}$ is an unsigned 64-bit integer indicating the authority weight. The value of $\text{Auth}_{{C}}{\left({B}\right)}$ is part of the Polkadot state. The value for $\text{Auth}_{{C}}{\left({B}_{{0}}\right)}$ is set in the genesis state ([Section A.3](id-cryptography-encoding.html#chapter-genesis)) and can be retrieved using a runtime entrypoint corresponding to consensus engine ${C}$.
 
 The authorities and their corresponding weights can be retrieved from the Runtime ([Section C.10.1](chap-runtime-api.html#sect-rte-grandpa-auth)).
 
 ### [](#sect-consensus-message-digest)[3.3.2. Runtime-to-Consensus Engine Message](#sect-consensus-message-digest)
 
-The authority list ([Definition 33](chap-sync.html#defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition 11](chap-state.html#defn-digest)) to the block header of block $B$ which caused the transition in the authority set.
+The authority list ([Definition 33](chap-sync.html#defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition 11](chap-state.html#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
 
 The Polkadot Host must inspect the digest header of each block and delegate consensus messages to their consensus engines. The BABE and GRANDPA consensus engine must react based on the type of consensus messages it receives. The active GRANDPA authorities can only vote for blocks that occurred after the finalized block in which they were selected. Any votes for blocks before the came into effect would get rejected.
 
@@ -48,17 +50,17 @@ New blocks can be received by the Polkadot Host via other peers ([Section 4.8.2]
 
 The Polkadot Host implements [Import-and-Validate-Block](chap-sync.html#algo-import-and-validate-block) to assure the validity of the block.
 
-\require \$B, \text{Just}(B)\$ \state \call{Set-Storage-State-At}{\$P(B)\$} \if{\$\text{Just}(B) \neq \emptyset\$} \state \call{Verify-Block-Justification}{\$B, \text{Just}(B)\$} \if{\$B~\textbf{is}~\text{Finalized}~\textbf{and}~P(B)~\textbf{is not}~\text{Finalized}\$} \state \call{Mark-as-Final}{\$P(B)\$} \endif \endif \if{\$H_p(B) \notin PBT\$} \return \endif \state \call{Verify-Authorship-Right}{\$\text{Head}(B)\$} \state \$B \leftarrow\$ \call{Remove-Seal}{\$B\$} \state \$R \leftarrow\$ \call{Call-Runtime-Entry}{\$\texttt{Core$execute$block}, B\$} \state \$B \leftarrow\$ \call{Add-Seal}{\$B\$} \if{\$R =\$ \textsc{True}} \state \call{Persist-State}{} \endif
+\require ${B},\text{Just}{\left({B}\right)}$ \state \call{Set-Storage-State-At}{${P}{\left({B}\right)}$} \if{$\text{Just}{\left({B}\right)}\ne{q}\emptyset$} \state \call{Verify-Block-Justification}{${B},\text{Just}{\left({B}\right)}$} \if{${B}~\text{}{f}{\left\lbrace{i}{s}\right\rbrace}~\text{Finalized}~\text{}{f}{\left\lbrace{\quad\text{and}\quad}\right\rbrace}~{P}{\left({B}\right)}~\text{}{f}{\left\lbrace{i}{s}\neg\right\rbrace}~\text{Finalized}$} \state \call{Mark-as-Final}{${P}{\left({B}\right)}$} \endif \endif \if{${H}_{{p}}{\left({B}\right)}\notin{P}{B}{T}$} \return \endif \state \call{Verify-Authorship-Right}{$\text{Head}{\left({B}\right)}$} \state ${B}\leftarrow$ \call{Remove-Seal}{${B}$} \state ${R}\leftarrow$ \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{C}{\quad\text{or}\quad}{e}$\right.}execute${b}{l}{o}{c}{k}{\rbrace},{B}$} \state ${B}\leftarrow$ \call{Add-Seal}{${B}$} \if{${R}=$ \textsc{True}} \state \call{Persist-State}{} \endif
 
 where  
-- $"Remove-Seal"$ removes the Seal digest from the block ([Definition 11](chap-state.html#defn-digest)) before submitting it to the Runtime.
+- $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition 11](chap-state.html#defn-digest)) before submitting it to the Runtime.
 
-- $"Add-Seal"$ adds the Seal digest back to the block ([Definition 11](chap-state.html#defn-digest)) for later propagation.
+- $\text{Add-Seal}$ adds the Seal digest back to the block ([Definition 11](chap-state.html#defn-digest)) for later propagation.
 
-- $"Persist-State"$ implies the persistence of any state changes created by $tt "Core_execute_block"$ ([Section C.4.2](chap-runtime-api.html#sect-rte-core-execute-block)) on successful execution.
+- $\text{Persist-State}$ implies the persistence of any state changes created by ${\mathtt{\text{Core_execute_block}}}$ ([Section C.4.2](chap-runtime-api.html#sect-rte-core-execute-block)) on successful execution.
 
-- $"PBT"$ is the pruned block tree ([Definition 4](chap-state.html#defn-block-tree)).
+- $\text{PBT}$ is the pruned block tree ([Definition 4](chap-state.html#defn-block-tree)).
 
-- $"Verify-Authorship-Right"$ is part of the block production consensus protocol and is described in [Verify-Authorship-Right](sect-block-production.html#algo-verify-authorship-right).
+- $\text{Verify-Authorship-Right}$ is part of the block production consensus protocol and is described in [Verify-Authorship-Right](sect-block-production.html#algo-verify-authorship-right).
 
 - *Finalized block* and *finality* are defined in [Chapter 6](sect-finality.html).

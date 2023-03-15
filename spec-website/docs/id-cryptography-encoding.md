@@ -38,67 +38,95 @@ It essentially generates a deterministic elliptic curve based Schnorr signature 
 
 Definition 171. [VRF Proof](id-cryptography-encoding.html#defn-vrf-proof)
 
-The **VRF proof** proves the correctness for an associated VRF output. The VRF proof, $P$, is a datastructure of the following format:
+The **VRF proof** proves the correctness for an associated VRF output. The VRF proof, ${P}$, is a datastructure of the following format:
 
-$P = (C,S)$ $S = (b_0, ... b_31)$
+$$
+{P}={\left({C},{S}\right)}
+$$
+$$
+{S}={\left({b}_{{0}},\ldots{b}_{{31}}\right)}
+$$
 
-where $C$ is the challenge and $S$ is the 32-byte Schnorr poof. Both are expressed as Curve25519 scalars as defined in Definition [Definition 172](id-cryptography-encoding.html#defn-vrf-dleq-prove).
+where ${C}$ is the challenge and ${S}$ is the 32-byte Schnorr poof. Both are expressed as Curve25519 scalars as defined in Definition [Definition 172](id-cryptography-encoding.html#defn-vrf-dleq-prove).
 
 Definition 172. [`DLEQ Prove`](id-cryptography-encoding.html#defn-vrf-dleq-prove)
 
-The $"dleq_prove"(t, i)$ function creates a proof for a given input, $i$, based on the provided transcript, $T$.
+The $\text{dleq_prove}{\left({t},{i}\right)}$ function creates a proof for a given input, ${i}$, based on the provided transcript, ${T}$.
 
 First:
 
-$t_1 = "append"(t, "'proto-name'", "'DLEQProof'")$ $t_2 = "append"(t_1, "'vrf:h'", i)$
+$$
+{t}_{{1}}=\text{append}{\left({t},\text{'proto-name'},\text{'DLEQProof'}\right)}
+$$
+$$
+{t}_{{2}}=\text{append}{\left({t}_{{1}},\text{'vrf:h'},{i}\right)}
+$$
 
-Then the witness scalar is calculated, $s_w$, where $w$ is the 32-byte secret seed used for nonce generation in the context of sr25519.
+Then the witness scalar is calculated, ${s}_{{w}}$, where ${w}$ is the 32-byte secret seed used for nonce generation in the context of sr25519.
 
-$t_3 = "meta-AD"(t_2, "'proving$00'", "more=False")$ $t_4 = "meta-AD"(t_3, w_l, "more=True")$ $t_5 = "KEY"(t_4, w, "more=False")$ $t_6 = "meta-AD"(t_5, "'rng'", "more=False")$ $t_7 = "KEY"(t_6, r, "more=False")$ $t_8 = "meta-AD"(t_7, e\_(64), "more=False")$ $(phi, s_w) = "PRF"(t_8, "more=False")$
+${t}_{{3}}=\text{meta-AD}{\left({t}_{{2}},\text{}'{p}{r}{o}{v}\in{g}$\right.}00'", "more=False")$t_4 = "meta-AD"(t_3, w_l, "more=True")$t_5 = "KEY"(t_4, w, "more=False")$t_6 = "meta-AD"(t_5, "'rng'", "more=False")$t_7 = "KEY"(t_6, r, "more=False")$ $t_8 = "meta-AD"(t_7, e\_(64), "more=False")$ $(phi, s_w) = "PRF"(t_8, "more=False")$
 
-where $w_l$ is length of the witness, encoded as a 32-bit little-endian integer. $r$ is a 32-byte array containing the secret witness scalar.
+where ${w}_{{l}}$ is length of the witness, encoded as a 32-bit little-endian integer. ${r}$ is a 32-byte array containing the secret witness scalar.
 
-$l_1 = "append"(t_2, "'vrf:R=g^r'", s_w)$ $l_2 = "append"(l_1, "'vrf:h^r'", s_i)$ $l_3 = "append"(l_2, "'vrf:pk'", s_p)$ $l_4 = "append"(l_3, "'vrf:h^sk'", "vrf"\_o)$
+${l}_{{1}}=\text{append}{\left({t}_{{2}},\text{'vrf:R=g^r'},{s}_{{w}}\right)}$ ${l}_{{2}}=\text{append}{\left({l}_{{1}},\text{'vrf:h^r'},{s}_{{i}}\right)}$ ${l}_{{3}}=\text{append}{\left({l}_{{2}},\text{'vrf:pk'},{s}_{{p}}\right)}$ ${l}_{{4}}=\text{append}{\left({l}_{{3}},\text{'vrf:h^sk'},\text{vrf}_{{o}}\right)}$
 
 where
 
-- $s_i$ is the compressed Ristretto point of the scalar input.
+- ${s}_{{i}}$ is the compressed Ristretto point of the scalar input.
 
-- $s_p$ is the compressed Ristretto point of the public key.
+- ${s}_{{p}}$ is the compressed Ristretto point of the public key.
 
-- $s_w$ is the compressed Ristretto point of the wittness:
+- ${s}_{{w}}$ is the compressed Ristretto point of the wittness:
 
 For the 64-byte challenge:
 
-$l_5 = "meta-AD"(l_4, "'prove'", "more=False")$ $l_6 = "meta-AD"(l_5, e\_(64), "more=True")$ $C = "PRF"(l_6, "more=False")$
+$$
+{l}_{{5}}=\text{meta-AD}{\left({l}_{{4}},\text{'prove'},\text{more=False}\right)}
+$$
+$$
+{l}_{{6}}=\text{meta-AD}{\left({l}_{{5}},{e}_{{{64}}},\text{more=True}\right)}
+$$
+$$
+{C}=\text{PRF}{\left({l}_{{6}},\text{more=False}\right)}
+$$
 
 And the Schnorr proof:
 
-$S = s_w - (C \* p)$
+$$
+{S}={s}_{{w}}-{\left({C}\cdot{p}\right)}
+$$
 
-where $p$ is the secret key.
+where ${p}$ is the secret key.
 
 Definition 173. [`DLEQ Verify`](id-cryptography-encoding.html#defn-vrf-dleq-verify)
 
-The $"dleq_verify"(i, o, P, p_k)$ function verifiers the VRF input, $i$ against the output, $o$, with the associated proof ([Definition 171](id-cryptography-encoding.html#defn-vrf-proof)) and public key, $p_k$.
+The $\text{dleq_verify}{\left({i},{o},{P},{p}_{{k}}\right)}$ function verifiers the VRF input, ${i}$ against the output, ${o}$, with the associated proof ([Definition 171](id-cryptography-encoding.html#defn-vrf-proof)) and public key, ${p}_{{k}}$.
 
-$t_1 = "append"(t, "'proto-name'", "'DLEQProof'")$ $t_2 = "append"(t_1, "'vrf:h'", s_i)$ $t_3 = "append"(t_2, "'vrf:R=g^r'", R)$ $t_4 = "append"(t_3, "'vrf:h^r'", H)$ $t_5 = "append"(t_4, "'vrf:pk'", p_k)$ $t_6 = "append"(t_5, "'vrf:h^sk'", o)$
+${t}_{{1}}=\text{append}{\left({t},\text{'proto-name'},\text{'DLEQProof'}\right)}$ ${t}_{{2}}=\text{append}{\left({t}_{{1}},\text{'vrf:h'},{s}_{{i}}\right)}$ ${t}_{{3}}=\text{append}{\left({t}_{{2}},\text{'vrf:R=g^r'},{R}\right)}$ ${t}_{{4}}=\text{append}{\left({t}_{{3}},\text{'vrf:h^r'},{H}\right)}$ ${t}_{{5}}=\text{append}{\left({t}_{{4}},\text{'vrf:pk'},{p}_{{k}}\right)}$ ${t}_{{6}}=\text{append}{\left({t}_{{5}},\text{'vrf:h^sk'},{o}\right)}$
 
 where
 
-- $R$ is calculated as:
+- ${R}$ is calculated as:
 
-  $R = C in P xx p_k + S in P + B$
+  ${R}={C}\in{P}\times{p}_{{k}}+{S}\in{P}+{B}$
 
-  where $B$ is the Ristretto basepoint.
+  where ${B}$ is the Ristretto basepoint.
 
-- $H$ is calculated as:
+- ${H}$ is calculated as:
 
-  $H = C in P xx o + S in P xx i$
+  ${H}={C}\in{P}\times{o}+{S}\in{P}\times{i}$
 
-The challenge is valid if $C in P$ equals $y$:
+The challenge is valid if ${C}\in{P}$ equals ${y}$:
 
-$t_7 = "meta-AD"(t_6, "'prove'", "more=False")$ $t_8 = "meta-AD"(t_7, e\_(64), "more=True")$ $y = "PRF"(t_8, "more=False")$
+$$
+{t}_{{7}}=\text{meta-AD}{\left({t}_{{6}},\text{'prove'},\text{more=False}\right)}
+$$
+$$
+{t}_{{8}}=\text{meta-AD}{\left({t}_{{7}},{e}_{{{64}}},\text{more=True}\right)}
+$$
+$$
+{y}=\text{PRF}{\left({t}_{{8}},\text{more=False}\right)}
+$$
 
 #### [](#id-transcript)[A.1.3.1. Transcript](#id-transcript)
 
@@ -110,27 +138,34 @@ The **VRF context** is a constant byte array used to initiate VRF transcript. Th
 
 Definition 175. [VRF Transcript](id-cryptography-encoding.html#defn-vrf-transcript)
 
-A **transcript**, or VRF transcript, is a STROBE object, $"obj"$, as defined in the STROBE documentation, respectively section ["5. State of a STROBE object"](https://strobe.sourceforge.io/specs/#object).
+A **transcript**, or VRF transcript, is a STROBE object, $\text{obj}$, as defined in the STROBE documentation, respectively section ["5. State of a STROBE object"](https://strobe.sourceforge.io/specs/#object).
 
-$"obj" = ("st","pos","pos"\_("begin"),I_0)$
+$$
+\text{obj}={\left(\text{st},\text{pos},\text{pos}_{{\text{begin}}},{I}_{{0}}\right)}
+$$
 
 where:
 
-- The duplex state, $"st"$, is a 200-byte array created by the [keccak-f1600 sponge function](https://keccak.team/keccak_specs_summary.html) on the [initial STROBE state](https://strobe.sourceforge.io/specs/#object.initial). Specifically, `R` is of value `166` and `X.Y.Z` is of value `1.0.2`.
+- The duplex state, $\text{st}$, is a 200-byte array created by the [keccak-f1600 sponge function](https://keccak.team/keccak_specs_summary.html) on the [initial STROBE state](https://strobe.sourceforge.io/specs/#object.initial). Specifically, `R` is of value `166` and `X.Y.Z` is of value `1.0.2`.
 
-- $"pos"$ has the initial value of `0`.
+- $\text{pos}$ has the initial value of `0`.
 
-- $"pos"\_("begin")$ has the initial value of `0`.
+- $\text{pos}_{{\text{begin}}}$ has the initial value of `0`.
 
-- $I_0$ has the initial value of `0`.
+- ${I}_{{0}}$ has the initial value of `0`.
 
-Then, the `meta-AD` operation ([Definition 176](id-cryptography-encoding.html#defn-strobe-operations)) (where `more=False`) is used to add the protocol label `Merlin v1.0` to $"obj"$ followed by *appending* ([Section A.1.3.1.1](id-cryptography-encoding.html#sect-vrf-appending-messages)) label `dom-step` and its corresponding context, $ctx$, resulting in the final transcript, $T$.
+Then, the `meta-AD` operation ([Definition 176](id-cryptography-encoding.html#defn-strobe-operations)) (where `more=False`) is used to add the protocol label `Merlin v1.0` to $\text{obj}$ followed by *appending* ([Section A.1.3.1.1](id-cryptography-encoding.html#sect-vrf-appending-messages)) label `dom-step` and its corresponding context, ${c}{t}{x}$, resulting in the final transcript, ${T}$.
 
-$t = "meta-AD"(obj, "'Merlin v1.0'", "False")$ $T = "append"(t, "'dom-step'", "ctx")$
+$$
+{t}=\text{meta-AD}{\left({o}{b}{j},\text{'Merlin v1.0'},\text{False}\right)}
+$$
+$$
+{T}=\text{append}{\left({t},\text{'dom-step'},\text{ctx}\right)}
+$$
 
-$"ctx"$ serves as an arbitrary identifier/separator and its value is defined by the protocol specification individually. This transcript is treated just like a STROBE object, wherein any operations ([Definition 176](id-cryptography-encoding.html#defn-strobe-operations)) on it modify the values such as $"pos"$ and $"pos"\_("begin")$.
+$\text{ctx}$ serves as an arbitrary identifier/separator and its value is defined by the protocol specification individually. This transcript is treated just like a STROBE object, wherein any operations ([Definition 176](id-cryptography-encoding.html#defn-strobe-operations)) on it modify the values such as $\text{pos}$ and $\text{pos}_{{\text{begin}}}$.
 
-Formally, when creating a transcript we refer to it as $"Transcript"(ctx)$.
+Formally, when creating a transcript we refer to it as $\text{Transcript}{\left({c}{t}{x}\right)}$.
 
 Definition 176. [STROBE Operations](id-cryptography-encoding.html#defn-strobe-operations)
 
@@ -140,11 +175,19 @@ STROBE operations are described in the [STROBE specification](https://strobe.sou
 
 Appending messages, or "data", to the transcript ([Definition 175](id-cryptography-encoding.html#defn-vrf-transcript)) first requires `meta-AD` operations for a given label of the messages, including the size of the message, followed by an `AD` operation on the message itself. The size of the message is a 4-byte, little-endian encoded integer.
 
-$T_0 = "meta-AD"(T, l, "False")$ $T_1 = "meta-AD"(T_0, m_l, "True")$ $T_2 = "AD"(T_1, m, "False")$
+$$
+{T}_{{0}}=\text{meta-AD}{\left({T},{l},\text{False}\right)}
+$$
+$$
+{T}_{{1}}=\text{meta-AD}{\left({T}_{{0}},{m}_{{l}},\text{True}\right)}
+$$
+$$
+{T}_{{2}}=\text{AD}{\left({T}_{{1}},{m},\text{False}\right)}
+$$
 
-where $T$ is the transcript ([Definition 175](id-cryptography-encoding.html#defn-vrf-transcript)), $l$ is the given label and $m$ the message, respectively $m_l$ representing its size. $T_2$ is the resulting transcript with the appended data. STROBE operations are described in [Definition 176](id-cryptography-encoding.html#defn-strobe-operations).
+where ${T}$ is the transcript ([Definition 175](id-cryptography-encoding.html#defn-vrf-transcript)), ${l}$ is the given label and ${m}$ the message, respectively ${m}_{{l}}$ representing its size. ${T}_{{2}}$ is the resulting transcript with the appended data. STROBE operations are described in [Definition 176](id-cryptography-encoding.html#defn-strobe-operations).
 
-Formally, when appending a message we refer to it as $"append"(T, l, m)$.
+Formally, when appending a message we refer to it as $\text{append}{\left({T},{l},{m}\right)}$.
 
 ### [](#sect-cryptographic-keys)[A.1.4. Cryptographic Keys](#sect-cryptographic-keys)
 
@@ -152,7 +195,7 @@ Various types of keys are used in Polkadot to prove the identity of the actors i
 
 Definition 177. [Account Key](id-cryptography-encoding.html#defn-account-key)
 
-**Account key $(sk^a,pk^a)$** is a key pair of type of either of the schemes in the following table:
+**Account key ${\left({s}{k}^{{a}},{p}{k}^{{a}}\right)}$** is a key pair of type of either of the schemes in the following table:
 
 | Key Scheme | Description                                                                                                                                                                                                                                                                                                                                                                                                       |
 |------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -225,45 +268,61 @@ By **Unix time**, we refer to the unsigned, little-endian encoded 64-bit integer
 
 Definition 182. [Sequence of Bytes](id-cryptography-encoding.html#defn-byte-sequence)
 
-By a **sequences of bytes** or a **byte array**, $b$, of length $n$, we refer to
+By a **sequences of bytes** or a **byte array**, ${b}$, of length ${n}$, we refer to
 
-$b := (b_0, b_1, ..., b\_{n - 1}) " such that " 0 \<= b_i \<= 255$
+$$
+{b}\:={\left({b}_{{0}},{b}_{{1}},\ldots,{b}_{{{n}-{1}}}\right)}\ \text{ such that }\ {0}\le{b}_{{i}}\le{255}
+$$
 
-We define $\mathbb B_n$ to be the **set of all byte arrays of length $n$**. Furthermore, we define:
+We define ${\mathbb{{B}}}_{{n}}$ to be the **set of all byte arrays of length ${n}$**. Furthermore, we define:
 
-$\mathbb B := uuu\_(i=0)^infty \mathbb B_i$
+$$
+{\mathbb{{B}}}\:={\bigcup_{{{i}={0}}}^{\infty}}{\mathbb{{B}}}_{{i}}
+$$
 
-We represent the concatenation of byte arrays $a :=(a_0, ..., a_n)$ and $b :=(b_0, ..., b_m)$ by:
+We represent the concatenation of byte arrays ${a}\:={\left({a}_{{0}},\ldots,{a}_{{n}}\right)}$ and ${b}\:={\left({b}_{{0}},\ldots,{b}_{{m}}\right)}$ by:
 
-$a \|$ b :=(a_0, ..., a_n, b_0, ..., b_m)$
+$$
+{a}{\mid} b :=(a_0, ..., a_n, b_0, ..., b_m)
+$$
 
 Definition 183. [Bitwise Representation](id-cryptography-encoding.html#defn-bit-rep)
 
-For a given byte $0 \<= b \<= 255$ the **bitwise representation** in bits $b_i in {0, 1}$ is defined as:
+For a given byte ${0}\le{b}\le{255}$ the **bitwise representation** in bits ${b}_{{i}}\in{\left\lbrace{0},{1}\right\rbrace}$ is defined as:
 
-$b := b_7 ... b_0$
+$$
+{b}\:={b}_{{7}}\ldots{b}_{{0}}
+$$
 
 where
 
-$b = 2^7 b_7 + 2^6 b_6 + ... + 2^0 b_0$
+$$
+{b}={2}^{{7}}{b}_{{7}}+{2}^{{6}}{b}_{{6}}+\ldots+{2}^{{0}}{b}_{{0}}
+$$
 
 Definition 184. [Little Endian](id-cryptography-encoding.html#defn-little-endian)
 
-By the **little-endian** representation of a non-negative integer, $I$, represented as
+By the **little-endian** representation of a non-negative integer, ${I}$, represented as
 
-$I = (B_n ... B_0)\_256$
+$$
+{I}={\left({B}_{{n}}\ldots{B}_{{0}}\right)}_{{256}}
+$$
 
-in base 256, we refer to a byte array $B = (b_0, b_1, ..., b_n)$ such that
+in base 256, we refer to a byte array ${B}={\left({b}_{{0}},{b}_{{1}},\ldots,{b}_{{n}}\right)}$ such that
 
-$b_i :=B_i$
+$$
+{b}_{{i}}\:={B}_{{i}}
+$$
 
-Accordingly, we define the function $sf "Enc"\_(sf "LE")$:
+Accordingly, we define the function ${\mathsf{\text{Enc}}}_{{{\mathsf{\text{LE}}}}}$:
 
-$sf "Enc"\_(sf "LE"): \mathbb Z^+ -\> \mathbb B; (B_n ... B_0)\_256 \|-\> (B\_{0,} B_1, ... , B_n)$
+$$
+{\mathsf{\text{Enc}}}_{{{\mathsf{\text{LE}}}}}:{\mathbb{{Z}}}^{+}->{\mathbb{{B}}};{\left({B}_{{n}}\ldots{B}_{{0}}\right)}_{{256}}{\mid}->{\left({B}_{{{0},}}{B}_{{1}},\ldots,{B}_{{n}}\right)}
+$$
 
 Definition 185. [UINT32](id-cryptography-encoding.html#defn-uint32)
 
-By **UINT32** we refer to a non-negative integer stored in a byte array of length $4$ using little-endian encoding format.
+By **UINT32** we refer to a non-negative integer stored in a byte array of length ${4}$ using little-endian encoding format.
 
 ### [](#sect-scale-codec)[A.2.2. SCALE Codec](#sect-scale-codec)
 
@@ -271,7 +330,7 @@ The Polkadot Host uses *Simple Concatenated Aggregate Little-Endian” (SCALE) c
 
 Definition 186. [Decoding](id-cryptography-encoding.html#defn-scale-decoding)
 
-$"Dec"\_("SC")(d)$ refers to the decoding of a blob of data. Since the SCALE codec is not self-describing, it’s up to the decoder to validate whether the blob of data can be deserialized into the given type or data structure.
+$\text{Dec}_{{\text{SC}}}{\left({d}\right)}$ refers to the decoding of a blob of data. Since the SCALE codec is not self-describing, it’s up to the decoder to validate whether the blob of data can be deserialized into the given type or data structure.
 
 It’s accepted behavior for the decoder to partially decode the blob of data. Meaning, any additional data that does not fit into a datastructure can be ignored.
 
@@ -281,13 +340,17 @@ It’s accepted behavior for the decoder to partially decode the blob of data. M
 
 Definition 187. [Tuple](id-cryptography-encoding.html#defn-scale-tuple)
 
-The **SCALE codec** for **Tuple**, $T$, such that:
+The **SCALE codec** for **Tuple**, ${T}$, such that:
 
-$T := (A_1,... A_n)$
+$$
+{T}\:={\left({A}_{{1}},\ldots{A}_{{n}}\right)}
+$$
 
-Where $A_i$’s are values of **different types**, is defined as:
+Where ${A}_{{i}}$’s are values of **different types**, is defined as:
 
-$"Enc"\_("SC")(T) := "Enc"\_("SC")(A_1) "\|\|" "Enc"\_("SC")(A_2) "\|\|" ... "\|\|" "Enc"\_("SC")(A_n)$
+$$
+\text{Enc}_{{\text{SC}}}{\left({T}\right)}\:=\text{Enc}_{{\text{SC}}}{\left({A}_{{1}}\right)}\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{2}}\right)}\text{||}\ldots\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{n}}\right)}
+$$
 
 In case of a tuple (or a structure), the knowledge of the shape of data is not encoded even though it is necessary for decoding. The decoder needs to derive that information from the context where the encoding/decoding is happening.
 
@@ -295,63 +358,82 @@ Definition 188. [Varying Data Type](id-cryptography-encoding.html#defn-varrying-
 
 We define a **varying data** type to be an ordered set of data types.
 
-$\mathcal T = {T_1, ..., T_n}$
+$$
+{\mathcal{{T}}}={\left\lbrace{T}_{{1}},\ldots,{T}_{{n}}\right\rbrace}
+$$
 
-A value $A$ of varying date type is a pair $(A\_("Type"),A\_("Value"))$ where $A\_("Type") = T_i$ for some $T_i \in \mathcal T$ and $A\_("Value")$ is its value of type $T_i$, which can be empty. We define $"idx"(T_i) = i - 1$, unless it is explicitly defined as another value in the definition of a particular varying data type.
+A value ${A}$ of varying date type is a pair ${\left({A}_{{\text{Type}}},{A}_{{\text{Value}}}\right)}$ where ${A}_{{\text{Type}}}={T}_{{i}}$ for some ${T}_{{i}}\in{\mathcal{{T}}}$ and ${A}_{{\text{Value}}}$ is its value of type ${T}_{{i}}$, which can be empty. We define $\text{idx}{\left({T}_{{i}}\right)}={i}-{1}$, unless it is explicitly defined as another value in the definition of a particular varying data type.
 
 In particular, we define two specific varying data which are frequently used in various part of Polkadot protocol: *Option* ([Definition 190](id-cryptography-encoding.html#defn-option-type)) and *Result* ([Definition 191](id-cryptography-encoding.html#defn-result-type)).
 
 Definition 189. [Encoding of Varying Data Type](id-cryptography-encoding.html#defn-scale-variable-type)
 
-The SCALE codec for value $A = (A\_("Type"), A\_("Value"))$ of varying data type $\mathcal T = {T_i, ... T_n}$, formally referred to as $"Enc"\_("SC")(A)$ is defined as follows:
+The SCALE codec for value ${A}={\left({A}_{{\text{Type}}},{A}_{{\text{Value}}}\right)}$ of varying data type ${\mathcal{{T}}}={\left\lbrace{T}_{{i}},\ldots{T}_{{n}}\right\rbrace}$, formally referred to as $\text{Enc}_{{\text{SC}}}{\left({A}\right)}$ is defined as follows:
 
-$"Enc"\_("SC")(A) := "Enc"\_("SC")("idx"(A\_("Type")) "\|\|" "Enc"\_("SC")(A\_("Value")))$
+$$
+\text{Enc}_{{\text{SC}}}{\left({A}\right)}\:=\text{Enc}_{{\text{SC}}}{\left(\text{idx}{\left({A}_{{\text{Type}}}\right)}\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{\text{Value}}}\right)}\right)}
+$$
 
-Where $"idx"$ is a 8-bit integer determining the type of $A$. In particular, for the optional type defined in [Definition 188](id-cryptography-encoding.html#defn-varrying-data-type), we have:
+Where $\text{idx}$ is a 8-bit integer determining the type of ${A}$. In particular, for the optional type defined in [Definition 188](id-cryptography-encoding.html#defn-varrying-data-type), we have:
 
-$"Enc"\_("SC")("None", phi) := 0\_(\mathbb B_1)$
+$$
+\text{Enc}_{{\text{SC}}}{\left(\text{None},\phi\right)}\:={0}_{{{\mathbb{{B}}}_{{1}}}}
+$$
 
 The SCALE codec does not encode the correspondence between the value and the data type it represents; the decoder needs prior knowledge of such correspondence to decode the data.
 
 Definition 190. [Option Type](id-cryptography-encoding.html#defn-option-type)
 
-The **Option** type is a varying data type of ${"None",T_2}$ which indicates if data of $T_2$ type is available (referred to as *some* state) or not (referred to as *empty*, *none* or *null* state). The presence of type *none*, indicated by $"idx"(T\_("None")) = 0$, implies that the data corresponding to $T_2$ type is not available and contains no additional data. Where as the presence of type $T_2$ indicated by $"idx"(T_2) = 1$ implies that the data is available.
+The **Option** type is a varying data type of ${\left\lbrace\text{None},{T}_{{2}}\right\rbrace}$ which indicates if data of ${T}_{{2}}$ type is available (referred to as *some* state) or not (referred to as *empty*, *none* or *null* state). The presence of type *none*, indicated by $\text{idx}{\left({T}_{{\text{None}}}\right)}={0}$, implies that the data corresponding to ${T}_{{2}}$ type is not available and contains no additional data. Where as the presence of type ${T}_{{2}}$ indicated by $\text{idx}{\left({T}_{{2}}\right)}={1}$ implies that the data is available.
 
 Definition 191. [Result Type](id-cryptography-encoding.html#defn-result-type)
 
-The **Result** type is a varying data type of ${T_1, T_2}$ which is used to indicate if a certain operation or function was executed successfully (referred to as "ok" state) or not (referred to as "error" state). $T_1$ implies success, $T_2$ implies failure. Both types can either contain additional data or are defined as empty type otherwise.
+The **Result** type is a varying data type of ${\left\lbrace{T}_{{1}},{T}_{{2}}\right\rbrace}$ which is used to indicate if a certain operation or function was executed successfully (referred to as "ok" state) or not (referred to as "error" state). ${T}_{{1}}$ implies success, ${T}_{{2}}$ implies failure. Both types can either contain additional data or are defined as empty type otherwise.
 
 Definition 192. [Sequence](id-cryptography-encoding.html#defn-scale-list)
 
-The **SCALE codec** for **sequence** $S$ such that:
+The **SCALE codec** for **sequence** ${S}$ such that:
 
-$S := A_1, ... A_n$
+$$
+{S}\:={A}_{{1}},\ldots{A}_{{n}}
+$$
 
-where $A_i$’s are values of **the same type** (and the decoder is unable to infer value of $n$ from the context) is defined as:
+where ${A}_{{i}}$’s are values of **the same type** (and the decoder is unable to infer value of ${n}$ from the context) is defined as:
 
-$"Enc"\_("SC")(S) := "Enc"\_("SC")^("Len")(abs(S)) "\|\|" "Enc"\_("SC")(A_2) "\|\|" ... "\|\|" "Enc"\_("SC")(A_n)$
+$$
+\text{Enc}_{{\text{SC}}}{\left({S}\right)}\:={\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}{\left({\left|{{S}}\right|}\right)}\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{2}}\right)}\text{||}\ldots\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{n}}\right)}
+$$
 
-where $"Enc"\_("SC")^("Len")$ is defined in [Definition 198](id-cryptography-encoding.html#defn-sc-len-encoding).
+where ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}$ is defined in [Definition 198](id-cryptography-encoding.html#defn-sc-len-encoding).
 
-In some cases, the length indicator $"Enc"\_("SC")^("Len")(abs(S))$ is omitted if the length of the sequence is fixed and known by the decoder upfront. Such cases are explicitly stated by the definition of the corresponding type.
+In some cases, the length indicator ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}{\left({\left|{{S}}\right|}\right)}$ is omitted if the length of the sequence is fixed and known by the decoder upfront. Such cases are explicitly stated by the definition of the corresponding type.
 
 Definition 193. [Dictionary](id-cryptography-encoding.html#defn-scale-dictionary)
 
-SCALE codec for **dictionary** or **hashtable** D with key-value pairs $(k_i, v_i)$s such that:
+SCALE codec for **dictionary** or **hashtable** D with key-value pairs ${\left({k}_{{i}},{v}_{{i}}\right)}$s such that:
 
-$D := {(k_1, v_1), ... (k_n, v_n)}$
+$$
+{D}\:={\left\lbrace{\left({k}_{{1}},{v}_{{1}}\right)},\ldots{\left({k}_{{n}},{v}_{{n}}\right)}\right\rbrace}
+$$
 
-is defined the SCALE codec of $D$ as a sequence of key value pairs (as tuples):
+is defined the SCALE codec of ${D}$ as a sequence of key value pairs (as tuples):
 
-$"Enc"\_("SC")(D) := "Enc"\_("SC")^("Size")(abs(D)) "\|\|" "Enc"\_("SC")(k_1, v_1) "\|\|"..."\|\|" "Enc"\_("SC")(k_n, v_n)$
+$$
+\text{Enc}_{{\text{SC}}}{\left({D}\right)}\:={\text{Enc}_{{\text{SC}}}^{{\text{Size}}}}{\left({\left|{{D}}\right|}\right)}\text{||}\text{Enc}_{{\text{SC}}}{\left({k}_{{1}},{v}_{{1}}\right)}\text{||}\ldots\text{||}\text{Enc}_{{\text{SC}}}{\left({k}_{{n}},{v}_{{n}}\right)}
+$$
 
-where $"Enc"\_("SC")^("Size")$ is encoded the same way as $"Enc"\_("SC")^("Len")$ but argument $"Size"$ refers to the number of key-value pairs rather than the length.
+where ${\text{Enc}_{{\text{SC}}}^{{\text{Size}}}}$ is encoded the same way as ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}$ but argument $\text{Size}$ refers to the number of key-value pairs rather than the length.
 
 Definition 194. [Boolean](id-cryptography-encoding.html#defn-scale-boolean)
 
-The SCALE codec for a **boolean value** $b$ defined as a byte as follows:
+The SCALE codec for a **boolean value** ${b}$ defined as a byte as follows:
 
-$"Enc"\_("SC"): {"False", "True"} -\> \mathbb B_1$ $b -\> {(0, b="False"),(1, b="True"):}$
+$$
+\text{Enc}_{{\text{SC}}}:{\left\lbrace\text{False},\text{True}\right\rbrace}->{\mathbb{{B}}}_{{1}}
+$$
+$$
+{b}->{\left\lbrace\begin{matrix}{0}&{b}=\text{False}\\{1}&{b}=\text{True}\end{matrix}\right.}
+$$
 
 Definition 195. [String](id-cryptography-encoding.html#defn-scale-string)
 
@@ -359,11 +441,11 @@ The SCALE codec for a **string value** is an encoded sequence ([Definition 192](
 
 Definition 196. [Fixed Length](id-cryptography-encoding.html#defn-scale-fixed-length)
 
-The SCALE codec, $"Enc"\_("SC")$, for other types such as fixed length integers not defined here otherwise, is equal to little endian encoding of those values defined in [Definition 184](id-cryptography-encoding.html#defn-little-endian).
+The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for other types such as fixed length integers not defined here otherwise, is equal to little endian encoding of those values defined in [Definition 184](id-cryptography-encoding.html#defn-little-endian).
 
 Definition 197. [Empty](id-cryptography-encoding.html#defn-scale-empty)
 
-The SCALE codec, $"Enc"\_("SC")$, for an empty type is defined to a byte array of zero length and depicted as $phi$.
+The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for an empty type is defined to a byte array of zero length and depicted as $\phi$.
 
 #### [](#sect-sc-length-and-compact-encoding)[A.2.2.1. Length and Compact Encoding](#sect-sc-length-and-compact-encoding)
 
@@ -371,31 +453,53 @@ SCALE Length encoding is used to encode integer numbers of variying sizes promin
 
 Definition 198. [Length Encoding](id-cryptography-encoding.html#defn-sc-len-encoding)
 
-**SCALE Length encoding**, $"Enc"\_("SC")^("Len")$, also known as a *compact encoding*, of a non-negative number $n$ is defined as follows:
+**SCALE Length encoding**, ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}$, also known as a *compact encoding*, of a non-negative number ${n}$ is defined as follows:
 
-$"Enc"\_("SC")^("Len"): \mathbb N -\> \mathbb B$ $n -\> b := {(l_1, 0 \<= n \< 2^6),(i_1 i_2, 2^6 \<= n \< 2^14),(j_1 j_2 j_3, 2^14 \<= n \< 2^30),(k_1 k_2 ... k_m, 2^30\<=n):}$
+$$
+{\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}:{\mathbb{{N}}}->{\mathbb{{B}}}
+$$
+$$
+{n}->{b}\:={\left\lbrace\begin{matrix}{l}_{{1}}&{0}\le{n}<{2}^{{6}}\\{i}_{{1}}{i}_{{2}}&{2}^{{6}}\le{n}<{2}^{{14}}\\{j}_{{1}}{j}_{{2}}{j}_{{3}}&{2}^{{14}}\le{n}<{2}^{{30}}\\{k}_{{1}}{k}_{{2}}\ldots{k}_{{m}}&{2}^{{30}}\le{n}\end{matrix}\right.}
+$$
 
 in where the least significant bits of the first byte of byte array b are defined as follows:
 
-$l_1^1 l_1^0 = 00$ $i_1^1 i_1^0 = 01$ $j_1^1 j_1^0 = 10$ $k_1^1 k_1^0 = 11$
+$$
+{{l}_{{1}}^{{1}}}{{l}_{{1}}^{{0}}}={00}
+$$
+$$
+{{i}_{{1}}^{{1}}}{{i}_{{1}}^{{0}}}={01}
+$$
+$$
+{{j}_{{1}}^{{1}}}{{j}_{{1}}^{{0}}}={10}
+$$
+$$
+{{k}_{{1}}^{{1}}}{{k}_{{1}}^{{0}}}={11}
+$$
 
-and the rest of the bits of $b$ store the value of $n$ in little-endian format in base-2 as follows:
+and the rest of the bits of ${b}$ store the value of ${n}$ in little-endian format in base-2 as follows:
 
-$n := { (l_1^7 ... l_1^3 l_1^2, n \< 2^6), (i_2^7 ... i_2^0 i_1^7 .. i_1^2, 2^6 \<= n \< 2^14), (j_4^7 ... j_4^0 j_3^7 ... j_1^7 ... j_1^2, 2^14 \<= n \< 2^30), (k_2 + k_3 2^8 + k_4 2^(2 xx 8)+...+k_m2^((m-2)8),2^30 \<= n) :}$
+$$
+{n}\:={\left\lbrace\begin{matrix}{{l}_{{1}}^{{7}}}\ldots{{l}_{{1}}^{{3}}}{{l}_{{1}}^{{2}}}&{n}<{2}^{{6}}\\{{i}_{{2}}^{{7}}}\ldots{{i}_{{2}}^{{0}}}{{i}_{{1}}^{{7}}}..{{i}_{{1}}^{{2}}}&{2}^{{6}}\le{n}<{2}^{{14}}\\{{j}_{{4}}^{{7}}}\ldots{{j}_{{4}}^{{0}}}{{j}_{{3}}^{{7}}}\ldots{{j}_{{1}}^{{7}}}\ldots{{j}_{{1}}^{{2}}}&{2}^{{14}}\le{n}<{2}^{{30}}\\{k}_{{2}}+{k}_{{3}}{2}^{{8}}+{k}_{{4}}{2}^{{{2}\times{8}}}+\ldots+{k}_{{m}}{2}^{{{\left({m}-{2}\right)}{8}}}&{2}^{{30}}\le{n}\end{matrix}\right.}
+$$
 
 such that:
 
-$k_1^7 ... k_1^3 k_1^2 := m-4$
+$$
+{{k}_{{1}}^{{7}}}\ldots{{k}_{{1}}^{{3}}}{{k}_{{1}}^{{2}}}\:={m}-{4}
+$$
 
 ### [](#id-hex-encoding)[A.2.3. Hex Encoding](#id-hex-encoding)
 
-Practically, it is more convenient and efficient to store and process data which is stored in a byte array. On the other hand, the trie keys are broken into 4-bits nibbles. Accordingly, we need a method to encode sequences of 4-bits nibbles into byte arrays canonically. To this aim, we define hex encoding function $"Enc" ("HE")("PK")$ as follows:
+Practically, it is more convenient and efficient to store and process data which is stored in a byte array. On the other hand, the trie keys are broken into 4-bits nibbles. Accordingly, we need a method to encode sequences of 4-bits nibbles into byte arrays canonically. To this aim, we define hex encoding function $\text{Enc}{\left(\text{HE}\right)}{\left(\text{PK}\right)}$ as follows:
 
 Definition 199. [Hex Encoding](id-cryptography-encoding.html#defn-hex-encoding)
 
-Suppose that $"PK" = (k_1, ... k_n)$ is a sequence of nibbles, then:
+Suppose that $\text{PK}={\left({k}_{{1}},\ldots{k}_{{n}}\right)}$ is a sequence of nibbles, then:
 
-$"Enc"\_("HE")("PK") := {("Nibbles"\_4,-\>, \mathbb B),("PK" = (k_1, ... k_n),-\>,{((16k_1+k_2,...,16k\_(2i-1)+k\_(2i)),n=2i),((k_1,16k_2+k_3,...,16k\_(2i)+k\_(2i+1)),n = 2i+1):}):}$
+$$
+\text{Enc}_{{\text{HE}}}{\left(\text{PK}\right)}\:={\left\lbrace\begin{matrix}\text{Nibbles}_{{4}}&->&{\mathbb{{B}}}\\\text{PK}={\left({k}_{{1}},\ldots{k}_{{n}}\right)}&->&{\left\lbrace\begin{matrix}{\left({16}{k}_{{1}}+{k}_{{2}},\ldots,{16}{k}_{{{2}{i}-{1}}}+{k}_{{{2}{i}}}\right)}&{n}={2}{i}\\{\left({k}_{{1}},{16}{k}_{{2}}+{k}_{{3}},\ldots,{16}{k}_{{{2}{i}}}+{k}_{{{2}{i}+{1}}}\right)}&{n}={2}{i}+{1}\end{matrix}\right.}\end{matrix}\right.}
+$$
 
 ## [](#chapter-genesis)[A.3. Genesis State](#chapter-genesis)
 
