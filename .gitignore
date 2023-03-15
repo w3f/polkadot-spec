@@ -1,22 +1,22 @@
-# Ruby bundle config
-.bundle/
+# Dependencies
+/node_modules
 
-# Build outputs
-polkadot-spec.html
-polkadot-spec.pdf
-polkadot-spec.tex
+# Production
+/build
 
-# Export outputs
-block.ksy
-metadata.ksy
+# Generated files
+.docusaurus
+.cache-loader
 
-# Test outputs
-test/block.rb
-test/metadata.rb
-test/scale.rb
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# asciidoctor-mathmatical
-cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# direnv
-.envrc
+multipage-html

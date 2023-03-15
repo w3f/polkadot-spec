@@ -1,68 +1,41 @@
-# Polkadot Protocol Specification
+# Website
 
-[![License](https://img.shields.io/github/license/w3f/polkadot-spec.svg)](https://github.com/w3f/polkadot-spec/blob/main/LICENSE)
-[![Latest Release](https://img.shields.io/github/release/w3f/polkadot-spec.svg)](https://github.com/w3f/polkadot-spec/releases/latest)
-[![Specification Publication](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.deb.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.deb.yml)
-[![Cachix Cache](https://img.shields.io/badge/cachix-polkadot--spec-blue.svg)](https://polkadot-spec.cachix.org)
-[![Nix Integration](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.nix.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.nix.yml)
+This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
-Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository contains the official specification for the Polkadot Protocol.
- 
-The latest releases of the *Polkadot Protocol Specification* can be found on [spec.polkadot.network](https://spec.polkadot.network) or on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
+### Installation
 
-The Polkadot specification is written in [AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest) and currently compiled with [Asciidoctor](https://asciidoctor.org/).
-
-## Contributing
-
-Contributions are always welcome. For a quick primer on the AsciiDoc format, we recommend the [AsciiDoc Writers Guide](https://asciidoctor.org/docs/asciidoc-writers-guide).
-
-## Dependencies
-
-A handful of dependencies are required to successfully convert the spec into a publishable document. We provide a `Gemfile` that provides most dependecies. 
-
-You will have to install `bundler` to use the `Gemfile`. On a Debian based system, it can be installed with:
-
-```bash
-sudo apt-get install -y curl make cmake gcc g++ ruby-dev python3-pydot graphviz
-# Install Bundler
-gem install bundler
-# Install Kaitai
-curl -LO https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
-sudo apt-get install -y ./kaitai-struct-compiler_0.10_all.deb
+```
+$ yarn
 ```
 
-Furthermore you will also need to have `graphviz` and the `kaitai-struct-compiler` installed.
+### Local Development
 
-Once `bundler` is available, you can install any missing dependencies for a html build via `bundle install`:
-
-```bash
-bundle install
+```
+$ yarn start
 ```
 
-To also install the dependencies needed for a pdf build, add the `--with pdf` flag: 
+This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
-```bash
-bundle install --with pdf
+### Build
+
+```
+$ yarn build
 ```
 
-The pdf build requires various native dependencies to convert math to images with  `asciidoctor-mathematical`, please check the [official documentation](https://github.com/asciidoctor/asciidoctor-mathematical#installation=) for further details. Furthermore, the PDF is cleanup and compressed with `ghostscript`, so this will need to be installed as well.
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
 
-## Build
+### Deployment
 
-To build the html version of the spec, just run `bundle exec make html`. This create will create a `polkadot-spec.html` in the same folder.
+Using SSH:
 
-To build the pdf version of the spec, just run `bundle exec make pdf`, which will create a `polkadot-spec.pdf` in the same folder.
+```
+$ USE_SSH=true yarn deploy
+```
 
-To export the Kaitai Struct definitions contained in the spec, just run `bundle exec make kaitai`, which will create the `.ksy` file(s) in the same folder.
+Not using SSH:
 
-We also provide full nix flake integration, e.g. you can run `nix build github:w3f/polkadot-spec` to build the latest html release.
+```
+$ GIT_USER=<Your GitHub username> yarn deploy
+```
 
-## Test
-
-To test some of the machine readable definition in the spec, just run `bundle exec make test`.
-
-The test requires `curl`, `jq` and `xxd` to download required data via JSON RPC.
-
-## License
-
-Any code in this repository is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) and any documentation or specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.

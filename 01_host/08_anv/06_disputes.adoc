@@ -1,4 +1,0 @@
-[#sect-disputes]
-=== Disputes
-
-NOTE: Disputes are not documented yet.
