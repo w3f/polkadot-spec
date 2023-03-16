@@ -24,19 +24,19 @@ In this section, we define the concept of weight and we discuss the consideratio
 
 These concepts are formalized in [Definition 150](id-weights.html#defn-block-length) and [Definition 153](id-weights.html#defn-polkadot-block-limits):
 
-Definition 150. Block Length
+###### Definition 150. Block Length {#defn-block-length}
 
 For a block ${B}$ with ${H}{e}{a}{d}{\left({B}\right)}$ and ${B}{o}{\left.{d}{y}\right.}{\left({B}\right)}$ the block length of ${B}$,${L}{e}{n}{\left({B}\right)}$, is defined as the amount of raw bytes of ${B}$.
 
-Definition 151. Target Time per Block
+###### Definition 151. Target Time per Block {#defn-target-time-per-block}
 
 Ṯargeted time per block denoted by ${T}{\left({B}\right)}$ implies the amount of seconds that a new block should be produced by a validator. The transaction weights must consider ${T}{\left({B}\right)}$ in order to set restrictions on time intensive transactions in order to saturate the block to its fullest potential until ${T}{\left({B}\right)}$ is reached.
 
-Definition 152. Block Target Time
+###### Definition 152. Block Target Time {#defn-block-target-time}
 
 Available block ration reserved for normal, noted by ${R}{\left({B}\right)}$, is defined as the maximum weight of none-operational transactions in the Body of ${B}$ divided by ${L}{e}{n}{\left({B}\right)}$.
 
-Definition 153. Block Limits
+###### Definition 153. Block Limits {#defn-polkadot-block-limits}
 
 P̱olkadot block limits as defined here should be respected by each block producer for the produced block ${B}$ to be deemed valid:
 
@@ -46,7 +46,7 @@ P̱olkadot block limits as defined here should be respected by each block produc
 
 - ${R}{\left({B}\right)}\le{0.75}$
 
-Definition 154. Weight Function
+###### Definition 154. Weight Function {#defn-weight-function}
 
 The P̱olkadot transaction weight function denoted by ${\mathcal{{{W}}}}$ as follows:
 
@@ -76,7 +76,7 @@ Nonetheless, ${\mathcal{{{W}}}}{\left({E}\right)}$ can be manipulated depending 
 
 In this section we discuss how applying the limitation defined in [Definition 153](id-weights.html#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition 155](id-weights.html#defn-block-weight):
 
-Definition 155. Block Weight
+###### Definition 155. Block Weight {#defn-block-weight}
 
 We define the block weight of block ${B}$, formally denoted as ${\mathcal{{{W}}}}{\left({B}\right)}$, to be:
 
@@ -145,7 +145,7 @@ Indicators for performance penalties:
 
 - **Input parameters** - Input parameters that users pass on to the Runtime function can result in expensive operations. Depending on the data type, it can be appropriate to add additional weights based on certain properties, such as data size, assuming the data type allows varying sizes. The Runtime must define limits on those properties. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the maximum value, as described in paragraph [Definition 156](id-weights.html#defn-max-value).
 
-Definition 156. Maximum Value
+###### Definition 156. Maximum Value {#defn-max-value}
 
 What the maximum value should be really depends on the functionality that the Runtime function is trying to provide. If the choice for that value is not obvious, then it’s advised to run benchmarks on a big range of values and pick a conservative value below the `targeted time per block` limit as described in section [Section 10.2.1](id-weights.html#sect-limitations).
 
@@ -363,11 +363,11 @@ The following points must be considered:
 
 #### 10.5.2.3. Benchmarking Framework {#id-benchmarking-framework-2}
 
-Definition 157. History Depth
+###### Definition 157. History Depth {#defn-history-depth}
 
 H̱istory Depth indicated as `MaxNominatorRewardedPerValidator` is a fixed constant specified by the Polkadot Runtime which dictates the number of Eras the Runtime will reward nominators and validators for.
 
-Definition 158. Maximum Nominator Reward
+###### Definition 158. Maximum Nominator Reward {#defn-max-nominator-reward}
 
 M̱aximum Nominator Rewarded Per Validator indicated as `MaxNominatorRewardedPerValidator`, specifies the maximum amount of the highest-staked nominators which will get a reward. Those values should have some influence in the benchmarking process.
 

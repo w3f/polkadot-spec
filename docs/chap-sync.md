@@ -24,7 +24,7 @@ The full sync protocol usually downloads the entire chain, but no such requireme
 
 Because Polkadot is a proof-of-stake protocol, each of its consensus engines has its own set of nodes represented by known public keys, which have the authority to influence the protocol in pre-defined ways explained in this Section. To verify the validity of each block, the Polkadot node must track the current list of authorities ([Definition 33](chap-sync.html#defn-authority-list)) for that block.
 
-Definition 33. [Authority List](chap-sync.html#defn-authority-list)
+###### Definition 33. Authority List {#defn-authority-list}
 
 The **authority list** of block ${B}$ for consensus engine ${C}$ noted as $\text{Auth}_{{C}}{\left({B}\right)}$ is an array that contains the following pair of types for each of its authorities ${A}\in\text{Auth}_{{C}}{\left({B}\right)}$:
 

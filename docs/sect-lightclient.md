@@ -135,7 +135,7 @@ Where the `response` can be one of the following fields:
 
 Execute a call to a contract at the given block.
 
-Definition 96. [Remote Call Request](sect-lightclient.html#sect-light-remote-call-request)
+###### Definition 96. Remote Call Request {#sect-light-remote-call-request}
 
 Remote call request.
 
@@ -145,7 +145,7 @@ Remote call request.
 | `string` | 3   | Method name                    |
 | `bytes`  | 4   | Call data                      |
 
-Definition 97. [Remote Call Response](sect-lightclient.html#sect-light-remote-call-response)
+###### Definition 97. Remote Call Response {#sect-light-remote-call-response}
 
 Remote call response.
 
@@ -157,7 +157,7 @@ Remote call response.
 
 Read a storage value at the given block.
 
-Definition 98. [Remote Read Request](sect-lightclient.html#sect-light-remote-read-request)
+###### Definition 98. Remote Read Request {#sect-light-remote-read-request}
 
 Remote read request.
 
@@ -166,7 +166,7 @@ Remote read request.
 | `bytes`          | 2   | Block at which to perform call |
 | `repeated bytes` | 3   | Storage keys                   |
 
-Definition 99. [Remote Read Response](sect-lightclient.html#sect-light-remote-read-response)
+###### Definition 99. Remote Read Response {#sect-light-remote-read-response}
 
 Remote read response.
 
@@ -178,7 +178,7 @@ Remote read response.
 
 Read a child storage value at the given block.
 
-Definition 100. [Remote Read Child Request](sect-lightclient.html#sect-light-remote-read-child-request)
+###### Definition 100. Remote Read Child Request {#sect-light-remote-read-child-request}
 
 Remote read child request.
 

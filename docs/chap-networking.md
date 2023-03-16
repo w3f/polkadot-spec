@@ -34,7 +34,7 @@ Each Polkadot Host node maintains an ED25519 key pair which is used to identify 
 
 Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId* as defined in [Definition 34](chap-networking.html#defn-peer-id) is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section 4.4](chap-networking.html#sect-discovery-mechanism).
 
-Definition 34. [PeerId](chap-networking.html#defn-peer-id)
+###### Definition 34. PeerId {#defn-peer-id}
 
 The Polkadot node’s PeerId, formally referred to as ${P}_{{{i}{d}}}$, is derived from the ED25519 public key and is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/), but does not fully conform to the specification. Specifically, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519.
 
@@ -218,7 +218,7 @@ When the node creates or receives a new block, it must be announced to the netwo
 
 Block announcements, requests and responses are sent over the substream as described in [Definition 35](chap-networking.html#defn-block-announce-handshake).
 
-Definition 35. [Block Announce Handshake](chap-networking.html#defn-block-announce-handshake)
+###### Definition 35. Block Announce Handshake {#defn-block-announce-handshake}
 
 The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once established, all `BlockAnounce` messages ([Definition 36](chap-networking.html#defn-block-announce)) created by the node are sent to the `/dot/block-announces/1` substream.
 
@@ -243,7 +243,7 @@ $$
 {h}_{{G}}=\text{Genesis block hash according to the node}
 $$
 
-Definition 36. [Block Announce](chap-networking.html#defn-block-announce)
+###### Definition 36. Block Announce {#defn-block-announce}
 
 The `BlockAnnounce` message is sent to the specified substream and indicates to remote peers that the node has either created or received a new block.
 
@@ -266,7 +266,7 @@ $$
 
 Block requests can be used to retrieve a range of blocks from peers. Those messages are sent over the `/dot/sync/2` substream.
 
-Definition 37. [Block Request](chap-networking.html#defn-msg-block-request)
+###### Definition 37. Block Request {#defn-msg-block-request}
 
 The `BlockRequest` message is a Protobuf serialized structure of the following format:
 
@@ -302,7 +302,7 @@ where
 
 - ${B}_{{m}}$ is the number of blocks to be returned. An implementation defined maximum is used when unspecified.
 
-Definition 38. [Block Response](chap-networking.html#defn-msg-block-response)
+###### Definition 38. Block Response {#defn-msg-block-response}
 
 The `BlockResponse` message is received after sending a `BlockRequest` message to a peer. The message is a Protobuf serialized structure of the following format:
 
@@ -330,13 +330,13 @@ When receiving state entries from the state response messages ([Definition 40](c
 
 See the the synchronization chapter for more information ([Chapter 3](chap-sync.html)).
 
-Definition 39. [State Request](chap-networking.html#defn-msg-state-request)
+###### Definition 39. State Request {#defn-msg-state-request}
 
 A **state request** is sent to a peer to request the state at a specified block. The message is a single 32-byte Blake2 hash which indicates the block from which the sync should start.
 
 Depending on what substream is used, he remote peer either sends back a state response ([Definition 40](chap-networking.html#defn-msg-state-response)) on the `/dot/sync/2` substream or a warp sync proof ([Definition 41](chap-networking.html#defn-warp-sync-proof)) on the `/dot/sync/warp`.
 
-Definition 40. [State Response](chap-networking.html#defn-msg-state-response)
+###### Definition 40. State Response {#defn-msg-state-response}
 
 The **state response** is sent to the peer that initialized the state request ([Definition 39](chap-networking.html#defn-msg-state-request)) and contains a list of key/value entries with an associated proof. This response is sent continuously until all key/value pairs have been submitted.
 
@@ -366,7 +366,7 @@ The warp sync protocols allows nodes to retrieve blocks from remote peers where 
 
 See the the synchronization chapter for more information ([Chapter 3](chap-sync.html)).
 
-Definition 41. [Warp Sync Proof](chap-networking.html#defn-warp-sync-proof)
+###### Definition 41. Warp Sync Proof {#defn-warp-sync-proof}
 
 The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition 39](chap-networking.html#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section 3.3.2](chap-sync.html#sect-consensus-message-digest)). It’s a datastructure of the following format:
 
@@ -388,7 +388,7 @@ Transactions ([Section 2.3](chap-state.html#sect-extrinsics)) are sent directly 
 
 The mechanism for managing transactions is further described in Section [Section 2.3](chap-state.html#sect-extrinsics).
 
-Definition 42. [Transaction Message](chap-networking.html#defn-transactions-message)
+###### Definition 42. Transaction Message {#defn-transactions-message}
 
 The **transactions message** is the structure of how the transactions are sent over the network. It is represented by ${M}_{{T}}$ and is defined as follows:
 
@@ -409,7 +409,7 @@ Transactions are sent over the `/dot/transactions/1` substream.
 
 The exchange of GRANDPA messages is conducted on the substream. The process for the creation and distributing these messages is described in [Chapter 6](sect-finality.html). The underlying messages are specified in this section.
 
-Definition 43. [Grandpa Gossip Message](chap-networking.html#defn-gossip-message)
+###### Definition 43. Grandpa Gossip Message {#defn-gossip-message}
 
 A **GRANDPA gossip message**, ${M}$, is a varying datatype ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) which identifies the message type that is cast by a voter followed by the message itself.
 
@@ -428,7 +428,7 @@ where
 
 - ${U}_{{M}}$ is defined in [Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg).
 
-Definition 44. [GRANDPA Vote Messages](chap-networking.html#defn-grandpa-vote-msg)
+###### Definition 44. GRANDPA Vote Messages {#defn-grandpa-vote-msg}
 
 A **GRANDPA vote message** by voter ${v}$, ${{M}_{{v}}^{{{r},\text{stage}}}}$, is gossip to the network by voter ${v}$ with the following structure:
 
@@ -457,7 +457,7 @@ where
 
 This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id 0.
 
-Definition 45. [GRANDPA Compact Justification Format](chap-networking.html#defn-grandpa-justifications-compact)
+###### Definition 45. GRANDPA Compact Justification Format {#defn-grandpa-justifications-compact}
 
 The **GRANDPA compact justification format** is an optimized data structure to store a collection of pre-commits and their signatures to be submitted as part of a commit message. Instead of storing an array of justifications, it uses the following format:
 
@@ -472,7 +472,7 @@ where
 
 - ${v}_{{\text{id}_{{n}}}}$ is a 256-bit byte array containing the public key of authority ${v}_{{i}}$.
 
-Definition 46. [GRANDPA Commit Message](chap-networking.html#defn-grandpa-commit-msg)
+###### Definition 46. GRANDPA Commit Message {#defn-grandpa-commit-msg}
 
 A **GRANDPA commit message** for block ${B}$ in round ${r}$, ${{M}_{{v}}^{{{r},\text{Fin}}}}{\left({B}\right)}$, is a message broadcasted by voter ${v}$ to the network indicating that voter ${v}$ has finalized block ${B}$ in round ${r}$. It has the following structure:
 
@@ -495,7 +495,7 @@ This message is the sub-component of the GRANDPA gossip message ([Definition 43]
 
 Neighbor messages are sent to all connected peers but they are not repropagated on reception. A message should be send whenever the messages values change and at least every 5 minutes. The sender should take the recipients state into account and avoid sending messages to peers that are using a different voter sets or are in a different round. Messages received from a future voter set or round can be dropped and ignored.
 
-Definition 47. [GRANDPA Neighbor Message](chap-networking.html#defn-grandpa-neighbor-msg)
+###### Definition 47. GRANDPA Neighbor Message {#defn-grandpa-neighbor-msg}
 
 A **GRANDPA Neighbor Message** is defined as:
 
@@ -520,7 +520,7 @@ Whenever a Polkadot node detects that it is lagging behind the finality procedur
 
 In particular, this procedure involves sending a *catch-up request* and processing *catch-up response* messages.
 
-Definition 48. [Catch-Up Request Message](chap-networking.html#defn-grandpa-catchup-request-msg)
+###### Definition 48. Catch-Up Request Message {#defn-grandpa-catchup-request-msg}
 
 A **GRANDPA catch-up request message** for round ${r}$, ${{M}_{{{i},{v}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$, is a message sent from node ${i}$ to its voting peer node ${v}$ requesting the latest status of a GRANDPA round ${r}'>{r}$ of the authority set ${\mathbb{{V}}}_{{\text{id}}}$ along with the justification of the status and has the following structure:
 
@@ -530,7 +530,7 @@ $$
 
 This message is the sub-component of the GRANDPA Gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *3*.
 
-Definition 49. [Catch-Up Response Message](chap-networking.html#defn-grandpa-catchup-response-msg)
+###### Definition 49. Catch-Up Response Message {#defn-grandpa-catchup-response-msg}
 
 A **GRANDPA catch-up response message** for round ${r}$, ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$, is a message sent by a node ${v}$ to node ${i}$ in response of a catch-up request ${{M}_{{{v},{i}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}'\right)}$ in which ${r}\ge{r}'$ is the latest GRANDPA round which v has prove of its finalization and has the following structure:
 
@@ -550,7 +550,7 @@ This message is the sub-component of the GRANDPA Gossip message ([Definition 43]
 
 This section defines the messages required for the GRANDPA BEEFY protocol ([Section 6.7](sect-finality.html#sect-grandpa-beefy)). Those messages are sent over the `/paritytech/beefy/1` substream.
 
-Definition 50. [Commitment](chap-networking.html#defn-grandpa-beefy-commitment)
+###### Definition 50. Commitment {#defn-grandpa-beefy-commitment}
 
 A **commitment**, ${C}$, contains the information extracted from the finalized block at height ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ as specified in the message body and a datastructure of the following format:
 
@@ -565,7 +565,7 @@ where
 
 - $\text{id}_{{{\mathbb{{V}}}}}$ is the current authority set Id ([Definition 73](sect-finality.html#defn-authority-set-id)).
 
-Definition 51. [Vote Message](chap-networking.html#defn-msg-beefy-gossip)
+###### Definition 51. Vote Message {#defn-msg-beefy-gossip}
 
 A **vote message**, ${M}_{{v}}$, is direct vote created by the Polkadot Host on every BEEFY round and is gossiped to its peers. The message is a datastructure of the following format:
 
@@ -580,7 +580,7 @@ where
 
 - ${A}_{{\text{sig}}}$ is the signature created with ${{A}_{{\text{id}}}^{{\text{bfy}}}}$ by signing the statement ${R}_{{h}}$ in ${C}$.
 
-Definition 52. [Signed Commitment](chap-networking.html#defn-grandpa-beefy-signed-commitment)
+###### Definition 52. Signed Commitment {#defn-grandpa-beefy-signed-commitment}
 
 A **signed commitment**, ${M}_{{\text{sc}}}$, is a datastructure of the following format:
 
@@ -598,7 +598,7 @@ where
 
   For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in ${S}_{{n}}$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition 190](id-cryptography-encoding.html#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
 
-Definition 53. [Signed Commitment Witness](chap-networking.html#defn-grandpa-beefy-signed-commitment-witness)
+###### Definition 53. Signed Commitment Witness {#defn-grandpa-beefy-signed-commitment-witness}
 
 A **signed commitment witness**, ${{M}_{{\text{SC}}}^{{w}}}$, is a light version of the signed BEEFY commitment ([Definition 52](chap-networking.html#defn-grandpa-beefy-signed-commitment)). Instead of containing the entire list of signatures, it only claims which validator signed the statement.
 

@@ -6,7 +6,7 @@ title: Finality
 
 The Polkadot Host uses GRANDPA Finality protocol to finalize blocks. Finality is obtained by consecutive rounds of voting by the validator nodes. Validators execute GRANDPA finality process in parallel to Block Production as an independent service. In this section, we describe the different functions that GRANDPA service performs to successfully participate in the block-finalization process.
 
-Definition 72. [GRANDPA Voter](sect-finality.html#defn-grandpa-voter)
+###### Definition 72. GRANDPA Voter {#defn-grandpa-voter}
 
 A **GRANDPA Voter**, ${v}$, represented by a key pair ${\left({{K}_{{v}}^{{\text{pr}}}},{v}_{{\text{id}}}\right)}$ where ${{k}_{{v}}^{{\text{pr}}}}$ represents an *ed25519* private key, is a node running a GRANDPA protocol and broadcasting votes to finalize blocks in a Polkadot Host-based chain. The **set of all GRANDPA voters** for a given block B is indicated by ${\mathbb{{V}}}_{{B}}$. In that regard, we have \[To do: change function name, only call at genesis, adjust V_B over the sections\]
 
@@ -18,11 +18,11 @@ where ${\tt{grandpa\_authorities}}$ is a function entrypoint of the Runtime desc
 
 Analogously we say that a Polkadot node is a **non-voter node** for block ${B}$, if it does not own any of the key pairs in ${\mathbb{{V}}}_{{B}}$.
 
-Definition 73. [Authority Set Id](sect-finality.html#defn-authority-set-id)
+###### Definition 73. Authority Set Id {#defn-authority-set-id}
 
 The **authority set Id** ($\text{id}_{{{\mathbb{{V}}}}}$) is an incremental counter which tracks the amount of authority list changes that occurred ([Definition 86](sect-finality.html#defn-consensus-message-grandpa)). Starting with the value of zero at genesis, the Polkadot Host increments this value by one every time a **Scheduled Change** or a **Forced Change** occurs. The authority set Id is an unsigned 64-bit integer.
 
-Definition 74. [GRANDPA State](sect-finality.html#defn-grandpa-state)
+###### Definition 74. GRANDPA State {#defn-grandpa-state}
 
 The **GRANDPA state**, $\text{GS}$, is defined as:
 
@@ -37,7 +37,7 @@ where
 
 - ${r}$: is the voting round number.
 
-Definition 75. [GRANDPA Vote](sect-finality.html#defn-vote)
+###### Definition 75. GRANDPA Vote {#defn-vote}
 
 A **GRANDPA vote** or simply a vote for block ${B}$ is an ordered pair defined as
 
@@ -47,7 +47,7 @@ $$
 
 where ${H}_{{h}}{\left({B}\right)}$ and ${H}_{{i}}{\left({B}\right)}$ are the block hash ([Definition 12](chap-state.html#defn-block-header-hash)) and the block number ([Definition 10](chap-state.html#defn-block-header)).
 
-Definition 76. [Voting Rounds](sect-finality.html#defn-voting-rounds)
+###### Definition 76. Voting Rounds {#defn-voting-rounds}
 
 Voters engage in a maximum of two sub-rounds of voting for each round ${r}$. The first sub-round is called **pre-vote** and the second sub-round is called **pre-commit**.
 
@@ -55,7 +55,7 @@ By ${{V}_{{v}}^{{{r},\text{pv}}}}$ and ${{V}_{{v}}^{{{r},\text{pc}}}}$ we refer 
 
 Voting is done by means of broadcasting voting messages ([Section 4.8.6](chap-networking.html#sect-msg-grandpa)) to the network. Validators inform their peers about the block finalized in round ${r}$ by broadcasting a commit message ([Play-Grandpa-Round](sect-finality.html#algo-grandpa-round)).
 
-Definition 77. [Vote Signature](sect-finality.html#defn-sign-round-vote)
+###### Definition 77. Vote Signature {#defn-sign-round-vote}
 
 ${\text{Sign}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}$ refers to the signature of a voter for a specific message in a round and is formally defined as:
 
@@ -70,7 +70,7 @@ where
 
 - $\text{id}_{{{\mathbb{{V}}}}}$: is an unsigned 64-bit integer indicating the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
-Definition 78. [Justification](sect-finality.html#defn-grandpa-justification)
+###### Definition 78. Justification {#defn-grandpa-justification}
 
 The **justification** for block ${B}$ in round ${r}$, ${J}^{{{r},\text{stage}}}{\left({B}\right)}$, is a vector of pairs of the type:
 
@@ -86,7 +86,7 @@ or ${{V}_{{{v}_{{i}}}}^{{{r},\text{pc}}}}{\left({B}'\right)}$ is an equivocatory
 
 In all cases, ${\text{Sign}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}{\left({B}'\right)}$ is the signature ([Definition 77](sect-finality.html#defn-sign-round-vote)) of voter ${v}_{{\text{id}}}\in{\mathbb{{V}}}_{{B}}$ broadcasted during either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round r. A **valid justification** must only contain up-to-one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
 
-Definition 79. [Finalizing Justification](sect-finality.html#defn-finalizing-justification)
+###### Definition 79. Finalizing Justification {#defn-finalizing-justification}
 
 We say ${J}^{{{r},\text{pc}}}{\left({B}\right)}$ **justifies the finalization** of ${B}'\ge{B}$ **for a non-voter node** ${n}$ if the number of valid signatures in ${J}^{{{r},\text{pc}}}{\left({B}\right)}$ for ${B}'$ is greater than $\frac{{2}}{{3}}{\left|{\mathbb{{V}}}_{{B}}\right|}$.
 
@@ -94,7 +94,7 @@ Note that ${J}^{{{r},\text{pc}}}{\left({B}\right)}$ can only be used by a non-vo
 
 The GRANDPA protocol dictates how an honest voter should vote in each sub-round, which is described by [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round). After defining what constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
 
-Definition 80. [Equivocation](sect-finality.html#defn-equivocation)
+###### Definition 80. Equivocation {#defn-equivocation}
 
 Voter ${v}$ **equivocates** if they broadcast two or more valid votes to blocks during one voting sub-round. In such a situation, we say that ${v}$ is an **equivocator** and any vote ${{V}_{{v}}^{{{r},\text{stage}}}}{\left({B}\right)}$ cast by ${v}$ in that sub-round is an **equivocatory vote**, and
 
@@ -122,13 +122,13 @@ A vote ${{V}_{{v}}^{{{r},\text{stage}}}}={V}{\left({B}\right)}$ is **invalid** i
 
 - ${{V}_{{v}}^{{{r},\text{stage}}}}$ is an equivocatory vote.
 
-Definition 81. [Set of Observed Direct Votes](sect-finality.html#defn-observed-direct-votes)
+###### Definition 81. Set of Observed Direct Votes {#defn-observed-direct-votes}
 
 For validator ${v}$, **the set of observed direct votes for Block ${B}$ in round ${r}$**, formally denoted by ${\text{VD}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{stage}}}}{\left({B}\right)}$ is equal to the union of:
 
 - set of *valid* votes ${{V}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}$ cast in round ${r}$ and received by ${v}$ such that ${{V}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}={V}{\left({B}\right)}$.
 
-Definition 82. [Set of Total Observed Votes](sect-finality.html#defn-observed-votes)
+###### Definition 82. Set of Total Observed Votes {#defn-observed-votes}
 
 We refer to **the set of total votes observed by voter ${v}$ in sub-round *stage* of round ${r}$** by ${{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{stage}}}}$.
 
@@ -146,7 +146,7 @@ $$
 
 Note that for genesis state we always have $\#{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{pv}}}}{\left({B}\right)}={\left|{\mathbb{{V}}}\right|}$.
 
-Definition 83. [Set of Total Potential Votes](sect-finality.html#defn-total-potential-votes)
+###### Definition 83. Set of Total Potential Votes {#defn-total-potential-votes}
 
 Let ${{V}_{{\text{unobs}{\left({v}\right)}}}^{{{r},\text{stage}}}}$ be the set of voters whose vote in the given stage has not been received. We define the **total number of potential votes for Block ${B}$ in round ${r}$** to be:
 
@@ -154,7 +154,7 @@ $$
 \#{{V}_{{\text{obs}{\left({v}\right)},\text{pot}}}^{{{r},\text{stage}}}}{\left({B}\right)}\:={\left|{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{stage}}}}{\left({B}\right)}\right|}+{\left|{{V}_{{\text{unobs}{\left({v}\right)}}}^{{{r},\text{stage}}}}\right|}+\text{Min}{\left(\frac{{1}}{{3}}{\left|{\mathbb{{V}}}\right|},{\left|{\mathbb{{V}}}\right|}-{\left|{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{stage}}}}{\left({B}\right)}\right|}-{\left|{{V}_{{\text{unobs}{\left({v}\right)}}}^{{{r},\text{stage}}}}\right|}\right)}
 $$
 
-Definition 84. [Current Pre-Voted Block](sect-finality.html#defn-grandpa-ghost)
+###### Definition 84. Current Pre-Voted Block {#defn-grandpa-ghost}
 
 The current **pre-voted** block ${{B}_{{v}}^{{{r},\text{pv}}}}$ also know as GRANDPA GHOST is the block chosen by [GRANDPA-GHOST](sect-finality.html#algo-grandpa-ghost):
 
@@ -164,7 +164,7 @@ $$
 
 Finally, we define when a voter ${v}$ sees a round as completable, that is when they are confident that ${{B}_{{v}}^{{{r},\text{pv}}}}$ is an upper bound for what is going to be finalized in this round.
 
-Definition 85. [Completable Round](sect-finality.html#defn-grandpa-completable)
+###### Definition 85. Completable Round {#defn-grandpa-completable}
 
 We say that round ${r}$ is **completable** if ${\left|{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{pc}}}}\right|}+{{\mathcal{{E}}}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{pc}}}}>\frac{{2}}{{3}}{\mathbb{{V}}}$ and for all ${B}'>{{B}_{{v}}^{{{r},\text{pv}}}}$:
 
@@ -174,7 +174,7 @@ $$
 
 Note that in practice we only need to check the inequality for those ${B}'>{{B}_{{v}}^{{{r},\text{pv}}}}$ where ${\left|{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{pc}}}}{\left({B}'\right)}\right|}>{0}$.
 
-Definition 86. [GRANDPA Consensus Message](sect-block-production.html#defn-consensus-message-babe)
+###### Definition 86. GRANDPA Consensus Message {#defn-consensus-message-babe}
 
 $\text{CM}_{{g}}$, the consensus message for GRANDPA, is of the following format:
 
@@ -186,7 +186,7 @@ where
 
 [TABLE]
 
-Definition 87. [BEEFY Consensus Message](sect-finality.html#defn-consensus-message-beefy)
+###### Definition 87. BEEFY Consensus Message {#defn-consensus-message-beefy}
 
 |     |                                                                                                                                             |
 |-----|---------------------------------------------------------------------------------------------------------------------------------------------|
@@ -274,7 +274,7 @@ where the condition for *completability* is defined in [Definition 85](sect-fina
 
 Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round) prevents us from moving to the round ${r}+{1}$ before finalizing the best final candidate of round ${r}-{1}$) The example in [Definition 88](sect-finality.html#exmp-candid-unfinalized) serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
 
-Definition 88. Unfinalized Candidate
+###### Definition 88. Unfinalized Candidate {#defn-unfinalized-candidate}
 
 Let us assume that we have 100 voters and there are two blocks in the chain (${B}_{{1}}<{B}_{{2}}$). At round 1, we get 67 pre-votes for ${B}_{{2}}$ and at least one pre-vote for ${B}_{{1}}$ which means that $\text{GRANDPA-GHOST}{\left({1}\right)}={B}_{{2}}$.
 
@@ -310,7 +310,7 @@ Figure 3. Applying a forced change
 
 ## 6.6. Block Finalization {#sect-block-finalization}
 
-Definition 89. [Justified Block Header](sect-finality.html#defn-justified-block-header)
+###### Definition 89. Justified Block Header {#defn-justified-block-header}
 
 The Justified Block Header is provided by the consensus engine and presented to the Polkadot Host, for the block to be appended to the blockchain. It contains the following parts:
 
@@ -320,7 +320,7 @@ The Justified Block Header is provided by the consensus engine and presented to 
 
 - **authority Ids**: This is the list of the Ids of authorities, which have voted for the block to be stored and is formally referred to as ${A}{\left({B}\right)}$. An authority Id is 256-bit.
 
-Definition 90. [Finalized](sect-finality.html#defn-finalized-block)
+###### Definition 90. Finalized {#defn-finalized-block}
 
 A Polkadot relay chain node ${n}$ should consider block ${B}$ as **finalized** if any of the following criteria hold for ${B}'\ge{B}$:
 
@@ -391,7 +391,7 @@ Storing all the information necessary to verify the state of the remote chain, s
 
 ### 6.7.1. Preliminaries {#id-preliminaries-2}
 
-Definition 91. [Merkle Mountain Ranges](sect-finality.html#defn-mmr)
+###### Definition 91. Merkle Mountain Ranges {#defn-mmr}
 
 Merkle Mountain Ranges, **MMR**, are used as an efficient way to send block headers and signatures to light clients.
 
@@ -399,21 +399,21 @@ Merkle Mountain Ranges, **MMR**, are used as an efficient way to send block head
 |-----|---------------------------------|
 |     | MMRs have not been defined yet. |
 
-Definition 92. [Statement](sect-finality.html#defn-beefy-statement)
+###### Definition 92. Statement {#defn-beefy-statement}
 
 The **statement** is the same piece of information which every relay chain validator is voting on. Namely, the MMR root of all the block header hashes leading up to the latest, finalized block.
 
-Definition 93. [Witness Data](sect-finality.html#defn-beefy-witness-data)
+###### Definition 93. Witness Data {#defn-beefy-witness-data}
 
 **Witness data** contains the statement ([Definition 92](sect-finality.html#defn-beefy-statement)), an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves) and a MMR root of the signatures. The indicators of which validator voted for the statement are just claims and provide no proofs. The network message is defined in [Definition 53](chap-networking.html#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
 
-Definition 94. [Light Client](sect-finality.html#defn-beefy-light-client)
+###### Definition 94. Light Client {#defn-beefy-light-client}
 
 A **light client** is an abstract entity in a remote network such as Ethereum. It can be a node or a smart contract with the intent of requesting finality proofs from the Polkadot network. A light client reads the witness data ([Definition 93](sect-finality.html#defn-beefy-witness-data) from the chain, then requests the signatures directly from the relayer in order to verify those.
 
 The light client is expected to know who the validators are and has access to their public keys.
 
-Definition 95. [Relayer](sect-finality.html#defn-beefy-relayer)
+###### Definition 95. Relayer {#defn-beefy-relayer}
 
 A **relayer** (or "prover") is an abstract entity which takes finality proofs from the Polkadot network and makes those available to the light clients. Inherently, the relayer tries to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates offchain and can for example be a node or a collection of nodes.
 
