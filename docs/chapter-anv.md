@@ -12,7 +12,7 @@ Every relay chain validator must fetch the proposed candidates and issue votes o
 
 Parachain candidates contained in non-finalized relay chain blocks must then be retrieved by a secondary set of relay chain validators, unrelated from the candidate backing process, who are randomly assigned to determine the validity of specific parachains based on a VRF lottery and are then required to vote on the validity of those candidates. This process is known as approval voting ([Section 8.5](chapter-anv.html#sect-approval-voting)). If a validator does not have the candidate data, it must recover the candidate data ([Section 8.4.2](chapter-anv.html#sect-candidate-recovery)).
 
-## [](#sect-collations)[8.1. Collations](#sect-collations)
+## 8.1. Collations {#sect-collations}
 
 Collations are proposed candidates [Definition 131](chapter-anv.html#defn-candidate) to the Polkadot relay chain validators. The Polkodat network protocol is agnostic on what candidate productionis mechanism each parachain uses and does not specify or mandate any of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the relay chain validator host implementation itself does not directly interpret or process the internal transactions of the candidate, but rather rely on the parachain Runtime to validate the candidate ([Section 8.3](chapter-anv.html#sect-candidate-validation)). Collators, which are parachain nodes which produce candidate proposals and send them to the relay chain validator, must prepare pieces of data ([Definition 101](chapter-anv.html#defn-collation)) in order to correctly comply with the requirements of the parachain protocol.
 
@@ -45,11 +45,11 @@ where
 
 - ${w}$ is an unsigned 32-bit integer indicating the mark up to which all inbound HRMP messages have been processed by the parachain.
 
-## [](#sect-candidate-backing)[8.2. Candidate Backing](#sect-candidate-backing)
+## 8.2. Candidate Backing {#sect-candidate-backing}
 
 The Polkadot validator receives an arbitrary number of parachain candidates with associated proofs from untrusted collators. The assigned validators of each parachain ([Definition 136](chapter-anv.html#defn-validator-groups)) must verify and select a specific quantity of the proposed candidates and issue those as backable candidates to its peers. A candidate is considered backable when at least 2/3 of all assigned validators have issued a *Valid* statement about that candidate, as described in [Section 8.2.1](chapter-anv.html#sect-candidate-statements). Validators can retrieve information about assignments via the Runtime APIs [Section C.9.2](chap-runtime-api.html#sect-rt-api-validator-groups) respectively [Section C.9.3](chap-runtime-api.html#sect-rt-api-availability-cores).
 
-### [](#sect-candidate-statements)[8.2.1. Statements](#sect-candidate-statements)
+### 8.2.1. Statements {#sect-candidate-statements}
 
 The assigned validator checks the validity of the proposed parachains blocks ([Section 8.3](chapter-anv.html#sect-candidate-validation)) and issues *Valid* statements ([Definition 102](chapter-anv.html#defn-statement)) to its peers if the verification succeeded. Broadcasting failed verification as *Valid* statements is a slashable offense. The validator must only issue one *Seconded* statement, based on an arbitrary metric, which implies an explicit vote for a candidate to be included in the relay chain.
 
@@ -77,7 +77,7 @@ where
 
 - ${A}_{{s}}$ is the signature of the validator.
 
-### [](#sect-candidate-inclusion)[8.2.2. Inclusion](#sect-candidate-inclusion)
+### 8.2.2. Inclusion {#sect-candidate-inclusion}
 
 The Polkadot validator includes the backed candidates as parachain inherent data ([Definition 103](chapter-anv.html#defn-parachain-inherent-data)) into a block as described [Section 2.3.3](chap-state.html#sect-inherents). The relay chain block author decides on whatever metric which candidate should be selected for inclusion, as long as that candidate is valid and meets the validity quorum of 2/3+ as described in [Section 8.2.1](chapter-anv.html#sect-candidate-statements). The candidate approval process ([Section 8.5](chapter-anv.html#sect-approval-voting)) ensures that only relay chain blocks are finalized where each candidate for each availability core meets the requirement of 2/3+ availability votes.
 
@@ -203,7 +203,7 @@ where
 
 - ${w}$ is a unsigned 32-bit integer indicating the watermark which specifies the relay chain block number up to which all inbound horizontal messages have been processed.
 
-## [](#sect-candidate-validation)[8.3. Candidate Validation](#sect-candidate-validation)
+## 8.3. Candidate Validation {#sect-candidate-validation}
 
 Received candidates submitted by collators and must have its validity verified by the assigned Polkadot validators. For each candidate to be valid, the validator must successfully verify the following conditions in the following order:
 
@@ -215,7 +215,7 @@ Received candidates submitted by collators and must have its validity verified b
 
 If all steps are valid, the Polkadot validator must create the necessary candidate commitments ([Definition 107](chapter-anv.html#defn-candidate-commitments)) and submit the appropriate statement for each candidate ([Section 8.2.1](chapter-anv.html#sect-candidate-statements)).
 
-### [](#sect-parachain-runtime)[8.3.1. Parachain Runtime](#sect-parachain-runtime)
+### 8.3.1. Parachain Runtime {#sect-parachain-runtime}
 
 Parachain Runtimes are stored in the relay chain state, and can either be fetched by the parachain Id or the Runtime hash via the relay chain Runtime API as described in [Section C.9.7](chap-runtime-api.html#sect-rt-api-validation-code) and [Section C.9.8](chap-runtime-api.html#sect-rt-api-validation-code-by-hash) respectively. The retrieved parachain Runtime might need to be decompressed based on the magic identifier as described in [Section 8.3.2](chapter-anv.html#sect-runtime-compression).
 
@@ -265,15 +265,15 @@ where
 
 - ${w}$ is a unsigned 32-bit integer indicating the watermark which specifies the relay chain block number up to which all inbound horizontal messages have been processed.
 
-### [](#sect-runtime-compression)[8.3.2. Runtime Compression](#sect-runtime-compression)
+### 8.3.2. Runtime Compression {#sect-runtime-compression}
 
 |     |                                            |
 |-----|--------------------------------------------|
 |     | Runtime compression is not documented yet. |
 
-## [](#sect-availability)[8.4. Availability](#sect-availability)
+## 8.4. Availability {#sect-availability}
 
-### [](#sect-availability-votes)[8.4.1. Availability Votes](#sect-availability-votes)
+### 8.4.1. Availability Votes {#sect-availability-votes}
 
 The Polkadot validator must issue a bitfield ([Definition 141](chapter-anv.html#defn-bitfield-array)) which indicates votes for the availability of candidates. Issued bitfields can be used by the validator and other peers to determine which backed candidates meet the 2/3+ availability quorum.
 
@@ -283,17 +283,17 @@ Missing availability data of candidates must be recovered by the validator as de
 
 The validator issues availability votes in form of a validator protocol message ([Definition 115](chapter-anv.html#net-msg-collator-protocol-message)).
 
-### [](#sect-candidate-recovery)[8.4.2. Candidate Recovery](#sect-candidate-recovery)
+### 8.4.2. Candidate Recovery {#sect-candidate-recovery}
 
 The availability distribution of the Polkadot validator must be able to recover parachain candidates that the validator is assigned to, in order to determine whether the candidate should be backed ([Section 8.2](chapter-anv.html#sect-candidate-backing)) respectively whether the candidate should be approved ([Section 8.5](chapter-anv.html#sect-approval-voting)). Additionally, peers can send availability requests as defined in [Definition 122](chapter-anv.html#net-msg-chunk-fetching-request) and [Definition 124](chapter-anv.html#net-msg-available-data-request) to the validator, which the validator should be able to respond to.
 
 Candidates are recovered by sending requests for specific indices of erasure encoded chunks ([Section A.4.1](id-cryptography-encoding.html#sect-erasure-encoding)). A validator should request chunks by picking peers randomly and must recover at least ${f}+{1}$ chunks, where ${n}={3}{f}+{k}$ and ${k}\in{\left\lbrace{1},{2},{3}\right\rbrace}$. ${n}$ is the number of validators as specified in the session info, which can be fetched by the Runtime API as described in [Section C.9.11](chap-runtime-api.html#sect-rt-api-session-info).
 
-## [](#sect-approval-voting)[8.5. Approval Voting](#sect-approval-voting)
+## 8.5. Approval Voting {#sect-approval-voting}
 
 The approval voting process ensures that only valid parachain blocks are finalized on the relay chain. After *backable* parachain candidates were submitted to the relay chain ([Section 8.2.2](chapter-anv.html#sect-candidate-inclusion)), which can be retrieved via the Runtime API ([Section C.9.3](chap-runtime-api.html#sect-rt-api-availability-cores)), validators need to determine their assignments for each parachain and issue approvals for valid candidates, respectively disputes for invalid candidates. Since it cannot be expected that each validator verifies every single parachain candidate, this mechanism ensures that enough honest validators are selected to verify parachain candidates in order prevent the finalization of invalid blocks. If an honest validator detects an invalid block which was approved by one or more validators, the honest validator must issue a disputes which wil cause escalations, resulting in consequences for all malicious parties, i.e. slashing. This mechanism is described more in [Section 8.5.1](chapter-anv.html#sect-availability-assignment-criteria).
 
-### [](#sect-availability-assignment-criteria)[8.5.1. Assignment Criteria](#sect-availability-assignment-criteria)
+### 8.5.1. Assignment Criteria {#sect-availability-assignment-criteria}
 
 Validators determine their assignment based on a VRF mechanism, similar to the BABE consensus mechanism. First, validators generate an availability core VRF assignment ([Definition 111](chapter-anv.html#defn-availability-core-vrf-assignment)), which indicates which availability core a validator is assigned to. Then a delayed availability core VRF assignment is generated which indicates at what point a validator should start the approval process. The delays are based on “tranches” ([Section 8.5.2](chapter-anv.html#sect-tranches)).
 
@@ -301,7 +301,7 @@ An assigned validator never broadcasts their assignment until relevant. Once the
 
 The validator issues approval votes in form of a validator protocol message ([Definition 114](chapter-anv.html#net-msg-validator-protocol-message)) respectively disputes ([Section 8.6](chapter-anv.html#sect-disputes)).
 
-### [](#sect-tranches)[8.5.2. Tranches](#sect-tranches)
+### 8.5.2. Tranches {#sect-tranches}
 
 Validators use a subjective, tick-based system to determine when the approval process should start. A validator starts the tick-based system when a new availability core candidates have been proposed, which can be retrieved via the Runtime API ([Section C.9.3](chap-runtime-api.html#sect-rt-api-availability-cores)) , and increments the tick every *500 milliseconds*. Each tick/increment is referred to as a “tranche”, represented as an integer, starting at *0*.
 
@@ -384,17 +384,17 @@ $$
 
 where ${k}$ indicates the kind of the certificate, respectively the value *0* proves the availability core assignment ([Definition 111](chapter-anv.html#defn-availability-core-vrf-assignment)), followed by the sample number ${s}$, and the value *1* proves the delayed availability core assignment ([Definition 112](chapter-anv.html#delayed-availability-core-vrf-assignment)), followed by the core index ${c}_{{i}}$ ([Section C.9.3](chap-runtime-api.html#sect-rt-api-availability-cores)). ${o}$ is the VRF output and ${p}$ is the VRF proof.
 
-## [](#sect-disputes)[8.6. Disputes](#sect-disputes)
+## 8.6. Disputes {#sect-disputes}
 
 |     |                                  |
 |-----|----------------------------------|
 |     | Disputes are not documented yet. |
 
-## [](#sect-anv-network-messages)[8.7. Network Messages](#sect-anv-network-messages)
+## 8.7. Network Messages {#sect-anv-network-messages}
 
 The availability and validity process requires certain network messages to be exchanged between validators and collators.
 
-### [](#id-notification-messges)[8.7.1. Notification Messges](#id-notification-messges)
+### 8.7.1. Notification Messges {#id-notification-messges}
 
 The notification messages are exchanged between validators, including messages sent by collators to validators. The protocol messages are exchanged based on a streaming notification substream ([Section 4.5](chap-networking.html#sect-connection-establishment)). The messages are SCALE encoded ([Section A.2.2](id-cryptography-encoding.html#sect-scale-codec)).
 
@@ -525,7 +525,7 @@ where
 
 - ${P}_{{o}}$ is a VRF output and ${P}_{{p}}$ its corresponding proof.
 
-### [](#id-request-response)[8.7.2. Request & Response](#id-request-response)
+### 8.7.2. Request & Response {#id-request-response}
 
 The request & response network messages are sent and received between peers in the Polkadot network, including collators and non-validator nodes. Those messages are conducted on the request-response substreams ([Section 4.5](chap-networking.html#sect-connection-establishment)). The network messages are SCALE encoded as described in Section ?.
 
@@ -635,7 +635,7 @@ $$
 
 where ${C}_{{r}}$ is the committed candidate receipt ([Definition 105](chapter-anv.html#defn-committed-candidate-receipt)). No response is returned if no statement is found.
 
-#### [](#net-msg-dispute-request)[8.7.2.1. Dispute Request](#net-msg-dispute-request)
+#### 8.7.2.1. Dispute Request {#net-msg-dispute-request}
 
 The dispute request is sent by clients who want to issue a dispute about a candidate. The request, ${D}_{{r}}$, is a datastructure of the following format:
 
@@ -682,7 +682,7 @@ where
 
 The response message is defined in [Section 8.7.2.2](chapter-anv.html#net-msg-dispute-response).
 
-#### [](#net-msg-dispute-response)[8.7.2.2. Dispute Response](#net-msg-dispute-response)
+#### 8.7.2.2. Dispute Response {#net-msg-dispute-response}
 
 The dispute response is sent by nodes to the clients who who issued a dispute request ([Section 8.7.2.1](chapter-anv.html#net-msg-dispute-request)). The response, ${R}$, is a varying type of the following format:
 
@@ -692,7 +692,7 @@ $$
 
 where ${0}$ indicates that the dispute was successfully processed.
 
-## [](#sect-anv-definitions)[8.8. Definitions](#sect-anv-definitions)
+## 8.8. Definitions {#sect-anv-definitions}
 
 Definition 130. [Collator](chapter-anv.html#defn-collator)
 

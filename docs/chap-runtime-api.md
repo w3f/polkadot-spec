@@ -4,7 +4,7 @@ title: "Appendix C: Runtime API"
 
 Description of how to interact with the Runtime through its exported functions
 
-## [](#id-general-information)[C.1. General Information](#id-general-information)
+## C.1. General Information {#id-general-information}
 
 The Polkadot Host assumes that at least the constants and functions described in this Chapter are implemented in the Runtime Wasm blob.
 
@@ -12,17 +12,17 @@ It should be noted that the API can change through the Runtime updates. Therefor
 
 In this section, we describe all Runtime API functions alongside their arguments and the return values. The functions are organized into modules with each being versioned independently.
 
-### [](#sect-json-rpc-api)[C.1.1. JSON-RPC API for external services](#sect-json-rpc-api)
+### C.1.1. JSON-RPC API for external services {#sect-json-rpc-api}
 
 Polkadot Host implementers are encouraged to implement an API in order for external, third-party services to interact with the node. The [JSON-RPC Interface for Polkadot Nodes](https://github.com/w3f/PSPs/blob/master/PSPs/drafts/psp-6.md) (PSP6) is a Polkadot Standard Proposal for such an API and makes it easier to integrate the node with existing tools available in the Polkadot ecosystem, such as [polkadot.js.org](https://polkadot.js.org/). The Runtime API has a few modules designed specifically for use in the official RPC API.
 
-## [](#id-runtime-constants)[C.2. Runtime Constants](#id-runtime-constants)
+## C.2. Runtime Constants {#id-runtime-constants}
 
-### [](#id-__heap_base)[C.2.1. `__heap_base`](#id-__heap_base)
+### C.2.1. `__heap_base` {#id-__heap_base}
 
 This constant indicates the beginning of the heap in memory. The space below is reserved for the stack and the data section. For more details please refer to [Section 2.6.3.1](chap-state.html#sect-memory-management).
 
-## [](#id-runtime-call-convention)[C.3. Runtime Call Convention](#id-runtime-call-convention)
+## C.3. Runtime Call Convention {#id-runtime-call-convention}
 
 Definition 215. Runtime API Call Convention
 
@@ -37,13 +37,13 @@ where `ptr` points to the SCALE encoded tuple of the parameters passed to the fu
 
 See [Section 2.6.3](chap-state.html#sect-code-executor) for more information about the behavior of the Wasm Runtime. Also note that any storage changes must be fork-aware ([Section 2.4.5](chap-state.html#sect-managing-multiple-states)).
 
-## [](#sect-runtime-core-module)[C.4. Module Core](#sect-runtime-core-module)
+## C.4. Module Core {#sect-runtime-core-module}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | This section describes **Version 3** of this API. Please check `Core_version` ([Section C.4.1](chap-runtime-api.html#defn-rt-core-version)) to ensure compatibility. |
 
-### [](#defn-rt-core-version)[C.4.1. `Core_version`](#defn-rt-core-version)
+### C.4.1. `Core_version` {#defn-rt-core-version}
 
 |     |                                                                                                                                                                                                                                                                                                 |
 |-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -78,7 +78,7 @@ ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{m}{a}{t}{h}{r}{m}{\le
 
 Requires `Core_initialize_block` to be called beforehand.
 
-### [](#sect-rte-core-execute-block)[C.4.2. `Core_execute_block`](#sect-rte-core-execute-block)
+### C.4.2. `Core_execute_block` {#sect-rte-core-execute-block}
 
 This function executes a full block and all its extrinsics and updates the state accordingly. Additionally, some integrity checks are executed such as validating if the parent hash is correct and that the transaction root represents the transactions. Internally, this function performs an operation similar to the process described in [Build-Block](sect-block-production.html#algo-build-block), by calling `Core_initialize_block`,`BlockBuilder_apply_extrinsics` and `BlockBuilder_finalize_block`.
 
@@ -92,7 +92,7 @@ Arguments
 Return  
 - None.
 
-### [](#sect-rte-core-initialize-block)[C.4.3. `Core_initialize_block`](#sect-rte-core-initialize-block)
+### C.4.3. `Core_initialize_block` {#sect-rte-core-initialize-block}
 
 Sets up the environment required for building a new block as described in [Build-Block](sect-block-production.html#algo-build-block).
 
@@ -102,13 +102,13 @@ Arguments
 Return  
 - None.
 
-## [](#sect-runtime-metadata-module)[C.5. Module Metadata](#sect-runtime-metadata-module)
+## C.5. Module Metadata {#sect-runtime-metadata-module}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | This section describes **Version 1** of this API. Please check `Core_version` ([Section C.4.1](chap-runtime-api.html#defn-rt-core-version)) to ensure compatibility. |
 
-### [](#sect-rte-metadata-metadata)[C.5.1. `Metadata_metadata`](#sect-rte-metadata-metadata)
+### C.5.1. `Metadata_metadata` {#sect-rte-metadata-metadata}
 
 Returns native Runtime metadata in an opaque form. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in [Section C.1.1](chap-runtime-api.html#sect-json-rpc-api). and returns all the information necessary to build valid transactions.
 
@@ -118,7 +118,7 @@ Arguments
 Return  
 - The scale-encoded ([Section A.2.2](id-cryptography-encoding.html#sect-scale-codec)) runtime metadata as described in [Chapter 12](sect-metadata.html).
 
-## [](#sect-runtime-blockbuilder-module)[C.6. Module BlockBuilder](#sect-runtime-blockbuilder-module)
+## C.6. Module BlockBuilder {#sect-runtime-blockbuilder-module}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -126,7 +126,7 @@ Return
 
 All calls in this module require `Core_initialize_block` ([Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-### [](#sect-rte-apply-extrinsic)[C.6.1. `BlockBuilder_apply_extrinsic`](#sect-rte-apply-extrinsic)
+### C.6.1. `BlockBuilder_apply_extrinsic` {#sect-rte-apply-extrinsic}
 
 Apply the extrinsic outside of the block execution function. This does not attempt to validate anything regarding the block, but it builds a list of transaction hashes.
 
@@ -233,7 +233,7 @@ Definition 223. UnknownTransaction
 
 Table 13. Possible values of varying data type *UnknownTransaction*.
 
-### [](#defn-rt-blockbuilder-finalize-block)[C.6.2. `BlockBuilder_finalize_block`](#defn-rt-blockbuilder-finalize-block)
+### C.6.2. `BlockBuilder_finalize_block` {#defn-rt-blockbuilder-finalize-block}
 
 Finalize the block - it is up to the caller to ensure that all header fields are valid except for the state root. State changes resulting from calling this function are usually meant to persist upon successful execution of the function and appending of the block to the chain.
 
@@ -243,7 +243,7 @@ Arguments
 Return  
 - The header of the new block as defined in [Definition 10](chap-state.html#defn-block-header).
 
-### [](#defn-rt-builder-inherent-extrinsics)[C.6.3. `BlockBuilder_inherent_extrinisics`:](#defn-rt-builder-inherent-extrinsics)
+### C.6.3. `BlockBuilder_inherent_extrinisics`: {#defn-rt-builder-inherent-extrinsics}
 
 Generates the inherent extrinsics, which are explained in more detail in [Section 2.3.3](chap-state.html#sect-inherents). This function takes a SCALE-encoded hash table as defined in [Definition 192](id-cryptography-encoding.html#defn-scale-list) and returns an array of extrinsics. The Polkadot Host must submit each of those to the `BlockBuilder_apply_extrinsic`, described in [Section C.6.1](chap-runtime-api.html#sect-rte-apply-extrinsic). This procedure is outlined in [Build-Block](sect-block-production.html#algo-build-block).
 
@@ -253,7 +253,7 @@ Arguments
 Return  
 - A byte array of varying size containing extrinisics. Each extrinsic is a byte array of varying size.
 
-### [](#id-blockbuilder_check_inherents)[C.6.4. `BlockBuilder_check_inherents`](#id-blockbuilder_check_inherents)
+### C.6.4. `BlockBuilder_check_inherents` {#id-blockbuilder_check_inherents}
 
 Checks whether the provided inherent is valid. This function can be used by the Polkadot Host when deemed appropriate, e.g. during the block-building process.
 
@@ -276,7 +276,7 @@ Return
 
   - ${e}$ is a Inherents-Data structure as defined in [Definition 15](chap-state.html#defn-inherent-data) containing any errors created by this Runtime function.
 
-### [](#id-blockbuilder_random_seed)[C.6.5. `BlockBuilder_random_seed`](#id-blockbuilder_random_seed)
+### C.6.5. `BlockBuilder_random_seed` {#id-blockbuilder_random_seed}
 
 Generates a random seed.
 
@@ -286,7 +286,7 @@ Arguments
 Return  
 - A 32-byte array containing the random seed.
 
-## [](#sect-runtime-txqueue-module)[C.7. Module TaggedTransactionQueue](#sect-runtime-txqueue-module)
+## C.7. Module TaggedTransactionQueue {#sect-runtime-txqueue-module}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -294,7 +294,7 @@ Return
 
 All calls in this module require `Core_initialize_block` ([Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-### [](#sect-rte-validate-transaction)[C.7.1. `TaggedTransactionQueue_validate_transaction`](#sect-rte-validate-transaction)
+### C.7.1. `TaggedTransactionQueue_validate_transaction` {#sect-rte-validate-transaction}
 
 This entry is invoked against extrinsics submitted through a transaction network message ([Section 4.8.5](chap-networking.html#sect-msg-transactions)) or by an offchain worker through the Host API ([Section B.6.2](chap-host-api.html#sect-ext-offchain-submit-transaction)).
 
@@ -342,7 +342,7 @@ Return
 |-----|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | If this function gets called by the Polkadot Host in order to validate a transaction received from peers, the Polkadot Host disregards and rewinds state changes resulting in such a call. |
 
-## [](#sect-runtime-offchainapi-module)[C.8. Module OffchainWorkerApi](#sect-runtime-offchainapi-module)
+## C.8. Module OffchainWorkerApi {#sect-runtime-offchainapi-module}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -350,7 +350,7 @@ Return
 
 Does not require `Core_initialize_block` ([Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-### [](#id-offchainworkerapi_offchain_worker)[C.8.1. `OffchainWorkerApi_offchain_worker`](#id-offchainworkerapi_offchain_worker)
+### C.8.1. `OffchainWorkerApi_offchain_worker` {#id-offchainworkerapi_offchain_worker}
 
 Starts an off-chain worker and generates extrinsics. \[To do: when is this called?\]
 
@@ -360,13 +360,13 @@ Arguments
 Return  
 - None.
 
-## [](#sect-anv-runtime-api)[C.9. Module ParachainHost](#sect-anv-runtime-api)
+## C.9. Module ParachainHost {#sect-anv-runtime-api}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | This section describes **Version 1** of this API. Please check `Core_version` ([Section C.4.1](chap-runtime-api.html#defn-rt-core-version)) to ensure compatibility. |
 
-### [](#sect-rt-api-validators)[C.9.1. `ParachainHost_validators`](#sect-rt-api-validators)
+### C.9.1. `ParachainHost_validators` {#sect-rt-api-validators}
 
 Returns the validator set at the current state. The specified validators are responsible for backing parachains for the current state.
 
@@ -376,7 +376,7 @@ Arguments
 Return  
 - An array of public keys representing the validators.
 
-### [](#sect-rt-api-validator-groups)[C.9.2. `ParachainHost_validator_groups`](#sect-rt-api-validator-groups)
+### C.9.2. `ParachainHost_validator_groups` {#sect-rt-api-validator-groups}
 
 Returns the validator groups ([Definition 136](chapter-anv.html#defn-validator-groups)) used during the current session. The validators in the groups are referred to by the validator set Id ([Definition 33](chap-sync.html#defn-authority-list)).
 
@@ -405,7 +405,7 @@ Return
 
   - ${B}_{{c}}$ indicates the current block number.
 
-### [](#sect-rt-api-availability-cores)[C.9.3. `ParachainHost_availability_cores`](#sect-rt-api-availability-cores)
+### C.9.3. `ParachainHost_availability_cores` {#sect-rt-api-availability-cores}
 
 Returns information on all availability cores ([Definition 135](chapter-anv.html#defn-availability-core)).
 
@@ -446,7 +446,7 @@ Return
 
   - ${C}_{{i}}$ is an *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) which can contain the collators public key indicating who should author the block.
 
-### [](#sect-rt-api-persisted-validation-data)[C.9.4. `ParachainHost_persisted_validation_data`](#sect-rt-api-persisted-validation-data)
+### C.9.4. `ParachainHost_persisted_validation_data` {#sect-rt-api-persisted-validation-data}
 
 Returns the persisted validation data for the given parachain Id and a given occupied core assumption.
 
@@ -489,7 +489,7 @@ where
 
 The persisted validation data is fetched via the Runtime API ([Section C.9.4](chap-runtime-api.html#sect-rt-api-persisted-validation-data)).
 
-### [](#id-parachainhost_check_validation_outputs)[C.9.5. `ParachainHost_check_validation_outputs`](#id-parachainhost_check_validation_outputs)
+### C.9.5. `ParachainHost_check_validation_outputs` {#id-parachainhost_check_validation_outputs}
 
 Checks if the given validation outputs pass the acceptance criteria.
 
@@ -501,7 +501,7 @@ Arguments
 Return  
 - A boolean indicating whether the candidate commitments pass the acceptance criteria.
 
-### [](#id-parachainhost_session_index_for_child)[C.9.6. `ParachainHost_session_index_for_child`](#id-parachainhost_session_index_for_child)
+### C.9.6. `ParachainHost_session_index_for_child` {#id-parachainhost_session_index_for_child}
 
 Returns the session index that is expected at the child of a block.
 
@@ -515,7 +515,7 @@ Arguments
 Return  
 - A unsigned 32-bit integer representing the session index.
 
-### [](#sect-rt-api-validation-code)[C.9.7. `ParachainHost_validation_code`](#sect-rt-api-validation-code)
+### C.9.7. `ParachainHost_validation_code` {#sect-rt-api-validation-code}
 
 Fetches the validation code (Runtime) of a parachain by parachain Id.
 
@@ -527,7 +527,7 @@ Arguments
 Return  
 - An *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
 
-### [](#sect-rt-api-validation-code-by-hash)[C.9.8. `ParachainHost_validation_code_by_hash`](#sect-rt-api-validation-code-by-hash)
+### C.9.8. `ParachainHost_validation_code_by_hash` {#sect-rt-api-validation-code-by-hash}
 
 Returns the validation code (Runtime) of a parachain by its hash.
 
@@ -537,7 +537,7 @@ Arguments
 Return  
 - An *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
 
-### [](#id-parachainhost_candidate_pending_availability)[C.9.9. `ParachainHost_candidate_pending_availability`](#id-parachainhost_candidate_pending_availability)
+### C.9.9. `ParachainHost_candidate_pending_availability` {#id-parachainhost_candidate_pending_availability}
 
 Returns the receipt of a candidate pending availability for any parachain assigned to an occupied availability core.
 
@@ -547,7 +547,7 @@ Arguments
 Return  
 - An *Option* value ([Definition 190](id-cryptography-encoding.html#defn-option-type)) containing the committed candidate receipt ([Definition 104](chapter-anv.html#defn-candidate-receipt)). This value is empty if the given parachain Id is not assigned to an occupied availability cores.
 
-### [](#id-parachainhost_candidate_events)[C.9.10. `ParachainHost_candidate_events`](#id-parachainhost_candidate_events)
+### C.9.10. `ParachainHost_candidate_events` {#id-parachainhost_candidate_events}
 
 Returns an array of candidate events that occurred within the latest state.
 
@@ -575,7 +575,7 @@ Return
 
   - ${G}_{{i}}$ is the group index ([Definition 136](chapter-anv.html#defn-validator-groups)) that is responsible of backing the candidate.
 
-### [](#sect-rt-api-session-info)[C.9.11. `ParachainHost_session_info`](#sect-rt-api-session-info)
+### C.9.11. `ParachainHost_session_info` {#sect-rt-api-session-info}
 
 Get the session info of the given session, if available.
 
@@ -629,7 +629,7 @@ Return
 
   - ${a}$ is an unsigned 32-bit integer indicating the number of validators needed to approve a block.
 
-### [](#id-parachainhost_dmq_contents)[C.9.12. `ParachainHost_dmq_contents`](#id-parachainhost_dmq_contents)
+### C.9.12. `ParachainHost_dmq_contents` {#id-parachainhost_dmq_contents}
 
 Returns all the pending inbound messages in the downward message queue for a given parachain.
 
@@ -639,7 +639,7 @@ Arguments
 Return  
 - An array of inbound downward messages ([Definition 138](chapter-anv.html#defn-downward-message)).
 
-### [](#id-parachainhost_inbound_hrmp_channels_contents)[C.9.13. `ParachainHost_inbound_hrmp_channels_contents`](#id-parachainhost_inbound_hrmp_channels_contents)
+### C.9.13. `ParachainHost_inbound_hrmp_channels_contents` {#id-parachainhost_inbound_hrmp_channels_contents}
 
 Returns the contents of all channels addressed to the given recipient. Channels that have no messages in them are also included.
 
@@ -649,7 +649,7 @@ Arguments
 Return  
 - An array of inbound HRMP messages ([Definition 140](chapter-anv.html#defn-inbound-hrmp-message)).
 
-## [](#id-module-grandpaapi)[C.10. Module GrandpaApi](#id-module-grandpaapi)
+## C.10. Module GrandpaApi {#id-module-grandpaapi}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -657,7 +657,7 @@ Return
 
 All calls in this module require `Core_initialize_block` ([Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-### [](#sect-rte-grandpa-auth)[C.10.1. `GrandpaApi_grandpa_authorities`](#sect-rte-grandpa-auth)
+### C.10.1. `GrandpaApi_grandpa_authorities` {#sect-rte-grandpa-auth}
 
 This entry fetches the list of GRANDPA authorities according to the genesis block and is used to initialize an authority list at genesis, defined in [Definition 33](chap-sync.html#defn-authority-list). Any future authority changes get tracked via Runtime-to-consensus engine messages, as described in [Section 3.3.2](chap-sync.html#sect-consensus-message-digest).
 
@@ -667,7 +667,7 @@ Arguments
 Return  
 - An authority list as defined in [Definition 33](chap-sync.html#defn-authority-list).
 
-### [](#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic)[C.10.2. `GrandpaApi_submit_report_equivocation_unsigned_extrinsic`](#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic)
+### C.10.2. `GrandpaApi_submit_report_equivocation_unsigned_extrinsic` {#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic}
 
 A GRANDPA equivocation occurs when a validator votes for multiple blocks during one voting subround, as described further in [Definition 80](sect-finality.html#defn-equivocation). The Polkadot Host is expected to identify equivocators and report those to the Runtime by calling this function.
 
@@ -702,7 +702,7 @@ Arguments
 Return  
 - A SCALE encoded *Option* as defined in [Definition 190](id-cryptography-encoding.html#defn-option-type) containing an empty value on success.
 
-### [](#sect-grandpaapi_generate_key_ownership_proof)[C.10.3. `GrandpaApi_generate_key_ownership_proof`](#sect-grandpaapi_generate_key_ownership_proof)
+### C.10.3. `GrandpaApi_generate_key_ownership_proof` {#sect-grandpaapi_generate_key_ownership_proof}
 
 Generates proof of the membership of a key owner in the specified block state. The returned value is used to report equivocations as described in [Section C.10.2](chap-runtime-api.html#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic).
 
@@ -714,7 +714,7 @@ Arguments
 Return  
 - A SCALE encoded *Option* as defined in [Definition 190](id-cryptography-encoding.html#defn-option-type) containing the proof in an opaque form.
 
-## [](#id-module-babeapi)[C.11. Module BabeApi](#id-module-babeapi)
+## C.11. Module BabeApi {#id-module-babeapi}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -722,7 +722,7 @@ Return
 
 All calls in this module require `Core_initialized_block` ([Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-### [](#sect-rte-babeapi-epoch)[C.11.1. `BabeApi_configuration`](#sect-rte-babeapi-epoch)
+### C.11.1. `BabeApi_configuration` {#sect-rte-babeapi-epoch}
 
 This entry is called to obtain the current configuration of the BABE consensus protocol.
 
@@ -743,7 +743,7 @@ Return
 
   Table 16. The tuple provided by **BabeApi_configuration**.
 
-### [](#id-babeapi_current_epoch_start)[C.11.2. `BabeApi_current_epoch_start`](#id-babeapi_current_epoch_start)
+### C.11.2. `BabeApi_current_epoch_start` {#id-babeapi_current_epoch_start}
 
 Finds the start slot of the current epoch.
 
@@ -753,7 +753,7 @@ Arguments
 Return  
 - A unsigned 64-bit integer indicating the slot number.
 
-### [](#sect-babeapi_current_epoch)[C.11.3. `BabeApi_current_epoch`](#sect-babeapi_current_epoch)
+### C.11.3. `BabeApi_current_epoch` {#sect-babeapi_current_epoch}
 
 Produces information about the current epoch.
 
@@ -778,7 +778,7 @@ Return
 
   - ${r}$ is an 256-bit array containing the randomness for the epoch as defined in [Definition 71](sect-block-production.html#defn-epoch-randomness).
 
-### [](#id-babeapi_next_epoch)[C.11.4. `BabeApi_next_epoch`](#id-babeapi_next_epoch)
+### C.11.4. `BabeApi_next_epoch` {#id-babeapi_next_epoch}
 
 Produces information about the next epoch.
 
@@ -788,7 +788,7 @@ Arguments
 Return  
 - Returns the same datastructure as described in [Section C.11.3](chap-runtime-api.html#sect-babeapi_current_epoch).
 
-### [](#sect-babeapi_generate_key_ownership_proof)[C.11.5. `BabeApi_generate_key_ownership_proof`](#sect-babeapi_generate_key_ownership_proof)
+### C.11.5. `BabeApi_generate_key_ownership_proof` {#sect-babeapi_generate_key_ownership_proof}
 
 Generates a proof of the membership of a key owner in the specified block state. The returned value is used to report equivocations as described in [Section C.11.6](chap-runtime-api.html#sect-babeapi_submit_report_equivocation_unsigned_extrinsic).
 
@@ -800,7 +800,7 @@ Arguments
 Return  
 - A SCALE encoded *Option* as defined in Definition [Definition 190](id-cryptography-encoding.html#defn-option-type) containing the proof in an opaque form.
 
-### [](#sect-babeapi_submit_report_equivocation_unsigned_extrinsic)[C.11.6. `BabeApi_submit_report_equivocation_unsigned_extrinsic`](#sect-babeapi_submit_report_equivocation_unsigned_extrinsic)
+### C.11.6. `BabeApi_submit_report_equivocation_unsigned_extrinsic` {#sect-babeapi_submit_report_equivocation_unsigned_extrinsic}
 
 A BABE equivocation occurs when a validator produces more than one block at the same slot. The proof of equivocation are the given distinct headers that were signed by the validator and which include the slot number. The Polkadot Host is expected to identify equivocators and report those to the Runtime using this function.
 
@@ -831,7 +831,7 @@ Arguments
 Return  
 - A SCALE encoded *Option* as defined in [Definition 190](id-cryptography-encoding.html#defn-option-type) containing an empty value on success.
 
-### [](#id-module-authoritydiscoveryapi)[C.11.7. Module AuthorityDiscoveryApi](#id-module-authoritydiscoveryapi)
+### C.11.7. Module AuthorityDiscoveryApi {#id-module-authoritydiscoveryapi}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -839,7 +839,7 @@ Return
 
 All calls in this module require (Section [Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-#### [](#id-authoritydiscoveryapi_authorities)[C.11.7.1. `AuthorityDiscoveryApi_authorities`](#id-authoritydiscoveryapi_authorities)
+#### C.11.7.1. `AuthorityDiscoveryApi_authorities` {#id-authoritydiscoveryapi_authorities}
 
 A function which helps to discover authorities.
 
@@ -849,7 +849,7 @@ Arguments
 Return  
 - A byte array of varying size containing 256-bit pulic keys of the authorities.
 
-### [](#sect-runtime-sessionkeys-module)[C.11.8. Module SessionKeys](#sect-runtime-sessionkeys-module)
+### C.11.8. Module SessionKeys {#sect-runtime-sessionkeys-module}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -857,7 +857,7 @@ Return
 
 All calls in this module require `Core_initialize_block` ([Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-#### [](#id-sessionkeys_generate_session_keys)[C.11.8.1. `SessionKeys_generate_session_keys`](#id-sessionkeys_generate_session_keys)
+#### C.11.8.1. `SessionKeys_generate_session_keys` {#id-sessionkeys_generate_session_keys}
 
 Generates a set of session keys with an optional seed. The keys should be stored within the keystore exposed by the Host Api. The seed needs to be valid and UTF-8 encoded.
 
@@ -867,7 +867,7 @@ Arguments
 Return  
 - A byte array of varying size containing the encoded session keys.
 
-#### [](#id-sessionkeys_decode_session_keys)[C.11.8.2. `SessionKeys_decode_session_keys`](#id-sessionkeys_decode_session_keys)
+#### C.11.8.2. `SessionKeys_decode_session_keys` {#id-sessionkeys_decode_session_keys}
 
 Decodes the given public session keys. Returns a list of raw public keys including their key type.
 
@@ -883,7 +883,7 @@ Return
 
   where ${k}$ is an array of varying sizes containing the raw public key and ${k}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}}$ is a 4-byte array indicating the key type.
 
-## [](#id-module-accountnonceapi)[C.12. Module AccountNonceApi](#id-module-accountnonceapi)
+## C.12. Module AccountNonceApi {#id-module-accountnonceapi}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -891,7 +891,7 @@ Return
 
 All calls in this module require `Core_initialize_block` ([Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-### [](#sect-accountnonceapi-account-nonce)[C.12.1. `AccountNonceApi_account_nonce`](#sect-accountnonceapi-account-nonce)
+### C.12.1. `AccountNonceApi_account_nonce` {#sect-accountnonceapi-account-nonce}
 
 Get the current nonce of an account. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in [Section C.1.1](chap-runtime-api.html#sect-json-rpc-api).
 
@@ -901,7 +901,7 @@ Arguments
 Return  
 - A 32-bit unsigned integer indicating the nonce of the account.
 
-### [](#id-module-transactionpaymentapi)[C.12.2. Module TransactionPaymentApi](#id-module-transactionpaymentapi)
+### C.12.2. Module TransactionPaymentApi {#id-module-transactionpaymentapi}
 
 |     |                                                                                                                                                                      |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -909,7 +909,7 @@ Return
 
 All calls in this module require `Core_initialize_block` ([Section C.4.3](chap-runtime-api.html#sect-rte-core-initialize-block)) to be called beforehand.
 
-#### [](#id-transactionpaymentapi_query_info)[C.12.2.1. `TransactionPaymentApi_query_info`](#id-transactionpaymentapi_query_info)
+#### C.12.2.1. `TransactionPaymentApi_query_info` {#id-transactionpaymentapi_query_info}
 
 Returns information of a given extrinsic. This function is not aware of the internals of an extrinsic, but only interprets the extrinsic as some encoded value and accounts for its weight and length, the Runtime’s extrinsic base weight and the current fee multiplier.
 
@@ -936,7 +936,7 @@ Return
 
   - ${f}$ is the inclusion fee of the extrinsic. This does not include a tip or anything else that depends on the signature.
 
-#### [](#id-transactionpaymentapi_query_fee_details)[C.12.2.2. `TransactionPaymentApi_query_fee_details`](#id-transactionpaymentapi_query_fee_details)
+#### C.12.2.2. `TransactionPaymentApi_query_fee_details` {#id-transactionpaymentapi_query_fee_details}
 
 Query the detailed fee of a given extrinsic. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in [Section C.1.1](chap-runtime-api.html#sect-json-rpc-api).
 

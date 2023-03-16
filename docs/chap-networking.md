@@ -6,13 +6,13 @@ title: Networking
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | This chapter in its current form is incomplete and considered work in progress. Authors appreciate receiving request for clarification or any reports regarding deviation from the current Polkadot network protocol. This can be done through filing an issue in [Polkadot Specification repository](https://github.com/w3f/polkadot-spec). |
 
-## [](#id-introduction-2)[4.1. Introduction](#id-introduction-2)
+## 4.1. Introduction {#id-introduction-2}
 
 The Polkadot network is decentralized and does not rely on any central authority or entity for achieving its fullest potential of provided functionality. The networking protocol is based on a family of open protocols, including protocol implemented *libp2p* e.g. the distributed Kademlia hash table which is used for peer discovery.
 
 This chapter walks through the behavior of the networking implementation of the Polkadot Host and defines the network messages. The implementation details of the *libp2p* protocols used are specified in external sources as described in [Section 4.2](chap-networking.html#sect-networking-external-docs)
 
-## [](#sect-networking-external-docs)[4.2. External Documentation](#sect-networking-external-docs)
+## 4.2. External Documentation {#sect-networking-external-docs}
 
 Complete specification of the Polkadot networking protocol relies on the following external protocols:
 
@@ -28,7 +28,7 @@ Complete specification of the Polkadot networking protocol relies on the followi
 
 - [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/reference/proto3-spec) - Protocol Buffers is a language-neutral, platform-neutral mechanism for serializing structured data and is developed by Google. The Polkadot Host uses Protocol Buffers to serialize specific messages, as clarified in [Section 4.8](chap-networking.html#sect-network-messages).
 
-## [](#id-node-identities)[4.3. Node Identities](#id-node-identities)
+## 4.3. Node Identities {#id-node-identities}
 
 Each Polkadot Host node maintains an ED25519 key pair which is used to identify the node. The public key is shared with the rest of the network allowing the nodes to establish secure communication channels.
 
@@ -72,7 +72,7 @@ where
 
 - ${b}_{{4}}$, ${b}_{{5}}$ and ${b}_{{{6}.{.37}}}$ are a protobuf encoded field-value pair where ${b}_{{5}}$ indicates the length of the public key followed by the the raw ED25519 public key itself, which varies for each Polkadot Host and is always 32 bytes (field ${2}$ contains the public key, which has a field value length prefix).
 
-## [](#sect-discovery-mechanism)[4.4. Discovery mechanism](#sect-discovery-mechanism)
+## 4.4. Discovery mechanism {#sect-discovery-mechanism}
 
 The Polkadot Host uses various mechanisms to find peers within the network, to establish and maintain a list of peers and to share that list with other peers from the network as follows:
 
@@ -82,7 +82,7 @@ The Polkadot Host uses various mechanisms to find peers within the network, to e
 
 - **Kademlia requests** invoking Kademlia requests, where nodes respond with their list of available peers. Kademlia requests are performed on a specific substream as described in [Section 4.7](chap-networking.html#sect-protocols-substreams).
 
-## [](#sect-connection-establishment)[4.5. Connection establishment](#sect-connection-establishment)
+## 4.5. Connection establishment {#sect-connection-establishment}
 
 Polkadot nodes connect to peers by establishing a TCP connection. Once established, the node initiates a handshake with the remote peers on the encryption layer. An additional layer on top of the encryption layer, known as the multiplexing layer, allows a connection to be split into substreams, as described by the [yamux specification](https://docs.libp2p.io/concepts/stream-multiplexing/#yamux), either by the local or remote node.
 
@@ -112,7 +112,7 @@ The Polkadot Host can establish a connection with any peer of which it knows the
 
 The addressing system is described in the [libp2p addressing](https://docs.libp2p.io/concepts/addressing/) specification. After a base-layer protocol is established, the Polkadot Host will apply the Noise protocol to establish the encryption layer as described in [Section 4.6](chap-networking.html#sect-encryption-layer).
 
-## [](#sect-encryption-layer)[4.6. Encryption Layer](#sect-encryption-layer)
+## 4.6. Encryption Layer {#sect-encryption-layer}
 
 Polkadot protocol uses the *libp2p* Noise framework to build an encryption protocol. The Noise protocol is a framework for building encryption protocols. *libp2p* utilizes that protocol for establishing encrypted communication channels. Refer to the [libp2p Secure Channel Handshake](https://github.com/libp2p/specs/tree/master/noise) specification for a detailed description.
 
@@ -126,7 +126,7 @@ Polkadot nodes use the [XX handshake pattern](https://noiseexplorer.com/patterns
 
 After these three steps, both the initiator and responder derive a new shared secret using the static and session-defined Noise keys, which are used to encrypt all further communication.
 
-## [](#sect-protocols-substreams)[4.7. Protocols and Substreams](#sect-protocols-substreams)
+## 4.7. Protocols and Substreams {#sect-protocols-substreams}
 
 After the node establishes a connection with a peer, the use of multiplexing allows the Polkadot Host to open substreams. *libp2p* uses the [*yamux protocol*](https://docs.libp2p.io/concepts/stream-multiplexing/#yamux) to manage substreams and to allow the negotiation of *application-specific protocols*, where each protocol serves a specific utility.
 
@@ -204,7 +204,7 @@ The Polkadot Host uses multiple substreams whose usage depends on a specific pur
   |-----|----------------------------------------------------------------------------------------------------------|
   |     | For backwards compatibility reasons, `/paritytech/beefy/1` is also a valid substream for those messages. |
 
-## [](#sect-network-messages)[4.8. Network Messages](#sect-network-messages)
+## 4.8. Network Messages {#sect-network-messages}
 
 The Polkadot Host must actively communicate with the network in order to participate in the validation process or act as a full node.
 
@@ -212,7 +212,7 @@ The Polkadot Host must actively communicate with the network in order to partici
 |-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | The Polkadot network originally only used SCALE encoding for all message formats. Meanwhile, Protobuf has been adopted for certain messages. The encoding of each listed message is always SCALE encoded unless Protobuf is explicitly mentioned. Encoding and message formats are subject to change. |
 
-### [](#sect-msg-block-announce)[4.8.1. Announcing blocks](#sect-msg-block-announce)
+### 4.8.1. Announcing blocks {#sect-msg-block-announce}
 
 When the node creates or receives a new block, it must be announced to the network. Other nodes within the network will track this announcement and can request information about this block. The mechanism for tracking announcements and requesting the required data is implementation-specific.
 
@@ -262,7 +262,7 @@ $$
 {b}={\left\lbrace\begin{matrix}{0}&\text{Is not part of the best chain}\\{1}&\text{Is the best block according to the node}\end{matrix}\right.}
 $$
 
-### [](#sect-msg-block-request)[4.8.2. Requesting Blocks](#sect-msg-block-request)
+### 4.8.2. Requesting Blocks {#sect-msg-block-request}
 
 Block requests can be used to retrieve a range of blocks from peers. Those messages are sent over the `/dot/sync/2` substream.
 
@@ -322,7 +322,7 @@ where *BlockData* is a Protobuf structure containing the requested blocks. Do no
 | `bytes`          | 6   | Justification (optional)                                              | [Definition 78](sect-finality.html#defn-grandpa-justification) |
 | `bool`           | 7   | Indicates whether the justification is empty (i.e. should be ignored) |                                                                |
 
-### [](#sect-msg-state-request)[4.8.3. Requesting States](#sect-msg-state-request)
+### 4.8.3. Requesting States {#sect-msg-state-request}
 
 The Polkadot Host can request the state in form of a key/value list at a specified block.
 
@@ -360,7 +360,7 @@ and *StateEntry*:
 | `bytes` | 1   | The key of the entry   |
 | `bytes` | 2   | The value of the entry |
 
-### [](#sect-msg-warp-sync)[4.8.4. Warp Sync](#sect-msg-warp-sync)
+### 4.8.4. Warp Sync {#sect-msg-warp-sync}
 
 The warp sync protocols allows nodes to retrieve blocks from remote peers where authority set changes occurred. This can be used to speed up synchronization to the latest state.
 
@@ -382,7 +382,7 @@ $$
 
 where ${B}_{{h}}$ is the last block header containing a digest item ([Definition 11](chap-state.html#defn-digest)) signaling an authority set change from which the next authority set change can be fetched from. ${J}^{{{r},\text{stage}}}{\left({B}\right)}$ is the GRANDPA justification ([Definition 78](sect-finality.html#defn-grandpa-justification)) and ${c}$ is a boolean that indicates whether the warp sync has been completed.
 
-### [](#sect-msg-transactions)[4.8.5. Transactions](#sect-msg-transactions)
+### 4.8.5. Transactions {#sect-msg-transactions}
 
 Transactions ([Section 2.3](chap-state.html#sect-extrinsics)) are sent directly to peers with which the Polkadot Host has an open transaction substream ([Definition 42](chap-networking.html#defn-transactions-message)). Polkadot Host implementers should implement a mechanism that only sends a transaction once to each peer and avoids sending duplicates. Sending duplicate transactions might result in undefined consequences such as being blocked for bad behavior by peers.
 
@@ -405,7 +405,7 @@ Where each ${E}_{{i}}$ is a byte array and represents a separate extrinsic. The 
 
 Transactions are sent over the `/dot/transactions/1` substream.
 
-### [](#sect-msg-grandpa)[4.8.6. GRANDPA Messages](#sect-msg-grandpa)
+### 4.8.6. GRANDPA Messages {#sect-msg-grandpa}
 
 The exchange of GRANDPA messages is conducted on the substream. The process for the creation and distributing these messages is described in [Chapter 6](sect-finality.html). The underlying messages are specified in this section.
 
@@ -491,7 +491,7 @@ where
 
 This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *1*.
 
-#### [](#sect-grandpa-neighbor-msg)[4.8.6.1. GRANDPA Neighbor Messages](#sect-grandpa-neighbor-msg)
+#### 4.8.6.1. GRANDPA Neighbor Messages {#sect-grandpa-neighbor-msg}
 
 Neighbor messages are sent to all connected peers but they are not repropagated on reception. A message should be send whenever the messages values change and at least every 5 minutes. The sender should take the recipients state into account and avoid sending messages to peers that are using a different voter sets or are in a different round. Messages received from a future voter set or round can be dropped and ignored.
 
@@ -514,7 +514,7 @@ where
 
 This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *2*.
 
-#### [](#sect-grandpa-catchup-messages)[4.8.6.2. GRANDPA Catch-up Messages](#sect-grandpa-catchup-messages)
+#### 4.8.6.2. GRANDPA Catch-up Messages {#sect-grandpa-catchup-messages}
 
 Whenever a Polkadot node detects that it is lagging behind the finality procedure, it needs to initiate a *catch-up* procedure. GRANDPA Neighbor messages ([Definition 47](chap-networking.html#defn-grandpa-neighbor-msg)) reveal the round number for the last finalized GRANDPA round which the node’s peers have observed. This provides the means to identify a discrepancy in the latest finalized round number observed among the peers. If such a discrepancy is observed, the node needs to initiate the catch-up procedure explained in [Section 6.6.1](sect-finality.html#sect-grandpa-catchup)).
 
@@ -542,7 +542,7 @@ Where ${B}$ is the highest block which ${v}$ believes to be finalized in round $
 
 This message is the sub-component of the GRANDPA Gossip message ([Definition 43](chap-networking.html#defn-gossip-message)) of type Id *4*.
 
-### [](#sect-msg-grandpa-beefy)[4.8.7. GRANDPA BEEFY](#sect-msg-grandpa-beefy)
+### 4.8.7. GRANDPA BEEFY {#sect-msg-grandpa-beefy}
 
 |     |                                                                             |
 |-----|-----------------------------------------------------------------------------|

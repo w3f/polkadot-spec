@@ -6,21 +6,21 @@ Many applications that interact with the Polkadot network to some extent must be
 
 The associated network messages are specified in [Section 4.8](chap-networking.html#sect-network-messages).
 
-## [](#sect-sync-warp)[3.1. Warp Sync](#sect-sync-warp)
+## 3.1. Warp Sync {#sect-sync-warp}
 
 Warp sync ([Section 4.8.4](chap-networking.html#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so called fragments ([Definition 41](chap-networking.html#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition 45](chap-networking.html#defn-grandpa-justifications-compact)). This protocols allows nodes to arrive at the desired state much faster than fast sync.
 
-## [](#sect-sync-fast)[3.2. Fast Sync](#sect-sync-fast)
+## 3.2. Fast Sync {#sect-sync-fast}
 
 Fast sync works by downloading the block header history and validating the auhtority set changes ([Section 3.3.1](chap-sync.html#sect-authority-set)) in order to arrive at a specific (usually the most recent) header. After the desired header has been reached and verified, the state can be downloaded and imported ([Section 4.8.3](chap-networking.html#sect-msg-state-request)). Once this process has been completed, the node can proceed with a full sync.
 
-## [](#id-full-sync)[3.3. Full Sync](#id-full-sync)
+## 3.3. Full Sync {#id-full-sync}
 
 The full sync protocols is the "default" protocol that’s suited for many types of implementations, such as archive nodes (nodes that store everything), validators that participate in Polkadots consensus and light clients that only verify claims about the state of the network. Full sync works by listening to announced blocks ([Section 4.8.1](chap-networking.html#sect-msg-block-announce)) and requesting the blocks from the announcing peers, or just the block headers in case of light clients.
 
 The full sync protocol usually downloads the entire chain, but no such requirements must be met. If an implemenation only wants the latest, finalized state, it can combine it with protocols such as fast sync ([Section 3.2](chap-sync.html#sect-sync-fast)) and/or warp sync ([Section 3.1](chap-sync.html#sect-sync-warp)) to make synchronization as fast as possible.
 
-### [](#sect-authority-set)[3.3.1. Consensus Authority Set](#sect-authority-set)
+### 3.3.1. Consensus Authority Set {#sect-authority-set}
 
 Because Polkadot is a proof-of-stake protocol, each of its consensus engines has its own set of nodes represented by known public keys, which have the authority to influence the protocol in pre-defined ways explained in this Section. To verify the validity of each block, the Polkadot node must track the current list of authorities ([Definition 33](chap-sync.html#defn-authority-list)) for that block.
 
@@ -36,13 +36,13 @@ ${p}{k}_{{A}}$ is the session public key ([Definition 180](id-cryptography-encod
 
 The authorities and their corresponding weights can be retrieved from the Runtime ([Section C.10.1](chap-runtime-api.html#sect-rte-grandpa-auth)).
 
-### [](#sect-consensus-message-digest)[3.3.2. Runtime-to-Consensus Engine Message](#sect-consensus-message-digest)
+### 3.3.2. Runtime-to-Consensus Engine Message {#sect-consensus-message-digest}
 
 The authority list ([Definition 33](chap-sync.html#defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition 11](chap-state.html#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
 
 The Polkadot Host must inspect the digest header of each block and delegate consensus messages to their consensus engines. The BABE and GRANDPA consensus engine must react based on the type of consensus messages it receives. The active GRANDPA authorities can only vote for blocks that occurred after the finalized block in which they were selected. Any votes for blocks before the came into effect would get rejected.
 
-## [](#sect-block-validation)[3.4. Importing and Validating Block](#sect-block-validation)
+## 3.4. Importing and Validating Block {#sect-block-validation}
 
 Block validation is the process by which a node asserts that a block is fit to be added to the blockchain. This means that the block is consistent with the current state of the system and transitions to a new valid state.
 

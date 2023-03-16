@@ -4,23 +4,23 @@ title: "Appendix A: Cryptography & Encoding"
 
 Appendix chapter containing various protocol details
 
-## [](#chapter-crypto-algos)[A.1. Cryptographic Algorithms](#chapter-crypto-algos)
+## A.1. Cryptographic Algorithms {#chapter-crypto-algos}
 
-### [](#sect-hash-functions)[A.1.1. Hash Functions](#sect-hash-functions)
+### A.1.1. Hash Functions {#sect-hash-functions}
 
-#### [](#sect-blake2)[A.1.1.1. BLAKE2](#sect-blake2)
+#### A.1.1.1. BLAKE2 {#sect-blake2}
 
 BLAKE2 is a collection of cryptographic hash functions known for their high speed. Their design closely resembles BLAKE which has been a finalist in the SHA-3 competition.
 
 Polkadot is using the Blake2b variant which is optimized for 64-bit platforms. Unless otherwise specified, the Blake2b hash function with a 256-bit output is used whenever Blake2b is invoked in this document. The detailed specification and sample implementations of all variants of Blake2 hash functions can be found in RFC 7693 cite:\[saarinen_blake2_2015\].
 
-### [](#sect-randomness)[A.1.2. Randomness](#sect-randomness)
+### A.1.2. Randomness {#sect-randomness}
 
 |     |     |
 |-----|-----|
 |     | TBH |
 
-### [](#sect-vrf)[A.1.3. VRF](#sect-vrf)
+### A.1.3. VRF {#sect-vrf}
 
 A Verifiable Random Function (VRF) is a mathematical operation that takes some input and produces a random number using a secret key along with a proof of authenticity that this random number was generated using the submitter’s secret key and the given input. The proof can be verified by any challenger to ensure the random number generation is valid and has not been tampered with (for example to the benfit of submitter).
 
@@ -128,7 +128,7 @@ $$
 {y}=\text{PRF}{\left({t}_{{8}},\text{more=False}\right)}
 $$
 
-#### [](#id-transcript)[A.1.3.1. Transcript](#id-transcript)
+#### A.1.3.1. Transcript {#id-transcript}
 
 A VRF transcript serves as a domain-specific separator of cryptographic protocols and is represented as a mathematical object, as defined by Merlin, which defines how that object is generated and encoded. The usage of the transcript is implementation specific, such as for certain mechanisms in the Availability & Validity chapter ([Chapter 8](chapter-anv.html)), and is therefore described in more detail in those protocols. The input value used to initiate the transcript is referred to as a *context* ([Definition 174](id-cryptography-encoding.html#defn-vrf-context)).
 
@@ -171,7 +171,7 @@ Definition 176. [STROBE Operations](id-cryptography-encoding.html#defn-strobe-op
 
 STROBE operations are described in the [STROBE specification](https://strobe.sourceforge.io/specs/), respectively section ["6. Strobe operations"](https://strobe.sourceforge.io/specs/#ops). Operations are indicated by their corresponding bitfield, as described in section ["6.2. Operations and flags"](https://strobe.sourceforge.io/specs/#ops.flags) and implemented as described in section ["7. Implementation of operations"](https://strobe.sourceforge.io/specs/#ops.impl)
 
-##### [](#sect-vrf-appending-messages)[Appending Messages](#sect-vrf-appending-messages)
+##### Appending Messages {#sect-vrf-appending-messages}
 
 Appending messages, or "data", to the transcript ([Definition 175](id-cryptography-encoding.html#defn-vrf-transcript)) first requires `meta-AD` operations for a given label of the messages, including the size of the message, followed by an `AD` operation on the message itself. The size of the message is a 4-byte, little-endian encoded integer.
 
@@ -189,7 +189,7 @@ where ${T}$ is the transcript ([Definition 175](id-cryptography-encoding.html#de
 
 Formally, when appending a message we refer to it as $\text{append}{\left({T},{l},{m}\right)}$.
 
-### [](#sect-cryptographic-keys)[A.1.4. Cryptographic Keys](#sect-cryptographic-keys)
+### A.1.4. Cryptographic Keys {#sect-cryptographic-keys}
 
 Various types of keys are used in Polkadot to prove the identity of the actors involved in the Polkadot Protocols. To improve the security of the users, each key type has its own unique function and must be treated differently, as described by this Section.
 
@@ -230,41 +230,41 @@ Table 3. List of key schemes which are used for session keys depending on the pr
 
 Session keys must be accessible by certain Polkadot Host APIs defined in Appendix [Appendix B](chap-host-api.html). Session keys are *not* meant to control the majority of the users’ funds and should only be used for their intended purpose.
 
-#### [](#sect-staking-funds)[A.1.4.1. Holding and staking funds](#sect-staking-funds)
+#### A.1.4.1. Holding and staking funds {#sect-staking-funds}
 
 |     |     |
 |-----|-----|
 |     | TBH |
 
-#### [](#sect-creating-controller-key)[A.1.4.2. Creating a Controller key](#sect-creating-controller-key)
+#### A.1.4.2. Creating a Controller key {#sect-creating-controller-key}
 
 |     |     |
 |-----|-----|
 |     | TBH |
 
-#### [](#sect-designating-proxy)[A.1.4.3. Designating a proxy for voting](#sect-designating-proxy)
+#### A.1.4.3. Designating a proxy for voting {#sect-designating-proxy}
 
 |     |     |
 |-----|-----|
 |     | TBH |
 
-#### [](#sect-controller-settings)[A.1.4.4. Controller settings](#sect-controller-settings)
+#### A.1.4.4. Controller settings {#sect-controller-settings}
 
 |     |     |
 |-----|-----|
 |     | TBH |
 
-#### [](#sect-certifying-keys)[A.1.4.5. Certifying keys](#sect-certifying-keys)
+#### A.1.4.5. Certifying keys {#sect-certifying-keys}
 
 Due to security considerations and Runtime upgrades, the session keys are supposed to  be changed regularly. As such, the new session keys need to be certified by a controller key before putting them in use. The controller only needs to create a certificate by signing a session public key and broadcasting this certificate via an extrinsic. \[TODO: spec the detail of the data structure of the certificate etc.\]
 
-## [](#chapter-encoding)[A.2. Auxiliary Encodings](#chapter-encoding)
+## A.2. Auxiliary Encodings {#chapter-encoding}
 
 Definition 181. [Unix Time](id-cryptography-encoding.html#defn-unix-time)
 
 By **Unix time**, we refer to the unsigned, little-endian encoded 64-bit integer which stores the number of **milliseconds** that have elapsed since the Unix epoch, that is the time 00:00:00 UTC on 1 January 1970, minus leap seconds. Leap seconds are ignored, and every day is treated as if it contained exactly 86’400 seconds.
 
-### [](#id-binary-enconding)[A.2.1. Binary Enconding](#id-binary-enconding)
+### A.2.1. Binary Enconding {#id-binary-enconding}
 
 Definition 182. [Sequence of Bytes](id-cryptography-encoding.html#defn-byte-sequence)
 
@@ -324,7 +324,7 @@ Definition 185. [UINT32](id-cryptography-encoding.html#defn-uint32)
 
 By **UINT32** we refer to a non-negative integer stored in a byte array of length ${4}$ using little-endian encoding format.
 
-### [](#sect-scale-codec)[A.2.2. SCALE Codec](#sect-scale-codec)
+### A.2.2. SCALE Codec {#sect-scale-codec}
 
 The Polkadot Host uses *Simple Concatenated Aggregate Little-Endian” (SCALE) codec* to encode byte arrays as well as other data structures. SCALE provides a canonical encoding to produce consistent hash values across their implementation, including the Merkle hash proof for the State Storage.
 
@@ -447,7 +447,7 @@ Definition 197. [Empty](id-cryptography-encoding.html#defn-scale-empty)
 
 The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for an empty type is defined to a byte array of zero length and depicted as $\phi$.
 
-#### [](#sect-sc-length-and-compact-encoding)[A.2.2.1. Length and Compact Encoding](#sect-sc-length-and-compact-encoding)
+#### A.2.2.1. Length and Compact Encoding {#sect-sc-length-and-compact-encoding}
 
 SCALE Length encoding is used to encode integer numbers of variying sizes prominently in an encoding length of arrays:
 
@@ -489,7 +489,7 @@ $$
 {{k}_{{1}}^{{7}}}\ldots{{k}_{{1}}^{{3}}}{{k}_{{1}}^{{2}}}\:={m}-{4}
 $$
 
-### [](#id-hex-encoding)[A.2.3. Hex Encoding](#id-hex-encoding)
+### A.2.3. Hex Encoding {#id-hex-encoding}
 
 Practically, it is more convenient and efficient to store and process data which is stored in a byte array. On the other hand, the trie keys are broken into 4-bits nibbles. Accordingly, we need a method to encode sequences of 4-bits nibbles into byte arrays canonically. To this aim, we define hex encoding function $\text{Enc}{\left(\text{HE}\right)}{\left(\text{PK}\right)}$ as follows:
 
@@ -501,7 +501,7 @@ $$
 \text{Enc}_{{\text{HE}}}{\left(\text{PK}\right)}\:={\left\lbrace\begin{matrix}\text{Nibbles}_{{4}}&->&{\mathbb{{B}}}\\\text{PK}={\left({k}_{{1}},\ldots{k}_{{n}}\right)}&->&{\left\lbrace\begin{matrix}{\left({16}{k}_{{1}}+{k}_{{2}},\ldots,{16}{k}_{{{2}{i}-{1}}}+{k}_{{{2}{i}}}\right)}&{n}={2}{i}\\{\left({k}_{{1}},{16}{k}_{{2}}+{k}_{{3}},\ldots,{16}{k}_{{{2}{i}}}+{k}_{{{2}{i}+{1}}}\right)}&{n}={2}{i}+{1}\end{matrix}\right.}\end{matrix}\right.}
 $$
 
-## [](#chapter-genesis)[A.3. Genesis State](#chapter-genesis)
+## A.3. Genesis State {#chapter-genesis}
 
 The genesis state is a set of key-value pairs representing the initial state of the Polkadot state storage. It can be retrieved from [the Polkadot repository](https://github.com/paritytech/polkadot/tree/master/node/service/chain-specs). While each of those key-value pairs offers important identifiable information to the Runtime, to the Polkadot Host they are a transparent set of arbitrary chain- and network-dependent keys and values. The only exception to this are the `:code` ([Section 2.6.2](chap-state.html#sect-loading-runtime-code)) and `:heappages` ([Section 2.6.3.1](chap-state.html#sect-memory-management)) keys, which are used by the Polkadot Host to initialize the WASM environment and its Runtime. The other keys and values are unspecified and solely depend on the chain and respectively its corresponding Runtime. On initialization the data should be inserted into the state storage with the Host API ([Section B.2.1](chap-host-api.html#sect-storage-set)).
 
@@ -519,9 +519,9 @@ The Polkadot genesis header is a data structure conforming to block header forma
 | `extrinsics_root`  | *0*                                                                                                                                 |
 | `digest`           | *0*                                                                                                                                 |
 
-## [](#chapter-erasure-encoding)[A.4. Erasure Encoding](#chapter-erasure-encoding)
+## A.4. Erasure Encoding {#chapter-erasure-encoding}
 
-### [](#sect-erasure-encoding)[A.4.1. Erasure Encoding](#sect-erasure-encoding)
+### A.4.1. Erasure Encoding {#sect-erasure-encoding}
 
 |     |                                               |
 |-----|-----------------------------------------------|

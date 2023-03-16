@@ -2,7 +2,7 @@
 title: Weights
 ---
 
-## [](#id-motivation)[10.1. Motivation](#id-motivation)
+## 10.1. Motivation {#id-motivation}
 
 The Polkadot network, like any other permissionless system, needs to implement a mechanism to measure and to limit the usage in order to establish an economic incentive structure, to prevent the network overload, and to mitigate DoS vulnerabilities. In particular, Polkadot enforces a limited time-window for block producers to create a block, including limitations on block size, which can make the selection and execution of certain extrinsics too expensive and decelerate the network.
 
@@ -14,7 +14,7 @@ Additionally, Polkadot introduces a specified block ratio (as defined in [Sectio
 
 To begin, we introduce in [Section 10.2](id-weights.html#sect-assumptions) the assumption upon which the Polkadot transaction weight system is designed. In [Section 10.2.1](id-weights.html#sect-limitations), we discuss the limitation Polkadot needs to enforce on the block size. In [Section 10.3](id-weights.html#sect-runtime-primitives), we describe in detail the procedure upon which the weight of any transaction should be calculated. In [Section 10.5](id-weights.html#sect-practical-examples), we present how we apply this procedure to compute the weight of particular runtime functions.
 
-## [](#sect-assumptions)[10.2. Assumptions](#sect-assumptions)
+## 10.2. Assumptions {#sect-assumptions}
 
 In this section, we define the concept of weight and we discuss the considerations that need to be accounted for when assigning weight to transactions. These considerations are essential in order for the weight system to deliver its fundamental mission, i.e. the fair distribution of network resources and preventing a network overload. In this regard, weights serve as an indicator on whether a block is considered full and how much space is left for remaining, pending extrinsics. Extrinsics which require too many resources are discarded. More formally, the weight system should:
 
@@ -72,7 +72,7 @@ $$
 
 Nonetheless, ${\mathcal{{{W}}}}{\left({E}\right)}$ can be manipulated depending on the priority of ${E}$ the chain is supposed to endorse.
 
-### [](#sect-limitations)[10.2.1. Limitations](#sect-limitations)
+### 10.2.1. Limitations {#sect-limitations}
 
 In this section we discuss how applying the limitation defined in [Definition 153](id-weights.html#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition 155](id-weights.html#defn-block-weight):
 
@@ -92,13 +92,13 @@ $$
 
 The weights must fulfill the requirements as noted by the fundamentals and limitations, and can be assigned as the author sees fit. As a simple example, consider a maximum block weight of 1’000’000’000, an available ratio of 75% and a targeted transaction throughput of 500 transactions, we could assign the (average) weight for each transaction at about 1’500’000. Block producers have economic incentive to include as many extrinsics as possible (without exceeding limitations) into a block before reaching the targeted block time. Weights give indicators to block producers on which extrinsics to include in order to reach the blocks fullest potential.
 
-## [](#sect-runtime-primitives)[10.3. Calculation of the weight function](#sect-runtime-primitives)
+## 10.3. Calculation of the weight function {#sect-runtime-primitives}
 
 In order to calculate weight of block ${B}$, ${\mathcal{{{W}}}}{\left({B}\right)}$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as loops, I/O operations, and data manipulation. Subsequently the performance and execution time of each part will be evaluated based on variety of input parameters. Based on those observations, weights are assigned Runtime functions or parameters which contribute to long execution times. These sub component of the code are discussed in [Section 10.4.1](id-weights.html#sect-primitive-types).
 
 The general algorithm to calculate ${\mathcal{{{W}}}}{\left({E}\right)}$ is described in the [Section 10.4](id-weights.html#sect-benchmarking).
 
-## [](#sect-benchmarking)[10.4. Benchmarking](#sect-benchmarking)
+## 10.4. Benchmarking {#sect-benchmarking}
 
 Calculating the extrinsic weight solely based on theoretical complexity of the underlying implementation proves to be too complicated and unreliable at the same time. Certain decisions in the source code architecture, internal communication within the Runtime or other design choices could add enough overhead to make the asymptotic complexity practically meaningless.
 
@@ -108,7 +108,7 @@ In order to select useful parameters, the Runtime functions have to be analyzed 
 
 The Practical Examples ([Section 10.5](id-weights.html#sect-practical-examples)) covers the analysis process and the implementation of preliminary work in more detail.
 
-### [](#sect-primitive-types)[10.4.1. Primitive Types](#sect-primitive-types)
+### 10.4.1. Primitive Types {#sect-primitive-types}
 
 The Runtime reuses components, known as "primitives", to interact with the state storage. The execution cost of those primitives can be measured and a weight should be applied for each occurrence within the Runtime code.
 
@@ -131,7 +131,7 @@ It depends on the functionality of the Runtime module (or its sub-processes, rat
 
 Those lower level types get abstracted over in each individual Runtime module using the `decl_storage!` macro. Therefore, each module specifies its own types that are used as input and output values. The abstractions do give indicators on what operations must be closely observed and where potential performance penalties and attack vectors are possible.
 
-#### [](#sect-primitive-types-considerations)[10.4.1.1. Considerations](#sect-primitive-types-considerations)
+#### 10.4.1.1. Considerations {#sect-primitive-types-considerations}
 
 The storage layout is mostly the same for every primitive type, primarily differentiated by using special prefixes for the storage key. Big differences arise on how the primitive types are used in the Runtime function, on whether single values or entire datasets are being worked on. Single value operations are generally quite cheap and its execution time does not vary depending on the data that’s being processed. However, excessive overhead can appear when I/O operations are executed repeatedly, such as in loops. Especially, when the amount of loop iterations can be influenced by the caller of the function or by certain conditions in the state storage.
 
@@ -149,7 +149,7 @@ Definition 156. Maximum Value
 
 What the maximum value should be really depends on the functionality that the Runtime function is trying to provide. If the choice for that value is not obvious, then it’s advised to run benchmarks on a big range of values and pick a conservative value below the `targeted time per block` limit as described in section [Section 10.2.1](id-weights.html#sect-limitations).
 
-### [](#id-parameters)[10.4.2. Parameters](#id-parameters)
+### 10.4.2. Parameters {#id-parameters}
 
 The inputs parameters highly vary depending on the Runtime function and must therefore be carefully selected. The benchmarks should use input parameters which will most likely be used in regular cases, as intended by the authors, but must also consider worst case scenarios and inputs which might decelerate or heavily impact performance of the function. The input parameters should be randomized in order to cause various effects in behaviors on certain values, such as memory relocations and other outcomes that can impact performance.
 
@@ -157,27 +157,27 @@ It’s not possible to benchmark every single value. However, one should select 
 
 Additionally, given the distinction theoretical and practical usage, the author reserves the right to make adjustments to the input parameters and assigned weights according to the observed behavior of the actual, real-world network.
 
-#### [](#id-weight-refunds)[10.4.2.1. Weight Refunds](#id-weight-refunds)
+#### 10.4.2.1. Weight Refunds {#id-weight-refunds}
 
 When assigning the final weight, the worst case scenario of each runtime function should be used. The runtime can then additional "refund" the amount of weights which were overestimated once the runtime function is actually executed.
 
 The Polkadot runtime only returns weights if the difference between the assigned weight and the actual weight calculated during execution is greater than 20%.
 
-### [](#id-storage-io-cost)[10.4.3. Storage I/O cost](#id-storage-io-cost)
+### 10.4.3. Storage I/O cost {#id-storage-io-cost}
 
 It is advised to benchmark the raw I/O operations of the database and assign "base weights" for each I/O operation type, such as insertion, deletion, querying, etc. When a runtime function is executed, the runtime can then add those base weights of each used operation in order to calculate the final weight.
 
-### [](#id-environment)[10.4.4. Environment](#id-environment)
+### 10.4.4. Environment {#id-environment}
 
 The benchmarks should be executed on clean systems without interference of other processes or software. Additionally, the benchmarks should be executed on multiple machines with different system resources, such as CPU performance, CPU cores, RAM and storage speed.
 
-## [](#sect-practical-examples)[10.5. Practical examples](#sect-practical-examples)
+## 10.5. Practical examples {#sect-practical-examples}
 
 This section walks through Runtime functions available in the Polkadot Runtime to demonstrate the analysis process as described in [Section 10.4.1](id-weights.html#sect-primitive-types).
 
 In order for certain benchmarks to produce conditions where resource heavy computation or excessive I/O can be observed, the benchmarks might require some preliminary work on the environment, since those conditions cannot be created with simply selected parameters. The analysis process shows indicators on how the preliminary work should be implemented.
 
-### [](#id-practical-example-1-request_judgement)[10.5.1. Practical Example \#1: `request_judgement`](#id-practical-example-1-request_judgement)
+### 10.5.1. Practical Example \#1: `request_judgement` {#id-practical-example-1-request_judgement}
 
 In Polkadot, accounts can save information about themselves on-chain, known as the "Identity Info". This includes information such as display name, legal name, email address and so on. Polkadot offers a set of trusted registrars, entities elected by a Polkadot public referendum, which can verify the specified contact addresses of the identities, such as Email, and vouch on whether the identity actually owns those accounts. This can be achieved, for example, by sending a challenge to the specified address and requesting a signature as a response. The verification is done off-chain, while the final judgement is saved onchain, directly in the corresponding Identity Info. It’s also note worthy that Identity Info can contain additional fields, set manually by the corresponding account holder.
 
@@ -193,7 +193,7 @@ The function `request_judgement` from the `identity` pallet allows users to requ
 
 Studying this function reveals multiple design choices that can impact performance, as it will be revealed by this analysis.
 
-#### [](#id-analysis)[10.5.1.1. Analysis](#id-analysis)
+#### 10.5.1.1. Analysis {#id-analysis}
 
 First, it fetches a list of current registrars from storage and then searches that list for the specified registrar index.
 
@@ -230,7 +230,7 @@ T::Currency::reserve(&sender, registrar.fee)?;
 Self::deposit_event(RawEvent::JudgementRequested(sender, reg_index));
 ```
 
-#### [](#sect-considerations)[10.5.1.2. Considerations](#sect-considerations)
+#### 10.5.1.2. Considerations {#sect-considerations}
 
 The following points must be considered:
 
@@ -242,7 +242,7 @@ The following points must be considered:
 
 - The Identity Info can contain only a few fields or many. It is legitimate to introduce additional weights for changes the owner/sender has influence over, such as the additional fields in the Identity Info.
 
-#### [](#id-benchmarking-framework)[10.5.1.3. Benchmarking Framework](#id-benchmarking-framework)
+#### 10.5.1.3. Benchmarking Framework {#id-benchmarking-framework}
 
 The Polkadot Runtime specifies the `MaxRegistrars` constant, which will prevent the list of registrars of reaching an undesired length. This value should have some influence on the benchmarking process.
 
@@ -283,9 +283,9 @@ where
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
-### [](#sect-practical-example-payout-stakers)[10.5.2. Practical Example \#2: `payout_stakers`](#sect-practical-example-payout-stakers)
+### 10.5.2. Practical Example \#2: `payout_stakers` {#sect-practical-example-payout-stakers}
 
-#### [](#id-analysis-2)[10.5.2.1. Analysis](#id-analysis-2)
+#### 10.5.2.1. Analysis {#id-analysis-2}
 
 The function `payout_stakers` from the `staking` Pallet can be called by a single account in order to payout the reward for all nominators who back a particular validator. The reward also covers the validator’s share. This function is interesting because it iterates over a range of nominators, which varies, and does I/O operation for each of them.
 
@@ -353,7 +353,7 @@ for nominator in exposure.others.iter() {
 }
 ```
 
-#### [](#considerations-1)[10.5.2.2. Considerations](#considerations-1)
+#### 10.5.2.2. Considerations {#considerations-1}
 
 The following points must be considered:
 
@@ -361,7 +361,7 @@ The following points must be considered:
 
 - Looping through a list of nominators and creating I/O operations for each increases execution time. The Runtime fetches up to 64 nominators.
 
-#### [](#id-benchmarking-framework-2)[10.5.2.3. Benchmarking Framework](#id-benchmarking-framework-2)
+#### 10.5.2.3. Benchmarking Framework {#id-benchmarking-framework-2}
 
 Definition 157. History Depth
 
@@ -408,11 +408,11 @@ where
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
-### [](#id-practical-example-3-transfer)[10.5.3. Practical Example \#3: `transfer`](#id-practical-example-3-transfer)
+### 10.5.3. Practical Example \#3: `transfer` {#id-practical-example-3-transfer}
 
 The ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ function of the `balances` module is designed to move the specified balance by the sender to the receiver.
 
-#### [](#id-analysis-3)[10.5.3.1. Analysis](#id-analysis-3)
+#### 10.5.3.1. Analysis {#id-analysis-3}
 
 The source code of this function is quite short:
 
@@ -433,7 +433,7 @@ However, one need to pay close attention to the property `AllowDeath` and to how
 
 - If recipient account has no balance, the transfer also needs to create the recipient account.
 
-#### [](#considerations-2)[10.5.3.2. Considerations](#considerations-2)
+#### 10.5.3.2. Considerations {#considerations-2}
 
 Specific parameters can could have a significant impact for this specific function. In order to trigger the two behaviors mentioned above, the following parameters are selected:
 
@@ -464,7 +464,7 @@ Executing a benchmark for each balance increment within the balance range for ea
 
 The parameters itself do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights.html#algo-benchmark-transfer).
 
-#### [](#id-benchmarking-framework-3)[10.5.3.3. Benchmarking Framework](#id-benchmarking-framework-3)
+#### 10.5.3.3. Benchmarking Framework {#id-benchmarking-framework-3}
 
 The benchmarking implementation for the Polkadot Runtime function ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ is defined as follows (starting with the Main function):
 
@@ -495,11 +495,11 @@ where
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
-### [](#id-practical-example-4-withdraw_unbounded)[10.5.4. Practical Example \#4: `withdraw_unbounded`](#id-practical-example-4-withdraw_unbounded)
+### 10.5.4. Practical Example \#4: `withdraw_unbounded` {#id-practical-example-4-withdraw_unbounded}
 
 The `withdraw_unbonded` function of the `staking` module is designed to move any unlocked funds from the staking management system to be ready for transfer. It contains some operations which have some I/O overhead.
 
-#### [](#id-analysis-4)[10.5.4.1. Analysis](#id-analysis-4)
+#### 10.5.4.1. Analysis {#id-analysis-4}
 
 Similarly to the `payout_stakers` function ([Section 10.5.2](id-weights.html#sect-practical-example-payout-stakers)), this function fetches the Ledger which contains information about the stash, such as bonded balance and unlocking balance (balance that will eventually be freed and can be withdrawn).
 
@@ -562,7 +562,7 @@ let value = old_total - ledger.total;
 Self::deposit_event(RawEvent::Withdrawn(stash, value));
 ```
 
-#### [](#id-parameters-2)[10.5.4.2. Parameters](#id-parameters-2)
+#### 10.5.4.2. Parameters {#id-parameters-2}
 
 The following parameters are selected:
 
@@ -572,7 +572,7 @@ The following parameters are selected:
 
 This benchmark does not require complex parameters. The values are used solely for account generation.
 
-#### [](#considerations-3)[10.5.4.3. Considerations](#considerations-3)
+#### 10.5.4.3. Considerations {#considerations-3}
 
 Two important points in the `withdraw_unbonded` function must be considered. The benchmarks should trigger both conditions
 
@@ -580,7 +580,7 @@ Two important points in the `withdraw_unbonded` function must be considered. The
 
 - If the stash gets killed, then multiple, repetitive deletion calls are performed in the storage.
 
-#### [](#id-benchmarking-framework-4)[10.5.4.4. Benchmarking Framework](#id-benchmarking-framework-4)
+#### 10.5.4.4. Benchmarking Framework {#id-benchmarking-framework-4}
 
 The benchmarking implementation for the Polkadot Runtime function `withdraw_unbonded` is defined as follows:
 
@@ -623,11 +623,11 @@ where
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
-## [](#id-fees)[10.6. Fees](#id-fees)
+## 10.6. Fees {#id-fees}
 
 Block producers charge a fee in order to be economically sustainable. That fee must always be covered by the sender of the transaction. Polkadot has a flexible mechanism to determine the minimum cost to include transactions in a block.
 
-### [](#sect-fee-calculation)[10.6.1. Fee Calculation](#sect-fee-calculation)
+### 10.6.1. Fee Calculation {#sect-fee-calculation}
 
 Polkadot fees consists of three parts:
 
@@ -641,7 +641,7 @@ The final fee can be summarized as:
 
 ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{f}{e}{e}&={b}{a}{s}{e}${f}{e}{e}$ &{} + length${\left\lbracenull\right\rbrace}+\le{n}\gt{h}$ of${t}{r}{a}{n}{s}{a}{c}{t}{i}{o}{n}$ in${b}{y}{t}{e}{s}\times\le{n}\gt{h}$ fee $ &{} + weight${\left\lbracenull\right\rbrace}+{w}{e}{i}{g}{h}{t}$ to$ fee $ \end{aligned}$
 
-### [](#id-definitions-in-polkadot)[10.6.2. Definitions in Polkadot](#id-definitions-in-polkadot)
+### 10.6.2. Definitions in Polkadot {#id-definitions-in-polkadot}
 
 The Polkadot Runtime defines the following values:
 
@@ -655,7 +655,7 @@ The Polkadot Runtime defines the following values:
 
   A weight of 10’000 (the smallest non-zero weight) is mapped to ${\frac{{{1}}}{{{10}}}}$ of 100 uDOT. This fee will never exceed the max size of an unsigned 128 bit integer.
 
-### [](#id-fee-multiplier)[10.6.3. Fee Multiplier](#id-fee-multiplier)
+### 10.6.3. Fee Multiplier {#id-fee-multiplier}
 
 Polkadot can add a additional fee to transactions if the network becomes too busy and starts to decelerate the system. This fee can create an incentive to avoid the production of low priority or insignificant transactions. In contrast, those additional fees will decrease if the network calms down and it can execute transactions without much difficulties.
 
@@ -667,7 +667,7 @@ $$
 final fee = fee \times Fee Multiplier
 $$
 
-#### [](#id-update-multiplier)[10.6.3.1. Update Multiplier](#id-update-multiplier)
+#### 10.6.3.1. Update Multiplier {#id-update-multiplier}
 
 The `Update Multiplier` defines how the multiplier can change. The Polkadot Runtime internally updates the multiplier after each block according the following formula:
 

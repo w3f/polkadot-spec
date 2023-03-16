@@ -2,15 +2,15 @@
 title: Block Production
 ---
 
-## [](#id-introduction-3)[5.1. Introduction](#id-introduction-3)
+## 5.1. Introduction {#id-introduction-3}
 
 The Polkadot Host uses BABE protocol for block production. It is designed based on Ouroboros praos . BABE execution happens in sequential non-overlapping phases known as an ***epoch***. Each epoch on its turn is divided into a predefined number of slots. All slots in each epoch are sequentially indexed starting from 0. At the beginning of each epoch, the BABE node needs to run [Block-Production-Lottery](sect-block-production.html#algo-block-production-lottery) to find out in which slots it should produce a block and gossip to the other block producers. In turn, the block producer node should keep a copy of the block tree and grow it as it receives valid blocks from other block producers. A block producer prunes the tree in parallel by eliminating branches that do not include the most recent finalized blocks ([Definition 5](chap-state.html#defn-pruned-tree)).
 
-### [](#id-block-producer)[5.1.1. Block Producer](#id-block-producer)
+### 5.1.1. Block Producer {#id-block-producer}
 
 A **block producer**, noted by ${\mathcal{{P}}}_{{j}}$, is a node running the Polkadot Host which is authorized to keep a transaction queue and which it gets a turn in producing blocks.
 
-### [](#id-block-authoring-session-key-pair)[5.1.2. Block Authoring Session Key Pair](#id-block-authoring-session-key-pair)
+### 5.1.2. Block Authoring Session Key Pair {#id-block-authoring-session-key-pair}
 
 **Block authoring session key pair** ${\left({s}{{k}_{{j}}^{{s}}},{p}{{k}_{{j}}^{{s}}}\right)}$ is an SR25519 key pair which the block producer ${\mathcal{{P}}}_{{j}}$ signs by their account key ([Definition 177](id-cryptography-encoding.html#defn-account-key)) and is used to sign the produced block as well as to compute its lottery values in [Block-Production-Lottery](sect-block-production.html#algo-block-production-lottery).
 
@@ -50,7 +50,7 @@ where
 
 [TABLE]
 
-## [](#sect-block-production-lottery)[5.2. Block Production Lottery](#sect-block-production-lottery)
+## 5.2. Block Production Lottery {#sect-block-production-lottery}
 
 The babe constant ([Definition 59](sect-block-production.html#defn-babe-constant)) is initialized at genesis to the value returned by calling `BabeApi_configuration` ([Section C.11.1](chap-runtime-api.html#sect-rte-babeapi-epoch)). For efficiency reasons, it is generally updated by the Runtime through the *next config data* consensus message in the digest ([Definition 11](chap-state.html#defn-digest)) of the first block of an epoch for the next epoch.
 
@@ -77,7 +77,7 @@ where ${A}_{{w}}$ is the total sum of all authority weights in the authority set
 
 The numbers should be treated as 64-bit rational numbers.
 
-### [](#id-primary-block-production-lottery)[5.2.1. Primary Block Production Lottery](#id-primary-block-production-lottery)
+### 5.2.1. Primary Block Production Lottery {#id-primary-block-production-lottery}
 
 A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should run the $\text{Block-Production-Lottery}$ algorithm to identify the slots it is awarded. These are the slots during which the block producer is allowed to build a block. The session secret key, ${s}{k}$, is the block producer lottery secret key and ${n}$ is the index of the epoch for whose slots the block producer is running the lottery.
 
@@ -121,7 +121,7 @@ ${t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'BABE'}\right)}$ ${t}_{{2}}\le
 
 The operators are defined in [Definition 176](id-cryptography-encoding.html#defn-strobe-operations), $\text{dleq_prove}$ in [Definition 172](id-cryptography-encoding.html#defn-vrf-dleq-prove). The computed outputs, ${o}$ and ${p}$, are included in the block Pre-Digest ([Definition 69](sect-block-production.html#defn-babe-header)).
 
-## [](#sect-slot-number-calculation)[5.3. Slot Number Calculation](#sect-slot-number-calculation)
+## 5.3. Slot Number Calculation {#sect-slot-number-calculation}
 
 It is imperative for the security of the network that each block producer correctly determines the current slot numbers at a given time by regularly estimating the local clock offset in relation to the network ([Definition 64](sect-block-production.html#defn-relative-synchronization)).
 
@@ -182,7 +182,7 @@ A is an interval at which each validator (re-)evaluates its local clock offsets.
 
 Figure 1. An exemplary result of Median Algorithm in first sync epoch with ${s}_{\text{cq}}={9}$ and ${k}={1}$.
 
-## [](#block-production)[5.4. Production Algorithm](#block-production)
+## 5.4. Production Algorithm {#block-production}
 
 Throughout each epoch, each block producer should run [Invoke-Block-Authoring](sect-block-production.html#algo-block-production) to produce blocks during the slots it has been awarded during that epoch. The produced block needs to carry the *Pre-Digest* ([Definition 69](sect-block-production.html#defn-babe-header)) as well as the *block signature* ([Definition 70](sect-block-production.html#defn-block-signature)) as Pre-Runtime and Seal digest items.
 
@@ -227,7 +227,7 @@ $$
 
 in which, ${t}={5}$ is the seal digest identifier and $\text{id}{\left(\text{BABE}\right)}$ is the BABE consensus engine unique identifier ([Definition 11](chap-state.html#defn-digest)). The Seal digest item is referred to as the **BABE Seal**.
 
-## [](#sect-epoch-randomness)[5.5. Epoch Randomness](#sect-epoch-randomness)
+## 5.5. Epoch Randomness {#sect-epoch-randomness}
 
 At the beginning of each epoch, ${\mathcal{{E}}}_{{n}}$ the host will receive the randomness seed ${\mathcal{{R}}}_{{{\mathcal{{E}}}_{{{n}+{1}}}}}$ ([Definition 71](sect-block-production.html#defn-epoch-randomness)) necessary to participate in the block production lottery in the next epoch ${\mathcal{{E}}}_{{{n}+{1}}}$ from the Runtime, through the consensus message ([Definition 58](sect-block-production.html#defn-consensus-message-babe)) in the digest of the first block.
 
@@ -235,7 +235,7 @@ Definition 71. [Randomness Seed](sect-block-production.html#defn-epoch-randomnes
 
 For epoch ${\mathcal{{E}}}$, there is a 32-byte ${\mathcal{{R}}}_{{{\mathcal{{E}}}}}$ computed based on the previous epochs VRF outputs. For ${\mathcal{{E}}}_{{0}}$ and ${\mathcal{{E}}}_{{1}}$, the randomness seed is provided in the genesis state ([Section C.11.1](chap-runtime-api.html#sect-rte-babeapi-epoch)). For any further epochs, the randomness is retrieved from the consensus message ([Definition 58](sect-block-production.html#defn-consensus-message-babe)).
 
-## [](#sect-verifying-authorship)[5.6. Verifying Authorship Right](#sect-verifying-authorship)
+## 5.6. Verifying Authorship Right {#sect-verifying-authorship}
 
 When a Polkadot node receives a produced block, it needs to verify if the block producer was entitled to produce the block in the given slot by running [Verify-Authorship-Right](sect-block-production.html#algo-verify-authorship-right). [Verify-Slot-Winner](sect-block-production.html#algo-verify-slot-winner) runs as part of the verification process, when a node is importing a block.
 
@@ -273,7 +273,7 @@ where
 
 5.  ${T}_{{{\mathcal{{E}}}_{{n}}}}$ is the winning threshold as defined in [Definition 60](sect-block-production.html#defn-winning-threshold).
 
-## [](#sect-block-building)[5.7. Block Building Process](#sect-block-building)
+## 5.7. Block Building Process {#sect-block-building}
 
 The block building process is triggered by [Invoke-Block-Authoring](sect-block-production.html#algo-block-production) of the consensus engine which in turn runs [Build-Block](sect-block-production.html#algo-build-block).
 

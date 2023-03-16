@@ -2,11 +2,11 @@
 title: Extrinsics
 ---
 
-## [](#id-introduction-5)[9.1. Introduction](#id-introduction-5)
+## 9.1. Introduction {#id-introduction-5}
 
 An extrinsic is a SCALE encoded array consisting of a version number, signature, and varying data types indicating the resulting Runtime function to be called, including the parameters required for that function to be executed.
 
-## [](#id-preliminaries-3)[9.2. Preliminaries](#id-preliminaries-3)
+## 9.2. Preliminaries {#id-preliminaries-3}
 
 Definition 142. Extrinsic
 
@@ -24,9 +24,9 @@ ${T}_{{v}}$ is a 8-bit bitfield and defines the extrinsic version. The required 
 
 The most significant bit of ${T}_{{v}}$ indicates whether the transaction is **signed** (${1}$) or **unsigned** (${0}$). The remaining 7-bits represent the version number. As an example, for extrinsic format version 4, an signed extrinsic represents ${T}_{{v}}$ as `132` while a unsigned extrinsic represents it as `4`.
 
-## [](#id-extrinsics-body)[9.3. Extrinsics Body](#id-extrinsics-body)
+## 9.3. Extrinsics Body {#id-extrinsics-body}
 
-### [](#sect-version-four)[9.3.1. Version 4](#sect-version-four)
+### 9.3.1. Version 4 {#sect-version-four}
 
 Version 4 of the Polkadot extrinsic format is defined as follows:
 
@@ -111,7 +111,7 @@ The value of ${m}_{{i}}$ varies for each Polkadot module, since every module off
 
 ${B}{a}{l}{a}{n}{c}{e}{s}_{{i}}\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{0},&\text{transfer}$ 1, & \text{set_balance} ${2},&\text{force_transfer}$ 3, & \text{transfer_keep_alive} $\ldots&{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}$
 
-### [](#id-mortality)[9.3.2. Mortality](#id-mortality)
+### 9.3.2. Mortality {#id-mortality}
 
 Definition 149. Extrinsic Mortality
 
@@ -131,11 +131,11 @@ $$
 
 ${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$ are then included in the extrinsic, as clarified in [Definition 146](id-extrinsics.html#defn-extra-data), in the SCALE encoded form of ${T}_{mor}$ ([Section 9.3.2.2](id-extrinsics.html#sect-mortality-encoding)). Polkadot validators can use ${M}_{{{p}{h}{a}}}$ to figure out the block hash included in the payload, which will therefore result in a valid signature if the extrinsic is within the specified period or an invalid signature if the extrinsic "died".
 
-#### [](#id-example)[9.3.2.1. Example](#id-example)
+#### 9.3.2.1. Example {#id-example}
 
 The extrinsic author choses ${M}_{{{p}{e}{r}}}={256}$ at block `10'000`, resulting with ${M}_{{{p}{h}{a}}}={16}$. The extrinsic is then valid for blocks ranging from `10'000` to `10'256`.
 
-#### [](#sect-mortality-encoding)[9.3.2.2. Encoding](#sect-mortality-encoding)
+#### 9.3.2.2. Encoding {#sect-mortality-encoding}
 
 ${T}_{mor}$ refers to the SCALE encoded form of type ${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$. ${T}_{mor}$ is the size of two bytes if the extrinsic is considered mortal, or simply one bytes with the value equal to zero if the extrinsic is considered immortal.
 

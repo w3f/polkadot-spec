@@ -6,7 +6,7 @@ The runtime metadata structure contains all the information necessary on how to 
 
 The metadata of a runtime is provided by a call to `Metadata_metadata` ([Section C.5.1](chap-runtime-api.html#sect-rte-metadata-metadata)) and is returned as a scale encoded ([Section A.2.2](id-cryptography-encoding.html#sect-scale-codec)) binary blob. How to interpret and decode this data is described in this chapter.
 
-## [](#sect-rtm-structure)[12.1. Structure](#sect-rtm-structure)
+## 12.1. Structure {#sect-rtm-structure}
 
 The Runtime Metadata is a datastructure of the following format:
 
@@ -168,7 +168,7 @@ where
 
 seq: - id: num_variants type: scale::compact_int - id: variants type: variant repeat: expr repeat-expr: num_variants.value types: variant: seq: - id: name type: scale::string - id: composite type: metadata_type_fields - id: index type: u1 - id: docs type: scale::string_list
 
-## [](#sect-rtm-pallet-metadata)[12.2. Pallet Metadata](#sect-rtm-pallet-metadata)
+## 12.2. Pallet Metadata {#sect-rtm-pallet-metadata}
 
 All the metadata about a pallet, part of the main structure ([Section 12.1](sect-metadata.html#sect-rtm-structure)) and of the following format:
 
@@ -289,7 +289,7 @@ where
 
 seq: - id: name type: scale::string - id: type type: scale::compact_int - id: value type: scale::bytes - id: docs type: scale::string_list
 
-## [](#sect-rtm-extrinsic-metadata)[12.3. Extrinsic Metadata](#sect-rtm-extrinsic-metadata)
+## 12.3. Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
 
 The metadata about a pallets extrinsics, part of the main structure ([Section 12.1](sect-metadata.html#sect-rtm-structure)) and of the following format:
 

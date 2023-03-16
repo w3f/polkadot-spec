@@ -4,11 +4,11 @@ title: Overview
 
 The Polkadot Protocol differentiates between different classes of Polkadot Hosts. Each class differs in their trust roots and how active or passively they interact with the network.
 
-## [](#sect-client-light)[1.1. Light Client](#sect-client-light)
+## 1.1. Light Client {#sect-client-light}
 
 The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on recent state of the blockchain, and to add extrinsics (transactions). It does not maintain the full state, rather queries the full node on the latest finalized state and verifies the authenticity of the responses trustlessly. Details of specifications focused for Light Clients can be found in [Chapter 7](sect-lightclient.html).
 
-## [](#sect-node-full)[1.2. Full Node](#sect-node-full)
+## 1.2. Full Node {#sect-node-full}
 
 While the full node is still a mostly passive participant of the protocol, they follow the chain by receiving and verifying every block in the chain. It maintains full state of the blockchain by executing the extrinsics in blocks. Their role in consesus mechanism is limited to following the chain and not producing the blocks.
 
@@ -24,7 +24,7 @@ While the full node is still a mostly passive participant of the protocol, they 
 
   5.  The node should exchange neighbor packets ([Section 4.8.6.1](chap-networking.html#sect-grandpa-neighbor-msg)).
 
-## [](#sect-node-authoring)[1.3. Authoring Node](#sect-node-authoring)
+## 1.3. Authoring Node {#sect-node-authoring}
 
 The authoring node covers all the features of the full node but instead of just passivly following the protocol, it is an active participant, producing blocks and voting in Grandpa.
 
@@ -40,6 +40,6 @@ The authoring node covers all the features of the full node but instead of just 
 
   5.  Run the GRANDPA rounds protocol ([Chapter 6](sect-finality.html)).
 
-## [](#sect-node-relaying)[1.4. Relaying Node](#sect-node-relaying)
+## 1.4. Relaying Node {#sect-node-relaying}
 
 The relaying node covers all the features of the authoring node, but also participants in the availability and validity process to process new parachain blocks as described in [Chapter 8](chapter-anv.html).

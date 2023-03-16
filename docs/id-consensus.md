@@ -2,7 +2,7 @@
 title: Consensus
 ---
 
-## [](#id-babe-digest-messages)[11.1. BABE digest messages](#id-babe-digest-messages)
+## 11.1. BABE digest messages {#id-babe-digest-messages}
 
 The Runtime is required to provide the BABE authority list and randomness to the host via a consensus message in the header of the first block of each epoch.
 
