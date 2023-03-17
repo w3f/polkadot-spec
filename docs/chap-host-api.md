@@ -489,6 +489,8 @@ Interfaces for working with crypto related types from within the runtime.
 
 Cryptographic keys are stored in separate key stores based on their intended use case. The separate key stores are identified by a 4-byte ASCII **key type identifier**. The following known types are available:
 
+###### Table 4. Table of known key type identifiers {#tabl-key-type-ids}
+
 | Id   | Description                                |
 |------|--------------------------------------------|
 | acco | Key type for the controlling accounts      |
@@ -499,19 +501,17 @@ Cryptographic keys are stored in separate key stores based on their intended use
 | para | Key type for the Parachain Validator Key   |
 | asgn | Key type for the Parachain Assignment Key  |
 
-Table 4. Table of known key type identifiers
-
 ###### Definition 208. ECDSA Verify Error {#defn-ecdsa-verify-error}
 
 **EcdsaVerifyError** is a varying data type ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) that specifies the error type when using ECDSA recovery functionality. Following values are possible:
+
+###### Table 5. Table of error types in ECDSA recovery {#tabl-ecdsa-verify-error}
 
 | Id  | Description               |
 |-----|---------------------------|
 | 0   | Incorrect value of R or S |
 | 1   | Incorrect value of V      |
 | 2   | Invalid signature         |
-
-Table 5. Table of error types in ECDSA recovery
 
 ### B.4.1. `ext_crypto_ed25519_public_keys` {#id-ext_crypto_ed25519_public_keys}
 

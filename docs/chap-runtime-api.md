@@ -57,6 +57,8 @@ Arguments
 Return  
 - A datastructure of the following format:
 
+  ###### Table 6. Details of the version that the data type returns from the Runtime function. {#tabl-rt-core-version}
+
   | Name                  | Type                                                                  | Description                                     |
   |-----------------------|-----------------------------------------------------------------------|-------------------------------------------------|
   | `spec_name`           | String                                                                | Runtime identifier                              |
@@ -67,8 +69,6 @@ Return
   | `apis`                | ApiVersions ([Definition 216](chap-runtime-api.html#defn-rt-apisvec)) | List of supported APIs along with their version |
   | `transaction_version` | Unsigned 32-bit integer                                               | Version of the transaction format               |
   | `state_version`       | Unsigned 8-bit integer                                                | Version of the trie format                      |
-
-  Table 6. Details of the version that the data type returns from the Runtime function.
 
 ###### Definition 216. ApiVersions {#defn-rt-apisvec}
 
@@ -140,12 +140,12 @@ Return
 
 **ApplyExtrinsicResult** is a varying data type as defined in [Definition 191](id-cryptography-encoding.html#defn-result-type). This structure can contain multiple nested structures, indicating either module dispatch outcomes or transaction invalidity errors.
 
+###### Table 7. Possible values of varying data type *ApplyExtrinsicResult*. {#tabl-rte-apply-extrinsic-result}
+
 | **Id** | **Description**                                               | **Type**                                                                                                 |
 |--------|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
 | 0      | Outcome of dispatching the extrinsic.                         | *DispatchOutcome* ([Definition 218](chap-runtime-api.html#defn-rte-dispatch-outcome))                    |
 | 1      | Possible errors while checking the validity of a transaction. | *TransactionValidityError* ([Definition 221](chap-runtime-api.html#defn-rte-transaction-validity-error)) |
-
-Table 7. Possible values of varying data type *ApplyExtrinsicResult*.
 
 |     |                                                                                                                                                                                                                                                                                          |
 |-----|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -155,16 +155,18 @@ Table 7. Possible values of varying data type *ApplyExtrinsicResult*.
 
 **DispatchOutcome** is the varying data type as defined in [Definition 191](id-cryptography-encoding.html#defn-result-type).
 
+###### Table 8. Possible values of varying data type *DispatchOutcome*. {#tabl-rte-dispatch-outcome}
+
 | **Id** | **Description**                                    | **Type**                                                                          |
 |--------|----------------------------------------------------|-----------------------------------------------------------------------------------|
 | 0      | Extrinsic is valid and was submitted successfully. | None                                                                              |
 | 1      | Possible errors while dispatching the extrinsic.   | *DispatchError* ([Definition 219](chap-runtime-api.html#defn-rte-dispatch-error)) |
 
-Table 8. Possible values of varying data type *DispatchOutcome*.
-
 ###### Definition 219. DispatchError {#defn-rte-dispatch-error}
 
 **DispatchError** is a varying data type as defined in [Definition 188](id-cryptography-encoding.html#defn-varrying-data-type). Indicates various reasons why a dispatch call failed.
+
+###### Table 9. Possible values of varying data type *DispatchError*. {#tabl-rte-dispatch-error}
 
 | **Id** | **Description**              | **Type**                                                                                   |
 |--------|------------------------------|--------------------------------------------------------------------------------------------|
@@ -173,19 +175,17 @@ Table 8. Possible values of varying data type *DispatchOutcome*.
 | 2      | A bad origin.                | None                                                                                       |
 | 3      | A custom error in a module.  | *CustomModuleError* ([Definition 220](chap-runtime-api.html#defn-rte-custom-module-error)) |
 
-Table 9. Possible values of varying data type *DispatchError*.
-
 ###### Definition 220. CustomModuleError {#defn-rte-custom-module-error}
 
 **CustomModuleError** is a tuple appended after a possible error in as defined in [Definition 219](chap-runtime-api.html#defn-rte-dispatch-error).
+
+###### Table 10. Possible values of varying data type *CustomModuleError*. {#tabl-rte-custom-module-error}
 
 | **Name** | **Description**                                  | **Type**                                                                                                                                                                           |
 |----------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Index    | Module index matching the metadata module index. | Unsigned 8-bit integer.                                                                                                                                                            |
 | Error    | Module specific error value.                     | Unsigned 8-bit integer                                                                                                                                                             |
 | Message  | Optional error message.                          | Varying data type *Option* ([Definition 190](id-cryptography-encoding.html#defn-option-type)). The optional value is a SCALE encoded byte array containing a valid UTF-8 sequence. |
-
-Table 10. Possible values of varying data type *CustomModuleError*.
 
 |     |                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -195,16 +195,18 @@ Table 10. Possible values of varying data type *CustomModuleError*.
 
 **TransactionValidityError** is a varying data type as defined in [Definition 188](id-cryptography-encoding.html#defn-varrying-data-type). It indicates possible errors that can occur while checking the validity of a transaction.
 
+###### Table 11. Possible values of varying data type *TransactionValidityError*. {#tabl-rte-transaction-validity-error}
+
 | **Id** | **Description**                           | **Type**                                                                                    |
 |--------|-------------------------------------------|---------------------------------------------------------------------------------------------|
 | 0      | Transaction is invalid.                   | *InvalidTransaction* ([Definition 222](chap-runtime-api.html#defn-rte-invalid-transaction)) |
 | 1      | Transaction validity can’t be determined. | *UnknownTransaction* ([Definition 223](chap-runtime-api.html#defn-rte-unknown-transaction)) |
 
-Table 11. Possible values of varying data type *TransactionValidityError*.
-
 ###### Definition 222. InvalidTransaction {#defn-rte-invalid-transaction}
 
 **InvalidTransaction** is a varying data type as defined in [Definition 188](id-cryptography-encoding.html#defn-varrying-data-type) and specifies the invalidity of the transaction in more detail.
+
+###### Table 12. Possible values of varying data type *InvalidTransaction*. {#tabl-rte-invalid-transaction}
 
 | **Id** | **Description**                                                                                  | **Type**               | **Reject** |
 |--------|--------------------------------------------------------------------------------------------------|------------------------|------------|
@@ -219,19 +221,17 @@ Table 11. Possible values of varying data type *TransactionValidityError*.
 | 8      | An extrinsic with mandatory dispatch resulted in an error.                                       | None                   | Yes        |
 | 9      | A transaction with a mandatory dispatch (only inherents are allowed to have mandatory dispatch). | None                   | Yes        |
 
-Table 12. Possible values of varying data type *InvalidTransaction*.
-
 ###### Definition 223. UnknownTransaction {#defn-rte-unknown-transaction}
 
 **UnknownTransaction** is a varying data type as defined in [Definition 188](id-cryptography-encoding.html#defn-varrying-data-type) and specifies the unknown invalidity of the transaction in more detail.
+
+###### Table 13. Possible values of varying data type *UnknownTransaction*. {#tabl-rte-unknown-transaction}
 
 | **Id** | **Description**                                                                 | **Type**               | **Reject** |
 |--------|---------------------------------------------------------------------------------|------------------------|------------|
 | 0      | Could not lookup some information that is required to validate the transaction. | None                   | Yes        |
 | 1      | No validator found for the given unsigned transaction.                          | None                   | Yes        |
 | 2      | Any other custom unknown validity that is not covered by this type.             | Unsigned 8-bit integer | Yes        |
-
-Table 13. Possible values of varying data type *UnknownTransaction*.
 
 ### C.6.2. `BlockBuilder_finalize_block` {#defn-rt-blockbuilder-finalize-block}
 
@@ -305,9 +305,11 @@ Arguments
 
 - A byte array that contains the transaction.
 
-  Definition 224. [TransactionSource](chap-runtime-api.html#defn-transaction-source)
+  ###### Definition 224. TransactionSource {#defn-transaction-source}
 
   **TransactionSource** is an enum describing the source of a transaction and can have one of the following values:
+
+  ###### Table 14. The *TransactionSource* enum {#tabl-rte-transaction-source}
 
   | Id  | Name       | Description                                                       |
   |-----|------------|-------------------------------------------------------------------|
@@ -315,14 +317,14 @@ Arguments
   | 1   | *Local*    | Transaction is coming from a local source, e.g. off-chain worker. |
   | 2   | *External* | Transaction has been received externally, e.g. over the network.  |
 
-  Table 14. The *TransactionSource* enum
-
 Return  
 - This function returns a *Result* as defined in [Definition 191](id-cryptography-encoding.html#defn-result-type) which contains the type *ValidTransaction* as defined in [Definition 225](chap-runtime-api.html#defn-valid-transaction) on success and the type *TransactionValidityError* as defined in [Definition 221](chap-runtime-api.html#defn-rte-transaction-validity-error) on failure.
 
-  Definition 225. [ValidTransaction](chap-runtime-api.html#defn-valid-transaction)
+  ###### Definition 225. ValidTransaction {#defn-valid-transaction}
 
   **ValidTransaction** is a tuple that contains information concerning a valid transaction.
+
+  ###### Table 15. The tuple provided by in the case the transaction is judged to be valid.
 
   | **Name**    | **Description**                                                                                                                                                                                           | **Type**                      |
   |-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
@@ -331,8 +333,6 @@ Return
   | *Provides*  | Informs Runtime of the extrinsics depending on the tags in the list that can be applied after current extrinsics are being applied. Describes the minimum number of blocks for the validity to be correct | Array containing inner arrays |
   | *Longevity* | After this period, the transaction should be removed from the pool or revalidated.                                                                                                                        | Unsigned 64-bit integer       |
   | *Propagate* | A flag indicating if the transaction should be gossiped to other peers.                                                                                                                                   | Boolean                       |
-
-  Table 15. The tuple provided by in the case the transaction is judged to be valid.
 
 |     |                                                                                                                                                                                     |
 |-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -732,6 +732,8 @@ Arguments
 Return  
 - A tuple containing configuration data used by the Babe consensus engine.
 
+  ###### Table 16. The tuple provided by **BabeApi_configuration**. {#tabl-babeapi-configuration}
+
   | **Name**             | **Description**                                                                                                                                                                                                             | **Type**                                                                                                                |
   |----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
   | *SlotDuration*       | The slot duration in milliseconds. Currently, only the value provided by this type at genesis will be used. Dynamic slot duration may be supported in the future.                                                           | Unsigned 64bit integer                                                                                                  |
@@ -740,8 +742,6 @@ Return
   | *GenesisAuthorities* | The authority list for the genesis epoch as defined in [Definition 33](chap-sync.html#defn-authority-list).                                                                                                                 | Array of tuples containing a 256-bit byte array and a unsigned 64bit integer                                            |
   | *Randomness*         | The randomness for the genesis epoch                                                                                                                                                                                        | 32-byte array                                                                                                           |
   | *SecondarySlot*      | Whether this chain should run with round-robin-style secondary slot and if this secondary slot requires the inclusion of an auxiliary VRF output ([Section 5.2](sect-block-production.html#sect-block-production-lottery)). | A one-byte enum as defined in [Definition 58](sect-block-production.html#defn-consensus-message-babe) as ${2}_{{\text{nd}}}$. |
-
-  Table 16. The tuple provided by **BabeApi_configuration**.
 
 ### C.11.2. `BabeApi_current_epoch_start` {#id-babeapi_current_epoch_start}
 
