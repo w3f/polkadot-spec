@@ -92,7 +92,9 @@ Polkadot nodes replicate each other’s state by syncing the history of the extr
 
 A Polkadot block consists a *block header* ([Definition 10](chap-state.html#defn-block-header)) and a *block body* ([Definition 13](chap-state.html#defn-block-body)). The *block body* in turn is made up out of *extrinsics* , which represent the generalization of the concept of *transactions*. *Extrinsics* can contain any set of external data the underlying chain wishes to validate and track.
 
-seq: - id: header type: block_header - id: body type: block_body
+import Block from '/static/img/kaitai_render/block.svg';
+
+<Block />
 
 ###### Definition 10. Block Header {#defn-block-header}
 
@@ -108,7 +110,9 @@ The **header of block B**, ${H}_{{h}}{\left({B}\right)}$, is a 5-tuple containin
 
 - **digest:** this field is used to store any chain-specific auxiliary data, which could help the light clients interact with the block without the need of accessing the full storage as well as consensus-related data including the block signature. This field is indicated as ${H}_{{d}}$ ([Definition 11](chap-state.html#defn-digest)).
 
-seq: - id: parent_hash size: 32 - id: number type: scale::compact_int - id: state_root size: 32 - id: extrinsic_root size: 32 - id: num_digests type: scale::compact_int - id: digests type: digest repeat: expr repeat-expr: num_digests.value
+import BlockHeader from '/static/img/kaitai_render/block_header.svg';
+
+<BlockHeader />
 
 ###### Definition 11. Header Digest {#defn-digest}
 
@@ -136,7 +140,9 @@ where
 
 [TABLE]
 
-seq: - id: type type: u1 enum: type_id - id: value type: switch-on: type cases: 'type_id::pre_runtime': pre_runtime 'type_id::post_runtime': post_runtime 'type_id::seal': seal 'type_id::runtime_updated': empty enums: type_id: 4: post_runtime 5: seal 6: pre_runtime 8: runtime_updated types: pre_runtime: seq: - id: engine type: str encoding: ASCII size: 4 - id: payload type: scale::bytes post_runtime: seq: - id: engine type: str encoding: ASCII size: 4 - id: payload type: scale::bytes seal: seq: - id: engine type: str encoding: ASCII size: 4 - id: payload type: scale::bytes empty: {}
+import BlockDigest from '/static/img/kaitai_render/block_digest.svg';
+
+<BlockDigest />
 
 ###### Definition 12. Header Hash {#defn-block-header-hash}
 
@@ -156,7 +162,9 @@ $$
 
 Where each ${E}_{{i}}\in{\mathbb{{B}}}$ is a SCALE encoded extrinsic.
 
-seq: - id: num_transactions type: scale::compact_int - id: transactions type: transaction repeat: expr repeat-expr: num_transactions.value types: transaction: seq: - id: len_data type: scale::compact_int - id: data size: len_data.value
+import BlockBody from '/static/img/kaitai_render/block_body.svg';
+
+<BlockBody />
 
 ## 2.3. Extrinsics {#sect-extrinsics}
 

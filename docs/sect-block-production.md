@@ -300,4 +300,4 @@ where
 
 - $\text{Drop}$ indicates removing the extrinsic from the extrinsic queue ([Definition 14](chap-state.html#defn-transaction-queue)).
 
-- $\text{Add-Seal}$ adds the seal to the block (\<\<\>\>) before sending it to peers. The seal is removed again before submitting it to the Runtime.
+- $\text{Add-Seal}$ adds the seal to the block (<<\>\>) before sending it to peers. The seal is removed again before submitting it to the Runtime.

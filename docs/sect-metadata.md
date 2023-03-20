@@ -40,7 +40,9 @@ where
 
 - ${t}_{{r}}$ is the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the runtime.
 
-seq: - id: magic contents: meta - id: metadata_version type: u1 - id: num_types type: scale::compact_int - id: types type: metadata_type repeat: expr repeat-expr: num_types.value - id: num_pallets type: scale::compact_int - id: pallets type: metadata_pallet repeat: expr repeat-expr: num_pallets.value - id: extrinsic_type type: scale::compact_int - id: extrinsic_version type: u1 - id: num_extrinsics type: scale::compact_int - id: extrinsics type: metadata_extrinsic repeat: expr repeat-expr: num_extrinsics.value - id: runtime_type type: scale::compact_int
+import Metadata from '/static/img/kaitai_render/metadata.svg';
+
+<Metadata />
 
 ###### Definition 159. Runtime Registry Type Entry {#defn-rtm-registry-entry}
 
@@ -71,7 +73,9 @@ where
 
 - ${c}$ is the documentation as sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of strings.
 
-seq: - id: id type: scale::compact_int - id: path type: scale::string_list - id: num_params type: scale::compact_int - id: params repeat: expr repeat-expr: num_params.value type: param - id: definition type: metadata_type_definition - id: docs type: scale::string_list types: param: seq: - id: name type: scale::string - id: type type: scale::maybe_compact_int
+import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
+
+<MetadataType />
 
 ###### Definition 160. Runtime Type Id {#defn-rtm-type-id}
 
@@ -126,7 +130,9 @@ where
 
   - ${o}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) the bit order type ([external reference](https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder.html)).
 
-seq: - id: type type: u1 enum: type - id: details type: switch-on: type cases: "type::composite": metadata_type_fields "type::variant": metadata_type_variants "type::sequence": sequence "type::array": array "type::tuple": tuple "type::primitive": primitive "type::compact": compact "type::bits": bits enums: type: 0: composite 1: variant 2: sequence 3: array 4: tuple 5: primitive 6: compact 7: bits types: sequence: seq: - id: type type: scale::compact_int array: seq: - id: length type: u4 - id: type type: scale::compact_int tuple: seq: - id: num_types type: scale::compact_int - id: types type: scale::compact_int repeat: expr repeat-expr: num_types.value primitive: seq: - id: id type: u1 enum: pid enums: pid: 0: bool 1: char 2: str 3: uint8 4: uint16 5: uint32 6: uint64 7: uint128 8: uint256 9: int8 10: int16 11: int32 12: int64 13: int128 14: int256 compact: seq: - id: type type: scale::compact_int bits: seq: - id: type type: scale::compact_int - id: order type: scale::compact_int
+import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_definition.svg';
+
+<MetadataTypeDefinition />
 
 ###### Definition 162. Field {#defn-rtm-field}
 
@@ -146,7 +152,9 @@ where
 
 - ${C}$ is a sequence of varying length containing strings of documentation.
 
-seq: - id: num_fields type: scale::compact_int - id: fields type: field repeat: expr repeat-expr: num_fields.value types: field: seq: - id: name type: scale::maybe_string - id: type type: scale::compact_int - id: typename type: scale::maybe_string - id: docs type: scale::string_list
+import MetadataTypeFields from '/static/img/kaitai_render/metadata_type_fields.svg';
+
+<MetadataTypeFields />
 
 ###### Definition 163. Variant {#defn-rtm-variant}
 
@@ -166,7 +174,9 @@ where
 
 - ${C}$ is a sequence of strings containing the documentation.
 
-seq: - id: num_variants type: scale::compact_int - id: variants type: variant repeat: expr repeat-expr: num_variants.value types: variant: seq: - id: name type: scale::string - id: composite type: metadata_type_fields - id: index type: u1 - id: docs type: scale::string_list
+import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_variants.svg';
+
+<MetadataTypeVariants />
 
 ## 12.2. Pallet Metadata {#sect-rtm-pallet-metadata}
 
@@ -192,7 +202,9 @@ where
 
 - ${i}$ is an unsigned 8-bit integers indicating the index of the pallet, which is used for encoding pallet events and calls.
 
-seq: - id: name type: scale::string - id: has_storage type: u1 - id: storage type: pallet_storage if: has_storage != 0 - id: has_calls type: u1 - id: calls type: calls if: has_calls != 0 - id: has_events type: u1 - id: events type: events if: has_events != 0 - id: num_constants type: scale::compact_int - id: constants type: pallet_constant repeat: expr repeat-expr: num_constants.value - id: has_errors type: u1 - id: errors type: errors if: has_errors != 0 - id: index type: u1 types: calls: seq: - id: type type: scale::compact_int events: seq: - id: type type: scale::compact_int errors: seq: - id: type type: scale::compact_int
+import MetadataPallet from '/static/img/kaitai_render/metadata_pallet.svg';
+
+<MetadataPallet />
 
 ###### Definition 164. Pallet Storage Metadata {#defn-rtm-pallet-storage-metadata}
 
@@ -234,7 +246,9 @@ where
 
 - ${C}$ is an array of varying length of strings containing the documentation.
 
-seq: - id: prefix type: scale::string - id: num_items type: scale::compact_int - id: items type: item repeat: expr repeat-expr: num_items.value types: item: seq: - id: name type: scale::string - id: modifier type: u1 enum: storage_modifier - id: definition type: storage_definition - id: fallback type: scale::bytes - id: docs type: scale::string_list enums: storage_modifier: 0: optional 1: default
+import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
+
+<PalletStorage />
 
 ###### Definition 166. Storage Entry Modifier {#defn-rtm-storage-entry-modifier}
 
@@ -260,7 +274,9 @@ $$
 
 where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition 160](sect-metadata.html#defn-rtm-type-id)). ${H}$ is an array of varying length containing the storage hasher ([Definition 168](sect-metadata.html#defn-rtm-storage-hasher)).
 
-seq: - id: type type: u1 enum: storage_type - id: details type: switch-on: type cases: 'storage_type::plain': plain 'storage_type::map': map enums: storage_type: 0: plain 1: map types: plain: seq: - id: type type: scale::compact_int map: seq: - id: num_hasher type: scale::compact_int - id: hasher type: u1 enum: hasher_type repeat: expr repeat-expr: num_hasher.value - id: key type: scale::compact_int - id: value type: scale::compact_int enums: hasher_type: 0: blake2_128 1: blake2_256 2: blake2_128_128 3: xxhash_128 4: xxhash_256 5: xxhahs_64_64 6: idhash
+import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg';
+
+<StorageDefinition />
 
 ###### Definition 168. Storage Hasher {#defn-rtm-storage-hasher}
 
@@ -287,7 +303,9 @@ where
 
 - ${C}$ is an array of varying length containing string with the documentation.
 
-seq: - id: name type: scale::string - id: type type: scale::compact_int - id: value type: scale::bytes - id: docs type: scale::string_list
+import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
+
+<PalletConstant />
 
 ## 12.3. Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
 
@@ -308,4 +326,6 @@ where
 
 - ${a}$ is the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the additional signed data, with the data to be included in the signed payload.
 
-seq: - id: name type: scale::string - id: type type: scale::compact_int - id: additional type: scale::compact_int
+import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';
+
+<MetadataExtrinsic />
