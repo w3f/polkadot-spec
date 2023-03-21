@@ -3,11 +3,47 @@
 
 Interface for accessing the storage from within the runtime.
 
-IMPORTANT: As of now, the storage API should silently ignore any keys that start
-with the `:child_storage:default:` prefix. This applies to reading and writing.
-If the function expects a return value, then _None_ (<<defn-option-type>>)
-should be returned. See
-https://github.com/paritytech/substrate/issues/12461[substrate issue #12461].
+[#sect-storage-assumptions]
+==== Implementation Assumptions
+The storage and child storage (<<sect-child-storage-api>>) API in the Substrate
+implementation makes some behavioral assumptions on the underlying storage
+architecture. While Polkadot Host implementers can decide for themselves on how
+those APIs are implemented, those behaviors must be replicated in order for the
+Runtime to be executed deterministically. In Substrate, child storages are
+namespaced respectively segregated by attaching the `:child_storage:default:`
+prefix to every child storage keys, followed by `:<KEY>` for the key within that
+child storage. However, the storage API described in this section and the child
+storage API share the same database. This means that the storage API can
+retrieve child storage entries.
+
+For example, calling `ext_storage_get_version_1` (<<sect-ext-storage-get>>) with
+the key `:child_storage:default:some_child:some_key` is equivalent to calling
+`ext_default_child_storage_get_version_1`
+(<<sect-ext-default-child-storage-get>>) with child storage key `some_child` and
+key `some_key`.
+
+Importantly, the storage API can only _read_ child storage entries, but must
+implement write protection. Any function that modifies data must **silently ignore**
+any keys that start with the `:child_storage:` prefix. For
+`ext_storage_clear_prefix` (<<sect-ext-storage-clear-prefix>>) specifically,
+this also applies to any key that is a substring of the `:child_storage:` prefix,
+such as `:child_sto` (but not `:other`, for example). If the function expects a
+return value, then _None_ (<<defn-option-type>>) should be returned.
+
+Additionally, calling `ext_storage_get_version_1` on a child storage key
+directly (without a key within the child storage), such as
+`:child_storage:defaut:some_child`, the function returns the root of the child
+storage from when `ext_default_child_storage_root`
+(<<ext-default-child-storage-root>>) has been **last called** or _None_
+(<<defn-option-type>>) if it has never been called. Respectively, that root
+value is cached. Calling `ext_default_child_storage_root` directly always
+recomputes the current root value.
+
+See the following issues for more information:
+
+* https://github.com/w3f/polkadot-spec/issues/575
+* https://github.com/w3f/polkadot-spec/issues/577
+* https://github.com/paritytech/substrate/issues/12461
 
 [#defn-state-version]
 .<<defn-state-version, State Version>>
@@ -29,6 +65,9 @@ merkle proof (<<defn-hashed-subvalue>>).
 ==== `ext_storage_set`
 Sets the value under a given key into storage.
 
+IMPORTANT: Do note that this API must implement some specific behaviors,
+described further in <<sect-storage-assumptions>>
+
 ===== Version 1 - Prototype
 ----
 (func $ext_storage_set_version_1
@@ -40,8 +79,12 @@ Arguments::
 * `value`: a pointer-size (<<defn-runtime-pointer-size>>) containing the
 value.
 
+[#sect-ext-storage-get]
 ==== `ext_storage_get`
 Retrieves the value associated with the given key from storage.
+
+IMPORTANT: Do note that this API must implement some specific behaviors,
+described further in <<sect-storage-assumptions>>
 
 ===== Version 1 - Prototype
 ----
@@ -107,10 +150,14 @@ Arguments::
 * `return`: an i32 integer value equal to _1_ if the key exists or a value equal
 to _0_ if otherwise.
 
+[#sect-ext-storage-clear-prefix]
 ==== `ext_storage_clear_prefix`
 
 Clear the storage of each key/value pair where the key starts with the given
 prefix.
+
+IMPORTANT: Do note that this API must implement some specific behaviors,
+described further in <<sect-storage-assumptions>>
 
 ===== Version 1 - Prototype
 ----

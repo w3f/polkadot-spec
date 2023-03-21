@@ -3,6 +3,9 @@
 
 Interface for accessing the child storage from within the runtime.
 
+IMPORTANT: Do note that this API must implement some specific behaviors,
+described further in <<sect-storage-assumptions>>
+
 [#defn-child-storage-type]
 .<<defn-child-storage-type, Child Storage>>
 ====
@@ -25,6 +28,7 @@ child storage key (<<defn-child-storage-type>>).
 * `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
 * `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
 
+[#sect-ext-default-child-storage-get]
 ==== `ext_default_child_storage_get`
 Retrieves the value associated with the given key from the child storage.
 
@@ -212,6 +216,7 @@ where _0_ indicates that all keys of the child storage have been removed,
 followed by the number of removed keys, stem:[c]. The variant _1_ indicates that
 there are remaining keys, followed by the number of removed keys.
 
+[#ext-default-child-storage-root]
 ==== `ext_default_child_storage_root`
 
 Commits all existing operations and computes the resulting child storage
