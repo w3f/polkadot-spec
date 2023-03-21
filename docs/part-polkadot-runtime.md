@@ -4,10 +4,10 @@ title: Polkadot Runtime
 
 Description of various useful Runtime internals
 
-- [Extrinsics](id-extrinsics.html)
+- [Extrinsics](id-extrinsics)
 
-- [Weights](id-weights.html)
+- [Weights](id-weights)
 
-- [Consensus](id-consensus.html)
+- [Consensus](id-consensus)
 
-- [Metadata](sect-metadata.html)
+- [Metadata](sect-metadata)

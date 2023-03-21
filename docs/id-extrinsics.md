@@ -10,13 +10,13 @@ An extrinsic is a SCALE encoded array consisting of a version number, signature,
 
 ###### Definition 142. Extrinsic {#defn-extrinsic}
 
-An extrinsic , ${t}{x}$, is a tuple consisting of the extrinsic version, ${T}_{{v}}$ ([Definition 143](id-extrinsics.html#defn-extrinsic-version)), and the body of the extrinsic, ${T}_{{b}}$.
+An extrinsic , ${t}{x}$, is a tuple consisting of the extrinsic version, ${T}_{{v}}$ ([Definition 143](id-extrinsics#defn-extrinsic-version)), and the body of the extrinsic, ${T}_{{b}}$.
 
 $$
 {t}{x}\:={\left({T}_{{v}},{T}_{{b}}\right)}
 $$
 
-The value of ${T}_{{b}}$ varies for each version. The current version 4 is described in [Section 9.3.1](id-extrinsics.html#sect-version-four).
+The value of ${T}_{{b}}$ varies for each version. The current version 4 is described in [Section 9.3.1](id-extrinsics#sect-version-four).
 
 ###### Definition 143. Extrinsic Version {#defn-extrinsic-version}
 
@@ -35,15 +35,15 @@ $$
 $$
 
 where  
-- ${A}_{{i}}$: the 32-byte address of the sender ([Definition 144](id-extrinsics.html#defn-extrinsic-address)).
+- ${A}_{{i}}$: the 32-byte address of the sender ([Definition 144](id-extrinsics#defn-extrinsic-address)).
 
-- ${S}{i}{g}$: the signature of the sender ([Definition 145](id-extrinsics.html#defn-extrinsic-signature)).
+- ${S}{i}{g}$: the signature of the sender ([Definition 145](id-extrinsics#defn-extrinsic-signature)).
 
-- ${E}$: the extra data for the extrinsic ([Definition 146](id-extrinsics.html#defn-extra-data)).
+- ${E}$: the extra data for the extrinsic ([Definition 146](id-extrinsics#defn-extra-data)).
 
-- ${M}_{{i}}$: the indicator of the Polkadot module ([Definition 147](id-extrinsics.html#defn-module-indicator)).
+- ${M}_{{i}}$: the indicator of the Polkadot module ([Definition 147](id-extrinsics#defn-module-indicator)).
 
-- ${F}_{{i}}{\left({m}\right)}$: the indicator of the function of the Polkadot module ([Definition 148](id-extrinsics.html#defn-function-indicator)).
+- ${F}_{{i}}{\left({m}\right)}$: the indicator of the function of the Polkadot module ([Definition 148](id-extrinsics#defn-function-indicator)).
 
 ###### Definition 144. Extrinsic Address {#defn-extrinsic-address}
 
@@ -62,19 +62,19 @@ The signature is created by signing payload ${P}$.
 ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{P}&\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{R}{a}{w},&\text{if }\ {\left|{R}{a}{w}\right|}\leq{256}$ Blake2(Raw), & \text{if } \|Raw\| \> 256 ${e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}$ Raw &:= (M_i, F_i(m), E, R_v, F_v, H_h(G), H_h(B)) ${e}{n}{d}{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}$
 
 where  
-- ${M}_{{i}}$: the module indicator ([Definition 147](id-extrinsics.html#defn-module-indicator)).
+- ${M}_{{i}}$: the module indicator ([Definition 147](id-extrinsics#defn-module-indicator)).
 
-- ${F}_{{i}}{\left({m}\right)}$: the function indicator of the module ([Definition 148](id-extrinsics.html#defn-function-indicator)).
+- ${F}_{{i}}{\left({m}\right)}$: the function indicator of the module ([Definition 148](id-extrinsics#defn-function-indicator)).
 
-- ${E}$: the extra data ([Definition 146](id-extrinsics.html#defn-extra-data)).
+- ${E}$: the extra data ([Definition 146](id-extrinsics#defn-extra-data)).
 
-- ${R}_{{v}}$: a UINT32 containing the specification version (`spec_version`) of the Runtime ([Section C.4.1](chap-runtime-api.html#defn-rt-core-version)), which can be updated and is therefore subject to change.
+- ${R}_{{v}}$: a UINT32 containing the specification version (`spec_version`) of the Runtime ([Section C.4.1](chap-runtime-api#defn-rt-core-version)), which can be updated and is therefore subject to change.
 
-- ${F}_{{v}}$: a UINT32 containing the transaction version (`transaction_version`) of the Runtime ([Section C.4.1](chap-runtime-api.html#defn-rt-core-version)), which can be updated and is therefore subject to change.
+- ${F}_{{v}}$: a UINT32 containing the transaction version (`transaction_version`) of the Runtime ([Section C.4.1](chap-runtime-api#defn-rt-core-version)), which can be updated and is therefore subject to change.
 
 - ${H}_{{h}}{\left({G}\right)}$: a 32-byte array containing the genesis hash.
 
-- ${H}_{{h}}{\left({B}\right)}$: a 32-byte array containing the hash of the block which starts the mortality period, as described in [Definition 149](id-extrinsics.html#defn-extrinsic-mortality).
+- ${H}_{{h}}{\left({B}\right)}$: a 32-byte array containing the hash of the block which starts the mortality period, as described in [Definition 149](id-extrinsics#defn-extrinsic-mortality).
 
 ###### Definition 146. Extra Data {#defn-extra-data}
 
@@ -85,7 +85,7 @@ $$
 $$
 
 where  
-- ${T}_{mor}$: contains the SCALE encoded mortality of the extrinsic ([Definition 149](id-extrinsics.html#defn-extrinsic-mortality)).
+- ${T}_{mor}$: contains the SCALE encoded mortality of the extrinsic ([Definition 149](id-extrinsics#defn-extrinsic-mortality)).
 
 - ${N}$: a compact integer containing the nonce of the sender. The nonce must be incremented by one for each extrinsic created, otherwise the Polkadot network will reject the extrinsic.
 
@@ -115,11 +115,11 @@ ${B}{a}{l}{a}{n}{c}{e}{s}_{{i}}\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right
 
 ###### Definition 149. Extrinsic Mortality {#defn-extrinsic-mortality}
 
-Extrinsic **mortality** is a mechanism which ensures that an extrinsic is only valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can also be immortal, as clarified in [Section 9.3.2.2](id-extrinsics.html#sect-mortality-encoding).
+Extrinsic **mortality** is a mechanism which ensures that an extrinsic is only valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can also be immortal, as clarified in [Section 9.3.2.2](id-extrinsics#sect-mortality-encoding).
 
 The mortality mechanism works with two related values:
 
-- ${M}_{{{p}{e}{r}}}$: the period of validity in terms of block numbers from the block hash specified as ${H}_{{h}}{\left({B}\right)}$ in the payload ([Definition 145](id-extrinsics.html#defn-extrinsic-signature)). The requirement is ${M}_{{{p}{e}{r}}}\geq{4}$ and ${M}_{{{p}{e}{r}}}$ must be the power of two, such as `32`, `64`, `128`, etc.
+- ${M}_{{{p}{e}{r}}}$: the period of validity in terms of block numbers from the block hash specified as ${H}_{{h}}{\left({B}\right)}$ in the payload ([Definition 145](id-extrinsics#defn-extrinsic-signature)). The requirement is ${M}_{{{p}{e}{r}}}\geq{4}$ and ${M}_{{{p}{e}{r}}}$ must be the power of two, such as `32`, `64`, `128`, etc.
 
 - ${M}_{{{p}{h}{a}}}$: the phase in the period that this extrinsic’s lifetime begins. This value is calculated with a formula and validators can use this value in order to determine which block hash is included in the payload. The requirement is ${M}_{{{p}{h}{a}}}<{M}_{{{p}{e}{r}}}$.
 
@@ -129,7 +129,7 @@ $$
 {M}_{pha}={H}_{{i}}{\left({B}\right)} \; mod \; {M}_{{{p}{e}{r}}}
 $$
 
-${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$ are then included in the extrinsic, as clarified in [Definition 146](id-extrinsics.html#defn-extra-data), in the SCALE encoded form of ${T}_{mor}$ ([Section 9.3.2.2](id-extrinsics.html#sect-mortality-encoding)). Polkadot validators can use ${M}_{{{p}{h}{a}}}$ to figure out the block hash included in the payload, which will therefore result in a valid signature if the extrinsic is within the specified period or an invalid signature if the extrinsic "died".
+${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$ are then included in the extrinsic, as clarified in [Definition 146](id-extrinsics#defn-extra-data), in the SCALE encoded form of ${T}_{mor}$ ([Section 9.3.2.2](id-extrinsics#sect-mortality-encoding)). Polkadot validators can use ${M}_{{{p}{h}{a}}}$ to figure out the block hash included in the payload, which will therefore result in a valid signature if the extrinsic is within the specified period or an invalid signature if the extrinsic "died".
 
 #### 9.3.2.1. Example {#id-example}
 
@@ -143,7 +143,7 @@ $$
 {T}_{mor}\:={E}{n}{c}_{{{S}{C}}}{\left({M}_{{{p}{e}{r}}},{M}_{{{p}{h}{a}}}\right)}
 $$
 
-The SCALE encoded representation of mortality ${T}_{mor}$ deviates from most other types, as it’s specialized to be the smallest possible value, as described in [Encode Mortality](id-extrinsics.html#algo-mortality-encode) and [Decode Mortality](id-extrinsics.html#algo-mortality-decode).
+The SCALE encoded representation of mortality ${T}_{mor}$ deviates from most other types, as it’s specialized to be the smallest possible value, as described in [Encode Mortality](id-extrinsics#algo-mortality-encode) and [Decode Mortality](id-extrinsics#algo-mortality-decode).
 
 If the extrinsic is immortal, specify a single byte with the value equal to zero.
 

@@ -14,13 +14,13 @@ $$
 {\mathbb{{V}}}={\tt{grandpa\_authorities}}{\left({B}\right)}
 $$
 
-where ${\tt{grandpa\_authorities}}$ is a function entrypoint of the Runtime described in [Section C.10.1](chap-runtime-api.html#sect-rte-grandpa-auth). We refer to ${\mathbb{{V}}}_{{B}}$ as ${\mathbb{{V}}}$ when there is no chance of ambiguity.
+where ${\tt{grandpa\_authorities}}$ is a function entrypoint of the Runtime described in [Section C.10.1](chap-runtime-api#sect-rte-grandpa-auth). We refer to ${\mathbb{{V}}}_{{B}}$ as ${\mathbb{{V}}}$ when there is no chance of ambiguity.
 
 Analogously we say that a Polkadot node is a **non-voter node** for block ${B}$, if it does not own any of the key pairs in ${\mathbb{{V}}}_{{B}}$.
 
 ###### Definition 73. Authority Set Id {#defn-authority-set-id}
 
-The **authority set Id** ($\text{id}_{{{\mathbb{{V}}}}}$) is an incremental counter which tracks the amount of authority list changes that occurred ([Definition 86](sect-finality.html#defn-consensus-message-grandpa)). Starting with the value of zero at genesis, the Polkadot Host increments this value by one every time a **Scheduled Change** or a **Forced Change** occurs. The authority set Id is an unsigned 64-bit integer.
+The **authority set Id** ($\text{id}_{{{\mathbb{{V}}}}}$) is an incremental counter which tracks the amount of authority list changes that occurred ([Definition 86](sect-finality#defn-consensus-message-grandpa)). Starting with the value of zero at genesis, the Polkadot Host increments this value by one every time a **Scheduled Change** or a **Forced Change** occurs. The authority set Id is an unsigned 64-bit integer.
 
 ###### Definition 74. GRANDPA State {#defn-grandpa-state}
 
@@ -33,7 +33,7 @@ $$
 where  
 - ${\mathbb{{V}}}$: is the set of voters.
 
-- $\text{id}_{{{\mathbb{{V}}}}}$: is the authority set ID ([Definition 73](sect-finality.html#defn-authority-set-id)).
+- $\text{id}_{{{\mathbb{{V}}}}}$: is the authority set ID ([Definition 73](sect-finality#defn-authority-set-id)).
 
 - ${r}$: is the voting round number.
 
@@ -45,7 +45,7 @@ $$
 {V}{\left({B}\right)}\:={\left({H}_{{h}}{\left({B}\right)},{H}_{{i}}{\left({B}\right)}\right)}
 $$
 
-where ${H}_{{h}}{\left({B}\right)}$ and ${H}_{{i}}{\left({B}\right)}$ are the block hash ([Definition 12](chap-state.html#defn-block-header-hash)) and the block number ([Definition 10](chap-state.html#defn-block-header)).
+where ${H}_{{h}}{\left({B}\right)}$ and ${H}_{{i}}{\left({B}\right)}$ are the block hash ([Definition 12](chap-state#defn-block-header-hash)) and the block number ([Definition 10](chap-state#defn-block-header)).
 
 ###### Definition 76. Voting Rounds {#defn-voting-rounds}
 
@@ -53,7 +53,7 @@ Voters engage in a maximum of two sub-rounds of voting for each round ${r}$. The
 
 By ${{V}_{{v}}^{{{r},\text{pv}}}}$ and ${{V}_{{v}}^{{{r},\text{pc}}}}$ we refer to the vote cast by voter ${v}$ in round ${r}$ (for block ${B}$) during the pre-vote and the pre-commit sub-round respectively.
 
-Voting is done by means of broadcasting voting messages ([Section 4.8.6](chap-networking.html#sect-msg-grandpa)) to the network. Validators inform their peers about the block finalized in round ${r}$ by broadcasting a commit message ([Play-Grandpa-Round](sect-finality.html#algo-grandpa-round)).
+Voting is done by means of broadcasting voting messages ([Section 4.8.6](chap-networking#sect-msg-grandpa)) to the network. Validators inform their peers about the block finalized in round ${r}$ by broadcasting a commit message ([Play-Grandpa-Round](sect-finality#algo-grandpa-round)).
 
 ###### Definition 77. Vote Signature {#defn-sign-round-vote}
 
@@ -64,11 +64,11 @@ $$
 $$
 
 where  
-- $\text{msg}$: is an byte array containing the message to be signed ([Definition 75](sect-finality.html#defn-vote)).
+- $\text{msg}$: is an byte array containing the message to be signed ([Definition 75](sect-finality#defn-vote)).
 
 - ${r}$: is an unsigned 64-bit integer is the round number.
 
-- $\text{id}_{{{\mathbb{{V}}}}}$: is an unsigned 64-bit integer indicating the authority set Id ([Definition 33](chap-sync.html#defn-authority-list)).
+- $\text{id}_{{{\mathbb{{V}}}}}$: is an unsigned 64-bit integer indicating the authority set Id ([Definition 33](chap-sync#defn-authority-list)).
 
 ###### Definition 78. Justification {#defn-grandpa-justification}
 
@@ -84,15 +84,15 @@ ${B}'\ge{B}$
 
 or ${{V}_{{{v}_{{i}}}}^{{{r},\text{pc}}}}{\left({B}'\right)}$ is an equivocatory vote.
 
-In all cases, ${\text{Sign}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}{\left({B}'\right)}$ is the signature ([Definition 77](sect-finality.html#defn-sign-round-vote)) of voter ${v}_{{\text{id}}}\in{\mathbb{{V}}}_{{B}}$ broadcasted during either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round r. A **valid justification** must only contain up-to-one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
+In all cases, ${\text{Sign}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}{\left({B}'\right)}$ is the signature ([Definition 77](sect-finality#defn-sign-round-vote)) of voter ${v}_{{\text{id}}}\in{\mathbb{{V}}}_{{B}}$ broadcasted during either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round r. A **valid justification** must only contain up-to-one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
 
 ###### Definition 79. Finalizing Justification {#defn-finalizing-justification}
 
 We say ${J}^{{{r},\text{pc}}}{\left({B}\right)}$ **justifies the finalization** of ${B}'\ge{B}$ **for a non-voter node** ${n}$ if the number of valid signatures in ${J}^{{{r},\text{pc}}}{\left({B}\right)}$ for ${B}'$ is greater than $\frac{{2}}{{3}}{\left|{\mathbb{{V}}}_{{B}}\right|}$.
 
-Note that ${J}^{{{r},\text{pc}}}{\left({B}\right)}$ can only be used by a non-voter node to finalize a block. In contrast, a voter node can only be assured of the finality ([Definition 90](sect-finality.html#defn-finalized-block)) of block ${B}$ by actively participating in the voting process. That is by invoking [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round).
+Note that ${J}^{{{r},\text{pc}}}{\left({B}\right)}$ can only be used by a non-voter node to finalize a block. In contrast, a voter node can only be assured of the finality ([Definition 90](sect-finality#defn-finalized-block)) of block ${B}$ by actively participating in the voting process. That is by invoking [Play-Grandpa-Round](sect-finality#algo-grandpa-round).
 
-The GRANDPA protocol dictates how an honest voter should vote in each sub-round, which is described by [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round). After defining what constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
+The GRANDPA protocol dictates how an honest voter should vote in each sub-round, which is described by [Play-Grandpa-Round](sect-finality#algo-grandpa-round). After defining what constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
 
 ###### Definition 80. Equivocation {#defn-equivocation}
 
@@ -108,7 +108,7 @@ $$
 {{\mathcal{{E}}}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{stage}}}}
 $$
 
-The Polkadot Host must detect equivocations committed by other validators and submit those to the Runtime as described in [Section C.10.2](chap-runtime-api.html#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic).
+The Polkadot Host must detect equivocations committed by other validators and submit those to the Runtime as described in [Section C.10.2](chap-runtime-api#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic).
 
 A vote ${{V}_{{v}}^{{{r},\text{stage}}}}={V}{\left({B}\right)}$ is **invalid** if
 
@@ -156,7 +156,7 @@ $$
 
 ###### Definition 84. Current Pre-Voted Block {#defn-grandpa-ghost}
 
-The current **pre-voted** block ${{B}_{{v}}^{{{r},\text{pv}}}}$ also know as GRANDPA GHOST is the block chosen by [GRANDPA-GHOST](sect-finality.html#algo-grandpa-ghost):
+The current **pre-voted** block ${{B}_{{v}}^{{{r},\text{pv}}}}$ also know as GRANDPA GHOST is the block chosen by [GRANDPA-GHOST](sect-finality#algo-grandpa-ghost):
 
 $$
 {{B}_{{v}}^{{{r},\text{pv}}}}\:=\text{GRANDPA-GHOST}{\left({r}\right)}
@@ -192,7 +192,7 @@ where
 |-----|---------------------------------------------------------------------------------------------------------------------------------------------|
 |     | The BEEFY protocol is still under construction. The following part will be updated in the future and certain information will be clarified. |
 
-$\text{CM}_{{y}}$, the consensus message for BEEFY ([Section 6.7](sect-finality.html#sect-grandpa-beefy)), is of the following format:
+$\text{CM}_{{y}}$, the consensus message for BEEFY ([Section 6.7](sect-finality#sect-grandpa-beefy)), is of the following format:
 
 $$
 \text{CM}_{{y}}={\left\lbrace\begin{matrix}{1}&{\left({V}_{{B}},{V}_{{i}}\right)}\\{2}&{A}_{{i}}\\{3}&{R}\end{matrix}\right.}
@@ -208,46 +208,46 @@ where
 
 ## 6.2. Initiating the GRANDPA State {#id-initiating-the-grandpa-state}
 
-In order to participate coherently in the voting process, a validator must initiate its state and sync it with other active validators. In particular, considering that voting is happening in different distinct rounds where each round of voting is assigned a unique sequential round number ${r}_{{v}}$, it needs to determine and set its round counter ${r}$ equal to the voting round ${r}_{{n}}$ currently undergoing in the network. The mandated initialization procedure for the GRANDPA protocol for a joining validator is described in detail in [Initiate-Grandpa](sect-finality.html#algo-initiate-grandpa).
+In order to participate coherently in the voting process, a validator must initiate its state and sync it with other active validators. In particular, considering that voting is happening in different distinct rounds where each round of voting is assigned a unique sequential round number ${r}_{{v}}$, it needs to determine and set its round counter ${r}$ equal to the voting round ${r}_{{n}}$ currently undergoing in the network. The mandated initialization procedure for the GRANDPA protocol for a joining validator is described in detail in [Initiate-Grandpa](sect-finality#algo-initiate-grandpa).
 
 The process of joining a new voter set is different from the one of rejoining the current voter set after a network disconnect. The details of this distinction are described further in this section.
 
 ### 6.2.1. Voter Set Changes {#id-voter-set-changes}
 
-A GRANDPA voter node which is initiating GRANDPA protocol as part of joining a new authority set is required to execute [Initiate-Grandpa](sect-finality.html#algo-initiate-grandpa). The algorithm mandates the initialization procedure for GRANDPA protocol.
+A GRANDPA voter node which is initiating GRANDPA protocol as part of joining a new authority set is required to execute [Initiate-Grandpa](sect-finality#algo-initiate-grandpa). The algorithm mandates the initialization procedure for GRANDPA protocol.
 
 |     |                                                                     |
 |-----|---------------------------------------------------------------------|
 |     | The GRANDPA round number reset to 0 for every authority set change. |
 
-Voter set changes are signaled by Runtime via a consensus engine message ([Section 3.3.2](chap-sync.html#sect-consensus-message-digest)). When Authorities process such messages they must not vote on any block with a higher number than the block at which the change is supposed to happen. The new authority set should reinitiate GRANDPA protocol by executing [Initiate-Grandpa](sect-finality.html#algo-initiate-grandpa).
+Voter set changes are signaled by Runtime via a consensus engine message ([Section 3.3.2](chap-sync#sect-consensus-message-digest)). When Authorities process such messages they must not vote on any block with a higher number than the block at which the change is supposed to happen. The new authority set should reinitiate GRANDPA protocol by executing [Initiate-Grandpa](sect-finality#algo-initiate-grandpa).
 
 \input ${r}_{{{l}\ast}},{B}_{{{l}\ast}}$ \state \textsc{Last-Finalized-Block} $\leftarrow{B}_{{{l}\ast}}$ \state \textsc{Best-Final-Candidate}${\left({0}\right)}\leftarrow{B}_{{{l}\ast}}$ \state \textsc{GRANDPA-GHOST}${\left({0}\right)}\leftarrow{B}_{{{l}\ast}}$ \state \textsc{Last-Completed-Round}$\leftarrow{0}$ \state ${r}_{{n}}\leftarrow{1}$ \state \call{Play-Grandpa-round}{${r}_{{n}}$}
 
-where ${B}_{{\text{last}}}$ is the last block which has been finalized on the chain ([Definition 90](sect-finality.html#defn-finalized-block)). ${r}_{{\text{last}}}$ is equal to the latest round the voter has observed that other voters are voting on. The voter obtains this information through various gossiped messages including those mentioned in [Definition 90](sect-finality.html#defn-finalized-block). ${r}_{{\text{last}}}$ is set to *0* if the GRANDPA node is initiating the GRANDPA voting process as a part of a new authority set. This is because the GRANDPA round number resets to *0* for every authority set change.
+where ${B}_{{\text{last}}}$ is the last block which has been finalized on the chain ([Definition 90](sect-finality#defn-finalized-block)). ${r}_{{\text{last}}}$ is equal to the latest round the voter has observed that other voters are voting on. The voter obtains this information through various gossiped messages including those mentioned in [Definition 90](sect-finality#defn-finalized-block). ${r}_{{\text{last}}}$ is set to *0* if the GRANDPA node is initiating the GRANDPA voting process as a part of a new authority set. This is because the GRANDPA round number resets to *0* for every authority set change.
 
 ## 6.3. Rejoining the Same Voter Set {#id-rejoining-the-same-voter-set}
 
-When a voter node rejoins the network after a disconnect from the voter set and with the condition that there has been no change to the voter set at the time of the disconnect, the node must continue performing the GRANDPA protocol at the same state as before getting disconnected from the network, ignoring any possible progress in GRANDPA finalization. Following reconnection, the node eventually gets updated to the current GRANDPA round and synchronizes its state with the rest of the voting set through the process called Catchup ([Section 6.6.1](sect-finality.html#sect-grandpa-catchup)).
+When a voter node rejoins the network after a disconnect from the voter set and with the condition that there has been no change to the voter set at the time of the disconnect, the node must continue performing the GRANDPA protocol at the same state as before getting disconnected from the network, ignoring any possible progress in GRANDPA finalization. Following reconnection, the node eventually gets updated to the current GRANDPA round and synchronizes its state with the rest of the voting set through the process called Catchup ([Section 6.6.1](sect-finality#sect-grandpa-catchup)).
 
 ## 6.4. Voting Process in Round ${r}$ {#id-voting-process-in-round-r}
 
-For each round ${r}$, an honest voter ${v}$ must participate in the voting process by following [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round).
+For each round ${r}$, an honest voter ${v}$ must participate in the voting process by following [Play-Grandpa-Round](sect-finality#algo-grandpa-round).
 
 \REQUIRE(${r}$) \STATE ${t}_{{{r},{v}}}\leftarrow$ Current local time \STATE $\text{}{m}{\left\lbrace{p}{r}{i}{m}{a}{r}{y}\right\rbrace}\leftarrow$ \call{Derive-Primary}{${r}$} \IF{${v}=\text{}{m}{\left\lbrace{p}{r}{i}{m}{a}{r}{y}\right\rbrace}$} \STATE \call{Broadcast}{${{M}_{{{v}}}^{{{r}-{1},\text{}{m}{\left\lbrace{F}\in\right\rbrace}}}}{\left($\right.}\call{Best-Final-Candidate}{${r}-{1}$}${)}$} \IF{\call{Best-Final-Candidate}{${r}-{1}$} $\geq{s}{l}{a}{n}{t}$ \textsc{Last-Finalized-Block}} \STATE \call{Broadcast}{${{M}_{{{v}}}^{{{r}-{1},\text{}{m}{\left\lbrace{P}{r}{i}{m}\right\rbrace}}}}{\left($\right.}\call{Best-Final-Candidate}{${r}-{1}$}${)}$} \ENDIF \ENDIF \STATE \call{Receive-Messages}{\textbf{until} Time $\geq{s}{l}{a}{n}{t}{t}_{{{r}_{,}{v}}}+{2}\times{T}$ \or ${r}$ \textbf{is} completable} \STATE ${L}\leftarrow$ \call{Best-Final-Candidate}{${r}-{1}$} \STATE ${N}\leftarrow$ \call{Best-PreVote-Candidate}{${r}$} \STATE \call{Broadcast}{${{M}_{{v}}^{{{r},\text{}{m}{\left\lbrace{p}{v}\right\rbrace}}}}{\left({N}\right)}$} \STATE \call{Receive-Messages}{\textbf{until} ${B}^{{{r},\text{}{m}{\left\lbrace{p}{v}\right\rbrace}}}_{v}\geq{s}{l}{a}{n}{t}{L}$ \and ${\left($\right.} Time $\geq{s}{l}{a}{n}{t}{t}_{{{r}_{,}{v}}}+{4}\times{T}$ \or ${r}$ \textbf{is} completable ${)}$} \STATE \call{Broadcast}{${{M}_{{v}}^{{{r},\text{}{m}{\left\lbrace{p}{c}\right\rbrace}}}}{\left({{B}_{{v}}^{{{r},\text{}{m}{\left\lbrace{p}{v}\right\rbrace}}}}\right)}$} \REPEAT \STATE \call{Receive-Messages}{} \STATE \call{Attempt-To-Finalize-At-Round}{${r}$} \UNTIL{${r}$ \textbf{is} completable \and \call{Finalizable}{${r}$} \and \textsc{Last-Finalized-Block} $\geq{s}{l}{a}{n}{t}$ \call{Best-Final-Candidate}{${r}-{1}$}} \STATE \call{Play-Grandpa-round}{${r}+{1}$} \REPEAT \STATE \call{Receive-Messages}{} \STATE \call{Attempt-To-Finalize-At-Round}{${r}$} \UNTIL{\textsc{Last-Finalized-Block} $\geq{s}{l}{a}{n}{t}$ \call{Best-Final-Candidate}{${r}$}} \IF{\textsc{Last-Completed-Round} $<{r}$} \STATE \textsc{Last-Completed-Round} $\leftarrow{r}$ \ENDIF
 
 where  
 - ${T}$ is sampled from a log-normal distribution whose mean and standard deviation are equal to the average network delay for a message to be sent and received from one validator to another.
 
-- $\text{Derive-Primary}$ is described in [Derive-Primary](sect-finality.html#algo-derive-primary).
+- $\text{Derive-Primary}$ is described in [Derive-Primary](sect-finality#algo-derive-primary).
 
-- The condition of *completablitiy* is defined in [Definition 85](sect-finality.html#defn-grandpa-completable).
+- The condition of *completablitiy* is defined in [Definition 85](sect-finality#defn-grandpa-completable).
 
-- $\text{Best-Final-Candidate}$ function is explained in [Best-Final-Candidate](sect-finality.html#algo-grandpa-best-candidate).
+- $\text{Best-Final-Candidate}$ function is explained in [Best-Final-Candidate](sect-finality#algo-grandpa-best-candidate).
 
-- $\text{Attempt-To-Finalize-At-Round}{\left({r}\right)}$ is described in [Attempt-To-Finalize-At-Round](sect-finality.html#algo-attempt-to–finalize).
+- $\text{Attempt-To-Finalize-At-Round}{\left({r}\right)}$ is described in [Attempt-To-Finalize-At-Round](sect-finality#algo-attempt-to–finalize).
 
-- $\text{Finalizable}$ is defined in [Finalizable](sect-finality.html#algo-finalizable).
+- $\text{Finalizable}$ is defined in [Finalizable](sect-finality#algo-finalizable).
 
 \input ${r}$ \return ${r}{b}\text{mod}{\left|{\mathbb{{{V}}}}\right|}$
 
@@ -255,14 +255,14 @@ where ${r}$ is the GRANDPA round whose primary is to be determined.
 
 \input ${r}$ \state ${{B}_{{v}}^{{{r},{p}{v}}}}\leftarrow$ \call{GRANDPA-GHOST}{${r}$} \if{${r}={0}$} \return ${{B}_{{v}}^{{{r},{p}{v}}}}$ \else \state ${\mathcal{{{C}}}}\leftarrow$ B' \| B' \leqslant B_v^{r,pv} \| ${V}^{{{r},{p}{c}}}_{\left\lbrace{o}{p}{e}{r}{a}\to{r}{n}{a}{m}{e}{\left\lbrace{o}{b}{v}\right\rbrace}{\left({v}\right)},{p}{o}{t}\right\rbrace}{\left({B}'\right)}>{\frac{{{2}}}{{{3}}}}{\left|{\mathbb{{{V}}}}\right|}$ \if{${\mathcal{{{C}}}}=\phi$} \return ${{B}_{{v}}^{{{r},{p}{v}}}}$ \else \return ${E}\in{\mathcal{{{C}}}}:{H}_{{n}}{\left({E}\right)}={o}{p}{e}{r}{a}\to{r}{n}{a}{m}{e}{\left\lbrace\max\right\rbrace}\le{f}{t}{\left({H}_{{n}}{\left({B}'\right)}{\mid}{B}'\in{\mathcal{{{C}}}}{r}{i}{g}{h}{t}\right)}$ \endif \endif
 
-where $\#{{V}_{{\text{obv}{\left({v}\right)},{p}{o}{t}}}^{{{r},{p}{c}}}}$ is defined in [Definition 83](sect-finality.html#defn-total-potential-votes).
+where $\#{{V}_{{\text{obv}{\left({v}\right)},{p}{o}{t}}}^{{{r},{p}{c}}}}$ is defined in [Definition 83](sect-finality#defn-total-potential-votes).
 
 \input ${r}$ \if{${r}={0}$} \state ${G}\leftarrow{B}_{{{l}\ast}}$ \else \state ${L}\leftarrow$ \call{Best-Final-Candidate}{${r}-{1}$} \state ${\mathcal{{{G}}}}=$ \forall B \> L \| ${{V}_{{{o}{p}{e}{r}{a}\to{r}{n}{a}{m}{e}{\left\lbrace{o}{b}{s}\right\rbrace}{\left({v}\right)}}}^{{{r},{p}{v}}}}{\left({B}\right)}\geq{s}{l}{a}{n}{t}{\frac{{{2}}}{{{3}}}}{\left|{\mathbb{{{V}}}}\right|}$ \if{${\mathcal{{{G}}}}=\phi$} \state ${G}\leftarrow{L}$ \else \state ${G}\in{\mathcal{{{G}}}}{\mid}{H}_{{n}}{\left({G}\right)}={o}{p}{e}{r}{a}\to{r}{n}{a}{m}{e}{\left\lbrace\max\right\rbrace}\le{f}{t}{\left({H}_{{n}}{\left({B}\right)}{\mid}\forall{B}\in{\mathcal{{{G}}}}{r}{i}{g}{h}{t}\right)}$ \endif \endif \return ${G}$
 
 where  
-- ${B}_{{\text{last}}}$ is the last block which has been finalized on the chain ([Definition 90](sect-finality.html#defn-finalized-block)).
+- ${B}_{{\text{last}}}$ is the last block which has been finalized on the chain ([Definition 90](sect-finality#defn-finalized-block)).
 
-- $\#{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},{p}{v}}}}{\left({B}\right)}$ is defined in [Definition 82](sect-finality.html#defn-observed-votes).
+- $\#{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},{p}{v}}}}{\left({B}\right)}$ is defined in [Definition 82](sect-finality#defn-observed-votes).
 
 \input ${r}$ \state ${B}^{{{r},{p}{v}}}_{v}\leftarrow$ \call{GRANDPA-GHOST}{${r}$} \if{\call{Received}{${{M}_{{{v}_{{{p}{r}{i}{m}{a}{r}{y}}}}}^{{{r},{p}{r}{i}{m}}}}{\left({B}\right)}{)}$ \and ${B}^{{{r},{p}{v}}}_{v}\geq{s}{l}{a}{n}{t}{B}>{L}$}} \state ${N}\leftarrow{B}$ \else \state ${N}\leftarrow{B}^{{{r},{p}{v}}}_{v}$ \endif
 
@@ -270,9 +270,9 @@ where
 
 \REQUIRE(${r}$) \IF{${r}$ \textbf{is not} Completable} \RETURN \textbf{False} \ENDIF \STATE ${G}\leftarrow$ \call{GRANDPA-GHOST}{${J}^{{{r},{p}{v}}}{\left({B}\right)}$} \IF{${G}=\phi$} \RETURN \textbf{False} \ENDIF \STATE ${E}_{{r}}\leftarrow$ \call{Best-Final-Candidate}{${r}$} \IF{${E}_{{r}}\ne{q}\phi$ \and \call{Best-Final-Candidate}{${r}-{1}$} $\leq{s}{l}{a}{n}{t}{E}_{{r}}\leq{s}{l}{a}{n}{t}{G}$} \RETURN \textbf{True} \ELSE \RETURN \textbf{False} \ENDIF
 
-where the condition for *completability* is defined in [Definition 85](sect-finality.html#defn-grandpa-completable).
+where the condition for *completability* is defined in [Definition 85](sect-finality#defn-grandpa-completable).
 
-Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round) prevents us from moving to the round ${r}+{1}$ before finalizing the best final candidate of round ${r}-{1}$) The example in [Definition 88](sect-finality.html#exmp-candid-unfinalized) serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
+Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although [Play-Grandpa-Round](sect-finality#algo-grandpa-round) prevents us from moving to the round ${r}+{1}$ before finalizing the best final candidate of round ${r}-{1}$) The example in [Definition 88](sect-finality#exmp-candid-unfinalized) serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
 
 ###### Definition 88. Unfinalized Candidate {#defn-unfinalized-candidate}
 
@@ -282,9 +282,9 @@ Subsequently, potentially honest voters who could claim not seeing all the pre-v
 
 At this point, though, we have ${\mathtt{\text{Best-Final-Candidate}}}{\left({r}\right)}={B}_{{2}}$ as $\#{{V}_{{\text{obs}{\left({v}\right)},\text{pot}}}^{{{r},\text{stage}}}}{\left({B}_{{2}}\right)}={67}$ and ${2}>{1}$.
 
-However, at this point, the round is already completable as we know that we have ${\mathtt{\text{GRANDPA-GHOST}}}{\left({1}\right)}={B}_{{2}}$ as an upper limit on what we can finalize and nothing greater than ${B}_{{2}}$ can be finalized at ${r}={1}$. Therefore, the condition of [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round) is satisfied and we must proceed to round 2.
+However, at this point, the round is already completable as we know that we have ${\mathtt{\text{GRANDPA-GHOST}}}{\left({1}\right)}={B}_{{2}}$ as an upper limit on what we can finalize and nothing greater than ${B}_{{2}}$ can be finalized at ${r}={1}$. Therefore, the condition of [Play-Grandpa-Round](sect-finality#algo-grandpa-round) is satisfied and we must proceed to round 2.
 
-Nonetheless, we must continue to attempt to finalize round *1* in the background as the condition of [Attempt-To-Finalize-At-Round](sect-finality.html#algo-attempt-to–finalize) has not been fulfilled.
+Nonetheless, we must continue to attempt to finalize round *1* in the background as the condition of [Attempt-To-Finalize-At-Round](sect-finality#algo-attempt-to–finalize) has not been fulfilled.
 
 This prevents us from proceeding to round 3 until either:
 
@@ -292,11 +292,11 @@ This prevents us from proceeding to round 3 until either:
 
 - We receive an extra pre-commit vote for ${B}_{{1}}$ in round 1. This will make it impossible to finalize ${B}_{{2}}$ in round 1, no matter to whom the remaining pre-commits are going to be cast for (even with considering the possibility of 1/3 of voter equivocating) and therefore we have ${\mathtt{\text{Best-Final-Candidate}}}{\left({r}\right)}={B}_{{1}}$.
 
-Both scenarios unblock [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round), ${\mathtt{\text{Last-Finalized-Block}}}\ge{\mathtt{\text{Best-Final-Candidate}}}{\left({r}-{1}\right)}$ albeit in different ways: the former with increasing the ${\mathtt{\text{Last-Finalized-Block}}}$ and the latter with decreasing ${\mathtt{\text{Best-Final-Candidate}}}{\left({r}-{1}\right)}$.
+Both scenarios unblock [Play-Grandpa-Round](sect-finality#algo-grandpa-round), ${\mathtt{\text{Last-Finalized-Block}}}\ge{\mathtt{\text{Best-Final-Candidate}}}{\left({r}-{1}\right)}$ albeit in different ways: the former with increasing the ${\mathtt{\text{Last-Finalized-Block}}}$ and the latter with decreasing ${\mathtt{\text{Best-Final-Candidate}}}{\left({r}-{1}\right)}$.
 
 ## 6.5. Forced Authority Set Changes {#sect-finality-forced-changes}
 
-In a case of emergency where the Polkadot network is unable to finalize blocks, such as in an event of mass validator outage, the Polkadot governance mechanism must enact a forced change, which the Host must handle in a specific manner. Given that in such a case finality cannot be relied on, the Host must detect the forced change ([Definition 86](sect-finality.html#defn-consensus-message-grandpa)) in a (valid) block and apply it to all forks.
+In a case of emergency where the Polkadot network is unable to finalize blocks, such as in an event of mass validator outage, the Polkadot governance mechanism must enact a forced change, which the Host must handle in a specific manner. Given that in such a case finality cannot be relied on, the Host must detect the forced change ([Definition 86](sect-finality#defn-consensus-message-grandpa)) in a (valid) block and apply it to all forks.
 
 The ${m}\in{C}{M}_{{g}}$, which is specified by the governance mechanism, defines the starting block at which ${N}_{{\text{delay}}}$ is applied. This provides some degree of probabilistic consensus to the network with the assumption that the forced change was received by most participants and that finality can be continued.
 
@@ -314,9 +314,9 @@ Figure 3. Applying a forced change
 
 The Justified Block Header is provided by the consensus engine and presented to the Polkadot Host, for the block to be appended to the blockchain. It contains the following parts:
 
-- **block_header** the complete block header ([Definition 10](chap-state.html#defn-block-header)) and denoted by $\text{Head}{\left({B}\right)}$.
+- **block_header** the complete block header ([Definition 10](chap-state#defn-block-header)) and denoted by $\text{Head}{\left({B}\right)}$.
 
-- **justification**: as defined by the consensus specification indicated by $\text{Just}{\left({B}\right)}$ as defined in [Definition 78](sect-finality.html#defn-grandpa-justification).
+- **justification**: as defined by the consensus specification indicated by $\text{Just}{\left({B}\right)}$ as defined in [Definition 78](sect-finality#defn-grandpa-justification).
 
 - **authority Ids**: This is the list of the Ids of authorities, which have voted for the block to be stored and is formally referred to as ${A}{\left({B}\right)}$. An authority Id is 256-bit.
 
@@ -326,15 +326,15 @@ A Polkadot relay chain node ${n}$ should consider block ${B}$ as **finalized** i
 
 - ${{V}_{{\text{obs}{\left({n}\right)}}}^{{{r},\text{pc}}}}{\left({B}'\right)}>\frac{{2}}{{3}}{\left|{\mathbb{{V}}}_{{{B}'}}\right|}$.
 
-- It receives a ${{M}_{{v}}^{{{r},\text{Fin}}}}{\left({B}'\right)}$ message in which ${J}^{{r}}{\left({B}\right)}$ justifies the finalization ([Definition 78](sect-finality.html#defn-grandpa-justification)).
+- It receives a ${{M}_{{v}}^{{{r},\text{Fin}}}}{\left({B}'\right)}$ message in which ${J}^{{r}}{\left({B}\right)}$ justifies the finalization ([Definition 78](sect-finality#defn-grandpa-justification)).
 
-- It receives a block data message for ${B}'$ with $\text{Just}{\left({B}'\right)}$ ([Definition 89](sect-finality.html#defn-justified-block-header)) which justifies the finalization.
+- It receives a block data message for ${B}'$ with $\text{Just}{\left({B}'\right)}$ ([Definition 89](sect-finality#defn-justified-block-header)) which justifies the finalization.
 
 for:
 
 - Any round ${r}$ if the node ${n}$ is *not* a GRANDPA voter.
 
-- Only for round ${r}$ for which the node ${n}$ has invoked [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round) and round ${r}+{1}$ if ${n}$ is a GRANDPA voter and has already caught up to its peers according to the process described in Section [Section 6.6.1](sect-finality.html#sect-grandpa-catchup).
+- Only for round ${r}$ for which the node ${n}$ has invoked [Play-Grandpa-Round](sect-finality#algo-grandpa-round) and round ${r}+{1}$ if ${n}$ is a GRANDPA voter and has already caught up to its peers according to the process described in Section [Section 6.6.1](sect-finality#sect-grandpa-catchup).
 
 Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit messages regardless of their GRANDPA voter status.
 
@@ -342,11 +342,11 @@ Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit 
 
 When a Polkadot node (re)joins the network, it requests the history of state transitions in the form of blocks, which it is missing.
 
-Nonetheless, the process is different for a GRANDPA voter node. When a voter node joins the network, it needs to gather the justification ([Definition 78](sect-finality.html#defn-grandpa-justification)) of the rounds it has missed. Through this process, they can safely join the voting process of the current round, on which the voting is taking place.
+Nonetheless, the process is different for a GRANDPA voter node. When a voter node joins the network, it needs to gather the justification ([Definition 78](sect-finality#defn-grandpa-justification)) of the rounds it has missed. Through this process, they can safely join the voting process of the current round, on which the voting is taking place.
 
 #### 6.6.1.1. Sending the catch-up requests {#sect-sending-catchup-request}
 
-When a Polkadot voter node has the same authority list as a peer voter node who is reporting a higher number for the *finalized round* field, it should send a catch-up request message ([Definition 48](chap-networking.html#defn-grandpa-catchup-request-msg)) to the reporting peer. This will allow the node to to catch up to the more advanced finalized round, provided that the following criteria hold:
+When a Polkadot voter node has the same authority list as a peer voter node who is reporting a higher number for the *finalized round* field, it should send a catch-up request message ([Definition 48](chap-networking#defn-grandpa-catchup-request-msg)) to the reporting peer. This will allow the node to to catch up to the more advanced finalized round, provided that the following criteria hold:
 
 - The peer node is a GRANDPA voter, and:
 
@@ -354,12 +354,12 @@ When a Polkadot voter node has the same authority list as a peer voter node who 
 
 #### 6.6.1.2. Processing the catch-up requests {#id-processing-the-catch-up-requests}
 
-Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute [Process-Catchup-Request](sect-finality.html#algo-process-catchup-request). Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round) is not concluded.
+Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute [Process-Catchup-Request](sect-finality#algo-process-catchup-request). Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which [Play-Grandpa-Round](sect-finality#algo-grandpa-round) is not concluded.
 
 \input ${{M}_{{{i},{v}}}^{\text{Cat-q}}}{\left(\text{id}_{{\mathbb{{{V}}}}},{r}\right)}$ \if{${{M}_{{{i},{v}}}^{\text{Cat-q}}}{\left(\text{id}_{{\mathbb{{{V}}}}},{r}\right)}.\text{id}_{{\mathbb{{{V}}}}}\ne{q}\text{id}_{{\mathbb{{{V}}}}}$} \state \textbf{error} \`\`Catching up on different set'' \endif \if{${i}\notin{\mathbb{{{P}}}}$} \state \textbf{error} \`\`Requesting catching up from a non-peer'' \endif \if{${r}>$ \textsc{Last-Completed-Round}} \state \textbf{error} \`\`Catching up on a round in the future'' \endif \state \call{Send}{${i},{{M}_{{{v},{i}}}^{\text{Cat-s}}}{\left(\text{id}_{{\mathbb{{{V}}}}},{r}\right)}$}
 
 where  
-- ${{M}_{{{i},{v}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up message received from peer ${i}$ ([Definition 48](chap-networking.html#defn-grandpa-catchup-request-msg)).
+- ${{M}_{{{i},{v}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up message received from peer ${i}$ ([Definition 48](chap-networking#defn-grandpa-catchup-request-msg)).
 
 - $\text{id}_{{{\mathbb{{V}}}}}$ is the voter set id with which the serving node is operating
 
@@ -367,17 +367,17 @@ where
 
 - ${\mathbb{{P}}}$ is the set of immediate peers of node ${v}$.
 
-- ${\mathtt{\text{Last-Completed-Round}}}$ is initiated in [Initiate-Grandpa](sect-finality.html#algo-initiate-grandpa) and gets updated by [Play-Grandpa-Round](sect-finality.html#algo-grandpa-round).
+- ${\mathtt{\text{Last-Completed-Round}}}$ is initiated in [Initiate-Grandpa](sect-finality#algo-initiate-grandpa) and gets updated by [Play-Grandpa-Round](sect-finality#algo-grandpa-round).
 
-- ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response ([Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg)).
+- ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response ([Definition 49](chap-networking#defn-grandpa-catchup-response-msg)).
 
 #### 6.6.1.3. Processing catch-up responses {#id-processing-catch-up-responses}
 
-A Catch-up response message contains critical information for the requester node to update their view on the active rounds which are being voted on by GRANDPA voters. As such, the requester node should verify the content of the catch-up response message and subsequently updates its view of the state of the finality of the Relay chain according to [Process-Catchup-Response](sect-finality.html#algo-process-catchup-response).
+A Catch-up response message contains critical information for the requester node to update their view on the active rounds which are being voted on by GRANDPA voters. As such, the requester node should verify the content of the catch-up response message and subsequently updates its view of the state of the finality of the Relay chain according to [Process-Catchup-Response](sect-finality#algo-process-catchup-response).
 
 \input ${{M}_{{{v},{i}}}^{\text{Cat-s}}}{\left(\text{id}_{{{\mathbb{{{V}}}}}},{r}\right)}$ \state ${{M}_{{{v},{i}}}^{\text{Cat-s}}}{\left(\text{id}_{{{\mathbb{{{V}}}}}},{r}\right)}.\text{id}_{{{\mathbb{{{V}}}}}},{r},{J}^{{{r},{p}{v}}}{\left({B}\right)},{J}^{{{r},{p}{c}}}{\left({B}\right)},{H}_{{h}}{\left({B}'\right)},{H}_{{i}}{\left({B}'\right)}\leftarrow\text{Dec}_{{{S}{C}}}{\left({{M}_{{{v},{i}}}^{{{C}{a}{t}-{s}}}}{\left(\text{id}_{{{\mathbb{{{V}}}}}},{r}\right)}$\right.} \if{${{M}_{{{v},{i}}}^{\text{Cat-s}}}{\left(\text{id}_{{{\mathbb{{{V}}}}}},{r}\right)}.\text{id}_{{{\mathbb{{{V}}}}}}\ne{q}\text{id}_{{{\mathbb{{{V}}}}}}$} \state \textbf{error} \`\`Catching up on different set'' \endif \if{${r}\leq{s}{l}{a}{n}{t}$ \textsc{Leading-Round}} \state \textbf{error} \`\`Catching up in to the past'' \endif \if{${J}^{{{r},{p}{v}}}{\left({B}\right)}$ \textbf{is not} valid} \state \textbf{error} \`\`Invalid pre-vote justification'' \endif \if{${J}^{{{r},{p}{c}}}{\left({B}\right)}$ \textbf{is not} valid} \state \textbf{error} \`\`Invalid pre-commit justification'' \endif \state ${G}\leftarrow$ \call{GRANDPA-GHOST}{${J}^{{{r},{p}{v}}}{\left({B}\right)}$} \if{${G}=\phi$} \state \textbf{error} \`\`GHOST-less Catch-up'' \endif \if{${r}$ \textbf{is not} completable} \state \textbf{error} \`\`Catch-up round is not completable'' \endif \if{${J}^{{{r},{p}{c}}}{\left({B}\right)}$ justifies ${B}'$ finalization} \state \textbf{error} \`\`Unjustified Catch-up target finalization'' \endif \state \textsc{Last-Completed-Round} $\leftarrow{r}$ \if{${i}\in{\mathbb{{{V}}}}$} \state \call{Play-Grandpa-round}{${r}+{1}$} \endif
 
-where ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response received from node ${v}$ ([Definition 49](chap-networking.html#defn-grandpa-catchup-response-msg)).
+where ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response received from node ${v}$ ([Definition 49](chap-networking#defn-grandpa-catchup-response-msg)).
 
 ## 6.7. Bridge design (BEEFY) {#sect-grandpa-beefy}
 
@@ -405,11 +405,11 @@ The **statement** is the same piece of information which every relay chain valid
 
 ###### Definition 93. Witness Data {#defn-beefy-witness-data}
 
-**Witness data** contains the statement ([Definition 92](sect-finality.html#defn-beefy-statement)), an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves) and a MMR root of the signatures. The indicators of which validator voted for the statement are just claims and provide no proofs. The network message is defined in [Definition 53](chap-networking.html#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
+**Witness data** contains the statement ([Definition 92](sect-finality#defn-beefy-statement)), an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves) and a MMR root of the signatures. The indicators of which validator voted for the statement are just claims and provide no proofs. The network message is defined in [Definition 53](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
 
 ###### Definition 94. Light Client {#defn-beefy-light-client}
 
-A **light client** is an abstract entity in a remote network such as Ethereum. It can be a node or a smart contract with the intent of requesting finality proofs from the Polkadot network. A light client reads the witness data ([Definition 93](sect-finality.html#defn-beefy-witness-data) from the chain, then requests the signatures directly from the relayer in order to verify those.
+A **light client** is an abstract entity in a remote network such as Ethereum. It can be a node or a smart contract with the intent of requesting finality proofs from the Polkadot network. A light client reads the witness data ([Definition 93](sect-finality#defn-beefy-witness-data) from the chain, then requests the signatures directly from the relayer in order to verify those.
 
 The light client is expected to know who the validators are and has access to their public keys.
 
@@ -419,14 +419,14 @@ A **relayer** (or "prover") is an abstract entity which takes finality proofs fr
 
 ### 6.7.2. Voting on Statements {#id-voting-on-statements}
 
-The Polkadot Host signs a statement ([Definition 92](sect-finality.html#defn-beefy-statement)) and gossips it as part of a vote ([Definition 51](chap-networking.html#defn-msg-beefy-gossip)) to its peers on every new, finalized block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum has better compatibility for it compared to SR25519 or ED25519.
+The Polkadot Host signs a statement ([Definition 92](sect-finality#defn-beefy-statement)) and gossips it as part of a vote ([Definition 51](chap-networking#defn-msg-beefy-gossip)) to its peers on every new, finalized block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum has better compatibility for it compared to SR25519 or ED25519.
 
 ### 6.7.3. Committing Witnesses {#sect-beefy-committing-witnesses}
 
-The relayer ([Definition 95](sect-finality.html#defn-beefy-relayer)) participates in the Polkadot network by collecting the gossiped votes ([Definition 51](chap-networking.html#defn-msg-beefy-gossip)). Those votes are converted into the witness data structure ([Definition 93](sect-finality.html#defn-beefy-witness-data)). The relayer saves the data on the chain of the remote network. The occurrence of saving witnesses on remote networks is undefined.
+The relayer ([Definition 95](sect-finality#defn-beefy-relayer)) participates in the Polkadot network by collecting the gossiped votes ([Definition 51](chap-networking#defn-msg-beefy-gossip)). Those votes are converted into the witness data structure ([Definition 93](sect-finality#defn-beefy-witness-data)). The relayer saves the data on the chain of the remote network. The occurrence of saving witnesses on remote networks is undefined.
 
 ### 6.7.4. Requesting Signed Commitments {#id-requesting-signed-commitments}
 
-A light client ([Definition 94](sect-finality.html#defn-beefy-light-client)) fetches the witness data ([Definition 93](sect-finality.html#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition 52](chap-networking.html#defn-grandpa-beefy-signed-commitment)).
+A light client ([Definition 94](sect-finality#defn-beefy-light-client)) fetches the witness data ([Definition 93](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition 52](chap-networking#defn-grandpa-beefy-signed-commitment)).
 
 How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations. On Ethereum, for example, the light client can request the signed commitments in form of a transaction, which results in a response in form of a transaction.

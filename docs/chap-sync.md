@@ -4,25 +4,25 @@ title: Synchronization
 
 Many applications that interact with the Polkadot network to some extent must be able to retrieve certain information about the network. Depending on the utility, this includes validators that interact with Polkadot’s consensus and need access to the full state, either from the past or just the most up-to-date state, or light clients that are only interest in the minimum information required in order to verify some claims about the state of the network, such as the balance of a specific account. To allow implemenations to quickly retrieve the required information, different types of synchronization protocols are available, respectivel Full, Fast and Warp sync suited for different needs.
 
-The associated network messages are specified in [Section 4.8](chap-networking.html#sect-network-messages).
+The associated network messages are specified in [Section 4.8](chap-networking#sect-network-messages).
 
 ## 3.1. Warp Sync {#sect-sync-warp}
 
-Warp sync ([Section 4.8.4](chap-networking.html#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so called fragments ([Definition 41](chap-networking.html#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition 45](chap-networking.html#defn-grandpa-justifications-compact)). This protocols allows nodes to arrive at the desired state much faster than fast sync.
+Warp sync ([Section 4.8.4](chap-networking#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so called fragments ([Definition 41](chap-networking#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition 45](chap-networking#defn-grandpa-justifications-compact)). This protocols allows nodes to arrive at the desired state much faster than fast sync.
 
 ## 3.2. Fast Sync {#sect-sync-fast}
 
-Fast sync works by downloading the block header history and validating the auhtority set changes ([Section 3.3.1](chap-sync.html#sect-authority-set)) in order to arrive at a specific (usually the most recent) header. After the desired header has been reached and verified, the state can be downloaded and imported ([Section 4.8.3](chap-networking.html#sect-msg-state-request)). Once this process has been completed, the node can proceed with a full sync.
+Fast sync works by downloading the block header history and validating the auhtority set changes ([Section 3.3.1](chap-sync#sect-authority-set)) in order to arrive at a specific (usually the most recent) header. After the desired header has been reached and verified, the state can be downloaded and imported ([Section 4.8.3](chap-networking#sect-msg-state-request)). Once this process has been completed, the node can proceed with a full sync.
 
 ## 3.3. Full Sync {#id-full-sync}
 
-The full sync protocols is the "default" protocol that’s suited for many types of implementations, such as archive nodes (nodes that store everything), validators that participate in Polkadots consensus and light clients that only verify claims about the state of the network. Full sync works by listening to announced blocks ([Section 4.8.1](chap-networking.html#sect-msg-block-announce)) and requesting the blocks from the announcing peers, or just the block headers in case of light clients.
+The full sync protocols is the "default" protocol that’s suited for many types of implementations, such as archive nodes (nodes that store everything), validators that participate in Polkadots consensus and light clients that only verify claims about the state of the network. Full sync works by listening to announced blocks ([Section 4.8.1](chap-networking#sect-msg-block-announce)) and requesting the blocks from the announcing peers, or just the block headers in case of light clients.
 
-The full sync protocol usually downloads the entire chain, but no such requirements must be met. If an implemenation only wants the latest, finalized state, it can combine it with protocols such as fast sync ([Section 3.2](chap-sync.html#sect-sync-fast)) and/or warp sync ([Section 3.1](chap-sync.html#sect-sync-warp)) to make synchronization as fast as possible.
+The full sync protocol usually downloads the entire chain, but no such requirements must be met. If an implemenation only wants the latest, finalized state, it can combine it with protocols such as fast sync ([Section 3.2](chap-sync#sect-sync-fast)) and/or warp sync ([Section 3.1](chap-sync#sect-sync-warp)) to make synchronization as fast as possible.
 
 ### 3.3.1. Consensus Authority Set {#sect-authority-set}
 
-Because Polkadot is a proof-of-stake protocol, each of its consensus engines has its own set of nodes represented by known public keys, which have the authority to influence the protocol in pre-defined ways explained in this Section. To verify the validity of each block, the Polkadot node must track the current list of authorities ([Definition 33](chap-sync.html#defn-authority-list)) for that block.
+Because Polkadot is a proof-of-stake protocol, each of its consensus engines has its own set of nodes represented by known public keys, which have the authority to influence the protocol in pre-defined ways explained in this Section. To verify the validity of each block, the Polkadot node must track the current list of authorities ([Definition 33](chap-sync#defn-authority-list)) for that block.
 
 ###### Definition 33. Authority List {#defn-authority-list}
 
@@ -32,13 +32,13 @@ $$
 {\left({p}{k}_{{A}},{w}_{{A}}\right)}
 $$
 
-${p}{k}_{{A}}$ is the session public key ([Definition 180](id-cryptography-encoding.html#defn-session-key)) of authority ${A}$. And ${w}_{{A}}$ is an unsigned 64-bit integer indicating the authority weight. The value of $\text{Auth}_{{C}}{\left({B}\right)}$ is part of the Polkadot state. The value for $\text{Auth}_{{C}}{\left({B}_{{0}}\right)}$ is set in the genesis state ([Section A.3](id-cryptography-encoding.html#chapter-genesis)) and can be retrieved using a runtime entrypoint corresponding to consensus engine ${C}$.
+${p}{k}_{{A}}$ is the session public key ([Definition 180](id-cryptography-encoding#defn-session-key)) of authority ${A}$. And ${w}_{{A}}$ is an unsigned 64-bit integer indicating the authority weight. The value of $\text{Auth}_{{C}}{\left({B}\right)}$ is part of the Polkadot state. The value for $\text{Auth}_{{C}}{\left({B}_{{0}}\right)}$ is set in the genesis state ([Section A.3](id-cryptography-encoding#chapter-genesis)) and can be retrieved using a runtime entrypoint corresponding to consensus engine ${C}$.
 
-The authorities and their corresponding weights can be retrieved from the Runtime ([Section C.10.1](chap-runtime-api.html#sect-rte-grandpa-auth)).
+The authorities and their corresponding weights can be retrieved from the Runtime ([Section C.10.1](chap-runtime-api#sect-rte-grandpa-auth)).
 
 ### 3.3.2. Runtime-to-Consensus Engine Message {#sect-consensus-message-digest}
 
-The authority list ([Definition 33](chap-sync.html#defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition 11](chap-state.html#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
+The authority list ([Definition 33](chap-sync#defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition 11](chap-state#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
 
 The Polkadot Host must inspect the digest header of each block and delegate consensus messages to their consensus engines. The BABE and GRANDPA consensus engine must react based on the type of consensus messages it receives. The active GRANDPA authorities can only vote for blocks that occurred after the finalized block in which they were selected. Any votes for blocks before the came into effect would get rejected.
 
@@ -46,21 +46,21 @@ The Polkadot Host must inspect the digest header of each block and delegate cons
 
 Block validation is the process by which a node asserts that a block is fit to be added to the blockchain. This means that the block is consistent with the current state of the system and transitions to a new valid state.
 
-New blocks can be received by the Polkadot Host via other peers ([Section 4.8.2](chap-networking.html#sect-msg-block-request)) or from the Host’s own consensus engine ([Chapter 5](sect-block-production.html)). Both the Runtime and the Polkadot Host then need to work together to assure block validity. A block is deemed valid if the block author had authorship rights for the slot in which the block was produce as well as if the transactions in the block constitute a valid transition of states. The former criterion is validated by the Polkadot Host according to the block production consensus protocol. The latter can be verified by the Polkadot Host invoking entry into the Runtime as ([Section C.4.2](chap-runtime-api.html#sect-rte-core-execute-block)) as a part of the validation process. Any state changes created by this function on successful execution are persisted.
+New blocks can be received by the Polkadot Host via other peers ([Section 4.8.2](chap-networking#sect-msg-block-request)) or from the Host’s own consensus engine ([Chapter 5](sect-block-production)). Both the Runtime and the Polkadot Host then need to work together to assure block validity. A block is deemed valid if the block author had authorship rights for the slot in which the block was produce as well as if the transactions in the block constitute a valid transition of states. The former criterion is validated by the Polkadot Host according to the block production consensus protocol. The latter can be verified by the Polkadot Host invoking entry into the Runtime as ([Section C.4.2](chap-runtime-api#sect-rte-core-execute-block)) as a part of the validation process. Any state changes created by this function on successful execution are persisted.
 
-The Polkadot Host implements [Import-and-Validate-Block](chap-sync.html#algo-import-and-validate-block) to assure the validity of the block.
+The Polkadot Host implements [Import-and-Validate-Block](chap-sync#algo-import-and-validate-block) to assure the validity of the block.
 
 \require ${B},\text{Just}{\left({B}\right)}$ \state \call{Set-Storage-State-At}{${P}{\left({B}\right)}$} \if{$\text{Just}{\left({B}\right)}\ne{q}\emptyset$} \state \call{Verify-Block-Justification}{${B},\text{Just}{\left({B}\right)}$} \if{${B}~\text{}{f}{\left\lbrace{i}{s}\right\rbrace}~\text{Finalized}~\text{}{f}{\left\lbrace{\quad\text{and}\quad}\right\rbrace}~{P}{\left({B}\right)}~\text{}{f}{\left\lbrace{i}{s}\neg\right\rbrace}~\text{Finalized}$} \state \call{Mark-as-Final}{${P}{\left({B}\right)}$} \endif \endif \if{${H}_{{p}}{\left({B}\right)}\notin{P}{B}{T}$} \return \endif \state \call{Verify-Authorship-Right}{$\text{Head}{\left({B}\right)}$} \state ${B}\leftarrow$ \call{Remove-Seal}{${B}$} \state ${R}\leftarrow$ \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{C}{\quad\text{or}\quad}{e}$\right.}execute${b}{l}{o}{c}{k}{\rbrace},{B}$} \state ${B}\leftarrow$ \call{Add-Seal}{${B}$} \if{${R}=$ \textsc{True}} \state \call{Persist-State}{} \endif
 
 where  
-- $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition 11](chap-state.html#defn-digest)) before submitting it to the Runtime.
+- $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition 11](chap-state#defn-digest)) before submitting it to the Runtime.
 
-- $\text{Add-Seal}$ adds the Seal digest back to the block ([Definition 11](chap-state.html#defn-digest)) for later propagation.
+- $\text{Add-Seal}$ adds the Seal digest back to the block ([Definition 11](chap-state#defn-digest)) for later propagation.
 
-- $\text{Persist-State}$ implies the persistence of any state changes created by ${\mathtt{\text{Core_execute_block}}}$ ([Section C.4.2](chap-runtime-api.html#sect-rte-core-execute-block)) on successful execution.
+- $\text{Persist-State}$ implies the persistence of any state changes created by ${\mathtt{\text{Core_execute_block}}}$ ([Section C.4.2](chap-runtime-api#sect-rte-core-execute-block)) on successful execution.
 
-- $\text{PBT}$ is the pruned block tree ([Definition 4](chap-state.html#defn-block-tree)).
+- $\text{PBT}$ is the pruned block tree ([Definition 4](chap-state#defn-block-tree)).
 
-- $\text{Verify-Authorship-Right}$ is part of the block production consensus protocol and is described in [Verify-Authorship-Right](sect-block-production.html#algo-verify-authorship-right).
+- $\text{Verify-Authorship-Right}$ is part of the block production consensus protocol and is described in [Verify-Authorship-Right](sect-block-production#algo-verify-authorship-right).
 
-- *Finalized block* and *finality* are defined in [Chapter 6](sect-finality.html).
+- *Finalized block* and *finality* are defined in [Chapter 6](sect-finality).

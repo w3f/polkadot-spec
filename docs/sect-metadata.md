@@ -4,7 +4,7 @@ title: Metadata
 
 The runtime metadata structure contains all the information necessary on how to interact with the Polkadot runtime. Considering that Polkadot runtimes are upgradable and therefore any interfaces are subject to change, the metadata allows developers to structure any extrinsics or storage entries accordingly.
 
-The metadata of a runtime is provided by a call to `Metadata_metadata` ([Section C.5.1](chap-runtime-api.html#sect-rte-metadata-metadata)) and is returned as a scale encoded ([Section A.2.2](id-cryptography-encoding.html#sect-scale-codec)) binary blob. How to interpret and decode this data is described in this chapter.
+The metadata of a runtime is provided by a call to `Metadata_metadata` ([Section C.5.1](chap-runtime-api#sect-rte-metadata-metadata)) and is returned as a scale encoded ([Section A.2.2](id-cryptography-encoding#sect-scale-codec)) binary blob. How to interpret and decode this data is described in this chapter.
 
 ## 12.1. Structure {#sect-rtm-structure}
 
@@ -28,17 +28,17 @@ where
 
 - ${v}_{{m}}$ is an unsigned 8-bit integer indicating the format version of the metadata structure (currently the value of `14`).
 
-- ${R}$ is a sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of type definitions ${r}_{{i}}$ ([Definition 159](sect-metadata.html#defn-rtm-registry-entry)).
+- ${R}$ is a sequence ([Definition 192](id-cryptography-encoding#defn-scale-list)) of type definitions ${r}_{{i}}$ ([Definition 159](sect-metadata#defn-rtm-registry-entry)).
 
-- ${P}$ is a sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of pallet metadata ${p}_{{i}}$ ([Section 12.2](sect-metadata.html#sect-rtm-pallet-metadata)).
+- ${P}$ is a sequence ([Definition 192](id-cryptography-encoding#defn-scale-list)) of pallet metadata ${p}_{{i}}$ ([Section 12.2](sect-metadata#sect-rtm-pallet-metadata)).
 
-- ${t}_{{e}}$ is the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the extrinsics.
+- ${t}_{{e}}$ is the type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) of the extrinsics.
 
 - ${v}_{{e}}$ is an unsigned 8-bit integer indicating the format version of the extrinsics (implying a possible breaking change).
 
-- ${E}$ is a sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of extrinsics metadata ${e}_{{i}}$ ([Definition 170](sect-metadata.html#defn-rtm-signed-extension-metadata)).
+- ${E}$ is a sequence ([Definition 192](id-cryptography-encoding#defn-scale-list)) of extrinsics metadata ${e}_{{i}}$ ([Definition 170](sect-metadata#defn-rtm-signed-extension-metadata)).
 
-- ${t}_{{r}}$ is the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the runtime.
+- ${t}_{{r}}$ is the type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) of the runtime.
 
 ###### Image: Metadata {#img-metadata}
 import Metadata from '/static/img/kaitai_render/metadata.svg';
@@ -62,17 +62,17 @@ $$
 where  
 - $\text{id}_{{t}}$ is a compact integer indicating the identifier of the type.
 
-- ${p}$ is the path of the type, optional and based on source file location. Encoded as a sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of strings.
+- ${p}$ is the path of the type, optional and based on source file location. Encoded as a sequence ([Definition 192](id-cryptography-encoding#defn-scale-list)) of strings.
 
-- ${T}$ is a sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of generic parameters (empty for non-generic types).
+- ${T}$ is a sequence ([Definition 192](id-cryptography-encoding#defn-scale-list)) of generic parameters (empty for non-generic types).
 
   - ${n}$ is the name string of the generic type parameter
 
-  - ${y}$ is a *Option* type containing a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)).
+  - ${y}$ is a *Option* type containing a type Id ([Definition 160](sect-metadata#defn-rtm-type-id)).
 
-- ${D}$ is the type definition ([Definition 161](sect-metadata.html#defn-rtm-type-definition)).
+- ${D}$ is the type definition ([Definition 161](sect-metadata#defn-rtm-type-definition)).
 
-- ${c}$ is the documentation as sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of strings.
+- ${c}$ is the documentation as sequence ([Definition 192](id-cryptography-encoding#defn-scale-list)) of strings.
 
 ###### Image: Metadata Type {#img-metadata-type}
 import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
@@ -81,11 +81,11 @@ import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
 
 ###### Definition 160. Runtime Type Id {#defn-rtm-type-id}
 
-The **runtime type Id** is a compact integer representing the index of the entry ([Definition 159](sect-metadata.html#defn-rtm-registry-entry)) in ${R},{P}$ or ${E}$ of the runtime metadata structure ([Section 12.1](sect-metadata.html#sect-rtm-structure)), depending on context (starting at ${0}$).
+The **runtime type Id** is a compact integer representing the index of the entry ([Definition 159](sect-metadata#defn-rtm-registry-entry)) in ${R},{P}$ or ${E}$ of the runtime metadata structure ([Section 12.1](sect-metadata#sect-rtm-structure)), depending on context (starting at ${0}$).
 
 ###### Definition 161. Type Variant {#defn-rtm-type-definition}
 
-The type definition ${D}$ is a varying datatype ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) and indicates all the possible types of encodable values a type can have.
+The type definition ${D}$ is a varying datatype ([Definition 188](id-cryptography-encoding#defn-varrying-data-type)) and indicates all the possible types of encodable values a type can have.
 
 $$
 {D}={\left\lbrace\begin{matrix}{0}&->&{C}&\text{composite type (e.g. structure or tuple)}\\{1}&->&{V}&\text{variant type}\\{2}&->&{s}_{{v}}&\text{sequence type varying length}\\{3}&->&{S}&\text{sequence with fixed length}\\{4}&->&{T}&\text{tuple type}\\{5}&->&{P}&\text{primitive type}\\{6}&->&{e}&\text{compact encoded type}\\{7}&->&{B}&\text{sequence of bits}\end{matrix}\right.}
@@ -96,15 +96,15 @@ where
 
   ${C}={\left({{f}_{{0}},}\ldots,{f}_{{n}}\right)}$
 
-  - ${f_i}$ is a field ([Definition 162](sect-metadata.html#defn-rtm-field)).
+  - ${f_i}$ is a field ([Definition 162](sect-metadata#defn-rtm-field)).
 
 - ${V}$ is a sequence of the following format:
 
   ${V}={\left({v}_{{0}},\ldots,{v}_{{n}}\right)}$
 
-  - ${v}_{{i}}$ is a variant ([Definition 163](sect-metadata.html#defn-rtm-variant)).
+  - ${v}_{{i}}$ is a variant ([Definition 163](sect-metadata#defn-rtm-variant)).
 
-- ${s}_{{v}}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)).
+- ${s}_{{v}}$ is a type Id ([Definition 160](sect-metadata#defn-rtm-type-id)).
 
 - ${S}$ is of the following format:
 
@@ -112,25 +112,25 @@ where
 
   - ${l}$ is a unsigned 32-bit integer indicating the length
 
-  - ${y}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)).
+  - ${y}$ is a type Id ([Definition 160](sect-metadata#defn-rtm-type-id)).
 
-- ${T}$ is a sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of type Ids ([Definition 160](sect-metadata.html#defn-rtm-type-id)).
+- ${T}$ is a sequence ([Definition 192](id-cryptography-encoding#defn-scale-list)) of type Ids ([Definition 160](sect-metadata#defn-rtm-type-id)).
 
-- ${P}$ is a varying datatype ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) of the following structure:
+- ${P}$ is a varying datatype ([Definition 188](id-cryptography-encoding#defn-varrying-data-type)) of the following structure:
 
   $$
   {P}={\left\lbrace\begin{matrix}{0}&\text{boolean}\\{1}&\text{char}\\{2}&\text{string}\\{3}&\text{unsigned 8-bit integer}\\{4}&\text{unsigned 16-bit integer}\\{5}&\text{unsigned 32-bit integer}\\{6}&\text{unsigned 64-bit integer}\\{7}&\text{unsigned 128-bit integer}\\{8}&\text{unsigned 256-bit integer}\\{9}&\text{signed 8-bit integer}\\{10}&\text{signed 16-bit integer}\\{11}&\text{signed 32-bit integer}\\{12}&\text{signed 64-bit integer}\\{13}&\text{signed 128-bit integer}\\{14}&\text{signed 256-bit integer}\end{matrix}\right.}
   $$
 
-- ${e}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)).
+- ${e}$ is a type Id ([Definition 160](sect-metadata#defn-rtm-type-id)).
 
 - ${B}$ is a datastructure of the following format:
 
   ${B}={\left({s},{o}\right)}$
 
-  - ${s}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) representing the bit store order ([external reference](https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore.html))
+  - ${s}$ is a type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) representing the bit store order ([external reference](https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore))
 
-  - ${o}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) the bit order type ([external reference](https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder.html)).
+  - ${o}$ is a type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) the bit order type ([external reference](https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder)).
 
 ###### Image: Metadata Type Definition {#img-metadata-type-definition}
 import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_definition.svg';
@@ -149,7 +149,7 @@ where
 
 - ${n}$ is an *Option* type containing the string that indicates the field name.
 
-- ${y}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)).
+- ${y}$ is a type Id ([Definition 160](sect-metadata#defn-rtm-type-id)).
 
 - ${y}_{{n}}$ is an *Option* type containing a string that indicates the name of the type as it appears in the source code.
 
@@ -172,7 +172,7 @@ where
 
 - ${n}$ is a string representing the name of the variant.
 
-- ${F}$ is a possible empty array of varying length containing field ([Definition 162](sect-metadata.html#defn-rtm-field)) elements.
+- ${F}$ is a possible empty array of varying length containing field ([Definition 162](sect-metadata#defn-rtm-field)) elements.
 
 - ${k}$ is an unsigned 8-bit integer indicating the index of the variant.
 
@@ -185,7 +185,7 @@ import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_varian
 
 ## 12.2. Pallet Metadata {#sect-rtm-pallet-metadata}
 
-All the metadata about a pallet, part of the main structure ([Section 12.1](sect-metadata.html#sect-rtm-structure)) and of the following format:
+All the metadata about a pallet, part of the main structure ([Section 12.1](sect-metadata#sect-rtm-structure)) and of the following format:
 
 $$
 {p}_{{i}}={\left({n},{S},{a},{e},{C},{e},{i}\right)}
@@ -195,15 +195,15 @@ where
 
 - ${n}$ is a string representing the pallet name.
 
-- ${S}$ is an *Option* type containing the pallet storage metadata ([Definition 164](sect-metadata.html#defn-rtm-pallet-storage-metadata)).
+- ${S}$ is an *Option* type containing the pallet storage metadata ([Definition 164](sect-metadata#defn-rtm-pallet-storage-metadata)).
 
-- ${a}$ is an *Option* type ([Definition 190](id-cryptography-encoding.html#defn-option-type)) containing the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of pallet calls.
+- ${a}$ is an *Option* type ([Definition 190](id-cryptography-encoding#defn-option-type)) containing the type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) of pallet calls.
 
-- ${e}$ is an *Option* type ([Definition 190](id-cryptography-encoding.html#defn-option-type)) containing the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of pallet events.
+- ${e}$ is an *Option* type ([Definition 190](id-cryptography-encoding#defn-option-type)) containing the type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) of pallet events.
 
-- ${C}$ is an *Sequence* ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of all pallet constant metadata ([Definition 169](sect-metadata.html#defn-rtm-pallet-constants)).
+- ${C}$ is an *Sequence* ([Definition 192](id-cryptography-encoding#defn-scale-list)) of all pallet constant metadata ([Definition 169](sect-metadata#defn-rtm-pallet-constants)).
 
-- ${e}$ is an *Option* type ([Definition 190](id-cryptography-encoding.html#defn-option-type)) containing the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the pallet error.
+- ${e}$ is an *Option* type ([Definition 190](id-cryptography-encoding#defn-option-type)) containing the type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) of the pallet error.
 
 - ${i}$ is an unsigned 8-bit integers indicating the index of the pallet, which is used for encoding pallet events and calls.
 
@@ -244,9 +244,9 @@ where
 
 - ${n}$ is the string representing the variable name of the storage entry.
 
-- ${m}$ is an enum type determining the storage entry modifier ([Definition 166](sect-metadata.html#defn-rtm-storage-entry-modifier)).
+- ${m}$ is an enum type determining the storage entry modifier ([Definition 166](sect-metadata#defn-rtm-storage-entry-modifier)).
 
-- ${y}$ is the type of the value stored in the entry ([Definition 167](sect-metadata.html#defn-rtm-storage-entry-type)).
+- ${y}$ is the type of the value stored in the entry ([Definition 167](sect-metadata#defn-rtm-storage-entry-type)).
 
 - ${d}$ is an byte array containing the default value.
 
@@ -263,7 +263,7 @@ import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
 |-----|-------------------------------------------------|
 |     | This might be incorrect and has to be reviewed. |
 
-The storage entry modifier is a varying datatype ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) and indicates how the storage entry is returned and how it behaves if the entry is not present.
+The storage entry modifier is a varying datatype ([Definition 188](id-cryptography-encoding#defn-varrying-data-type)) and indicates how the storage entry is returned and how it behaves if the entry is not present.
 
 $$
 {m}={\left\lbrace\begin{matrix}{0}&\text{optional}\\{1}&\text{default}\end{matrix}\right.}
@@ -273,13 +273,13 @@ where *0* indicates that the entry returns an *Option* type and therefore *None*
 
 ###### Definition 167. Storage Entry Type {#defn-rtm-storage-entry-type}
 
-The type of the storage value is a varying datatype ([Definition 188](id-cryptography-encoding.html#defn-varrying-data-type)) that indicates how the entry is stored.
+The type of the storage value is a varying datatype ([Definition 188](id-cryptography-encoding#defn-varrying-data-type)) that indicates how the entry is stored.
 
 $$
 {y}={\left\lbrace\begin{matrix}{0}&->&{t}&\text{plain type}\\{1}&->&{\left({H},{k},{v}\right)}&\text{storage map}\end{matrix}\right.}
 $$
 
-where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition 160](sect-metadata.html#defn-rtm-type-id)). ${H}$ is an array of varying length containing the storage hasher ([Definition 168](sect-metadata.html#defn-rtm-storage-hasher)).
+where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition 160](sect-metadata#defn-rtm-type-id)). ${H}$ is an array of varying length containing the storage hasher ([Definition 168](sect-metadata#defn-rtm-storage-hasher)).
 
 ###### Image: Storage Definition {#img-storage-definition}
 import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg';
@@ -305,7 +305,7 @@ $$
 where  
 - ${n}$ is a string representing the name of the pallet constant.
 
-- ${y}$ is the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the pallet constant.
+- ${y}$ is the type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) of the pallet constant.
 
 - ${v}$ is a byte array containing the value of the constant.
 
@@ -318,7 +318,7 @@ import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 
 ## 12.3. Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
 
-The metadata about a pallets extrinsics, part of the main structure ([Section 12.1](sect-metadata.html#sect-rtm-structure)) and of the following format:
+The metadata about a pallets extrinsics, part of the main structure ([Section 12.1](sect-metadata#sect-rtm-structure)) and of the following format:
 
 ###### Definition 170. Signed Extension Metadata {#defn-rtm-signed-extension-metadata}
 
@@ -331,9 +331,9 @@ $$
 where  
 - ${n}$ is a string representing the unique signed extension identifier, which may be different from the type name.
 
-- ${y}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the signed extension, with the data to be included in the extrinsic.
+- ${y}$ is a type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) of the signed extension, with the data to be included in the extrinsic.
 
-- ${a}$ is the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the additional signed data, with the data to be included in the signed payload.
+- ${a}$ is the type Id ([Definition 160](sect-metadata#defn-rtm-type-id)) of the additional signed data, with the data to be included in the signed payload.
 
 ###### Image: Metadata Extrinsic {#img-metadata-extrinsic}
 import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';

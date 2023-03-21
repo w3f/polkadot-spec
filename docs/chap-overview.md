@@ -6,7 +6,7 @@ The Polkadot Protocol differentiates between different classes of Polkadot Hosts
 
 ## 1.1. Light Client {#sect-client-light}
 
-The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on recent state of the blockchain, and to add extrinsics (transactions). It does not maintain the full state, rather queries the full node on the latest finalized state and verifies the authenticity of the responses trustlessly. Details of specifications focused for Light Clients can be found in [Chapter 7](sect-lightclient.html).
+The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on recent state of the blockchain, and to add extrinsics (transactions). It does not maintain the full state, rather queries the full node on the latest finalized state and verifies the authenticity of the responses trustlessly. Details of specifications focused for Light Clients can be found in [Chapter 7](sect-lightclient).
 
 ## 1.2. Full Node {#sect-node-full}
 
@@ -14,15 +14,15 @@ While the full node is still a mostly passive participant of the protocol, they 
 
 - **Functional Requirements:**
 
-  1.  The node must populate the state storage with the official genesis state, elaborated further in [Section A.3](id-cryptography-encoding.html#chapter-genesis).
+  1.  The node must populate the state storage with the official genesis state, elaborated further in [Section A.3](id-cryptography-encoding#chapter-genesis).
 
-  2.  The node should maintain a set of around 50 active peers at any time. New peers can be found using the discovery protocols ([Section 4.4](chap-networking.html#sect-discovery-mechanism))
+  2.  The node should maintain a set of around 50 active peers at any time. New peers can be found using the discovery protocols ([Section 4.4](chap-networking#sect-discovery-mechanism))
 
-  3.  The node should open and maintain the various required streams ([Section 4.7](chap-networking.html#sect-protocols-substreams)) with each of its active peers.
+  3.  The node should open and maintain the various required streams ([Section 4.7](chap-networking#sect-protocols-substreams)) with each of its active peers.
 
-  4.  Furthermore, the node should send block requests ([Section 4.8.2](chap-networking.html#sect-msg-block-request)) to these peers to receive all blocks in the chain and execute each of them.
+  4.  Furthermore, the node should send block requests ([Section 4.8.2](chap-networking#sect-msg-block-request)) to these peers to receive all blocks in the chain and execute each of them.
 
-  5.  The node should exchange neighbor packets ([Section 4.8.6.1](chap-networking.html#sect-grandpa-neighbor-msg)).
+  5.  The node should exchange neighbor packets ([Section 4.8.6.1](chap-networking#sect-grandpa-neighbor-msg)).
 
 ## 1.3. Authoring Node {#sect-node-authoring}
 
@@ -30,16 +30,16 @@ The authoring node covers all the features of the full node but instead of just 
 
 - **Functional Requirements:**
 
-  1.  Verify that the Host’s session key is included in the current Epoch’s authority set ([Section 3.3.1](chap-sync.html#sect-authority-set)).
+  1.  Verify that the Host’s session key is included in the current Epoch’s authority set ([Section 3.3.1](chap-sync#sect-authority-set)).
 
-  2.  Run the BABE lottery ([Chapter 5](sect-block-production.html)) and wait for the next assigned slot in order to produce a block.
+  2.  Run the BABE lottery ([Chapter 5](sect-block-production)) and wait for the next assigned slot in order to produce a block.
 
-  3.  Gossip any produced blocks to all connected peers ([Section 4.8.1](chap-networking.html#sect-msg-block-announce)).
+  3.  Gossip any produced blocks to all connected peers ([Section 4.8.1](chap-networking#sect-msg-block-announce)).
 
-  4.  Run the catch-up protocol ([Section 6.6.1](sect-finality.html#sect-grandpa-catchup)) to make sure that the node is participating in the current round and not a past round.
+  4.  Run the catch-up protocol ([Section 6.6.1](sect-finality#sect-grandpa-catchup)) to make sure that the node is participating in the current round and not a past round.
 
-  5.  Run the GRANDPA rounds protocol ([Chapter 6](sect-finality.html)).
+  5.  Run the GRANDPA rounds protocol ([Chapter 6](sect-finality)).
 
 ## 1.4. Relaying Node {#sect-node-relaying}
 
-The relaying node covers all the features of the authoring node, but also participants in the availability and validity process to process new parachain blocks as described in [Chapter 8](chapter-anv.html).
+The relaying node covers all the features of the authoring node, but also participants in the availability and validity process to process new parachain blocks as described in [Chapter 8](chapter-anv).

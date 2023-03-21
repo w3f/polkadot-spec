@@ -8,11 +8,11 @@ The Polkadot network, like any other permissionless system, needs to implement a
 
 In contrast to some other systems such as Ethereum which implement fine measurement for each executed low-level operation by smart contracts, known as gas metering, Polkadot takes a more relaxed approach by implementing a measuring system where the cost of the transactions (referred to as ’extrinsics’) are determined before execution and are known as the weight system.
 
-The Polkadot weight system introduces a mechanism for block producers to measure the cost of running the extrinsics and determine how "heavy" it is in terms of execution time. Within this mechanism, block producers can select a set of extrinsics and saturate the block to its fullest potential without exceeding any limitations (as described in [Section 10.2.1](id-weights.html#sect-limitations)). Moreover, the weight system can be used to calculate a fee for executing each extrinsics according to its weight (as described in [Section 10.6.1](id-weights.html#sect-fee-calculation)).
+The Polkadot weight system introduces a mechanism for block producers to measure the cost of running the extrinsics and determine how "heavy" it is in terms of execution time. Within this mechanism, block producers can select a set of extrinsics and saturate the block to its fullest potential without exceeding any limitations (as described in [Section 10.2.1](id-weights#sect-limitations)). Moreover, the weight system can be used to calculate a fee for executing each extrinsics according to its weight (as described in [Section 10.6.1](id-weights#sect-fee-calculation)).
 
-Additionally, Polkadot introduces a specified block ratio (as defined in [Section 10.2.1](id-weights.html#sect-limitations)), ensuring that only a certain portion of the total block size gets used for regular extrinsics. The remaining space is reserved for critical, operational extrinsics required for the functionality by Polkadot itself.
+Additionally, Polkadot introduces a specified block ratio (as defined in [Section 10.2.1](id-weights#sect-limitations)), ensuring that only a certain portion of the total block size gets used for regular extrinsics. The remaining space is reserved for critical, operational extrinsics required for the functionality by Polkadot itself.
 
-To begin, we introduce in [Section 10.2](id-weights.html#sect-assumptions) the assumption upon which the Polkadot transaction weight system is designed. In [Section 10.2.1](id-weights.html#sect-limitations), we discuss the limitation Polkadot needs to enforce on the block size. In [Section 10.3](id-weights.html#sect-runtime-primitives), we describe in detail the procedure upon which the weight of any transaction should be calculated. In [Section 10.5](id-weights.html#sect-practical-examples), we present how we apply this procedure to compute the weight of particular runtime functions.
+To begin, we introduce in [Section 10.2](id-weights#sect-assumptions) the assumption upon which the Polkadot transaction weight system is designed. In [Section 10.2.1](id-weights#sect-limitations), we discuss the limitation Polkadot needs to enforce on the block size. In [Section 10.3](id-weights#sect-runtime-primitives), we describe in detail the procedure upon which the weight of any transaction should be calculated. In [Section 10.5](id-weights#sect-practical-examples), we present how we apply this procedure to compute the weight of particular runtime functions.
 
 ## 10.2. Assumptions {#sect-assumptions}
 
@@ -22,7 +22,7 @@ In this section, we define the concept of weight and we discuss the consideratio
 
 - avoid extrinsics where its execution takes too long, by assigning a transaction fee to each extrinsic proportional to their resource consumption.
 
-These concepts are formalized in [Definition 150](id-weights.html#defn-block-length) and [Definition 153](id-weights.html#defn-polkadot-block-limits):
+These concepts are formalized in [Definition 150](id-weights#defn-block-length) and [Definition 153](id-weights#defn-polkadot-block-limits):
 
 ###### Definition 150. Block Length {#defn-block-length}
 
@@ -52,7 +52,7 @@ The P̱olkadot transaction weight function denoted by ${\mathcal{{{W}}}}$ as fol
 
 ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{\mathcal{{{W}}}}&:{\mathcal{{{E}}}}\rightarrow{\mathbb{{{N}}}}$ \mathcal{W} &: E \mapsto w \end{aligned}$
 
-where ${w}$ is a non-negative integer representing the weight of the extrinsic ${E}$. We define the weight of all inherent extrinsics as defined in the [Section 2.3.3](chap-state.html#sect-inherents) to be equal to 0. We extend the definition of ${\mathcal{{{W}}}}$ function to compute the weight of the block as sum of weight of all extrinsics it includes:
+where ${w}$ is a non-negative integer representing the weight of the extrinsic ${E}$. We define the weight of all inherent extrinsics as defined in the [Section 2.3.3](chap-state#sect-inherents) to be equal to 0. We extend the definition of ${\mathcal{{{W}}}}$ function to compute the weight of the block as sum of weight of all extrinsics it includes:
 
 ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{\mathcal{{{W}}}}&:{\mathcal{{{B}}}}\rightarrow{\mathbb{{{N}}}}$ \mathcal{W} &: B \mapsto \sum\_{E\in B}(W(E)) \end{aligned}$
 
@@ -74,7 +74,7 @@ Nonetheless, ${\mathcal{{{W}}}}{\left({E}\right)}$ can be manipulated depending 
 
 ### 10.2.1. Limitations {#sect-limitations}
 
-In this section we discuss how applying the limitation defined in [Definition 153](id-weights.html#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition 155](id-weights.html#defn-block-weight):
+In this section we discuss how applying the limitation defined in [Definition 153](id-weights#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition 155](id-weights#defn-block-weight):
 
 ###### Definition 155. Block Weight {#defn-block-weight}
 
@@ -94,9 +94,9 @@ The weights must fulfill the requirements as noted by the fundamentals and limit
 
 ## 10.3. Calculation of the weight function {#sect-runtime-primitives}
 
-In order to calculate weight of block ${B}$, ${\mathcal{{{W}}}}{\left({B}\right)}$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as loops, I/O operations, and data manipulation. Subsequently the performance and execution time of each part will be evaluated based on variety of input parameters. Based on those observations, weights are assigned Runtime functions or parameters which contribute to long execution times. These sub component of the code are discussed in [Section 10.4.1](id-weights.html#sect-primitive-types).
+In order to calculate weight of block ${B}$, ${\mathcal{{{W}}}}{\left({B}\right)}$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as loops, I/O operations, and data manipulation. Subsequently the performance and execution time of each part will be evaluated based on variety of input parameters. Based on those observations, weights are assigned Runtime functions or parameters which contribute to long execution times. These sub component of the code are discussed in [Section 10.4.1](id-weights#sect-primitive-types).
 
-The general algorithm to calculate ${\mathcal{{{W}}}}{\left({E}\right)}$ is described in the [Section 10.4](id-weights.html#sect-benchmarking).
+The general algorithm to calculate ${\mathcal{{{W}}}}{\left({E}\right)}$ is described in the [Section 10.4](id-weights#sect-benchmarking).
 
 ## 10.4. Benchmarking {#sect-benchmarking}
 
@@ -104,9 +104,9 @@ Calculating the extrinsic weight solely based on theoretical complexity of the u
 
 On the other hand, benchmarking an extrinsics in a black-box fashion could (using random parameters) most centainly results in missing corner cases and worst case scenarios. Instead, we benchmark all available Runtime functions which are invoked in the course of execution of extrinsics with a large collection of carefully selected input parameters and use the result of the benchmarking process to evaluate ${\mathcal{{{W}}}}{\left({E}\right)}$.
 
-In order to select useful parameters, the Runtime functions have to be analyzed to fully understand which behaviors or conditions can result in expensive execution times, which is described closer in [Section 10.4.1](id-weights.html#sect-primitive-types). Not every possible benchmarking outcome can be invoked by varying input parameters of the Runtime function. In some circumstances, preliminary work is required before a specific benchmark can be reliably measured, such as creating certain preexisting entries in the storage or other changes to the environment.
+In order to select useful parameters, the Runtime functions have to be analyzed to fully understand which behaviors or conditions can result in expensive execution times, which is described closer in [Section 10.4.1](id-weights#sect-primitive-types). Not every possible benchmarking outcome can be invoked by varying input parameters of the Runtime function. In some circumstances, preliminary work is required before a specific benchmark can be reliably measured, such as creating certain preexisting entries in the storage or other changes to the environment.
 
-The Practical Examples ([Section 10.5](id-weights.html#sect-practical-examples)) covers the analysis process and the implementation of preliminary work in more detail.
+The Practical Examples ([Section 10.5](id-weights#sect-practical-examples)) covers the analysis process and the implementation of preliminary work in more detail.
 
 ### 10.4.1. Primitive Types {#sect-primitive-types}
 
@@ -141,19 +141,19 @@ Indicators for performance penalties:
 
 - **Fixed iterations and datasets** - Fixed iterations and datasets can increase the overall cost of the Runtime functions, but the execution time does not vary depending on the input parameters or storage entries. A base Weight is appropriate in this case.
 
-- **Adjustable iterations and datasets** - If the amount of iterations or datasets depend on the input parameters of the caller or specific entries in storage, then a certain weight should be applied for each (additional) iteration or item. The Runtime defines the maximum value for such cases. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum value to the maximum value, as described in [Definition 156](id-weights.html#defn-max-value).
+- **Adjustable iterations and datasets** - If the amount of iterations or datasets depend on the input parameters of the caller or specific entries in storage, then a certain weight should be applied for each (additional) iteration or item. The Runtime defines the maximum value for such cases. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum value to the maximum value, as described in [Definition 156](id-weights#defn-max-value).
 
-- **Input parameters** - Input parameters that users pass on to the Runtime function can result in expensive operations. Depending on the data type, it can be appropriate to add additional weights based on certain properties, such as data size, assuming the data type allows varying sizes. The Runtime must define limits on those properties. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the maximum value, as described in paragraph [Definition 156](id-weights.html#defn-max-value).
+- **Input parameters** - Input parameters that users pass on to the Runtime function can result in expensive operations. Depending on the data type, it can be appropriate to add additional weights based on certain properties, such as data size, assuming the data type allows varying sizes. The Runtime must define limits on those properties. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the maximum value, as described in paragraph [Definition 156](id-weights#defn-max-value).
 
 ###### Definition 156. Maximum Value {#defn-max-value}
 
-What the maximum value should be really depends on the functionality that the Runtime function is trying to provide. If the choice for that value is not obvious, then it’s advised to run benchmarks on a big range of values and pick a conservative value below the `targeted time per block` limit as described in section [Section 10.2.1](id-weights.html#sect-limitations).
+What the maximum value should be really depends on the functionality that the Runtime function is trying to provide. If the choice for that value is not obvious, then it’s advised to run benchmarks on a big range of values and pick a conservative value below the `targeted time per block` limit as described in section [Section 10.2.1](id-weights#sect-limitations).
 
 ### 10.4.2. Parameters {#id-parameters}
 
 The inputs parameters highly vary depending on the Runtime function and must therefore be carefully selected. The benchmarks should use input parameters which will most likely be used in regular cases, as intended by the authors, but must also consider worst case scenarios and inputs which might decelerate or heavily impact performance of the function. The input parameters should be randomized in order to cause various effects in behaviors on certain values, such as memory relocations and other outcomes that can impact performance.
 
-It’s not possible to benchmark every single value. However, one should select a range of inputs to benchmark, spanning from the minimum value to the maximum value which will most likely exceed the expected usage of that function. This is described in more detail in [Section 10.4.1.1](id-weights.html#sect-primitive-types-considerations). The benchmarks should run individual executions/iterations within that range, where the chosen parameters should give insight on the execution time. Selecting imprecise parameters or too extreme ranges might indicate an inaccurate result of the function as it will be used in production. Therefore, when a range of input parameters gets benchmarked, the result of each individual parameter should be recorded and optionally visualized, then the necessary adjustment can be made. Generally, the worst case scenario should be assigned as the weight value for the corresponding runtime function.
+It’s not possible to benchmark every single value. However, one should select a range of inputs to benchmark, spanning from the minimum value to the maximum value which will most likely exceed the expected usage of that function. This is described in more detail in [Section 10.4.1.1](id-weights#sect-primitive-types-considerations). The benchmarks should run individual executions/iterations within that range, where the chosen parameters should give insight on the execution time. Selecting imprecise parameters or too extreme ranges might indicate an inaccurate result of the function as it will be used in production. Therefore, when a range of input parameters gets benchmarked, the result of each individual parameter should be recorded and optionally visualized, then the necessary adjustment can be made. Generally, the worst case scenario should be assigned as the weight value for the corresponding runtime function.
 
 Additionally, given the distinction theoretical and practical usage, the author reserves the right to make adjustments to the input parameters and assigned weights according to the observed behavior of the actual, real-world network.
 
@@ -173,7 +173,7 @@ The benchmarks should be executed on clean systems without interference of other
 
 ## 10.5. Practical examples {#sect-practical-examples}
 
-This section walks through Runtime functions available in the Polkadot Runtime to demonstrate the analysis process as described in [Section 10.4.1](id-weights.html#sect-primitive-types).
+This section walks through Runtime functions available in the Polkadot Runtime to demonstrate the analysis process as described in [Section 10.4.1](id-weights#sect-primitive-types).
 
 In order for certain benchmarks to produce conditions where resource heavy computation or excessive I/O can be observed, the benchmarks might require some preliminary work on the environment, since those conditions cannot be created with simply selected parameters. The analysis process shows indicators on how the preliminary work should be implemented.
 
@@ -442,7 +442,7 @@ Specific parameters can could have a significant impact for this specific functi
 | Account index | `index` in…​   | 1        | 1000   | Used as a seed for account creation |
 | Balance       | `balance` in…​ | 2        | 1000   | Sender balance and transfer amount  |
 
-Executing a benchmark for each balance increment within the balance range for each index increment within the index range will generate too many variants (${1000}\times{999}$) and highly increase execution time. Therefore, this benchmark is configured to first set the balance at value 1’000 and then to iterate from 1 to 1’000 for the index value. Once the index value reaches 1’000, the balance value will reset to 2 and iterate to 1’000 (see ["transfer" Runtime function benchmark](id-weights.html#algo-benchmark-transfer) for more detail):
+Executing a benchmark for each balance increment within the balance range for each index increment within the index range will generate too many variants (${1000}\times{999}$) and highly increase execution time. Therefore, this benchmark is configured to first set the balance at value 1’000 and then to iterate from 1 to 1’000 for the index value. Once the index value reaches 1’000, the balance value will reset to 2 and iterate to 1’000 (see ["transfer" Runtime function benchmark](id-weights#algo-benchmark-transfer) for more detail):
 
 - `index`: 1, `balance`: 1000
 
@@ -462,7 +462,7 @@ Executing a benchmark for each balance increment within the balance range for ea
 
 - …​
 
-The parameters itself do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights.html#algo-benchmark-transfer).
+The parameters itself do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights#algo-benchmark-transfer).
 
 #### 10.5.3.3. Benchmarking Framework {#id-benchmarking-framework-3}
 
@@ -501,7 +501,7 @@ The `withdraw_unbonded` function of the `staking` module is designed to move any
 
 #### 10.5.4.1. Analysis {#id-analysis-4}
 
-Similarly to the `payout_stakers` function ([Section 10.5.2](id-weights.html#sect-practical-example-payout-stakers)), this function fetches the Ledger which contains information about the stash, such as bonded balance and unlocking balance (balance that will eventually be freed and can be withdrawn).
+Similarly to the `payout_stakers` function ([Section 10.5.2](id-weights#sect-practical-example-payout-stakers)), this function fetches the Ledger which contains information about the stash, such as bonded balance and unlocking balance (balance that will eventually be freed and can be withdrawn).
 
 ``` rouge
 if let Some(current_era) = Self::current_era() {
@@ -673,4 +673,4 @@ The `Update Multiplier` defines how the multiplier can change. The Polkadot Runt
 
 ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{d}\Leftrightarrow&=&{\left({t}{a}{r}\ge{t}$\right.} weight - previous${b}{l}{o}{c}{k}$ weight) ${v}&=&{0.00004}$ next${w}{e}{i}{g}{h}{t}&=&{w}{e}{i}{g}{h}{t}\times{\left({1}+{\left({v}\times{d}\Leftrightarrow\right)}+\frac{{\left({v}\times{d}\Leftrightarrow\right)}^{{2}}}{{2}}\right)}$ \end{aligned}$
 
-Polkadot defines the `target_weight` as 0.25 (25%). More information about this algorithm is described in the [Web3 Foundation research paper](https://research.web3.foundation/en/latest/polkadot/overview/2-token-economics.html#relay-chain-transaction-fees-and-per-block-transaction-limits).
+Polkadot defines the `target_weight` as 0.25 (25%). More information about this algorithm is described in the [Web3 Foundation research paper](https://research.web3.foundation/en/latest/polkadot/overview/2-token-economics#relay-chain-transaction-fees-and-per-block-transaction-limits).
