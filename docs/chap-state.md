@@ -92,9 +92,10 @@ Polkadot nodes replicate each other’s state by syncing the history of the extr
 
 A Polkadot block consists a *block header* ([Definition 10](chap-state.html#defn-block-header)) and a *block body* ([Definition 13](chap-state.html#defn-block-body)). The *block body* in turn is made up out of *extrinsics* , which represent the generalization of the concept of *transactions*. *Extrinsics* can contain any set of external data the underlying chain wishes to validate and track.
 
+###### Image: Block {#img-block}
 import Block from '/static/img/kaitai_render/block.svg';
 
-<Block />
+<Block className="graphviz-svg" />
 
 ###### Definition 10. Block Header {#defn-block-header}
 
@@ -110,9 +111,10 @@ The **header of block B**, ${H}_{{h}}{\left({B}\right)}$, is a 5-tuple containin
 
 - **digest:** this field is used to store any chain-specific auxiliary data, which could help the light clients interact with the block without the need of accessing the full storage as well as consensus-related data including the block signature. This field is indicated as ${H}_{{d}}$ ([Definition 11](chap-state.html#defn-digest)).
 
+###### Image: Block Header {#img-block-header}
 import BlockHeader from '/static/img/kaitai_render/block_header.svg';
 
-<BlockHeader />
+<BlockHeader className="graphviz-svg" />
 
 ###### Definition 11. Header Digest {#defn-digest}
 
@@ -140,9 +142,10 @@ where
 
 [TABLE]
 
-import BlockDigest from '/static/img/kaitai_render/block_digest.svg';
+###### Image: Digest {#img-digest}
+import Digest from '/static/img/kaitai_render/digest.svg';
 
-<BlockDigest />
+<Digest className="graphviz-svg" />
 
 ###### Definition 12. Header Hash {#defn-block-header-hash}
 
@@ -162,9 +165,10 @@ $$
 
 Where each ${E}_{{i}}\in{\mathbb{{B}}}$ is a SCALE encoded extrinsic.
 
+###### Image: Block Body {#img-block-body}
 import BlockBody from '/static/img/kaitai_render/block_body.svg';
 
-<BlockBody />
+<BlockBody className="graphviz-svg"/>
 
 ## 2.3. Extrinsics {#sect-extrinsics}
 

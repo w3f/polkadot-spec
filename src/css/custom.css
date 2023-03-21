@@ -28,3 +28,12 @@
   --ifm-color-primary-lightest: #ec6db1;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+.graphviz-svg {
+  max-width: 100%;
+  height: auto;
+}
+
+g > a > text {
+  text-decoration: underline;
+}

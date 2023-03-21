@@ -40,9 +40,10 @@ where
 
 - ${t}_{{r}}$ is the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the runtime.
 
+###### Image: Metadata {#img-metadata}
 import Metadata from '/static/img/kaitai_render/metadata.svg';
 
-<Metadata />
+<Metadata className="graphviz-svg" />
 
 ###### Definition 159. Runtime Registry Type Entry {#defn-rtm-registry-entry}
 
@@ -73,9 +74,10 @@ where
 
 - ${c}$ is the documentation as sequence ([Definition 192](id-cryptography-encoding.html#defn-scale-list)) of strings.
 
+###### Image: Metadata Type {#img-metadata-type}
 import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
 
-<MetadataType />
+<MetadataType className="graphviz-svg" /> 
 
 ###### Definition 160. Runtime Type Id {#defn-rtm-type-id}
 
@@ -130,9 +132,10 @@ where
 
   - ${o}$ is a type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) the bit order type ([external reference](https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder.html)).
 
+###### Image: Metadata Type Definition {#img-metadata-type-definition}
 import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_definition.svg';
 
-<MetadataTypeDefinition />
+<MetadataTypeDefinition className="graphviz-svg"  />
 
 ###### Definition 162. Field {#defn-rtm-field}
 
@@ -152,9 +155,10 @@ where
 
 - ${C}$ is a sequence of varying length containing strings of documentation.
 
+###### Image: Metadata Type Fields {#img-metadata-type-fields}
 import MetadataTypeFields from '/static/img/kaitai_render/metadata_type_fields.svg';
 
-<MetadataTypeFields />
+<MetadataTypeFields className="graphviz-svg" />
 
 ###### Definition 163. Variant {#defn-rtm-variant}
 
@@ -174,9 +178,10 @@ where
 
 - ${C}$ is a sequence of strings containing the documentation.
 
+###### Image: Metadata Type Variants {#img-metadata-type-variants}
 import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_variants.svg';
 
-<MetadataTypeVariants />
+<MetadataTypeVariants className="graphviz-svg" />
 
 ## 12.2. Pallet Metadata {#sect-rtm-pallet-metadata}
 
@@ -202,9 +207,10 @@ where
 
 - ${i}$ is an unsigned 8-bit integers indicating the index of the pallet, which is used for encoding pallet events and calls.
 
+###### Image: Metadata Pallet {#img-metadata-pallet}
 import MetadataPallet from '/static/img/kaitai_render/metadata_pallet.svg';
 
-<MetadataPallet />
+<MetadataPallet className="graphviz-svg" />
 
 ###### Definition 164. Pallet Storage Metadata {#defn-rtm-pallet-storage-metadata}
 
@@ -221,7 +227,7 @@ where
 
 - ${p}$ is the string representing the common prefix used by all storage entries.
 
-- ${E}$ is an array of varying length containing elements of storage entries ([Definition 165](sect-metadata.html#defn-rtm-storage-entry-metadata)).
+- ${E}$ is an array of varying length containing elements of storage entries ([Definition 165](sect-metadata#defn-rtm-storage-entry-metadata)).
 
 ###### Definition 165. Storage Entry Metadata {#defn-rtm-storage-entry-metadata}
 
@@ -246,9 +252,10 @@ where
 
 - ${C}$ is an array of varying length of strings containing the documentation.
 
+###### Image: Pallet Storage {#img-pallet-storage}
 import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
 
-<PalletStorage />
+<PalletStorage className="graphviz-svg" />
 
 ###### Definition 166. Storage Entry Modifier {#defn-rtm-storage-entry-modifier}
 
@@ -262,7 +269,7 @@ $$
 {m}={\left\lbrace\begin{matrix}{0}&\text{optional}\\{1}&\text{default}\end{matrix}\right.}
 $$
 
-where *0* indicates that the entry returns an *Option* type and therefore *None* if the storage entry is not present. *1* indicates that the entry returns the type ${y}$ with default value ${d}$ (in [Definition 165](sect-metadata.html#defn-rtm-storage-entry-metadata)) if the entry is not present.
+where *0* indicates that the entry returns an *Option* type and therefore *None* if the storage entry is not present. *1* indicates that the entry returns the type ${y}$ with default value ${d}$ (in [Definition 165](sect-metadata#defn-rtm-storage-entry-metadata)) if the entry is not present.
 
 ###### Definition 167. Storage Entry Type {#defn-rtm-storage-entry-type}
 
@@ -274,9 +281,10 @@ $$
 
 where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition 160](sect-metadata.html#defn-rtm-type-id)). ${H}$ is an array of varying length containing the storage hasher ([Definition 168](sect-metadata.html#defn-rtm-storage-hasher)).
 
+###### Image: Storage Definition {#img-storage-definition}
 import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg';
 
-<StorageDefinition />
+<StorageDefinition className="graphviz-svg" />
 
 ###### Definition 168. Storage Hasher {#defn-rtm-storage-hasher}
 
@@ -303,9 +311,10 @@ where
 
 - ${C}$ is an array of varying length containing string with the documentation.
 
+###### Image: Pallet Constant {#img-pallet-constant}
 import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 
-<PalletConstant />
+<PalletConstant className="graphviz-svg" />
 
 ## 12.3. Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
 
@@ -326,6 +335,7 @@ where
 
 - ${a}$ is the type Id ([Definition 160](sect-metadata.html#defn-rtm-type-id)) of the additional signed data, with the data to be included in the signed payload.
 
+###### Image: Metadata Extrinsic {#img-metadata-extrinsic}
 import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';
 
-<MetadataExtrinsic />
+<MetadataExtrinsic className="graphviz-svg" />
