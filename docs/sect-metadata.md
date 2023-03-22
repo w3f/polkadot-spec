@@ -43,7 +43,7 @@ where
 ###### Image: Metadata {#img-metadata}
 import Metadata from '/static/img/kaitai_render/metadata.svg';
 
-<Metadata className="graphviz-svg" />
+<Metadata className="graphviz" />
 
 ###### Definition 159. Runtime Registry Type Entry {#defn-rtm-registry-entry}
 
@@ -77,7 +77,7 @@ where
 ###### Image: Metadata Type {#img-metadata-type}
 import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
 
-<MetadataType className="graphviz-svg" /> 
+<MetadataType className="graphviz" /> 
 
 ###### Definition 160. Runtime Type Id {#defn-rtm-type-id}
 
@@ -135,7 +135,7 @@ where
 ###### Image: Metadata Type Definition {#img-metadata-type-definition}
 import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_definition.svg';
 
-<MetadataTypeDefinition className="graphviz-svg"  />
+<MetadataTypeDefinition className="graphviz"  />
 
 ###### Definition 162. Field {#defn-rtm-field}
 
@@ -158,7 +158,7 @@ where
 ###### Image: Metadata Type Fields {#img-metadata-type-fields}
 import MetadataTypeFields from '/static/img/kaitai_render/metadata_type_fields.svg';
 
-<MetadataTypeFields className="graphviz-svg" />
+<MetadataTypeFields className="graphviz" />
 
 ###### Definition 163. Variant {#defn-rtm-variant}
 
@@ -181,7 +181,7 @@ where
 ###### Image: Metadata Type Variants {#img-metadata-type-variants}
 import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_variants.svg';
 
-<MetadataTypeVariants className="graphviz-svg" />
+<MetadataTypeVariants className="graphviz" />
 
 ## 12.2. Pallet Metadata {#sect-rtm-pallet-metadata}
 
@@ -210,7 +210,7 @@ where
 ###### Image: Metadata Pallet {#img-metadata-pallet}
 import MetadataPallet from '/static/img/kaitai_render/metadata_pallet.svg';
 
-<MetadataPallet className="graphviz-svg" />
+<MetadataPallet className="graphviz" />
 
 ###### Definition 164. Pallet Storage Metadata {#defn-rtm-pallet-storage-metadata}
 
@@ -255,7 +255,7 @@ where
 ###### Image: Pallet Storage {#img-pallet-storage}
 import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
 
-<PalletStorage className="graphviz-svg" />
+<PalletStorage className="graphviz" />
 
 ###### Definition 166. Storage Entry Modifier {#defn-rtm-storage-entry-modifier}
 
@@ -284,7 +284,7 @@ where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition 160]
 ###### Image: Storage Definition {#img-storage-definition}
 import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg';
 
-<StorageDefinition className="graphviz-svg" />
+<StorageDefinition className="graphviz" />
 
 ###### Definition 168. Storage Hasher {#defn-rtm-storage-hasher}
 
@@ -314,7 +314,7 @@ where
 ###### Image: Pallet Constant {#img-pallet-constant}
 import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 
-<PalletConstant className="graphviz-svg" />
+<PalletConstant className="graphviz" />
 
 ## 12.3. Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
 
@@ -338,4 +338,4 @@ where
 ###### Image: Metadata Extrinsic {#img-metadata-extrinsic}
 import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';
 
-<MetadataExtrinsic className="graphviz-svg" />
+<MetadataExtrinsic className="graphviz" />

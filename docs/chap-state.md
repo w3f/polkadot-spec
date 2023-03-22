@@ -95,7 +95,7 @@ A Polkadot block consists a *block header* ([Definition 10](chap-state#defn-bloc
 ###### Image: Block {#img-block}
 import Block from '/static/img/kaitai_render/block.svg';
 
-<Block className="graphviz-svg" />
+<Block className="graphviz" />
 
 ###### Definition 10. Block Header {#defn-block-header}
 
@@ -114,7 +114,7 @@ The **header of block B**, ${H}_{{h}}{\left({B}\right)}$, is a 5-tuple containin
 ###### Image: Block Header {#img-block-header}
 import BlockHeader from '/static/img/kaitai_render/block_header.svg';
 
-<BlockHeader className="graphviz-svg" />
+<BlockHeader className="graphviz" />
 
 ###### Definition 11. Header Digest {#defn-digest}
 
@@ -145,7 +145,7 @@ where
 ###### Image: Digest {#img-digest}
 import Digest from '/static/img/kaitai_render/digest.svg';
 
-<Digest className="graphviz-svg" />
+<Digest className="graphviz" />
 
 ###### Definition 12. Header Hash {#defn-block-header-hash}
 
@@ -168,7 +168,7 @@ Where each ${E}_{{i}}\in{\mathbb{{B}}}$ is a SCALE encoded extrinsic.
 ###### Image: Block Body {#img-block-body}
 import BlockBody from '/static/img/kaitai_render/block_body.svg';
 
-<BlockBody className="graphviz-svg"/>
+<BlockBody className="graphviz"/>
 
 ## 2.3. Extrinsics {#sect-extrinsics}
 
