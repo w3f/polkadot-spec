@@ -33,7 +33,7 @@ The **Runtime API Call Convention** describes that all functions receive and ret
   (param ${p}{t}{r}{i}{32}{)}{\left({p}{a}{r}{m}$\right.}len i32) (result i64))
 ```
 
-where `ptr` points to the SCALE encoded tuple of the parameters passed to the function and `len` is the length of this data, while `result` is a pointer-size (Definition [Definition 203](chap-host-api#defn-runtime-pointer-size)) to the SCALE-encoded return data.
+where `ptr` points to the SCALE encoded tuple of the parameters passed to the function and `len` is the length of this data, while `result` is a pointer-size (Definition [Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE-encoded return data.
 
 See [Section 2.6.3](chap-state#sect-code-executor) for more information about the behavior of the Wasm Runtime. Also note that any storage changes must be fork-aware ([Section 2.4.5](chap-state#sect-managing-multiple-states)).
 
@@ -66,7 +66,7 @@ Return
   | `authoring_version`   | Unsigned 32-bit integer                                               | Version of the authorship interface             |
   | `spec_version`        | Unsigned 32-bit integer                                               | Version of the Runtime specification            |
   | `impl_version`        | Unsigned 32-bit integer                                               | Version of the Runtime implementation           |
-  | `apis`                | ApiVersions ([Definition 216](chap-runtime-api#defn-rt-apisvec)) | List of supported APIs along with their version |
+  | `apis`                | ApiVersions ([Definition -def-num-ref-](chap-runtime-api#defn-rt-apisvec)) | List of supported APIs along with their version |
   | `transaction_version` | Unsigned 32-bit integer                                               | Version of the transaction format               |
   | `state_version`       | Unsigned 8-bit integer                                                | Version of the trie format                      |
 
@@ -84,10 +84,10 @@ This function executes a full block and all its extrinsics and updates the state
 
 This function should be called when a fully complete block is available that is not actively being built on, such as blocks received from other peers. State changes resulted from calling this function are usually meant to persist when the block is imported successfully.
 
-Additionally, the seal digest in the block header, as described in [Definition 11](chap-state#defn-digest), must be removed by the Polkadot host before submitting the block.
+Additionally, the seal digest in the block header, as described in [Definition -def-num-), must be removed by the Polkadot host before submitting the block.
 
 Arguments  
-- A block represented as a tuple consisting of a block header, as described in [Definition 10](chap-state#defn-block-header), and the block body, as described in [Definition 13](chap-state#defn-block-body).
+- A block represented as a tuple consisting of a block header, as described in [Definition -def-num-ref-](chap-state#defn-block-header), and the block body, as described in [Definition -def-num-ref-](chap-state#defn-block-body).
 
 Return  
 - None.
@@ -97,7 +97,7 @@ Return
 Sets up the environment required for building a new block as described in [Build-Block](sect-block-production#algo-build-block).
 
 Arguments  
-- The header of the new block as defined in [Definition 10](chap-state#defn-block-header). The values ${H}_{{r}}$, ${H}_{{e}}$ and ${H}_{{d}}$ are left empty.
+- The header of the new block as defined in [Definition -def-num-ref-](chap-state#defn-block-header). The values ${H}_{{r}}$, ${H}_{{e}}$ and ${H}_{{d}}$ are left empty.
 
 Return  
 - None.
@@ -134,37 +134,37 @@ Arguments
 - A byte array of varying size containing the opaque extrinsic.
 
 Return  
-- Returns the varying datatype *ApplyExtrinsicResult* as defined in [Definition 217](chap-runtime-api#defn-rte-apply-extrinsic-result). This structure lets the block builder know whether an extrinsic should be included into the block or rejected.
+- Returns the varying datatype *ApplyExtrinsicResult* as defined in [Definition -def-num-ref-](chap-runtime-api#defn-rte-apply-extrinsic-result). This structure lets the block builder know whether an extrinsic should be included into the block or rejected.
 
 ###### Definition -def-num- ApplyExtrinsicResult {#defn-rte-apply-extrinsic-result}
 
-**ApplyExtrinsicResult** is a varying data type as defined in [Definition 191](id-cryptography-encoding#defn-result-type). This structure can contain multiple nested structures, indicating either module dispatch outcomes or transaction invalidity errors.
+**ApplyExtrinsicResult** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-result-type). This structure can contain multiple nested structures, indicating either module dispatch outcomes or transaction invalidity errors.
 
 ###### Table 7. Possible values of varying data type *ApplyExtrinsicResult*. {#tabl-rte-apply-extrinsic-result}
 
 | **Id** | **Description**                                               | **Type**                                                                                                 |
 |--------|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| 0      | Outcome of dispatching the extrinsic.                         | *DispatchOutcome* ([Definition 218](chap-runtime-api#defn-rte-dispatch-outcome))                    |
-| 1      | Possible errors while checking the validity of a transaction. | *TransactionValidityError* ([Definition 221](chap-runtime-api#defn-rte-transaction-validity-error)) |
+| 0      | Outcome of dispatching the extrinsic.                         | *DispatchOutcome* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-dispatch-outcome))                    |
+| 1      | Possible errors while checking the validity of a transaction. | *TransactionValidityError* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-transaction-validity-error)) |
 
 |     |                                                                                                                                                                                                                                                                                          |
 |-----|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | As long as a *DispatchOutcome* ([Definition 218](chap-runtime-api#defn-rte-dispatch-outcome)) is returned, the extrinsic is always included in the block, even if the outcome is a dispatch error. Dispatch errors do not invalidate the block and all state changes are persisted. |
+|     | As long as a *DispatchOutcome* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-dispatch-outcome)) is returned, the extrinsic is always included in the block, even if the outcome is a dispatch error. Dispatch errors do not invalidate the block and all state changes are persisted. |
 
 ###### Definition -def-num- DispatchOutcome {#defn-rte-dispatch-outcome}
 
-**DispatchOutcome** is the varying data type as defined in [Definition 191](id-cryptography-encoding#defn-result-type).
+**DispatchOutcome** is the varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-result-type).
 
 ###### Table 8. Possible values of varying data type *DispatchOutcome*. {#tabl-rte-dispatch-outcome}
 
 | **Id** | **Description**                                    | **Type**                                                                          |
 |--------|----------------------------------------------------|-----------------------------------------------------------------------------------|
 | 0      | Extrinsic is valid and was submitted successfully. | None                                                                              |
-| 1      | Possible errors while dispatching the extrinsic.   | *DispatchError* ([Definition 219](chap-runtime-api#defn-rte-dispatch-error)) |
+| 1      | Possible errors while dispatching the extrinsic.   | *DispatchError* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-dispatch-error)) |
 
 ###### Definition -def-num- DispatchError {#defn-rte-dispatch-error}
 
-**DispatchError** is a varying data type as defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type). Indicates various reasons why a dispatch call failed.
+**DispatchError** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type). Indicates various reasons why a dispatch call failed.
 
 ###### Table 9. Possible values of varying data type *DispatchError*. {#tabl-rte-dispatch-error}
 
@@ -173,11 +173,11 @@ Return
 | 0      | Some unknown error occurred. | SCALE encoded byte array containing a valid UTF-8 sequence.                                |
 | 1      | Failed to lookup some data.  | None                                                                                       |
 | 2      | A bad origin.                | None                                                                                       |
-| 3      | A custom error in a module.  | *CustomModuleError* ([Definition 220](chap-runtime-api#defn-rte-custom-module-error)) |
+| 3      | A custom error in a module.  | *CustomModuleError* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-custom-module-error)) |
 
 ###### Definition -def-num- CustomModuleError {#defn-rte-custom-module-error}
 
-**CustomModuleError** is a tuple appended after a possible error in as defined in [Definition 219](chap-runtime-api#defn-rte-dispatch-error).
+**CustomModuleError** is a tuple appended after a possible error in as defined in [Definition -def-num-ref-](chap-runtime-api#defn-rte-dispatch-error).
 
 ###### Table 10. Possible values of varying data type *CustomModuleError*. {#tabl-rte-custom-module-error}
 
@@ -185,26 +185,26 @@ Return
 |----------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Index    | Module index matching the metadata module index. | Unsigned 8-bit integer.                                                                                                                                                            |
 | Error    | Module specific error value.                     | Unsigned 8-bit integer                                                                                                                                                             |
-| Message  | Optional error message.                          | Varying data type *Option* ([Definition 190](id-cryptography-encoding#defn-option-type)). The optional value is a SCALE encoded byte array containing a valid UTF-8 sequence. |
+| Message  | Optional error message.                          | Varying data type *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)). The optional value is a SCALE encoded byte array containing a valid UTF-8 sequence. |
 
 |     |                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | Whenever *TransactionValidityError* ([Definition 221](chap-runtime-api#defn-rte-transaction-validity-error)) is returned, the contained error type will indicate whether an extrinsic should be outright rejected or requested for a later block. This behavior is clarified further in [Definition 222](chap-runtime-api#defn-rte-invalid-transaction) and respectively [Definition 223](chap-runtime-api#defn-rte-unknown-transaction). |
+|     | Whenever *TransactionValidityError* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-transaction-validity-error)) is returned, the contained error type will indicate whether an extrinsic should be outright rejected or requested for a later block. This behavior is clarified further in [Definition -def-num-ref-](chap-runtime-api#defn-rte-invalid-transaction) and respectively [Definition -def-num-ref-](chap-runtime-api#defn-rte-unknown-transaction). |
 
 ###### Definition -def-num- TransactionValidityError {#defn-rte-transaction-validity-error}
 
-**TransactionValidityError** is a varying data type as defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type). It indicates possible errors that can occur while checking the validity of a transaction.
+**TransactionValidityError** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type). It indicates possible errors that can occur while checking the validity of a transaction.
 
 ###### Table 11. Possible values of varying data type *TransactionValidityError*. {#tabl-rte-transaction-validity-error}
 
 | **Id** | **Description**                           | **Type**                                                                                    |
 |--------|-------------------------------------------|---------------------------------------------------------------------------------------------|
-| 0      | Transaction is invalid.                   | *InvalidTransaction* ([Definition 222](chap-runtime-api#defn-rte-invalid-transaction)) |
-| 1      | Transaction validity can’t be determined. | *UnknownTransaction* ([Definition 223](chap-runtime-api#defn-rte-unknown-transaction)) |
+| 0      | Transaction is invalid.                   | *InvalidTransaction* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-invalid-transaction)) |
+| 1      | Transaction validity can’t be determined. | *UnknownTransaction* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-unknown-transaction)) |
 
 ###### Definition -def-num- InvalidTransaction {#defn-rte-invalid-transaction}
 
-**InvalidTransaction** is a varying data type as defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type) and specifies the invalidity of the transaction in more detail.
+**InvalidTransaction** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type) and specifies the invalidity of the transaction in more detail.
 
 ###### Table 12. Possible values of varying data type *InvalidTransaction*. {#tabl-rte-invalid-transaction}
 
@@ -223,7 +223,7 @@ Return
 
 ###### Definition -def-num- UnknownTransaction {#defn-rte-unknown-transaction}
 
-**UnknownTransaction** is a varying data type as defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type) and specifies the unknown invalidity of the transaction in more detail.
+**UnknownTransaction** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type) and specifies the unknown invalidity of the transaction in more detail.
 
 ###### Table 13. Possible values of varying data type *UnknownTransaction*. {#tabl-rte-unknown-transaction}
 
@@ -241,14 +241,14 @@ Arguments
 - None.
 
 Return  
-- The header of the new block as defined in [Definition 10](chap-state#defn-block-header).
+- The header of the new block as defined in [Definition -def-num-ref-](chap-state#defn-block-header).
 
 ### C.6.3. `BlockBuilder_inherent_extrinisics`: {#defn-rt-builder-inherent-extrinsics}
 
-Generates the inherent extrinsics, which are explained in more detail in [Section 2.3.3](chap-state#sect-inherents). This function takes a SCALE-encoded hash table as defined in [Definition 192](id-cryptography-encoding#defn-scale-list) and returns an array of extrinsics. The Polkadot Host must submit each of those to the `BlockBuilder_apply_extrinsic`, described in [Section C.6.1](chap-runtime-api#sect-rte-apply-extrinsic). This procedure is outlined in [Build-Block](sect-block-production#algo-build-block).
+Generates the inherent extrinsics, which are explained in more detail in [Section 2.3.3](chap-state#sect-inherents). This function takes a SCALE-encoded hash table as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list) and returns an array of extrinsics. The Polkadot Host must submit each of those to the `BlockBuilder_apply_extrinsic`, described in [Section C.6.1](chap-runtime-api#sect-rte-apply-extrinsic). This procedure is outlined in [Build-Block](sect-block-production#algo-build-block).
 
 Arguments  
-- A Inherents-Data structure as defined in [Definition 15](chap-state#defn-inherent-data).
+- A Inherents-Data structure as defined in [Definition -def-num-ref-](chap-state#defn-inherent-data).
 
 Return  
 - A byte array of varying size containing extrinisics. Each extrinsic is a byte array of varying size.
@@ -258,9 +258,9 @@ Return
 Checks whether the provided inherent is valid. This function can be used by the Polkadot Host when deemed appropriate, e.g. during the block-building process.
 
 Arguments  
-- A block represented as a tuple consisting of a block header as described in [Definition 10](chap-state#defn-block-header) and the block body as described in [Definition 13](chap-state#defn-block-body).
+- A block represented as a tuple consisting of a block header as described in [Definition -def-num-ref-](chap-state#defn-block-header) and the block body as described in [Definition -def-num-ref-](chap-state#defn-block-body).
 
-- A Inherents-Data structure as defined in [Definition 15](chap-state#defn-inherent-data).
+- A Inherents-Data structure as defined in [Definition -def-num-ref-](chap-state#defn-inherent-data).
 
 Return  
 - A data structure of the following format:
@@ -274,7 +274,7 @@ Return
 
   - ${f_e}$ is a boolean indicating whether a fatal error was encountered.
 
-  - ${e}$ is a Inherents-Data structure as defined in [Definition 15](chap-state#defn-inherent-data) containing any errors created by this Runtime function.
+  - ${e}$ is a Inherents-Data structure as defined in [Definition -def-num-ref-](chap-state#defn-inherent-data) containing any errors created by this Runtime function.
 
 ### C.6.5. `BlockBuilder_random_seed` {#id-blockbuilder_random_seed}
 
@@ -301,7 +301,7 @@ This entry is invoked against extrinsics submitted through a transaction network
 It indicates if the submitted blob represents a valid extrinsics, the order in which it should be applied and if it should be gossiped to other peers. Furthermore this function gets called internally when executing blocks with the runtime function as described in [Section C.4.2](chap-runtime-api#sect-rte-core-execute-block).
 
 Arguments  
-- The source of the transaction as defined in [Definition 224](chap-runtime-api#defn-transaction-source).
+- The source of the transaction as defined in [Definition -def-num-ref-](chap-runtime-api#defn-transaction-source).
 
 - A byte array that contains the transaction.
 
@@ -318,7 +318,7 @@ Arguments
   | 2   | *External* | Transaction has been received externally, e.g. over the network.  |
 
 Return  
-- This function returns a *Result* as defined in [Definition 191](id-cryptography-encoding#defn-result-type) which contains the type *ValidTransaction* as defined in [Definition 225](chap-runtime-api#defn-valid-transaction) on success and the type *TransactionValidityError* as defined in [Definition 221](chap-runtime-api#defn-rte-transaction-validity-error) on failure.
+- This function returns a *Result* as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-result-type) which contains the type *ValidTransaction* as defined in [Definition -def-num-ref-](chap-runtime-api#defn-valid-transaction) on success and the type *TransactionValidityError* as defined in [Definition -def-num-ref-](chap-runtime-api#defn-rte-transaction-validity-error) on failure.
 
   ###### Definition 225. ValidTransaction {#defn-valid-transaction}
 
@@ -355,7 +355,7 @@ Does not require `Core_initialize_block` ([Section C.4.3](chap-runtime-api#sect-
 Starts an off-chain worker and generates extrinsics. \[To do: when is this called?\]
 
 Arguments  
-- The block header as defined in [Definition 10](chap-state#defn-block-header).
+- The block header as defined in [Definition -def-num-ref-](chap-state#defn-block-header).
 
 Return  
 - None.
@@ -378,7 +378,7 @@ Return
 
 ### C.9.2. `ParachainHost_validator_groups` {#sect-rt-api-validator-groups}
 
-Returns the validator groups ([Definition 136](chapter-anv#defn-validator-groups)) used during the current session. The validators in the groups are referred to by the validator set Id ([Definition 33](chap-sync#defn-authority-list)).
+Returns the validator groups ([Definition -def-num-ref-](chapter-anv#defn-validator-groups)) used during the current session. The validators in the groups are referred to by the validator set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
 Arguments  
 - None
@@ -397,7 +397,7 @@ Return
   $$
 
   where  
-  - ${I}$ is an array the validator set Ids ([Definition 33](chap-sync#defn-authority-list)).
+  - ${I}$ is an array the validator set Ids ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
   - ${B}_{{s}}$ indicates the block number where the session started.
 
@@ -407,7 +407,7 @@ Return
 
 ### C.9.3. `ParachainHost_availability_cores` {#sect-rt-api-availability-cores}
 
-Returns information on all availability cores ([Definition 135](chapter-anv#defn-availability-core)).
+Returns information on all availability cores ([Definition -def-num-ref-](chapter-anv#defn-availability-core)).
 
 Arguments  
 - None
@@ -428,35 +428,35 @@ Return
   where  
   - ${S}$ specifies the core state. *0* indicates that the core is occupied, *1* implies it’s currently free but scheduled and given the opportunity to occupy and *2* implies it’s free and there’s nothing scheduled.
 
-  - ${n}_{{u}}$ is an *Option* value ([Definition 190](id-cryptography-encoding#defn-option-type)) which can contain a ${C}_{{s}}$ value if the core was freed by the Runtime and indicates the assignment that is next scheduled on this core. An empty value indicates there is nothing scheduled.
+  - ${n}_{{u}}$ is an *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain a ${C}_{{s}}$ value if the core was freed by the Runtime and indicates the assignment that is next scheduled on this core. An empty value indicates there is nothing scheduled.
 
   - ${B}_{{o}}$ indicates the relay chain block number at which the core got occupied.
 
   - ${B}_{{t}}$ indicates the relay chain block number the core will time-out at, if any.
 
-  - ${n}_{{t}}$ is an *Option* value ([Definition 190](id-cryptography-encoding#defn-option-type)) which can contain a ${C}_{{s}}$ value if the core is freed by a time-out and indicates the assignment that is next scheduled on this core. An empty value indicates there is nothing scheduled.
+  - ${n}_{{t}}$ is an *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain a ${C}_{{s}}$ value if the core is freed by a time-out and indicates the assignment that is next scheduled on this core. An empty value indicates there is nothing scheduled.
 
-  - ${b}$ is a bitfield array ([Definition 141](chapter-anv#defn-bitfield-array)). A $>\frac{{2}}{{3}}$ majority of assigned validators voting with ${1}$ values means that the core is available.
+  - ${b}$ is a bitfield array ([Definition -def-num-ref-](chapter-anv#defn-bitfield-array)). A $>\frac{{2}}{{3}}$ majority of assigned validators voting with ${1}$ values means that the core is available.
 
-  - ${G}_{{i}}$ indicates the assigned validator group index ([Definition 136](chapter-anv#defn-validator-groups)) is to distribute availability pieces of this candidate.
+  - ${G}_{{i}}$ indicates the assigned validator group index ([Definition -def-num-ref-](chapter-anv#defn-validator-groups)) is to distribute availability pieces of this candidate.
 
   - ${C}_{{h}}$ indicates the hash of the candidate occupying the core.
 
-  - ${C}_{{d}}$ is the candidate descriptor ([Definition 106](chapter-anv#defn-candidate-descriptor)).
+  - ${C}_{{d}}$ is the candidate descriptor ([Definition -def-num-ref-](chapter-anv#defn-candidate-descriptor)).
 
-  - ${C}_{{i}}$ is an *Option* value ([Definition 190](id-cryptography-encoding#defn-option-type)) which can contain the collators public key indicating who should author the block.
+  - ${C}_{{i}}$ is an *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain the collators public key indicating who should author the block.
 
 ### C.9.4. `ParachainHost_persisted_validation_data` {#sect-rt-api-persisted-validation-data}
 
 Returns the persisted validation data for the given parachain Id and a given occupied core assumption.
 
 Arguments  
-- The parachain Id ([Definition 134](chapter-anv#defn-para-id)).
+- The parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
 
-- An occupied core assumption ([Definition 226](chap-runtime-api#defn-occupied-core-assumption)).
+- An occupied core assumption ([Definition -def-num-ref-](chap-runtime-api#defn-occupied-core-assumption)).
 
 Return  
-- An *Option* value ([Definition 190](id-cryptography-encoding#defn-option-type)) which can contain the persisted validation data ([Definition 227](chap-runtime-api#defn-persisted-validation-data)). The value is empty if the parachain Id is not registered or the core assumption is of index ${2}$, meaning that the core was freed.
+- An *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain the persisted validation data ([Definition -def-num-ref-](chap-runtime-api#defn-persisted-validation-data)). The value is empty if the parachain Id is not registered or the core assumption is of index ${2}$, meaning that the core was freed.
 
 ###### Definition -def-num- Occupied Core Assumption {#defn-occupied-core-assumption}
 
@@ -479,7 +479,7 @@ $$
 $$
 
 where  
-- ${P}_{{h}}$ is the parent head data ([Definition 133](chapter-anv#defn-head-data)).
+- ${P}_{{h}}$ is the parent head data ([Definition -def-num-ref-](chapter-anv#defn-head-data)).
 
 - ${H}_{{i}}$ is the relay chain block number this is in the context of.
 
@@ -494,9 +494,9 @@ The persisted validation data is fetched via the Runtime API ([Section C.9.4](ch
 Checks if the given validation outputs pass the acceptance criteria.
 
 Arguments  
-- The parachain Id ([Definition 134](chapter-anv#defn-para-id)).
+- The parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
 
-- The candidate commitments ([Definition 107](chapter-anv#defn-candidate-commitments)).
+- The candidate commitments ([Definition -def-num-ref-](chapter-anv#defn-candidate-commitments)).
 
 Return  
 - A boolean indicating whether the candidate commitments pass the acceptance criteria.
@@ -520,12 +520,12 @@ Return
 Fetches the validation code (Runtime) of a parachain by parachain Id.
 
 Arguments  
-- The parachain Id ([Definition 134](chapter-anv#defn-para-id)).
+- The parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
 
-- The occupied core assumption ([Definition 226](chap-runtime-api#defn-occupied-core-assumption)).
+- The occupied core assumption ([Definition -def-num-ref-](chap-runtime-api#defn-occupied-core-assumption)).
 
 Return  
-- An *Option* value ([Definition 190](id-cryptography-encoding#defn-option-type)) containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
+- An *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
 
 ### C.9.8. `ParachainHost_validation_code_by_hash` {#sect-rt-api-validation-code-by-hash}
 
@@ -535,17 +535,17 @@ Arguments
 - The hash value of the validation code.
 
 Return  
-- An *Option* value ([Definition 190](id-cryptography-encoding#defn-option-type)) containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
+- An *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
 
 ### C.9.9. `ParachainHost_candidate_pending_availability` {#id-parachainhost_candidate_pending_availability}
 
 Returns the receipt of a candidate pending availability for any parachain assigned to an occupied availability core.
 
 Arguments  
-- The parachain Id ([Definition 134](chapter-anv#defn-para-id)).
+- The parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
 
 Return  
-- An *Option* value ([Definition 190](id-cryptography-encoding#defn-option-type)) containing the committed candidate receipt ([Definition 104](chapter-anv#defn-candidate-receipt)). This value is empty if the given parachain Id is not assigned to an occupied availability cores.
+- An *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the committed candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-candidate-receipt)). This value is empty if the given parachain Id is not assigned to an occupied availability cores.
 
 ### C.9.10. `ParachainHost_candidate_events` {#id-parachainhost_candidate_events}
 
@@ -567,13 +567,13 @@ Return
   where  
   - ${E}$ specifies the the event type of the candidate. *0* indicates that the candidate receipt was backed in the latest relay chain block, *1* indicates that it was included and became a parachain block at the latest relay chain block and *2* indicates that the candidate receipt was not made available and timed-out.
 
-  - ${C}_{{r}}$ is the candidate receipt ([Definition 104](chapter-anv#defn-candidate-receipt)).
+  - ${C}_{{r}}$ is the candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-candidate-receipt)).
 
-  - ${h}$ is the parachain head data ([Definition 133](chapter-anv#defn-head-data)).
+  - ${h}$ is the parachain head data ([Definition -def-num-ref-](chapter-anv#defn-head-data)).
 
   - ${I}_{{c}}$ is the index of the availability core as can be retrieved in [Section C.9.3](chap-runtime-api#sect-rt-api-availability-cores) that the candidate is occupying. If ${E}$ is of variant ${2}$, then this indicates the core index the candidate *was* occupying.
 
-  - ${G}_{{i}}$ is the group index ([Definition 136](chapter-anv#defn-validator-groups)) that is responsible of backing the candidate.
+  - ${G}_{{i}}$ is the group index ([Definition -def-num-ref-](chapter-anv#defn-validator-groups)) that is responsible of backing the candidate.
 
 ### C.9.11. `ParachainHost_session_info` {#sect-rt-api-session-info}
 
@@ -583,7 +583,7 @@ Arguments
 - The unsigned 32-bit integer indicating the session index.
 
 Return  
-- An *Option* type ([Definition 190](id-cryptography-encoding#defn-option-type)) which can contain the session info structure, ${S}$, of the following format:
+- An *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain the session info structure, ${S}$, of the following format:
 
   $$
   {S}={\left({A},{D},{K},{G},{c},{z},{s},{d},{x},{a}\right)}
@@ -615,7 +615,7 @@ Return
 
   - ${v}_{{n}}$ is public key of the authority.
 
-  - ${A}_{{n}}$ is the authority set Id ([Definition 33](chap-sync#defn-authority-list)).
+  - ${A}_{{n}}$ is the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
   - ${c}$ is an unsigned 32-bit integer indicating the number of availability cores used by the protocol during the given session.
 
@@ -634,20 +634,20 @@ Return
 Returns all the pending inbound messages in the downward message queue for a given parachain.
 
 Arguments  
-- The parachain Id ([Definition 134](chapter-anv#defn-para-id)).
+- The parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
 
 Return  
-- An array of inbound downward messages ([Definition 138](chapter-anv#defn-downward-message)).
+- An array of inbound downward messages ([Definition -def-num-ref-](chapter-anv#defn-downward-message)).
 
 ### C.9.13. `ParachainHost_inbound_hrmp_channels_contents` {#id-parachainhost_inbound_hrmp_channels_contents}
 
 Returns the contents of all channels addressed to the given recipient. Channels that have no messages in them are also included.
 
 Arguments  
-- The parachain Id ([Definition 134](chapter-anv#defn-para-id)).
+- The parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
 
 Return  
-- An array of inbound HRMP messages ([Definition 140](chapter-anv#defn-inbound-hrmp-message)).
+- An array of inbound HRMP messages ([Definition -def-num-ref-](chapter-anv#defn-inbound-hrmp-message)).
 
 ## C.10. Module GrandpaApi {#id-module-grandpaapi}
 
@@ -659,17 +659,17 @@ All calls in this module require `Core_initialize_block` ([Section C.4.3](chap-r
 
 ### C.10.1. `GrandpaApi_grandpa_authorities` {#sect-rte-grandpa-auth}
 
-This entry fetches the list of GRANDPA authorities according to the genesis block and is used to initialize an authority list at genesis, defined in [Definition 33](chap-sync#defn-authority-list). Any future authority changes get tracked via Runtime-to-consensus engine messages, as described in [Section 3.3.2](chap-sync#sect-consensus-message-digest).
+This entry fetches the list of GRANDPA authorities according to the genesis block and is used to initialize an authority list at genesis, defined in [Definition -def-num-ref-](chap-sync#defn-authority-list). Any future authority changes get tracked via Runtime-to-consensus engine messages, as described in [Section 3.3.2](chap-sync#sect-consensus-message-digest).
 
 Arguments  
 - None.
 
 Return  
-- An authority list as defined in [Definition 33](chap-sync#defn-authority-list).
+- An authority list as defined in [Definition -def-num-ref-](chap-sync#defn-authority-list).
 
 ### C.10.2. `GrandpaApi_submit_report_equivocation_unsigned_extrinsic` {#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic}
 
-A GRANDPA equivocation occurs when a validator votes for multiple blocks during one voting subround, as described further in [Definition 80](sect-finality#defn-equivocation). The Polkadot Host is expected to identify equivocators and report those to the Runtime by calling this function.
+A GRANDPA equivocation occurs when a validator votes for multiple blocks during one voting subround, as described further in [Definition -def-num-). The Polkadot Host is expected to identify equivocators and report those to the Runtime by calling this function.
 
 Arguments  
 - The equivocation proof of the following format:
@@ -677,7 +677,7 @@ Arguments
   ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{G}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{E}{p}\right\rbrace}}}=&{\left({m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}_{{{\mathbb{{{V}}}}}},{e},{r},{A}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}},{B}^{{1}}_{h},{B}^{{1}}_{n}{A}^{{1}}_{\left\lbrace{m}{a}{t}{h}{r}{m}{\left\lbrace{s}{i}{g}\right\rbrace}\right\rbrace},{B}^{{2}}_{h},{B}^{{2}}_{n},{A}^{{2}}_{\left\lbrace{m}{a}{t}{h}{r}{m}{\left\lbrace{s}{i}{g}\right\rbrace}\right\rbrace}\right)}$ e =& \begin{cases} 0 &\quad \textrm{Equivocation at prevote stage} ${1}&\quad\text{}{m}{\left\lbrace{E}{q}{u}{i}{v}{o}{c}{a}{t}{i}{o}{n}{a}{t}\prec{o}{m}{m}{i}{t}{s}{t}{a}\ge\right\rbrace}{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{e}{n}{d}{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}$
 
   where  
-  - ${m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}_{{{\mathbb{{{V}}}}}}$ is the authority set id as defined in [Definition 73](sect-finality#defn-authority-set-id).
+  - ${m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}_{{{\mathbb{{{V}}}}}}$ is the authority set id as defined in [Definition -def-num-ref-](sect-finality#defn-authority-set-id).
 
   - ${e}$ indicates the stage at which the equivocation occurred.
 
@@ -700,19 +700,19 @@ Arguments
   - A proof of the key owner in an opaque form as described in [Section C.10.3](chap-runtime-api#sect-grandpaapi_generate_key_ownership_proof).
 
 Return  
-- A SCALE encoded *Option* as defined in [Definition 190](id-cryptography-encoding#defn-option-type) containing an empty value on success.
+- A SCALE encoded *Option* as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-option-type) containing an empty value on success.
 
 ### C.10.3. `GrandpaApi_generate_key_ownership_proof` {#sect-grandpaapi_generate_key_ownership_proof}
 
 Generates proof of the membership of a key owner in the specified block state. The returned value is used to report equivocations as described in [Section C.10.2](chap-runtime-api#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic).
 
 Arguments  
-- The authority set id as defined in [Definition 73](sect-finality#defn-authority-set-id).
+- The authority set id as defined in [Definition -def-num-ref-](sect-finality#defn-authority-set-id).
 
 - The 256-bit public key of the authority.
 
 Return  
-- A SCALE encoded *Option* as defined in [Definition 190](id-cryptography-encoding#defn-option-type) containing the proof in an opaque form.
+- A SCALE encoded *Option* as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-option-type) containing the proof in an opaque form.
 
 ## C.11. Module BabeApi {#id-module-babeapi}
 
@@ -738,10 +738,10 @@ Return
   |----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
   | *SlotDuration*       | The slot duration in milliseconds. Currently, only the value provided by this type at genesis will be used. Dynamic slot duration may be supported in the future.                                                           | Unsigned 64bit integer                                                                                                  |
   | *EpochLength*        | The duration of epochs in slots.                                                                                                                                                                                            | Unsigned 64bit integer                                                                                                  |
-  | *Constant*           | A constant value that is used in the threshold calculation formula as defined in [Definition 59](sect-block-production#defn-babe-constant).                                                                            | Tuple containing two unsigned 64bit integers                                                                            |
-  | *GenesisAuthorities* | The authority list for the genesis epoch as defined in [Definition 33](chap-sync#defn-authority-list).                                                                                                                 | Array of tuples containing a 256-bit byte array and a unsigned 64bit integer                                            |
+  | *Constant*           | A constant value that is used in the threshold calculation formula as defined in [Definition -def-num-ref-](sect-block-production#defn-babe-constant).                                                                            | Tuple containing two unsigned 64bit integers                                                                            |
+  | *GenesisAuthorities* | The authority list for the genesis epoch as defined in [Definition -def-num-ref-](chap-sync#defn-authority-list).                                                                                                                 | Array of tuples containing a 256-bit byte array and a unsigned 64bit integer                                            |
   | *Randomness*         | The randomness for the genesis epoch                                                                                                                                                                                        | 32-byte array                                                                                                           |
-  | *SecondarySlot*      | Whether this chain should run with round-robin-style secondary slot and if this secondary slot requires the inclusion of an auxiliary VRF output ([Section 5.2](sect-block-production#sect-block-production-lottery)). | A one-byte enum as defined in [Definition 58](sect-block-production#defn-consensus-message-babe) as ${2}_{{\text{nd}}}$. |
+  | *SecondarySlot*      | Whether this chain should run with round-robin-style secondary slot and if this secondary slot requires the inclusion of an auxiliary VRF output ([Section 5.2](sect-block-production#sect-block-production-lottery)). | A one-byte enum as defined in [Definition -def-num-ref-](sect-block-production#defn-consensus-message-babe) as ${2}_{{\text{nd}}}$. |
 
 ### C.11.2. `BabeApi_current_epoch_start` {#id-babeapi_current_epoch_start}
 
@@ -774,9 +774,9 @@ Return
 
   - ${d}$ is a unsigned 64-bit integer representing the duration of the epoch.
 
-  - ${A}$ is an authority list as defined in [Definition 33](chap-sync#defn-authority-list).
+  - ${A}$ is an authority list as defined in [Definition -def-num-ref-](chap-sync#defn-authority-list).
 
-  - ${r}$ is an 256-bit array containing the randomness for the epoch as defined in [Definition 71](sect-block-production#defn-epoch-randomness).
+  - ${r}$ is an 256-bit array containing the randomness for the epoch as defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness).
 
 ### C.11.4. `BabeApi_next_epoch` {#id-babeapi_next_epoch}
 
@@ -798,7 +798,7 @@ Arguments
 - The 256-bit public key of the authority.
 
 Return  
-- A SCALE encoded *Option* as defined in Definition [Definition 190](id-cryptography-encoding#defn-option-type) containing the proof in an opaque form.
+- A SCALE encoded *Option* as defined in Definition [Definition -def-num-ref-](id-cryptography-encoding#defn-option-type) containing the proof in an opaque form.
 
 ### C.11.6. `BabeApi_submit_report_equivocation_unsigned_extrinsic` {#sect-babeapi_submit_report_equivocation_unsigned_extrinsic}
 
@@ -818,7 +818,7 @@ Arguments
   where  
   - ${A}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}}$ is the public key of the equivocator.
 
-  - ${s}$ is the slot as described in [Definition 54](sect-block-production#defn-epoch-slot) at which the equivocation occurred.
+  - ${s}$ is the slot as described in [Definition -def-num-ref-](sect-block-production#defn-epoch-slot) at which the equivocation occurred.
 
   - ${h}_{{1}}$ is the block header of the first block produced by the equivocator.
 
@@ -829,7 +829,7 @@ Arguments
 - An proof of the key owner in an opaque form as described in [Section C.11.5](chap-runtime-api#sect-babeapi_generate_key_ownership_proof).
 
 Return  
-- A SCALE encoded *Option* as defined in [Definition 190](id-cryptography-encoding#defn-option-type) containing an empty value on success.
+- A SCALE encoded *Option* as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-option-type) containing an empty value on success.
 
 ### C.11.7. Module AuthorityDiscoveryApi {#id-module-authoritydiscoveryapi}
 
@@ -862,7 +862,7 @@ All calls in this module require `Core_initialize_block` ([Section C.4.3](chap-r
 Generates a set of session keys with an optional seed. The keys should be stored within the keystore exposed by the Host Api. The seed needs to be valid and UTF-8 encoded.
 
 Arguments  
-- A SCALE-encoded *Option* as defined in [Definition 190](id-cryptography-encoding#defn-option-type) containing an array of varying sizes indicating the seed.
+- A SCALE-encoded *Option* as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-option-type) containing an array of varying sizes indicating the seed.
 
 Return  
 - A byte array of varying size containing the encoded session keys.
@@ -930,7 +930,7 @@ Return
   where  
   - ${w}$ is the weight of the extrinsic.
 
-  - ${c}$ is the "class" of the extrinsic, where class is a varying data ([Definition 188](id-cryptography-encoding#defn-varrying-data-type)) type defined as:
+  - ${c}$ is the "class" of the extrinsic, where class is a varying data ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) type defined as:
 
     ${c}=\le{f}{t}$\begin{array}{l} 0 \quad \textrm{Normal extrinsic}${1}\quad\text{}{m}{\left\lbrace{O}{p}{e}{r}{a}{t}{i}{o}{n}{a}{l}{e}{x}{t}{r}\in{s}{i}{c}\right\rbrace}$ 2 \quad \textrm{Mandatory extrinsic, which is always included} \end{array}\right.$
 
@@ -953,7 +953,7 @@ Return
   $$
 
   where  
-  - ${f}$ is a SCALE encoded as defined in [Definition 190](id-cryptography-encoding#defn-option-type) containing the following data structure:
+  - ${f}$ is a SCALE encoded as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-option-type) containing the following data structure:
 
     $$
     {f}={\left({{f}_{{b}},}{{f}_{{l}},}{f}_{{a}}\right)}

@@ -8,7 +8,7 @@ The associated network messages are specified in [Section 4.8](chap-networking#s
 
 ## 3.1. Warp Sync {#sect-sync-warp}
 
-Warp sync ([Section 4.8.4](chap-networking#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so called fragments ([Definition 41](chap-networking#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition 45](chap-networking#defn-grandpa-justifications-compact)). This protocols allows nodes to arrive at the desired state much faster than fast sync.
+Warp sync ([Section 4.8.4](chap-networking#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so called fragments ([Definition -def-num-ref-](chap-networking#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition -def-num-ref-](chap-networking#defn-grandpa-justifications-compact)). This protocols allows nodes to arrive at the desired state much faster than fast sync.
 
 ## 3.2. Fast Sync {#sect-sync-fast}
 
@@ -22,7 +22,7 @@ The full sync protocol usually downloads the entire chain, but no such requireme
 
 ### 3.3.1. Consensus Authority Set {#sect-authority-set}
 
-Because Polkadot is a proof-of-stake protocol, each of its consensus engines has its own set of nodes represented by known public keys, which have the authority to influence the protocol in pre-defined ways explained in this Section. To verify the validity of each block, the Polkadot node must track the current list of authorities ([Definition 33](chap-sync#defn-authority-list)) for that block.
+Because Polkadot is a proof-of-stake protocol, each of its consensus engines has its own set of nodes represented by known public keys, which have the authority to influence the protocol in pre-defined ways explained in this Section. To verify the validity of each block, the Polkadot node must track the current list of authorities ([Definition -def-num-ref-](chap-sync#defn-authority-list)) for that block.
 
 ###### Definition -def-num- Authority List {#defn-authority-list}
 
@@ -32,13 +32,13 @@ $$
 {\left({p}{k}_{{A}},{w}_{{A}}\right)}
 $$
 
-${p}{k}_{{A}}$ is the session public key ([Definition 180](id-cryptography-encoding#defn-session-key)) of authority ${A}$. And ${w}_{{A}}$ is an unsigned 64-bit integer indicating the authority weight. The value of $\text{Auth}_{{C}}{\left({B}\right)}$ is part of the Polkadot state. The value for $\text{Auth}_{{C}}{\left({B}_{{0}}\right)}$ is set in the genesis state ([Section A.3](id-cryptography-encoding#chapter-genesis)) and can be retrieved using a runtime entrypoint corresponding to consensus engine ${C}$.
+${p}{k}_{{A}}$ is the session public key ([Definition -def-num-ref-](id-cryptography-encoding#defn-session-key)) of authority ${A}$. And ${w}_{{A}}$ is an unsigned 64-bit integer indicating the authority weight. The value of $\text{Auth}_{{C}}{\left({B}\right)}$ is part of the Polkadot state. The value for $\text{Auth}_{{C}}{\left({B}_{{0}}\right)}$ is set in the genesis state ([Section A.3](id-cryptography-encoding#chapter-genesis)) and can be retrieved using a runtime entrypoint corresponding to consensus engine ${C}$.
 
 The authorities and their corresponding weights can be retrieved from the Runtime ([Section C.10.1](chap-runtime-api#sect-rte-grandpa-auth)).
 
 ### 3.3.2. Runtime-to-Consensus Engine Message {#sect-consensus-message-digest}
 
-The authority list ([Definition 33](chap-sync#defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition 11](chap-state#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
+The authority list ([Definition -def-num-) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition -def-num-)) to the block header of block ${B}$ which caused the transition in the authority set.
 
 The Polkadot Host must inspect the digest header of each block and delegate consensus messages to their consensus engines. The BABE and GRANDPA consensus engine must react based on the type of consensus messages it receives. The active GRANDPA authorities can only vote for blocks that occurred after the finalized block in which they were selected. Any votes for blocks before the came into effect would get rejected.
 
@@ -53,13 +53,13 @@ The Polkadot Host implements [Import-and-Validate-Block](chap-sync#algo-import-a
 \require ${B},\text{Just}{\left({B}\right)}$ \state \call{Set-Storage-State-At}{${P}{\left({B}\right)}$} \if{$\text{Just}{\left({B}\right)}\ne{q}\emptyset$} \state \call{Verify-Block-Justification}{${B},\text{Just}{\left({B}\right)}$} \if{${B}~\text{}{f}{\left\lbrace{i}{s}\right\rbrace}~\text{Finalized}~\text{}{f}{\left\lbrace{\quad\text{and}\quad}\right\rbrace}~{P}{\left({B}\right)}~\text{}{f}{\left\lbrace{i}{s}\neg\right\rbrace}~\text{Finalized}$} \state \call{Mark-as-Final}{${P}{\left({B}\right)}$} \endif \endif \if{${H}_{{p}}{\left({B}\right)}\notin{P}{B}{T}$} \return \endif \state \call{Verify-Authorship-Right}{$\text{Head}{\left({B}\right)}$} \state ${B}\leftarrow$ \call{Remove-Seal}{${B}$} \state ${R}\leftarrow$ \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{C}{\quad\text{or}\quad}{e}$\right.}execute${b}{l}{o}{c}{k}{\rbrace},{B}$} \state ${B}\leftarrow$ \call{Add-Seal}{${B}$} \if{${R}=$ \textsc{True}} \state \call{Persist-State}{} \endif
 
 where  
-- $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition 11](chap-state#defn-digest)) before submitting it to the Runtime.
+- $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition -def-num-)) before submitting it to the Runtime.
 
-- $\text{Add-Seal}$ adds the Seal digest back to the block ([Definition 11](chap-state#defn-digest)) for later propagation.
+- $\text{Add-Seal}$ adds the Seal digest back to the block ([Definition -def-num-)) for later propagation.
 
 - $\text{Persist-State}$ implies the persistence of any state changes created by ${\mathtt{\text{Core_execute_block}}}$ ([Section C.4.2](chap-runtime-api#sect-rte-core-execute-block)) on successful execution.
 
-- $\text{PBT}$ is the pruned block tree ([Definition 4](chap-state#defn-block-tree)).
+- $\text{PBT}$ is the pruned block tree ([Definition -def-num-ref-](chap-state#defn-block-tree)).
 
 - $\text{Verify-Authorship-Right}$ is part of the block production consensus protocol and is described in [Verify-Authorship-Right](sect-block-production#algo-verify-authorship-right).
 

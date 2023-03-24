@@ -126,7 +126,7 @@ Child trie
 State trie of a child storage
 
 Transaction Queue  
-See [Definition 14](chap-state#defn-transaction-queue).
+See [Definition -def-num-ref-](chap-state#defn-transaction-queue).
 
 ${H}_{{p}}$  
 The 32-byte Blake2b hash of the header of the parent of the block.

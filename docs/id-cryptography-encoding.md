@@ -47,7 +47,7 @@ $$
 {S}={\left({b}_{{0}},\ldots{b}_{{31}}\right)}
 $$
 
-where ${C}$ is the challenge and ${S}$ is the 32-byte Schnorr poof. Both are expressed as Curve25519 scalars as defined in Definition [Definition 172](id-cryptography-encoding#defn-vrf-dleq-prove).
+where ${C}$ is the challenge and ${S}$ is the 32-byte Schnorr poof. Both are expressed as Curve25519 scalars as defined in Definition [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove).
 
 ###### Definition -def-num- `DLEQ Prove` {#defn-vrf-dleq-prove}
 
@@ -100,7 +100,7 @@ where ${p}$ is the secret key.
 
 ###### Definition -def-num- `DLEQ Verify` {#defn-vrf-dleq-verify}
 
-The $\text{dleq_verify}{\left({i},{o},{P},{p}_{{k}}\right)}$ function verifiers the VRF input, ${i}$ against the output, ${o}$, with the associated proof ([Definition 171](id-cryptography-encoding#defn-vrf-proof)) and public key, ${p}_{{k}}$.
+The $\text{dleq_verify}{\left({i},{o},{P},{p}_{{k}}\right)}$ function verifiers the VRF input, ${i}$ against the output, ${o}$, with the associated proof ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-proof)) and public key, ${p}_{{k}}$.
 
 ${t}_{{1}}=\text{append}{\left({t},\text{'proto-name'},\text{'DLEQProof'}\right)}$ ${t}_{{2}}=\text{append}{\left({t}_{{1}},\text{'vrf:h'},{s}_{{i}}\right)}$ ${t}_{{3}}=\text{append}{\left({t}_{{2}},\text{'vrf:R=g^r'},{R}\right)}$ ${t}_{{4}}=\text{append}{\left({t}_{{3}},\text{'vrf:h^r'},{H}\right)}$ ${t}_{{5}}=\text{append}{\left({t}_{{4}},\text{'vrf:pk'},{p}_{{k}}\right)}$ ${t}_{{6}}=\text{append}{\left({t}_{{5}},\text{'vrf:h^sk'},{o}\right)}$
 
@@ -130,7 +130,7 @@ $$
 
 #### A.1.3.1. Transcript {#id-transcript}
 
-A VRF transcript serves as a domain-specific separator of cryptographic protocols and is represented as a mathematical object, as defined by Merlin, which defines how that object is generated and encoded. The usage of the transcript is implementation specific, such as for certain mechanisms in the Availability & Validity chapter ([Chapter 8](chapter-anv)), and is therefore described in more detail in those protocols. The input value used to initiate the transcript is referred to as a *context* ([Definition 174](id-cryptography-encoding#defn-vrf-context)).
+A VRF transcript serves as a domain-specific separator of cryptographic protocols and is represented as a mathematical object, as defined by Merlin, which defines how that object is generated and encoded. The usage of the transcript is implementation specific, such as for certain mechanisms in the Availability & Validity chapter ([Chapter 8](chapter-anv)), and is therefore described in more detail in those protocols. The input value used to initiate the transcript is referred to as a *context* ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-context)).
 
 ###### Definition -def-num- VRF Contex {#defn-vrf-context}
 
@@ -154,7 +154,7 @@ where:
 
 - ${I}_{{0}}$ has the initial value of `0`.
 
-Then, the `meta-AD` operation ([Definition 176](id-cryptography-encoding#defn-strobe-operations)) (where `more=False`) is used to add the protocol label `Merlin v1.0` to $\text{obj}$ followed by *appending* ([Section A.1.3.1.1](id-cryptography-encoding#sect-vrf-appending-messages)) label `dom-step` and its corresponding context, ${c}{t}{x}$, resulting in the final transcript, ${T}$.
+Then, the `meta-AD` operation ([Definition -def-num-ref-](id-cryptography-encoding#defn-strobe-operations)) (where `more=False`) is used to add the protocol label `Merlin v1.0` to $\text{obj}$ followed by *appending* ([Section A.1.3.1.1](id-cryptography-encoding#sect-vrf-appending-messages)) label `dom-step` and its corresponding context, ${c}{t}{x}$, resulting in the final transcript, ${T}$.
 
 $$
 {t}=\text{meta-AD}{\left({o}{b}{j},\text{'Merlin v1.0'},\text{False}\right)}
@@ -163,7 +163,7 @@ $$
 {T}=\text{append}{\left({t},\text{'dom-step'},\text{ctx}\right)}
 $$
 
-$\text{ctx}$ serves as an arbitrary identifier/separator and its value is defined by the protocol specification individually. This transcript is treated just like a STROBE object, wherein any operations ([Definition 176](id-cryptography-encoding#defn-strobe-operations)) on it modify the values such as $\text{pos}$ and $\text{pos}_{{\text{begin}}}$.
+$\text{ctx}$ serves as an arbitrary identifier/separator and its value is defined by the protocol specification individually. This transcript is treated just like a STROBE object, wherein any operations ([Definition -def-num-ref-](id-cryptography-encoding#defn-strobe-operations)) on it modify the values such as $\text{pos}$ and $\text{pos}_{{\text{begin}}}$.
 
 Formally, when creating a transcript we refer to it as $\text{Transcript}{\left({c}{t}{x}\right)}$.
 
@@ -173,7 +173,7 @@ STROBE operations are described in the [STROBE specification](https://strobe.sou
 
 ##### Appending Messages {#sect-vrf-appending-messages}
 
-Appending messages, or "data", to the transcript ([Definition 175](id-cryptography-encoding#defn-vrf-transcript)) first requires `meta-AD` operations for a given label of the messages, including the size of the message, followed by an `AD` operation on the message itself. The size of the message is a 4-byte, little-endian encoded integer.
+Appending messages, or "data", to the transcript ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-transcript)) first requires `meta-AD` operations for a given label of the messages, including the size of the message, followed by an `AD` operation on the message itself. The size of the message is a 4-byte, little-endian encoded integer.
 
 $$
 {T}_{{0}}=\text{meta-AD}{\left({T},{l},\text{False}\right)}
@@ -185,7 +185,7 @@ $$
 {T}_{{2}}=\text{AD}{\left({T}_{{1}},{m},\text{False}\right)}
 $$
 
-where ${T}$ is the transcript ([Definition 175](id-cryptography-encoding#defn-vrf-transcript)), ${l}$ is the given label and ${m}$ the message, respectively ${m}_{{l}}$ representing its size. ${T}_{{2}}$ is the resulting transcript with the appended data. STROBE operations are described in [Definition 176](id-cryptography-encoding#defn-strobe-operations).
+where ${T}$ is the transcript ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-transcript)), ${l}$ is the given label and ${m}$ the message, respectively ${m}_{{l}}$ representing its size. ${T}_{{2}}$ is the resulting transcript with the appended data. STROBE operations are described in [Definition -def-num-ref-](id-cryptography-encoding#defn-strobe-operations).
 
 Formally, when appending a message we refer to it as $\text{append}{\left({T},{l},{m}\right)}$.
 
@@ -205,11 +205,11 @@ Various types of keys are used in Polkadot to prove the identity of the actors i
 | ed25519    | The ed25519 signature complies with cite:\[josefsson_edwards-curve_2017\] except for the verification process which adhere to Ed25519 Zebra variant specified in cite:\[devalence_ed25519zebra_2020\]. In short, the signature point is not assumed to be on in the prime ordered subgroup group. As such, the verifier must explicitly clear the cofactor during the course of verifying the signature equation. |
 | secp256k1  | Only for outgoing transfer transactions.                                                                                                                                                                                                                                                                                                                                                                          |
 
-An account key can be used to sign transactions among other accounts and balance-related functions. There are two prominent subcategories of account keys namely "stash keys" and "controller keys", each being used for a different function. Keys defined in [Definition 177](id-cryptography-encoding#defn-account-key), [Definition 178](id-cryptography-encoding#defn-stash-key) and [Definition 179](id-cryptography-encoding#defn-controller-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction, as defined in [Section A.1.4.2](id-cryptography-encoding#sect-creating-controller-key) and [Section A.1.4.5](id-cryptography-encoding#sect-certifying-keys) respectively.
+An account key can be used to sign transactions among other accounts and balance-related functions. There are two prominent subcategories of account keys namely "stash keys" and "controller keys", each being used for a different function. Keys defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-account-key), [Definition -def-num-ref-](id-cryptography-encoding#defn-stash-key) and [Definition -def-num-ref-](id-cryptography-encoding#defn-controller-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction, as defined in [Section A.1.4.2](id-cryptography-encoding#sect-creating-controller-key) and [Section A.1.4.5](id-cryptography-encoding#sect-certifying-keys) respectively.
 
 ###### Definition -def-num- Stash Key {#defn-stash-key}
 
-The **Stash key** is a type of account key that holds funds bonded for staking (described in [Section A.1.4.1](id-cryptography-encoding#sect-staking-funds)) to a particular controller key (defined in [Definition 179](id-cryptography-encoding#defn-controller-key)). As a result, one may actively participate with a stash key keeping the stash key offline in a secure location. It can also be used to designate a Proxy account to vote in governance proposals, as described in [Section A.1.4.2](id-cryptography-encoding#sect-creating-controller-key). The Stash key holds the majority of the users’ funds and should neither be shared with anyone, saved on an online device, nor used to submit extrinsics.
+The **Stash key** is a type of account key that holds funds bonded for staking (described in [Section A.1.4.1](id-cryptography-encoding#sect-staking-funds)) to a particular controller key (defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-controller-key)). As a result, one may actively participate with a stash key keeping the stash key offline in a secure location. It can also be used to designate a Proxy account to vote in governance proposals, as described in [Section A.1.4.2](id-cryptography-encoding#sect-creating-controller-key). The Stash key holds the majority of the users’ funds and should neither be shared with anyone, saved on an online device, nor used to submit extrinsics.
 
 ###### Definition -def-num- Controller Key {#defn-controller-key}
 
@@ -336,7 +336,7 @@ It’s accepted behavior for the decoder to partially decode the blob of data. M
 
 |     |                                                                                                                                                                                                                                                                                                                                                                                             |
 |-----|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | Considering that the decoded data is never larger than the encoded message, this information can serve as a way to validate values that can vary in sizes, such as sequences ([Definition 192](id-cryptography-encoding#defn-scale-list)). The decoder should strictly use the size of the encoded data as an upper bound when decoding in order to prevent denial of service attacks. |
+|     | Considering that the decoded data is never larger than the encoded message, this information can serve as a way to validate values that can vary in sizes, such as sequences ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)). The decoder should strictly use the size of the encoded data as an upper bound when decoding in order to prevent denial of service attacks. |
 
 ###### Definition -def-num- Tuple {#defn-scale-tuple}
 
@@ -364,7 +364,7 @@ $$
 
 A value ${A}$ of varying date type is a pair ${\left({A}_{{\text{Type}}},{A}_{{\text{Value}}}\right)}$ where ${A}_{{\text{Type}}}={T}_{{i}}$ for some ${T}_{{i}}\in{\mathcal{{T}}}$ and ${A}_{{\text{Value}}}$ is its value of type ${T}_{{i}}$, which can be empty. We define $\text{idx}{\left({T}_{{i}}\right)}={i}-{1}$, unless it is explicitly defined as another value in the definition of a particular varying data type.
 
-In particular, we define two specific varying data which are frequently used in various part of Polkadot protocol: *Option* ([Definition 190](id-cryptography-encoding#defn-option-type)) and *Result* ([Definition 191](id-cryptography-encoding#defn-result-type)).
+In particular, we define two specific varying data which are frequently used in various part of Polkadot protocol: *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) and *Result* ([Definition -def-num-ref-](id-cryptography-encoding#defn-result-type)).
 
 ###### Definition -def-num- Encoding of Varying Data Type {#defn-scale-variable-type}
 
@@ -374,7 +374,7 @@ $$
 \text{Enc}_{{\text{SC}}}{\left({A}\right)}\:=\text{Enc}_{{\text{SC}}}{\left(\text{idx}{\left({A}_{{\text{Type}}}\right)}\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{\text{Value}}}\right)}\right)}
 $$
 
-Where $\text{idx}$ is a 8-bit integer determining the type of ${A}$. In particular, for the optional type defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type), we have:
+Where $\text{idx}$ is a 8-bit integer determining the type of ${A}$. In particular, for the optional type defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type), we have:
 
 $$
 \text{Enc}_{{\text{SC}}}{\left(\text{None},\phi\right)}\:={0}_{{{\mathbb{{B}}}_{{1}}}}
@@ -404,7 +404,7 @@ $$
 \text{Enc}_{{\text{SC}}}{\left({S}\right)}\:={\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}{\left({\left|{{S}}\right|}\right)}\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{2}}\right)}\text{||}\ldots\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{n}}\right)}
 $$
 
-where ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}$ is defined in [Definition 198](id-cryptography-encoding#defn-sc-len-encoding).
+where ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}$ is defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-sc-len-encoding).
 
 In some cases, the length indicator ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}{\left({\left|{{S}}\right|}\right)}$ is omitted if the length of the sequence is fixed and known by the decoder upfront. Such cases are explicitly stated by the definition of the corresponding type.
 
@@ -437,11 +437,11 @@ $$
 
 ###### Definition -def-num- String {#defn-scale-string}
 
-The SCALE codec for a **string value** is an encoded sequence ([Definition 192](id-cryptography-encoding#defn-scale-list)) consisting of UTF-8 encoded bytes.
+The SCALE codec for a **string value** is an encoded sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) consisting of UTF-8 encoded bytes.
 
 ###### Definition -def-num- Fixed Length {#defn-scale-fixed-length}
 
-The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for other types such as fixed length integers not defined here otherwise, is equal to little endian encoding of those values defined in [Definition 184](id-cryptography-encoding#defn-little-endian).
+The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for other types such as fixed length integers not defined here otherwise, is equal to little endian encoding of those values defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-little-endian).
 
 ###### Definition -def-num- Empty {#defn-scale-empty}
 
@@ -505,17 +505,17 @@ $$
 
 The genesis state is a set of key-value pairs representing the initial state of the Polkadot state storage. It can be retrieved from [the Polkadot repository](https://github.com/paritytech/polkadot/tree/master/node/service/chain-specs). While each of those key-value pairs offers important identifiable information to the Runtime, to the Polkadot Host they are a transparent set of arbitrary chain- and network-dependent keys and values. The only exception to this are the `:code` ([Section 2.6.2](chap-state#sect-loading-runtime-code)) and `:heappages` ([Section 2.6.3.1](chap-state#sect-memory-management)) keys, which are used by the Polkadot Host to initialize the WASM environment and its Runtime. The other keys and values are unspecified and solely depend on the chain and respectively its corresponding Runtime. On initialization the data should be inserted into the state storage with the Host API ([Section B.2.1](chap-host-api#sect-storage-set)).
 
-As such, Polkadot does not define a formal genesis block. Nonetheless for the compatibility reasons in several algorithms, the Polkadot Host defines the *genesis header* ([Definition 200](id-cryptography-encoding#defn-genesis-header)). By the abuse of terminology, "genesis block" refers to the hypothetical parent of block number *1* which holds genesis header as its header.
+As such, Polkadot does not define a formal genesis block. Nonetheless for the compatibility reasons in several algorithms, the Polkadot Host defines the *genesis header* ([Definition -def-num-ref-](id-cryptography-encoding#defn-genesis-header)). By the abuse of terminology, "genesis block" refers to the hypothetical parent of block number *1* which holds genesis header as its header.
 
 ###### Definition -def-num- Genesis Header {#defn-genesis-header}
 
-The Polkadot genesis header is a data structure conforming to block header format ([Definition 10](chap-state#defn-block-header)). It contains the following values:
+The Polkadot genesis header is a data structure conforming to block header format ([Definition -def-num-ref-](chap-state#defn-block-header)). It contains the following values:
 
 | Block header field | Genesis Header Value                                                                                                                |
 |--------------------|-------------------------------------------------------------------------------------------------------------------------------------|
 | `parent_hash`      | *0*                                                                                                                                 |
 | `number`           | *0*                                                                                                                                 |
-| `state_root`       | Merkle hash of the state storage trie ([Definition 29](chap-state#defn-merkle-value)) after inserting the genesis state in it. |
+| `state_root`       | Merkle hash of the state storage trie ([Definition -def-num-ref-](chap-state#defn-merkle-value)) after inserting the genesis state in it. |
 | `extrinsics_root`  | *0*                                                                                                                                 |
 | `digest`           | *0*                                                                                                                                 |
 

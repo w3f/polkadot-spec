@@ -32,7 +32,7 @@ Complete specification of the Polkadot networking protocol relies on the followi
 
 Each Polkadot Host node maintains an ED25519 key pair which is used to identify the node. The public key is shared with the rest of the network allowing the nodes to establish secure communication channels.
 
-Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId* as defined in [Definition 34](chap-networking#defn-peer-id) is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section 4.4](chap-networking#sect-discovery-mechanism).
+Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId* as defined in [Definition -def-num-ref-](chap-networking#defn-peer-id) is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section 4.4](chap-networking#sect-discovery-mechanism).
 
 ###### Definition -def-num- PeerId {#defn-peer-id}
 
@@ -216,11 +216,11 @@ The Polkadot Host must actively communicate with the network in order to partici
 
 When the node creates or receives a new block, it must be announced to the network. Other nodes within the network will track this announcement and can request information about this block. The mechanism for tracking announcements and requesting the required data is implementation-specific.
 
-Block announcements, requests and responses are sent over the substream as described in [Definition 35](chap-networking#defn-block-announce-handshake).
+Block announcements, requests and responses are sent over the substream as described in [Definition -def-num-ref-](chap-networking#defn-block-announce-handshake).
 
 ###### Definition -def-num- Block Announce Handshake {#defn-block-announce-handshake}
 
-The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once established, all `BlockAnounce` messages ([Definition 36](chap-networking#defn-block-announce)) created by the node are sent to the `/dot/block-announces/1` substream.
+The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once established, all `BlockAnounce` messages ([Definition -def-num-ref-](chap-networking#defn-block-announce)) created by the node are sent to the `/dot/block-announces/1` substream.
 
 The `BlockAnnounceHandshake` is a structure of the following format:
 
@@ -314,19 +314,19 @@ where *BlockData* is a Protobuf structure containing the requested blocks. Do no
 
 | Type             | Id  | Description                                                           | Value                                                          |
 |------------------|-----|-----------------------------------------------------------------------|----------------------------------------------------------------|
-| `bytes`          | 1   | Block header hash                                                     | [Definition 12](chap-state#defn-block-header-hash)        |
-| `bytes`          | 2   | Block header (optional)                                               | [Definition 10](chap-state#defn-block-header)             |
-| repeated `bytes` | 3   | Block body (optional)                                                 | [Definition 13](chap-state#defn-block-body)               |
+| `bytes`          | 1   | Block header hash                                                     | [Definition -def-num-ref-](chap-state#defn-block-header-hash)        |
+| `bytes`          | 2   | Block header (optional)                                               | [Definition -def-num-ref-](chap-state#defn-block-header)             |
+| repeated `bytes` | 3   | Block body (optional)                                                 | [Definition -def-num-ref-](chap-state#defn-block-body)               |
 | `bytes`          | 4   | Block receipt (optional)                                              |                                                                |
 | `bytes`          | 5   | Block message queue (optional)                                        |                                                                |
-| `bytes`          | 6   | Justification (optional)                                              | [Definition 78](sect-finality#defn-grandpa-justification) |
+| `bytes`          | 6   | Justification (optional)                                              | [Definition -def-num-ref-](sect-finality#defn-grandpa-justification) |
 | `bool`           | 7   | Indicates whether the justification is empty (i.e. should be ignored) |                                                                |
 
 ### 4.8.3. Requesting States {#sect-msg-state-request}
 
 The Polkadot Host can request the state in form of a key/value list at a specified block.
 
-When receiving state entries from the state response messages ([Definition 40](chap-networking#defn-msg-state-response)), the node can verify the entries with the entry proof (id *1* in *KeyValueStorage*) against the merkle root in the block header (of the block specified in [Definition 39](chap-networking#defn-msg-state-request)). Once the state response message claims that all entries have been sent (id *3* in *KeyValueStorage*), the node can use all collected entry proofs and validate it against the merkle root to confirm that claim.
+When receiving state entries from the state response messages ([Definition -def-num-ref-](chap-networking#defn-msg-state-response)), the node can verify the entries with the entry proof (id *1* in *KeyValueStorage*) against the merkle root in the block header (of the block specified in [Definition -def-num-ref-](chap-networking#defn-msg-state-request)). Once the state response message claims that all entries have been sent (id *3* in *KeyValueStorage*), the node can use all collected entry proofs and validate it against the merkle root to confirm that claim.
 
 See the the synchronization chapter for more information ([Chapter 3](chap-sync)).
 
@@ -334,11 +334,11 @@ See the the synchronization chapter for more information ([Chapter 3](chap-sync)
 
 A **state request** is sent to a peer to request the state at a specified block. The message is a single 32-byte Blake2 hash which indicates the block from which the sync should start.
 
-Depending on what substream is used, he remote peer either sends back a state response ([Definition 40](chap-networking#defn-msg-state-response)) on the `/dot/sync/2` substream or a warp sync proof ([Definition 41](chap-networking#defn-warp-sync-proof)) on the `/dot/sync/warp`.
+Depending on what substream is used, he remote peer either sends back a state response ([Definition -def-num-ref-](chap-networking#defn-msg-state-response)) on the `/dot/sync/2` substream or a warp sync proof ([Definition -def-num-ref-](chap-networking#defn-warp-sync-proof)) on the `/dot/sync/warp`.
 
 ###### Definition -def-num- State Response {#defn-msg-state-response}
 
-The **state response** is sent to the peer that initialized the state request ([Definition 39](chap-networking#defn-msg-state-request)) and contains a list of key/value entries with an associated proof. This response is sent continuously until all key/value pairs have been submitted.
+The **state response** is sent to the peer that initialized the state request ([Definition -def-num-ref-](chap-networking#defn-msg-state-request)) and contains a list of key/value entries with an associated proof. This response is sent continuously until all key/value pairs have been submitted.
 
 | Type                          | Id  | Description   |
 |-------------------------------|-----|---------------|
@@ -368,7 +368,7 @@ See the the synchronization chapter for more information ([Chapter 3](chap-sync)
 
 ###### Definition -def-num- Warp Sync Proof {#defn-warp-sync-proof}
 
-The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition 39](chap-networking#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section 3.3.2](chap-sync#sect-consensus-message-digest)). It’s a datastructure of the following format:
+The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition -def-num-ref-](chap-networking#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section 3.3.2](chap-sync#sect-consensus-message-digest)). It’s a datastructure of the following format:
 
 $$
 {P}={\left({{f}_{{x}}\ldots}{{f}_{{y}},}{c}\right)}
@@ -380,11 +380,11 @@ $$
 {{f}_{{x}}=}{\left({B}_{{h}},{J}^{{{r},\text{stage}}}{\left({B}\right)}\right)}
 $$
 
-where ${B}_{{h}}$ is the last block header containing a digest item ([Definition 11](chap-state#defn-digest)) signaling an authority set change from which the next authority set change can be fetched from. ${J}^{{{r},\text{stage}}}{\left({B}\right)}$ is the GRANDPA justification ([Definition 78](sect-finality#defn-grandpa-justification)) and ${c}$ is a boolean that indicates whether the warp sync has been completed.
+where ${B}_{{h}}$ is the last block header containing a digest item ([Definition -def-num-)) signaling an authority set change from which the next authority set change can be fetched from. ${J}^{{{r},\text{stage}}}{\left({B}\right)}$ is the GRANDPA justification ([Definition -def-num-ref-](sect-finality#defn-grandpa-justification)) and ${c}$ is a boolean that indicates whether the warp sync has been completed.
 
 ### 4.8.5. Transactions {#sect-msg-transactions}
 
-Transactions ([Section 2.3](chap-state#sect-extrinsics)) are sent directly to peers with which the Polkadot Host has an open transaction substream ([Definition 42](chap-networking#defn-transactions-message)). Polkadot Host implementers should implement a mechanism that only sends a transaction once to each peer and avoids sending duplicates. Sending duplicate transactions might result in undefined consequences such as being blocked for bad behavior by peers.
+Transactions ([Section 2.3](chap-state#sect-extrinsics)) are sent directly to peers with which the Polkadot Host has an open transaction substream ([Definition -def-num-ref-](chap-networking#defn-transactions-message)). Polkadot Host implementers should implement a mechanism that only sends a transaction once to each peer and avoids sending duplicates. Sending duplicate transactions might result in undefined consequences such as being blocked for bad behavior by peers.
 
 The mechanism for managing transactions is further described in Section [Section 2.3](chap-state#sect-extrinsics).
 
@@ -411,22 +411,22 @@ The exchange of GRANDPA messages is conducted on the substream. The process for 
 
 ###### Definition -def-num- Grandpa Gossip Message {#defn-gossip-message}
 
-A **GRANDPA gossip message**, ${M}$, is a varying datatype ([Definition 188](id-cryptography-encoding#defn-varrying-data-type)) which identifies the message type that is cast by a voter followed by the message itself.
+A **GRANDPA gossip message**, ${M}$, is a varying datatype ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) which identifies the message type that is cast by a voter followed by the message itself.
 
 $$
 {M}={\left\lbrace\begin{matrix}{0}&\text{Vote message}&{V}_{{m}}\\{1}&\text{Commit message}&{C}_{{m}}\\{2}&\text{Neighbor message}&{N}_{{m}}\\{3}&\text{Catch-up request message}&{R}_{{m}}\\{4}&\text{Catch-up message}&{U}_{{m}}\end{matrix}\right.}
 $$
 
 where  
-- ${V}_{{m}}$ is defined in [Definition 44](chap-networking#defn-grandpa-vote-msg).
+- ${V}_{{m}}$ is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-vote-msg).
 
-- ${C}_{{m}}$ is defined in [Definition 46](chap-networking#defn-grandpa-commit-msg).
+- ${C}_{{m}}$ is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-commit-msg).
 
-- ${N}_{{m}}$ is defined in [Definition 47](chap-networking#defn-grandpa-neighbor-msg).
+- ${N}_{{m}}$ is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-neighbor-msg).
 
-- ${R}_{{m}}$ is defined in [Definition 48](chap-networking#defn-grandpa-catchup-request-msg).
+- ${R}_{{m}}$ is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-request-msg).
 
-- ${U}_{{M}}$ is defined in [Definition 49](chap-networking#defn-grandpa-catchup-response-msg).
+- ${U}_{{M}}$ is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-response-msg).
 
 ###### Definition -def-num- GRANDPA Vote Messages {#defn-grandpa-vote-msg}
 
@@ -443,19 +443,19 @@ $$
 $$
 
 where  
-- ${r}$ is an unsigned 64-bit integer indicating the Grandpa round number ([Definition 76](sect-finality#defn-voting-rounds)).
+- ${r}$ is an unsigned 64-bit integer indicating the Grandpa round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition 33](chap-sync#defn-authority-list)).
+- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
-- ${\text{Sig}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}$ is a 512-bit byte array containing the signature of the authority ([Definition 77](sect-finality#defn-sign-round-vote)).
+- ${\text{Sig}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}$ is a 512-bit byte array containing the signature of the authority ([Definition -def-num-ref-](sect-finality#defn-sign-round-vote)).
 
 - ${v}_{{{i}{d}}}$ is a 256-bit byte array containing the *ed25519* public key of the authority.
 
 - $\text{stage}$ is a 8-bit integer of value *0* if it’s a pre-vote sub-round, *1* if it’s a pre-commit sub-round or *2* if it’s a primary proposal message.
 
-- ${{V}_{{v}}^{{{r},\text{stage}}}}{\left({B}\right)}$ is the GRANDPA vote for block ${B}$ ([Definition 76](sect-finality#defn-voting-rounds)).
+- ${{V}_{{v}}^{{{r},\text{stage}}}}{\left({B}\right)}$ is the GRANDPA vote for block ${B}$ ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking#defn-gossip-message)) of type Id 0.
+This message is the sub-component of the GRANDPA gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id 0.
 
 ###### Definition -def-num- GRANDPA Compact Justification Format {#defn-grandpa-justifications-compact}
 
@@ -466,9 +466,9 @@ $$
 $$
 
 where  
-- ${{V}_{{{v}_{{i}}}}^{{{r},{p}{c}}}}$ is a 256-bit byte array containing the pre-commit vote of authority ${v}_{{i}}$ ([Definition 76](sect-finality#defn-voting-rounds)).
+- ${{V}_{{{v}_{{i}}}}^{{{r},{p}{c}}}}$ is a 256-bit byte array containing the pre-commit vote of authority ${v}_{{i}}$ ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-- ${\text{Sig}_{{{v}_{{i}}}}^{{{r},{p}{c}}}}$ is a 512-bit byte array containing the pre-commit signature of authority ${v}_{{i}}$ ([Definition 77](sect-finality#defn-sign-round-vote)).
+- ${\text{Sig}_{{{v}_{{i}}}}^{{{r},{p}{c}}}}$ is a 512-bit byte array containing the pre-commit signature of authority ${v}_{{i}}$ ([Definition -def-num-ref-](sect-finality#defn-sign-round-vote)).
 
 - ${v}_{{\text{id}_{{n}}}}$ is a 256-bit byte array containing the public key of authority ${v}_{{i}}$.
 
@@ -481,15 +481,15 @@ $$
 $$
 
 where  
-- ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition 76](sect-finality#defn-voting-rounds)).
+- ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-- ${i}{d}_{{{\mathbb{{V}}}}}$ is the authority set Id ([Definition 33](chap-sync#defn-authority-list)).
+- ${i}{d}_{{{\mathbb{{V}}}}}$ is the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
-- ${{V}_{{v}}^{{r}}}{\left({B}\right)}$ is a 256-bit array containing the GRANDPA vote for block ${B}$ ([Definition 75](sect-finality#defn-vote)).
+- ${{V}_{{v}}^{{r}}}{\left({B}\right)}$ is a 256-bit array containing the GRANDPA vote for block ${B}$ ([Definition -def-num-)).
 
-- ${{J}_{{{v}_{{{0},\ldots{n}}}}}^{{{r},\text{comp}}}}$ is the compacted GRANDPA justification containing observed pre-commit of authorities ${v}_{{0}}$ to ${v}_{{n}}$ ([Definition 45](chap-networking#defn-grandpa-justifications-compact)).
+- ${{J}_{{{v}_{{{0},\ldots{n}}}}}^{{{r},\text{comp}}}}$ is the compacted GRANDPA justification containing observed pre-commit of authorities ${v}_{{0}}$ to ${v}_{{n}}$ ([Definition -def-num-ref-](chap-networking#defn-grandpa-justifications-compact)).
 
-This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking#defn-gossip-message)) of type Id *1*.
+This message is the sub-component of the GRANDPA gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *1*.
 
 #### 4.8.6.1. GRANDPA Neighbor Messages {#sect-grandpa-neighbor-msg}
 
@@ -506,17 +506,17 @@ $$
 where  
 - ${v}$ is an unsigned 8-bit integer indicating the version of the neighbor message, currently *1*.
 
-- ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition 76](sect-finality#defn-voting-rounds)).
+- ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Id ([Definition 33](chap-sync#defn-authority-list)).
+- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
 - ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ is an unsigned 32-bit integer indicating the block number of the last finalized block ${B}_{{\text{last}}}$.
 
-This message is the sub-component of the GRANDPA gossip message ([Definition 43](chap-networking#defn-gossip-message)) of type Id *2*.
+This message is the sub-component of the GRANDPA gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *2*.
 
 #### 4.8.6.2. GRANDPA Catch-up Messages {#sect-grandpa-catchup-messages}
 
-Whenever a Polkadot node detects that it is lagging behind the finality procedure, it needs to initiate a *catch-up* procedure. GRANDPA Neighbor messages ([Definition 47](chap-networking#defn-grandpa-neighbor-msg)) reveal the round number for the last finalized GRANDPA round which the node’s peers have observed. This provides the means to identify a discrepancy in the latest finalized round number observed among the peers. If such a discrepancy is observed, the node needs to initiate the catch-up procedure explained in [Section 6.6.1](sect-finality#sect-grandpa-catchup)).
+Whenever a Polkadot node detects that it is lagging behind the finality procedure, it needs to initiate a *catch-up* procedure. GRANDPA Neighbor messages ([Definition -def-num-ref-](chap-networking#defn-grandpa-neighbor-msg)) reveal the round number for the last finalized GRANDPA round which the node’s peers have observed. This provides the means to identify a discrepancy in the latest finalized round number observed among the peers. If such a discrepancy is observed, the node needs to initiate the catch-up procedure explained in [Section 6.6.1](sect-finality#sect-grandpa-catchup)).
 
 In particular, this procedure involves sending a *catch-up request* and processing *catch-up response* messages.
 
@@ -528,7 +528,7 @@ $$
 {{M}_{{{i},{v}}}^{{{r},\text{Cat}-{q}}}}\:=\text{Enc}_{{\text{SC}}}{\left({r},\text{id}_{{{\mathbb{{V}}}}}\right)}
 $$
 
-This message is the sub-component of the GRANDPA Gossip message ([Definition 43](chap-networking#defn-gossip-message)) of type Id *3*.
+This message is the sub-component of the GRANDPA Gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *3*.
 
 ###### Definition -def-num- Catch-Up Response Message {#defn-grandpa-catchup-response-msg}
 
@@ -538,9 +538,9 @@ $$
 {{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}\:=\text{Enc}_{{\text{SC}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r},{{J}_{{{0},\ldots{n}}}^{{{r},\text{pv}}}}{\left({B}\right)},{{J}_{{{0},\ldots{m}}}^{{{r},\text{pc}}}}{\left({B}\right)},{H}_{{h}}{\left({B}'\right)},{H}_{{i}}{\left({B}'\right)}\right)}
 $$
 
-Where ${B}$ is the highest block which ${v}$ believes to be finalized in round ${r}$ ([Definition 76](sect-finality#defn-voting-rounds)). ${B}'$ is the highest ancestor of all blocks voted on in the arrays of justifications ${{J}_{{{0},\ldots{n}}}^{{{r},\text{pv}}}}{\left({B}\right)}$ and ${{J}_{{{0},\ldots{m}}}^{{{r},\text{pc}}}}{\left({B}\right)}$ ([Definition 78](sect-finality#defn-grandpa-justification)) with the exception of the equivocatory votes.
+Where ${B}$ is the highest block which ${v}$ believes to be finalized in round ${r}$ ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)). ${B}'$ is the highest ancestor of all blocks voted on in the arrays of justifications ${{J}_{{{0},\ldots{n}}}^{{{r},\text{pv}}}}{\left({B}\right)}$ and ${{J}_{{{0},\ldots{m}}}^{{{r},\text{pc}}}}{\left({B}\right)}$ ([Definition -def-num-ref-](sect-finality#defn-grandpa-justification)) with the exception of the equivocatory votes.
 
-This message is the sub-component of the GRANDPA Gossip message ([Definition 43](chap-networking#defn-gossip-message)) of type Id *4*.
+This message is the sub-component of the GRANDPA Gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *4*.
 
 ### 4.8.7. GRANDPA BEEFY {#sect-msg-grandpa-beefy}
 
@@ -563,7 +563,7 @@ where
 
 - ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ is the block number this commitment is for. Namely the latest, finalized block.
 
-- $\text{id}_{{{\mathbb{{V}}}}}$ is the current authority set Id ([Definition 73](sect-finality#defn-authority-set-id)).
+- $\text{id}_{{{\mathbb{{V}}}}}$ is the current authority set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
 ###### Definition -def-num- Vote Message {#defn-msg-beefy-gossip}
 
@@ -574,7 +574,7 @@ $$
 $$
 
 where  
-- ${C}$ is the BEEFY commitment ([Definition 50](chap-networking#defn-grandpa-beefy-commitment)).
+- ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
 
 - ${{A}_{{\text{id}}}^{{\text{bfy}}}}$ is the ECDSA public key of the Polkadot Host.
 
@@ -592,15 +592,15 @@ $$
 $$
 
 where  
-- ${C}$ is the BEEFY commitment ([Definition 50](chap-networking#defn-grandpa-beefy-commitment)).
+- ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
 
-- ${S}_{{n}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ ([Definition 73](sect-finality#defn-authority-set-id)) in ${C}$. Individual items are of the type *Option* ([Definition 190](id-cryptography-encoding#defn-option-type)) which can contain a signature of a validator which signed the same statement (${R}_{{h}}$ in ${C}$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
+- ${S}_{{n}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)) in ${C}$. Individual items are of the type *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain a signature of a validator which signed the same statement (${R}_{{h}}$ in ${C}$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
 
-  For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in ${S}_{{n}}$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition 190](id-cryptography-encoding#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
+  For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in ${S}_{{n}}$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
 
 ###### Definition -def-num- Signed Commitment Witness {#defn-grandpa-beefy-signed-commitment-witness}
 
-A **signed commitment witness**, ${{M}_{{\text{SC}}}^{{w}}}$, is a light version of the signed BEEFY commitment ([Definition 52](chap-networking#defn-grandpa-beefy-signed-commitment)). Instead of containing the entire list of signatures, it only claims which validator signed the statement.
+A **signed commitment witness**, ${{M}_{{\text{SC}}}^{{w}}}$, is a light version of the signed BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)). Instead of containing the entire list of signatures, it only claims which validator signed the statement.
 
 The message is a datastructure of the following format:
 
@@ -609,10 +609,10 @@ $$
 $$
 
 where  
-- ${C}$ is the BEEFY commitment ([Definition 50](chap-networking#defn-grandpa-beefy-commitment)).
+- ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
 
 - ${V}_{{{0},\ldots{n}}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ in ${C}$. Individual items are booleans which indicate whether the validator has signed the statement (*true*) or not (*false*). It’s critical that the boolean indicators are sorted based on their corresponding public key entry in the authority set.
 
   For example, the boolean indicator of the validator at index 3 in the authority set must be placed at index *3* in ${V}_{{n}}$. This sorting allows clients to map public keys to their corresponding boolean indicators.
 
-- ${R}_{{\text{sig}}}$ is the MMR root of the signatures in the original signed BEEFY commitment ([Definition 52](chap-networking#defn-grandpa-beefy-signed-commitment)).
+- ${R}_{{\text{sig}}}$ is the MMR root of the signatures in the original signed BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).

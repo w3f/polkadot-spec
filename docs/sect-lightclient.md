@@ -48,7 +48,7 @@ We list requirements of a Light Client categorized along the the three dimension
 
 ## 7.2. Warp Sync for Light Clients {#sect-sync-warp-lightclient}
 
-Warp sync ([Section 4.8.4](chap-networking#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so-called fragments ([Definition 41](chap-networking#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition 78](sect-finality#defn-grandpa-justification)). This protocol allows nodes to arrive at the desired state much faster than fast sync. Warp sync is primarily designed for Light Clients. Although, warp sync could be used by full nodes, the sync process may lack information to cater to complete functionality set of full nodes.
+Warp sync ([Section 4.8.4](chap-networking#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so-called fragments ([Definition -def-num-ref-](chap-networking#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition -def-num-ref-](sect-finality#defn-grandpa-justification)). This protocol allows nodes to arrive at the desired state much faster than fast sync. Warp sync is primarily designed for Light Clients. Although, warp sync could be used by full nodes, the sync process may lack information to cater to complete functionality set of full nodes.
 
 For light clients, it is too expensive to download the state (approx. 550MB) to respond to queries. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. Requests for warp sync are performed using the `/dot/sync/warp` *Request-Response* substream, the corresponding network messages are detailed in [Section 4.7](chap-networking#sect-protocols-substreams).
 
@@ -112,9 +112,9 @@ Where the `request` can be one of the following fields:
 
 | Type                     | Id  | Description                                                                                                |
 |--------------------------|-----|------------------------------------------------------------------------------------------------------------|
-| `RemoteCallRequest`      | 1   | A remote call request ([Definition 96](sect-lightclient#sect-light-remote-call-request))              |
-| `RemoteReadRequest`      | 2   | A remote read request ([Definition 98](sect-lightclient#sect-light-remote-read-request))              |
-| `RemoteReadChildRequest` | 4   | A remote read child request ([Definition 100](sect-lightclient#sect-light-remote-read-child-request)) |
+| `RemoteCallRequest`      | 1   | A remote call request ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-call-request))              |
+| `RemoteReadRequest`      | 2   | A remote read request ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-request))              |
+| `RemoteReadChildRequest` | 4   | A remote read child request ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-child-request)) |
 
 ### 7.4.2. Response {#id-response}
 
@@ -128,8 +128,8 @@ Where the `response` can be one of the following fields:
 
 | Type                 | Id  | Description                                                                                     |
 |----------------------|-----|-------------------------------------------------------------------------------------------------|
-| `RemoteCallResponse` | 1   | A remote call response ([Definition 97](sect-lightclient#sect-light-remote-call-response)) |
-| `RemoteReadResponse` | 2   | A remote read response ([Definition 99](sect-lightclient#sect-light-remote-read-response)) |
+| `RemoteCallResponse` | 1   | A remote call response ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-call-response)) |
+| `RemoteReadResponse` | 2   | A remote read response ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-response)) |
 
 ### 7.4.3. Remote Call Messages {#id-remote-call-messages}
 
@@ -151,7 +151,7 @@ Remote call response.
 
 | Type    | Id  | Description                                                                                                                                         |
 |---------|-----|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `bytes` | 2   | An *Option* type ([Definition 190](id-cryptography-encoding#defn-option-type)) containing the call proof or *None* if proof generation failed. |
+| `bytes` | 2   | An *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the call proof or *None* if proof generation failed. |
 
 ### 7.4.4. Remote Read Messages {#id-remote-read-messages}
 
@@ -172,7 +172,7 @@ Remote read response.
 
 | Type    | Id  | Description                                                                                                                                         |
 |---------|-----|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| `bytes` | 2   | An *Option* type ([Definition 190](id-cryptography-encoding#defn-option-type)) containing the read proof or *None* if proof generation failed. |
+| `bytes` | 2   | An *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the read proof or *None* if proof generation failed. |
 
 ### 7.4.5. Remote Read Child Messages {#id-remote-read-child-messages}
 
@@ -188,7 +188,7 @@ Remote read child request.
 | `bytes` | 3   | Child storage key, this is relative to the child type storage location |
 | `bytes` | 6   | Storage keys                                                           |
 
-The response is the same as for the *Remote Read Request* message, respectively [Definition 99](sect-lightclient#sect-light-remote-read-response).
+The response is the same as for the *Remote Read Request* message, respectively [Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-response).
 
 ## 7.5. Storage for Light Clients {#sect-storage-lightclient}
 

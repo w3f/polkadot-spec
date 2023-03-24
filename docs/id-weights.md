@@ -22,7 +22,7 @@ In this section, we define the concept of weight and we discuss the consideratio
 
 - avoid extrinsics where its execution takes too long, by assigning a transaction fee to each extrinsic proportional to their resource consumption.
 
-These concepts are formalized in [Definition 150](id-weights#defn-block-length) and [Definition 153](id-weights#defn-polkadot-block-limits):
+These concepts are formalized in [Definition -def-num-ref-](id-weights#defn-block-length) and [Definition -def-num-ref-](id-weights#defn-polkadot-block-limits):
 
 ###### Definition -def-num- Block Length {#defn-block-length}
 
@@ -74,7 +74,7 @@ Nonetheless, ${\mathcal{{{W}}}}{\left({E}\right)}$ can be manipulated depending 
 
 ### 10.2.1. Limitations {#sect-limitations}
 
-In this section we discuss how applying the limitation defined in [Definition 153](id-weights#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition 155](id-weights#defn-block-weight):
+In this section we discuss how applying the limitation defined in [Definition -def-num-ref-](id-weights#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition -def-num-ref-](id-weights#defn-block-weight):
 
 ###### Definition -def-num- Block Weight {#defn-block-weight}
 
@@ -141,9 +141,9 @@ Indicators for performance penalties:
 
 - **Fixed iterations and datasets** - Fixed iterations and datasets can increase the overall cost of the Runtime functions, but the execution time does not vary depending on the input parameters or storage entries. A base Weight is appropriate in this case.
 
-- **Adjustable iterations and datasets** - If the amount of iterations or datasets depend on the input parameters of the caller or specific entries in storage, then a certain weight should be applied for each (additional) iteration or item. The Runtime defines the maximum value for such cases. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum value to the maximum value, as described in [Definition 156](id-weights#defn-max-value).
+- **Adjustable iterations and datasets** - If the amount of iterations or datasets depend on the input parameters of the caller or specific entries in storage, then a certain weight should be applied for each (additional) iteration or item. The Runtime defines the maximum value for such cases. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum value to the maximum value, as described in [Definition -def-num-ref-](id-weights#defn-max-value).
 
-- **Input parameters** - Input parameters that users pass on to the Runtime function can result in expensive operations. Depending on the data type, it can be appropriate to add additional weights based on certain properties, such as data size, assuming the data type allows varying sizes. The Runtime must define limits on those properties. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the maximum value, as described in paragraph [Definition 156](id-weights#defn-max-value).
+- **Input parameters** - Input parameters that users pass on to the Runtime function can result in expensive operations. Depending on the data type, it can be appropriate to add additional weights based on certain properties, such as data size, assuming the data type allows varying sizes. The Runtime must define limits on those properties. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the maximum value, as described in paragraph [Definition -def-num-ref-](id-weights#defn-max-value).
 
 ###### Definition -def-num- Maximum Value {#defn-max-value}
 
