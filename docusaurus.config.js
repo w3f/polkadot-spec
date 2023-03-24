@@ -6,6 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const math = require('remark-math');
 const katex = require('rehype-katex');
 const path = require('path');
+const numerateDefinitions = require('./plugins/numerate-definitions');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -45,7 +46,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          remarkPlugins: [math],
+          remarkPlugins: [math, numerateDefinitions],
           rehypePlugins: [katex],
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.

@@ -14,7 +14,7 @@ A **block producer**, noted by ${\mathcal{{P}}}_{{j}}$, is a node running the Po
 
 **Block authoring session key pair** ${\left({s}{{k}_{{j}}^{{s}}},{p}{{k}_{{j}}^{{s}}}\right)}$ is an SR25519 key pair which the block producer ${\mathcal{{P}}}_{{j}}$ signs by their account key ([Definition 177](id-cryptography-encoding#defn-account-key)) and is used to sign the produced block as well as to compute its lottery values in [Block-Production-Lottery](sect-block-production#algo-block-production-lottery).
 
-###### Definition 54. Epoch and Slot {#defn-epoch-slot}
+###### Definition -def-num- Epoch and Slot {#defn-epoch-slot}
 
 A block production **epoch**, formally referred to as ${\mathcal{{E}}}$, is a period with a pre-known starting time and fixed-length during which the set of block producers stays constant. Epochs are indexed sequentially, and we refer to the ${n}^{{{t}{h}}}$ epoch since genesis by ${\mathcal{{E}}}_{{n}}$. Each epoch is divided into equal-length periods known as block production **slots**, sequentially indexed in each epoch. The index of each slot is called a **slot number**. The equal length duration of each slot is called the **slot duration** and indicated by ${\mathcal{{T}}}$. Each slot is awarded to a subset of block producers during which they are allowed to generate a block.
 
@@ -22,23 +22,23 @@ A block production **epoch**, formally referred to as ${\mathcal{{E}}}$, is a pe
 |-----|---------------------------------------------------------------------------------------------------------------------------------------|
 |     | Substrate refers to an epoch as "session" in some places, however, epoch should be the preferred and official name for these periods. |
 
-###### Definition 55. Epoch and Slot Duration {#defn-epoch-duration}
+###### Definition -def-num- Epoch and Slot Duration {#defn-epoch-duration}
 
 We refer to the number of slots in epoch ${\mathcal{{E}}}_{{n}}$ by ${s}{c}_{{n}}$. ${s}{c}_{{n}}$ is set to the `duration` field in the returned data from the call of the Runtime entry `BabeApi_configuration` ([Section C.11.1](chap-runtime-api#sect-rte-babeapi-epoch)) at genesis. For a given block ${B}$, we use the notation **${s}_{{B}}$** to refer to the slot during which ${B}$ has been produced. Conversely, for slot ${s}$, ${\mathcal{{B}}}_{{c}}$ is the set of Blocks generated at slot ${s}$.
 
 [Definition 56](sect-block-production#defn-epoch-subchain) provides an iterator over the blocks produced during a specific epoch.
 
-###### Definition 56. Epoch Subchain {#defn-epoch-subchain}
+###### Definition -def-num- Epoch Subchain {#defn-epoch-subchain}
 
 By $\text{SubChain}{\left({\mathcal{{E}}}_{{n}}$\right.}) for epoch ${\mathcal{{E}}}_{{n}}$, we refer to the path graph of ${B}{T}$ containing all the blocks generated during the slots of epoch ${\mathcal{{E}}}_{{n}}$. When there is more than one block generated at a slot, we choose the one which is also on $\text{Longest-Chain}{\left({B}{T}\right)}$.
 
-###### Definition 57. Equivocation {#defn-equivocation}
+###### Definition -def-num- Equivocation {#defn-equivocation}
 
 A block producer **equivocates** if they produce more than one block at the same slot. The proof of equivocation are the given distinct headers that were signed by the validator and which include the slot number.
 
 The Polkadot Host must detect equivocations committed by other validators and submit those to the Runtime as described in [Section C.11.6](chap-runtime-api#sect-babeapi_submit_report_equivocation_unsigned_extrinsic).
 
-###### Definition 58. BABE Consensus Message {#defn-consensus-message-babe}
+###### Definition -def-num- BABE Consensus Message {#defn-consensus-message-babe}
 
 $\text{CM}_{{b}}$, the consensus message for BABE, is of the following format:
 
@@ -58,11 +58,11 @@ A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should
 
 In order to ensure consistent block production, BABE uses secondary slots in case no authority won the (primary) block production lottery. Unlike the lottery, secondary slot assignees are know upfront publically ([Definition 61](sect-block-production#defn-babe-secondary-slots)). The Runtime provides information on how or if secondary slots are executed ([Section C.11.1](chap-runtime-api#sect-rte-babeapi-epoch)), explained further in [Definition 61](sect-block-production#defn-babe-secondary-slots).
 
-###### Definition 59. BABE Constant {#defn-babe-constant}
+###### Definition -def-num- BABE Constant {#defn-babe-constant}
 
 The **BABE constant** is the probability that a slot will not be empty and used in the winning threshold calculation ([Definition 60](sect-block-production#defn-winning-threshold)). It’s expressed as a rational, ${\left({x},{y}\right)}$, where ${x}$ is the numerator and ${y}$ is the denominator.
 
-###### Definition 60. Winning Threshold {#defn-winning-threshold}
+###### Definition -def-num- Winning Threshold {#defn-winning-threshold}
 
 The **Winning threshold** denoted by ${T}_{{{\mathcal{{E}}}_{{n}}}}$ is the threshold that is used alongside the result of [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) to decide if a block producer is the winner of a specific slot. ${T}_{{{\mathcal{{E}}}_{{n}}}}$ is calculated as follows:
 
@@ -89,7 +89,7 @@ where $\text{Epoch-Randomness}$ is defined in ([Definition 71](sect-block-produc
 |-----|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | the secondary slots ([Definition 61](sect-block-production#defn-babe-secondary-slots)) are running along side the primary block production lottery and mainly serve as a fallback to in case no authority was selected in the primary lottery. |
 
-###### Definition 61. Secondary Slots {#defn-babe-secondary-slots}
+###### Definition -def-num- Secondary Slots {#defn-babe-secondary-slots}
 
 **Secondary slots** work along side primary slot to ensure consistent block production, as described in [Section 5.2](sect-block-production#sect-block-production-lottery). The secondary assignee of a block is determined by calculating a specific value, ${i}_{{d}}$, which indicates the index in the authority set ([Definition 33](chap-sync#defn-authority-list)). The corresponding authority in that set has the right to author a secondary block. This calculation is done for every slot in the epoch, ${s}\in{s}{c}_{{n}}$ ([Definition 55](sect-block-production#defn-epoch-duration)).
 
@@ -113,7 +113,7 @@ where
 
 If ${i}_{{d}}$ points to the authority, that authority must claim the secondary slot by creating a BABE VRF transcript ([Definition 62](sect-block-production#defn-babe-vrf-transcript)). The resulting values ${o}$ and ${p}$ are then used in the Pre-Digest item ([Definition 69](sect-block-production#defn-babe-header)). In case of secondary slots with plain outputs, respectively the Pre-Digest being of value *2*, the transcript respectively the VRF is skipped.
 
-###### Definition 62. BABE Slot VRF transcript {#defn-babe-vrf-transcript}
+###### Definition -def-num- BABE Slot VRF transcript {#defn-babe-vrf-transcript}
 
 The BABE block production lottery requires a specific transcript structure ([Definition 175](id-cryptography-encoding#defn-vrf-transcript)). That structure is used by both primary slots ([Block-Production-Lottery](sect-block-production#algo-block-production-lottery)) and secondary slots ([Definition 61](sect-block-production#defn-babe-secondary-slots)).
 
@@ -135,13 +135,13 @@ This estimation depends on the two fixed parameters ${k}$ ([Definition 65](sect-
 
 All validators are then required to run [Median-Algorithm](sect-block-production#algo-slot-time) at the beginning of each sync period ([Definition 68](sect-block-production#defn-sync-period)) to update their synchronization using all block arrival times of the previous period. The algorithm should only be run once all the blocks in this period have been finalized, even if only probabilistically ([Definition 65](sect-block-production#defn-prunned-best)). The target slot to which to synchronize should be the first slot in the new sync period.
 
-###### Definition 63. Slot Offset {#defn-slot-offset}
+###### Definition -def-num- Slot Offset {#defn-slot-offset}
 
 Let ${s}_{{i}}$ and ${s}_{{j}}$ be two slots belonging to epochs ${\mathcal{{E}}}_{{k}}$ and ${\mathcal{{E}}}_{{l}}$. By **Slot-Offset**${\left({s}_{{i}},{s}_{{j}}\right)}$ we refer to the function whose value is equal to the number of slots between ${s}_{{i}}$ and ${s}_{{j}}$ (counting ${s}_{{j}}$) on the time continuum. As such, we have **Slot-Offset**${\left({s}_{{i}},{s}_{{i}}\right)}={0}$.
 
 It is imperative for the security of the network that each block producer correctly determines the current slot numbers at a given time by regularly estimating the local clock offset in relation to the network ([Definition 64](sect-block-production#defn-relative-synchronization)).
 
-###### Definition 64. Relative Time Synchronization {#defn-relative-synchronization}
+###### Definition -def-num- Relative Time Synchronization {#defn-relative-synchronization}
 
 The **relative time synchronization** is a tuple of a slot number and a local clock timestamp ${\left({s}_{\text{sync}},{t}_{\text{sync}}\right)}$ describing the last point at which the slot numbers have been synchronized with the local clock.
 
@@ -160,21 +160,21 @@ where
 
 - ${\mathcal{{{T}}}}$ is the slot duration defined in [Definition 54](sect-block-production#defn-epoch-slot).
 
-###### Definition 65. Pruned Best Chain {#defn-prunned-best}
+###### Definition -def-num- Pruned Best Chain {#defn-prunned-best}
 
 The **pruned best chain** ${C}^{{{r}^{{k}}}}$ is the longest selected chain ([Definition 7](chap-state#defn-longest-chain)) with the last ${k}$ Blocks pruned. We chose ${k}={140}$. The **last (probabilistic) finalized block** describes the last block in this pruned best chain.
 
-###### Definition 66. Chain Quality {#defn-chain-quality}
+###### Definition -def-num- Chain Quality {#defn-chain-quality}
 
 The **chain quality** ${s}_{{{c}{q}}}$ represents the number of slots that are used to estimate the local clock offset. Currently, it is set to ${s}_{{{c}{q}}}={3000}$.
 
 The prerequisite for such a calculation is that each producer stores the arrival time of each block ([Definition 67](sect-block-production#defn-block-time)) measured by a clock that is otherwise not adjusted by any external protocol.
 
-###### Definition 67. Block Arrival Time {#defn-block-time}
+###### Definition -def-num- Block Arrival Time {#defn-block-time}
 
 The **block arrival time** of block ${B}$ for node ${j}$ formally represented by ${{T}_{{B}}^{{j}}}$ is the local time of node ${j}$ when node ${j}$ has received block ${B}$ for the first time. If the node ${j}$ itself is the producer of ${B}$, ${{T}_{{B}}^{{j}}}$ is set equal to the time that the block is produced. The index ${j}$ in ${{T}_{{B}}^{{j}}}$ notation may be dropped and B’s arrival time is referred to by ${T}_{{B}}$ when there is no ambiguity about the underlying node.
 
-###### Definition 68. Sync Period {#defn-sync-period}
+###### Definition -def-num- Sync Period {#defn-sync-period}
 
 A is an interval at which each validator (re-)evaluates its local clock offsets. The first sync period ${\mathfrak{{E}}}_{{1}}$ starts just after the genesis block is released. Consequently, each sync period ${\mathfrak{{E}}}_{{i}}$ starts after ${\mathfrak{{E}}}_{{{i}-{1}}}$. The length of the sync period ([Definition 66](sect-block-production#defn-chain-quality)) is equal to ${s}_{{{q}{c}}}$and expressed in the number of slots.
 
@@ -186,7 +186,7 @@ Figure 1. An exemplary result of Median Algorithm in first sync epoch with ${s}_
 
 Throughout each epoch, each block producer should run [Invoke-Block-Authoring](sect-block-production#algo-block-production) to produce blocks during the slots it has been awarded during that epoch. The produced block needs to carry the *Pre-Digest* ([Definition 69](sect-block-production#defn-babe-header)) as well as the *block signature* ([Definition 70](sect-block-production#defn-block-signature)) as Pre-Runtime and Seal digest items.
 
-###### Definition 69. Pre-Digest {#defn-babe-header}
+###### Definition -def-num- Pre-Digest {#defn-babe-header}
 
 The **Pre-Digest**, or BABE header, ${P}$, is a varying datatype of the following format:
 
@@ -211,7 +211,7 @@ The Pre-Digest must be included as a digest item of Pre-Runtime type in the head
 
 where $\text{BT}$ is the current block tree, $\text{Block-Production-Lottery}$ is defined in [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) and $\text{Add-Digest-Item}$ appends a digest item to the end of the header digest ${H}_{{d}}{\left({B}\right)}$ ([Definition 11](chap-state#defn-digest)).
 
-###### Definition 70. Block Signature {#defn-block-signature}
+###### Definition -def-num- Block Signature {#defn-block-signature}
 
 The **Block Signature** ${S}_{{B}}$ is a signature of the block header hash ([Definition 12](chap-state#defn-block-header-hash)) and defined as
 
@@ -231,7 +231,7 @@ in which, ${t}={5}$ is the seal digest identifier and $\text{id}{\left(\text{BAB
 
 At the beginning of each epoch, ${\mathcal{{E}}}_{{n}}$ the host will receive the randomness seed ${\mathcal{{R}}}_{{{\mathcal{{E}}}_{{{n}+{1}}}}}$ ([Definition 71](sect-block-production#defn-epoch-randomness)) necessary to participate in the block production lottery in the next epoch ${\mathcal{{E}}}_{{{n}+{1}}}$ from the Runtime, through the consensus message ([Definition 58](sect-block-production#defn-consensus-message-babe)) in the digest of the first block.
 
-###### Definition 71. Randomness Seed {#defn-epoch-randomness}
+###### Definition -def-num- Randomness Seed {#defn-epoch-randomness}
 
 For epoch ${\mathcal{{E}}}$, there is a 32-byte ${\mathcal{{R}}}_{{{\mathcal{{E}}}}}$ computed based on the previous epochs VRF outputs. For ${\mathcal{{E}}}_{{0}}$ and ${\mathcal{{E}}}_{{1}}$, the randomness seed is provided in the genesis state ([Section C.11.1](chap-runtime-api#sect-rte-babeapi-epoch)). For any further epochs, the randomness is retrieved from the consensus message ([Definition 58](sect-block-production#defn-consensus-message-babe)).
 

@@ -8,7 +8,7 @@ An extrinsic is a SCALE encoded array consisting of a version number, signature,
 
 ## 9.2. Preliminaries {#id-preliminaries-3}
 
-###### Definition 142. Extrinsic {#defn-extrinsic}
+###### Definition -def-num- Extrinsic {#defn-extrinsic}
 
 An extrinsic , ${t}{x}$, is a tuple consisting of the extrinsic version, ${T}_{{v}}$ ([Definition 143](id-extrinsics#defn-extrinsic-version)), and the body of the extrinsic, ${T}_{{b}}$.
 
@@ -18,7 +18,7 @@ $$
 
 The value of ${T}_{{b}}$ varies for each version. The current version 4 is described in [Section 9.3.1](id-extrinsics#sect-version-four).
 
-###### Definition 143. Extrinsic Version {#defn-extrinsic-version}
+###### Definition -def-num- Extrinsic Version {#defn-extrinsic-version}
 
 ${T}_{{v}}$ is a 8-bit bitfield and defines the extrinsic version. The required format of an extrinsic body, ${T}_{{b}}$, is dictated by the Runtime. Older or unsupported version are rejected.
 
@@ -45,11 +45,11 @@ where
 
 - ${F}_{{i}}{\left({m}\right)}$: the indicator of the function of the Polkadot module ([Definition 148](id-extrinsics#defn-function-indicator)).
 
-###### Definition 144. Extrinsic Address {#defn-extrinsic-address}
+###### Definition -def-num- Extrinsic Address {#defn-extrinsic-address}
 
 Account Id, ${A}_{{i}}$, is the 32-byte address of the sender of the extrinsic as described in the [external SS58 address format](https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)).
 
-###### Definition 145. Extrinsic Signature {#defn-extrinsic-signature}
+###### Definition -def-num- Extrinsic Signature {#defn-extrinsic-signature}
 
 The signature, ${S}{i}{g}$, is a varying data type indicating the used signature type, followed by the signature created by the extrinsic author. The following types are supported:
 
@@ -76,7 +76,7 @@ where
 
 - ${H}_{{h}}{\left({B}\right)}$: a 32-byte array containing the hash of the block which starts the mortality period, as described in [Definition 149](id-extrinsics#defn-extrinsic-mortality).
 
-###### Definition 146. Extra Data {#defn-extra-data}
+###### Definition -def-num- Extra Data {#defn-extra-data}
 
 Extra data, ${E}$, is a tuple containing additional meta data about the extrinsic and the system it is meant to be executed in.
 
@@ -91,7 +91,7 @@ where
 
 - ${P}_{{t}}$: a compact integer containing the transactor pay including tip.
 
-###### Definition 147. Module Indicator {#defn-module-indicator}
+###### Definition -def-num- Module Indicator {#defn-module-indicator}
 
 ${M}_{{i}}$ is an indicator for the Runtime to which Polkadot *module*, ${m}$, the extrinsic should be forwarded to.
 
@@ -99,7 +99,7 @@ ${M}_{{i}}$ is a varying data type pointing to every module exposed to the netwo
 
 ${M}_{{i}}\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{0},&\text{System}$ 1, & \text{Utility} $\ldots&$ 7, & \text{Balances} $\ldots&{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}$
 
-###### Definition 148. Function Indicator {#defn-function-indicator}
+###### Definition -def-num- Function Indicator {#defn-function-indicator}
 
 ${F}_{{i}}{\left({m}\right)}$ is a tuple which contains an indicator, ${m}_{{i}}$, for the Runtime to which *function* within the Polkadot *module*, ${m}$, the extrinsic should be forwarded to. This indicator is followed by the concatenated and SCALE encoded parameters of the corresponding function, ${p}{a}{r}{a}{m}{s}$.
 
@@ -113,7 +113,7 @@ ${B}{a}{l}{a}{n}{c}{e}{s}_{{i}}\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right
 
 ### 9.3.2. Mortality {#id-mortality}
 
-###### Definition 149. Extrinsic Mortality {#defn-extrinsic-mortality}
+###### Definition -def-num- Extrinsic Mortality {#defn-extrinsic-mortality}
 
 Extrinsic **mortality** is a mechanism which ensures that an extrinsic is only valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can also be immortal, as clarified in [Section 9.3.2.2](id-extrinsics#sect-mortality-encoding).
 

@@ -24,7 +24,7 @@ This constant indicates the beginning of the heap in memory. The space below is 
 
 ## C.3. Runtime Call Convention {#id-runtime-call-convention}
 
-###### Definition 215. Runtime API Call Convention {#defn-runtime-call-convention}
+###### Definition -def-num- Runtime API Call Convention {#defn-runtime-call-convention}
 
 The **Runtime API Call Convention** describes that all functions receive and return SCALE-encoded data and as a result have the following prototype signature:
 
@@ -70,7 +70,7 @@ Return
   | `transaction_version` | Unsigned 32-bit integer                                               | Version of the transaction format               |
   | `state_version`       | Unsigned 8-bit integer                                                | Version of the trie format                      |
 
-###### Definition 216. ApiVersions {#defn-rt-apisvec}
+###### Definition -def-num- ApiVersions {#defn-rt-apisvec}
 
 **ApiVersions** is a specialized type for the ([Section C.4.1](chap-runtime-api#defn-rt-core-version)) function entry. It represents an array of tuples, where the first value of the tuple is an array of 8-bytes containing the Blake2b hash of the API name. The second value of the tuple is the version number of the corresponding API.
 
@@ -136,7 +136,7 @@ Arguments
 Return  
 - Returns the varying datatype *ApplyExtrinsicResult* as defined in [Definition 217](chap-runtime-api#defn-rte-apply-extrinsic-result). This structure lets the block builder know whether an extrinsic should be included into the block or rejected.
 
-###### Definition 217. ApplyExtrinsicResult {#defn-rte-apply-extrinsic-result}
+###### Definition -def-num- ApplyExtrinsicResult {#defn-rte-apply-extrinsic-result}
 
 **ApplyExtrinsicResult** is a varying data type as defined in [Definition 191](id-cryptography-encoding#defn-result-type). This structure can contain multiple nested structures, indicating either module dispatch outcomes or transaction invalidity errors.
 
@@ -151,7 +151,7 @@ Return
 |-----|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | As long as a *DispatchOutcome* ([Definition 218](chap-runtime-api#defn-rte-dispatch-outcome)) is returned, the extrinsic is always included in the block, even if the outcome is a dispatch error. Dispatch errors do not invalidate the block and all state changes are persisted. |
 
-###### Definition 218. DispatchOutcome {#defn-rte-dispatch-outcome}
+###### Definition -def-num- DispatchOutcome {#defn-rte-dispatch-outcome}
 
 **DispatchOutcome** is the varying data type as defined in [Definition 191](id-cryptography-encoding#defn-result-type).
 
@@ -162,7 +162,7 @@ Return
 | 0      | Extrinsic is valid and was submitted successfully. | None                                                                              |
 | 1      | Possible errors while dispatching the extrinsic.   | *DispatchError* ([Definition 219](chap-runtime-api#defn-rte-dispatch-error)) |
 
-###### Definition 219. DispatchError {#defn-rte-dispatch-error}
+###### Definition -def-num- DispatchError {#defn-rte-dispatch-error}
 
 **DispatchError** is a varying data type as defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type). Indicates various reasons why a dispatch call failed.
 
@@ -175,7 +175,7 @@ Return
 | 2      | A bad origin.                | None                                                                                       |
 | 3      | A custom error in a module.  | *CustomModuleError* ([Definition 220](chap-runtime-api#defn-rte-custom-module-error)) |
 
-###### Definition 220. CustomModuleError {#defn-rte-custom-module-error}
+###### Definition -def-num- CustomModuleError {#defn-rte-custom-module-error}
 
 **CustomModuleError** is a tuple appended after a possible error in as defined in [Definition 219](chap-runtime-api#defn-rte-dispatch-error).
 
@@ -191,7 +191,7 @@ Return
 |-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 |     | Whenever *TransactionValidityError* ([Definition 221](chap-runtime-api#defn-rte-transaction-validity-error)) is returned, the contained error type will indicate whether an extrinsic should be outright rejected or requested for a later block. This behavior is clarified further in [Definition 222](chap-runtime-api#defn-rte-invalid-transaction) and respectively [Definition 223](chap-runtime-api#defn-rte-unknown-transaction). |
 
-###### Definition 221. TransactionValidityError {#defn-rte-transaction-validity-error}
+###### Definition -def-num- TransactionValidityError {#defn-rte-transaction-validity-error}
 
 **TransactionValidityError** is a varying data type as defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type). It indicates possible errors that can occur while checking the validity of a transaction.
 
@@ -202,7 +202,7 @@ Return
 | 0      | Transaction is invalid.                   | *InvalidTransaction* ([Definition 222](chap-runtime-api#defn-rte-invalid-transaction)) |
 | 1      | Transaction validity can’t be determined. | *UnknownTransaction* ([Definition 223](chap-runtime-api#defn-rte-unknown-transaction)) |
 
-###### Definition 222. InvalidTransaction {#defn-rte-invalid-transaction}
+###### Definition -def-num- InvalidTransaction {#defn-rte-invalid-transaction}
 
 **InvalidTransaction** is a varying data type as defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type) and specifies the invalidity of the transaction in more detail.
 
@@ -221,7 +221,7 @@ Return
 | 8      | An extrinsic with mandatory dispatch resulted in an error.                                       | None                   | Yes        |
 | 9      | A transaction with a mandatory dispatch (only inherents are allowed to have mandatory dispatch). | None                   | Yes        |
 
-###### Definition 223. UnknownTransaction {#defn-rte-unknown-transaction}
+###### Definition -def-num- UnknownTransaction {#defn-rte-unknown-transaction}
 
 **UnknownTransaction** is a varying data type as defined in [Definition 188](id-cryptography-encoding#defn-varrying-data-type) and specifies the unknown invalidity of the transaction in more detail.
 
@@ -458,7 +458,7 @@ Arguments
 Return  
 - An *Option* value ([Definition 190](id-cryptography-encoding#defn-option-type)) which can contain the persisted validation data ([Definition 227](chap-runtime-api#defn-persisted-validation-data)). The value is empty if the parachain Id is not registered or the core assumption is of index ${2}$, meaning that the core was freed.
 
-###### Definition 226. Occupied Core Assumption {#defn-occupied-core-assumption}
+###### Definition -def-num- Occupied Core Assumption {#defn-occupied-core-assumption}
 
 A occupied core assumption is used for fetching certain pieces of information about a parachain by using the relay chain API. The assumption indicates how the Runtime API should compute the result. The assumptions, A, is a varying datatype of the following format:
 
@@ -468,7 +468,7 @@ $$
 
 where *0* indicates that the candidate occupying the core was made available and included to free the core, *1* indicates that it timed-out and freed the core without advancing the parachain and *2* indicates that the core was not occupied to begin with.
 
-###### Definition 227. Persisted Validation Data {#defn-persisted-validation-data}
+###### Definition -def-num- Persisted Validation Data {#defn-persisted-validation-data}
 
 The persisted validation data provides information about how to create the inputs for the validation of a candidate by calling the Runtime. This information is derived from the parachain state and will vary from parachain to parachain, although some of the fields may be the same for every parachain. This validation data acts as a way to authorize the additional data (such as messages) the collator needs to pass to the validation function.
 

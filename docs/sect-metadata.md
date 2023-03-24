@@ -45,7 +45,7 @@ import Metadata from '/static/img/kaitai_render/metadata.svg';
 
 <Metadata className="graphviz" />
 
-###### Definition 159. Runtime Registry Type Entry {#defn-rtm-registry-entry}
+###### Definition -def-num- Runtime Registry Type Entry {#defn-rtm-registry-entry}
 
 A registry entry contains information about a type in its portable form for serialization. The entry is a datastructure of the following format:
 
@@ -79,11 +79,11 @@ import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
 
 <MetadataType className="graphviz" /> 
 
-###### Definition 160. Runtime Type Id {#defn-rtm-type-id}
+###### Definition -def-num- Runtime Type Id {#defn-rtm-type-id}
 
 The **runtime type Id** is a compact integer representing the index of the entry ([Definition 159](sect-metadata#defn-rtm-registry-entry)) in ${R},{P}$ or ${E}$ of the runtime metadata structure ([Section 12.1](sect-metadata#sect-rtm-structure)), depending on context (starting at ${0}$).
 
-###### Definition 161. Type Variant {#defn-rtm-type-definition}
+###### Definition -def-num- Type Variant {#defn-rtm-type-definition}
 
 The type definition ${D}$ is a varying datatype ([Definition 188](id-cryptography-encoding#defn-varrying-data-type)) and indicates all the possible types of encodable values a type can have.
 
@@ -137,7 +137,7 @@ import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_defi
 
 <MetadataTypeDefinition className="graphviz"  />
 
-###### Definition 162. Field {#defn-rtm-field}
+###### Definition -def-num- Field {#defn-rtm-field}
 
 A field of a datastructure of the following format:
 
@@ -160,7 +160,7 @@ import MetadataTypeFields from '/static/img/kaitai_render/metadata_type_fields.s
 
 <MetadataTypeFields className="graphviz" />
 
-###### Definition 163. Variant {#defn-rtm-variant}
+###### Definition -def-num- Variant {#defn-rtm-variant}
 
 A struct variant of the following format:
 
@@ -212,7 +212,7 @@ import MetadataPallet from '/static/img/kaitai_render/metadata_pallet.svg';
 
 <MetadataPallet className="graphviz" />
 
-###### Definition 164. Pallet Storage Metadata {#defn-rtm-pallet-storage-metadata}
+###### Definition -def-num- Pallet Storage Metadata {#defn-rtm-pallet-storage-metadata}
 
 The metadata about a pallets storage.
 
@@ -229,7 +229,7 @@ where
 
 - ${E}$ is an array of varying length containing elements of storage entries ([Definition 165](sect-metadata#defn-rtm-storage-entry-metadata)).
 
-###### Definition 165. Storage Entry Metadata {#defn-rtm-storage-entry-metadata}
+###### Definition -def-num- Storage Entry Metadata {#defn-rtm-storage-entry-metadata}
 
 The metadata about a pallets storage entry.
 
@@ -257,7 +257,7 @@ import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
 
 <PalletStorage className="graphviz" />
 
-###### Definition 166. Storage Entry Modifier {#defn-rtm-storage-entry-modifier}
+###### Definition -def-num- Storage Entry Modifier {#defn-rtm-storage-entry-modifier}
 
 |     |                                                 |
 |-----|-------------------------------------------------|
@@ -271,7 +271,7 @@ $$
 
 where *0* indicates that the entry returns an *Option* type and therefore *None* if the storage entry is not present. *1* indicates that the entry returns the type ${y}$ with default value ${d}$ (in [Definition 165](sect-metadata#defn-rtm-storage-entry-metadata)) if the entry is not present.
 
-###### Definition 167. Storage Entry Type {#defn-rtm-storage-entry-type}
+###### Definition -def-num- Storage Entry Type {#defn-rtm-storage-entry-type}
 
 The type of the storage value is a varying datatype ([Definition 188](id-cryptography-encoding#defn-varrying-data-type)) that indicates how the entry is stored.
 
@@ -286,7 +286,7 @@ import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg'
 
 <StorageDefinition className="graphviz" />
 
-###### Definition 168. Storage Hasher {#defn-rtm-storage-hasher}
+###### Definition -def-num- Storage Hasher {#defn-rtm-storage-hasher}
 
 The hashing algorithm used by storage maps.
 
@@ -294,7 +294,7 @@ $$
 {\left\lbrace\begin{matrix}{0}&\text{128-bit Blake2 hash}\\{1}&\text{256-bit Blake2 hash}\\{2}&\text{Multiple 128-bit Blake2 hashes concatenated}\\{3}&\text{128-bit XX hash}\\{4}&\text{256-bit XX hash}\\{5}&\text{Multiple 64-bit XX hashes concatenated}\\{6}&\text{Identity hashing}\end{matrix}\right.}
 $$
 
-###### Definition 169. Pallet Constants {#defn-rtm-pallet-constants}
+###### Definition -def-num- Pallet Constants {#defn-rtm-pallet-constants}
 
 The metadata about the pallets constants.
 
@@ -320,7 +320,7 @@ import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 
 The metadata about a pallets extrinsics, part of the main structure ([Section 12.1](sect-metadata#sect-rtm-structure)) and of the following format:
 
-###### Definition 170. Signed Extension Metadata {#defn-rtm-signed-extension-metadata}
+###### Definition -def-num- Signed Extension Metadata {#defn-rtm-signed-extension-metadata}
 
 The metadata about the additional, signed data required to execute an extrinsic.
 

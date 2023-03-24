@@ -43,8 +43,8 @@ function graphvizSvgFixer(context) {
         name: 'graphviz-svg-fixer',
         postBuild: function (props) {
             return __awaiter(this, void 0, void 0, function () {
-                var blacklist, routes, htmlFilesToFix, allSvgFiles, _i, routes_1, route, filePath, html, htmlFile, htmlIndex, htmlFile, $_1, svgFiles, _a, svgFiles_1, svgFile, svgFileObj, _b, allSvgFiles_1, svgFile, $_2, prev_1, nodes, _c, nodes_1, node, text, cropped_text, cropped_text_array, CroppedText, i_1, croppedDashText, svgFound, i, svgFileToLink, main_cluster, clusterTitle, external_page, link, _d, htmlFilesToFix_1, htmlFile, $_3, links, _e, links_1, link, $, prev;
-                return __generator(this, function (_f) {
+                var blacklist, routes, htmlFilesToFix, allSvgFiles, _i, routes_1, route, filePath, html, htmlFile;
+                return __generator(this, function (_a) {
                     blacklist = [
                         '/404.html',
                         '/',
@@ -64,85 +64,45 @@ function graphvizSvgFixer(context) {
                             htmlFilesToFix.push(htmlFile);
                         }
                     }
-                    htmlIndex = 0;
-                    while (htmlIndex < htmlFilesToFix.length) {
-                        htmlFile = htmlFilesToFix[htmlIndex];
-                        $_1 = cheerio.load(htmlFile.html);
-                        svgFiles = $_1('svg.graphviz');
-                        for (_a = 0, svgFiles_1 = svgFiles; _a < svgFiles_1.length; _a++) {
-                            svgFile = svgFiles_1[_a];
-                            svgFileObj = { route: htmlFile.route, svg: $_1(svgFile), htmlIndex: htmlIndex };
-                            allSvgFiles.push(svgFileObj);
-                        }
-                        htmlIndex++;
-                    }
-                    // for each svg file
-                    for (_b = 0, allSvgFiles_1 = allSvgFiles; _b < allSvgFiles_1.length; _b++) {
-                        svgFile = allSvgFiles_1[_b];
-                        $_2 = cheerio.load(htmlFilesToFix[svgFile.htmlIndex].html);
-                        prev_1 = $_2.root().html();
-                        ;
-                        nodes = $_2(svgFile.svg).find('g > g.node');
-                        for (_c = 0, nodes_1 = nodes; _c < nodes_1.length; _c++) {
-                            node = nodes_1[_c];
-                            if ($_2(node).children().length == 2) {
-                                text = $_2(node).find('text');
-                                cropped_text = text.text().split('__')[0];
-                                cropped_text_array = cropped_text.split('_');
-                                CroppedText = '';
-                                for (i_1 = 0; i_1 < cropped_text_array.length; i_1++) {
-                                    CroppedText += cropped_text_array[i_1].charAt(0).toUpperCase() + cropped_text_array[i_1].slice(1);
+                    // // we get all the svg files to fix foreach html
+                    // // TODO: remove g > path and fix the size
+                    // let htmlIndex = 0;
+                    // while (htmlIndex < htmlFilesToFix.length) {
+                    //   let htmlFile = htmlFilesToFix[htmlIndex];
+                    //   const $ = cheerio.load(htmlFile.html);
+                    //   let svgFiles = $('svg.graphviz');
+                    //   for (let svgFile of svgFiles) {
+                    //     let svgFileObj: SvgFile = { route: htmlFile.route, svg: $(svgFile), htmlIndex };
+                    //     allSvgFiles.push(svgFileObj);
+                    //   }
+                    //   htmlIndex++;
+                    // }
+                    // // delete all the svgs from the html files
+                    // for (let htmlFile of htmlFilesToFix) {
+                    //   const $ = cheerio.load(htmlFile.html);
+                    //   $('svg.graphviz').remove();
+                    //   // log a thing that shows that svg has been removed (like $('svg.graphviz').length)
+                    //   console.log($(`svg.graphviz`).length);
+                    //   fs.writeFileSync(`${props.outDir}/${htmlFile.route}/index.html`, $.html());
+                    // }
+                    (function () {
+                        return __awaiter(this, void 0, void 0, function () {
+                            var _i, htmlFilesToFix_1, htmlFile, html, $, prev, next;
+                            return __generator(this, function (_a) {
+                                for (_i = 0, htmlFilesToFix_1 = htmlFilesToFix; _i < htmlFilesToFix_1.length; _i++) {
+                                    htmlFile = htmlFilesToFix_1[_i];
+                                    html = fs.readFileSync("".concat(props.outDir, "/").concat(htmlFile.route, "/index.html"));
+                                    $ = cheerio.load(html);
+                                    prev = $.html();
+                                    $('svg.graphviz').remove();
+                                    next = $.html();
+                                    console.log(prev == next);
+                                    fs.writeFileSync("".concat(props.outDir, "/").concat(htmlFile.route, "/index.html"), $.html());
                                 }
-                                croppedDashText = cropped_text.replace(/_/g, '-');
-                                svgFound = false;
-                                i = 0;
-                                while (!svgFound && i < allSvgFiles.length) {
-                                    svgFileToLink = allSvgFiles[i];
-                                    if (svgFileToLink != svgFile) {
-                                        main_cluster = $_2(svgFileToLink.svg).find('g > g.cluster')[0];
-                                        clusterTitle = $_2(main_cluster).find('title').text().split('__')[1];
-                                        if (cropped_text == clusterTitle) {
-                                            // we found the cluster to link
-                                            // encapsulate the text node in a link, like this:
-                                            // <a xlink:href="(external-page)#img-cropped-text" xlink:title="CroppedText">
-                                            //   <text ... >CroppedText</text>
-                                            // </a>
-                                            $_2(text).text(CroppedText);
-                                            external_page = svgFileToLink.route == svgFile.route ? '' : svgFileToLink.route;
-                                            link = $_2("<a xlink:href=\"".concat(external_page, "#img-").concat(croppedDashText, "\" xlink:title=\"").concat(CroppedText, "\"></a>"));
-                                            $_2(text).wrap(link);
-                                            // log the parent of the text parent
-                                            svgFound = true;
-                                        }
-                                    }
-                                    i++;
-                                }
-                                if (!svgFound) {
-                                }
-                            }
-                        }
-                        htmlFilesToFix[svgFile.htmlIndex].html = $_2.root().html();
-                        ;
-                        console.log(prev_1 == htmlFilesToFix[svgFile.htmlIndex].html);
-                    }
-                    // write the html files in the filesystem
-                    for (_d = 0, htmlFilesToFix_1 = htmlFilesToFix; _d < htmlFilesToFix_1.length; _d++) {
-                        htmlFile = htmlFilesToFix_1[_d];
-                        console.log(htmlFile.route);
-                        fs.writeFileSync("".concat(props.outDir, "/").concat(htmlFile.route, "/index.html"), htmlFile.html);
-                        $_3 = cheerio.load(htmlFile.html);
-                        links = $_3('a[xlink\\:href]');
-                        for (_e = 0, links_1 = links; _e < links_1.length; _e++) {
-                            link = links_1[_e];
-                            console.log($_3(link).attr('xlink:href'));
-                        }
-                    }
-                    $ = cheerio.load('<h2 class="title">Hello world</h2>');
-                    prev = $.root().html();
-                    $('h2.title').text('Hello there!');
-                    $('h2').addClass('welcome');
-                    console.log(prev == $.root().html());
-                    console.log($.html());
+                                return [2 /*return*/];
+                            });
+                        });
+                    })();
                     return [2 /*return*/];
                 });
             });
