@@ -6,7 +6,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const math = require('remark-math');
 const katex = require('rehype-katex');
 const path = require('path');
-const numerateDefinitions = require('./plugins/numerate-definitions');
+// const numerateDefinitions = require('./plugins/numerate-definitions');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -38,6 +38,7 @@ const config = {
 
   plugins: [
     path.join(__dirname, 'plugins', 'graphviz-svg-fixer'),
+    // path.join(__dirname, 'plugins', 'numerate-definitions'),
   ],
 
   presets: [
@@ -46,7 +47,7 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          remarkPlugins: [math, numerateDefinitions],
+          remarkPlugins: [math],
           rehypePlugins: [katex],
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
