@@ -7,12 +7,6 @@ export interface HtmlFile {
   html: string;
 }
 
-export interface SvgFile {
-  route: string;
-  svg: cheerio.Cheerio<cheerio.Element>;
-  htmlIndex: number;
-}
-
 export default function numerateDefinitions(
   context: LoadContext,
 ): Plugin {

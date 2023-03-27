@@ -7,12 +7,6 @@ export interface HtmlFile {
   html: string;
 }
 
-export interface SvgFile {
-  route: string;
-  svg: cheerio.Cheerio<cheerio.Element>;
-  htmlIndex: number;
-}
-
 export default function graphvizSvgFixer(
   context: LoadContext,
 ): Plugin {
@@ -32,7 +26,7 @@ export default function graphvizSvgFixer(
   
       let htmlFilesToFix: HtmlFile[] = [];
       // svgs to fix foreach html file
-      let allSvgFiles: SvgFile[] = [];  
+      let svgsMap: string[] = [];
 
       for (const route of routes) {
         const filePath = `${props.outDir}${route}/index.html`;
@@ -45,43 +39,65 @@ export default function graphvizSvgFixer(
         }
       }
 
-      // // we get all the svg files to fix foreach html
-      // // TODO: remove g > path and fix the size
-      // let htmlIndex = 0;
-      // while (htmlIndex < htmlFilesToFix.length) {
-      //   let htmlFile = htmlFilesToFix[htmlIndex];
-      //   const $ = cheerio.load(htmlFile.html);
-      //   let svgFiles = $('svg.graphviz');
-      //   for (let svgFile of svgFiles) {
-      //     let svgFileObj: SvgFile = { route: htmlFile.route, svg: $(svgFile), htmlIndex };
-      //     allSvgFiles.push(svgFileObj);
-      //   }
-      //   htmlIndex++;
-      // }
-
-      // // delete all the svgs from the html files
-      // for (let htmlFile of htmlFilesToFix) {
-      //   const $ = cheerio.load(htmlFile.html);
-      //   $('svg.graphviz').remove();
-      //   // log a thing that shows that svg has been removed (like $('svg.graphviz').length)
-      //   console.log($(`svg.graphviz`).length);
-      //   fs.writeFileSync(`${props.outDir}/${htmlFile.route}/index.html`, $.html());
-      // }
-
-      (async function(){
-
-        for (let htmlFile of htmlFilesToFix) {
-          let html = fs.readFileSync(`${props.outDir}/${htmlFile.route}/index.html`);
-          const $ = cheerio.load(html);
-          const prev = $.html();
-          $('svg.graphviz').remove();
-          let next = $.html();
-          console.log(prev == next);
-          fs.writeFileSync(`${props.outDir}/${htmlFile.route}/index.html`, $.html());
+      // we get all the svg files to fix foreach html
+      // TODO: remove g > path and fix the size
+      let htmlIndex = 0;
+      while (htmlIndex < htmlFilesToFix.length) {
+        let htmlFile = htmlFilesToFix[htmlIndex];
+        const $ = cheerio.load(htmlFile.html);
+        let svgElements = $('svg.graphviz');
+        for (let svgElement of svgElements) {
+          let cluster = $(svgElement).find('g > g.cluster')[0];
+          let clusterTitle = $(cluster).find('title').text().split("__")[1];
+          svgsMap[clusterTitle] = htmlFile.route;
         }
-       
-      })();
+        htmlIndex++;
+      }
 
+      // for each html file
+      for (let htmlFile of htmlFilesToFix) {
+        const $ = cheerio.load(htmlFile.html);
+        // take all the svgs with selector
+        $('svg.graphviz').each((index, svg) => {
+          // take all the g > g.node with at max 2 children
+          $(svg).find('g > g.node').each((index, node) => {
+            if ($(node).children().length == 2) {
+              let text = $(node).find('text');
+              let cropped_text = text.text().split('__')[0];
+              let cropped_text_array = cropped_text.split('_');
+              let CroppedText = '';
+              for (let i = 0; i < cropped_text_array.length; i++) {
+                CroppedText += cropped_text_array[i].charAt(0).toUpperCase() + cropped_text_array[i].slice(1);
+              }
+              const croppedDashText = cropped_text.replace(/_/g, '-');
+              if (svgsMap[cropped_text] != undefined) {
+                let externalLink = `
+                  <a xlink:href="${svgsMap[cropped_text]}.html#img-${croppedDashText}" xlink:title="${CroppedText}">
+                    ${CroppedText}
+                  </a>
+                `;
+                text.html(externalLink);
+              } else {
+                // delete the node
+                $(node).remove();
+                // delete the associated edges
+                $(svg).find('g > g.edge').each((index, edge) => {
+                  if ($(edge).find('title').text().includes(cropped_text)) {
+                    $(edge).remove();
+                  }
+                });
+              }
+            }
+          });
+        });
+        // remove the path from the svg
+        $('svg > g > path').remove();
+        // adjust the viewbox for all the svg.graphviz
+        // the new one has to fit the dimensions of the svg > g.graph
+        
+
+        fs.writeFileSync(`${props.outDir}/${htmlFile.route}/index.html`, $.html());
+      }
     },
   }
 };

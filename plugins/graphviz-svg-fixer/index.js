@@ -38,13 +38,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var fs = require("fs");
 var cheerio = require("cheerio");
+var fixSvgDimensions = function ($, html) {
+    // remove the path
+    // now resize the svg viewbox
+};
 function graphvizSvgFixer(context) {
     return {
         name: 'graphviz-svg-fixer',
         postBuild: function (props) {
             return __awaiter(this, void 0, void 0, function () {
-                var blacklist, routes, htmlFilesToFix, allSvgFiles, _i, routes_1, route, filePath, html, htmlFile;
-                return __generator(this, function (_a) {
+                var blacklist, routes, htmlFilesToFix, svgsMap, _i, routes_1, route, filePath, html, htmlFile, htmlIndex, htmlFile, $, svgElements, _a, svgElements_1, svgElement, cluster, clusterTitle, _loop_1, _b, htmlFilesToFix_1, htmlFile;
+                return __generator(this, function (_c) {
                     blacklist = [
                         '/404.html',
                         '/',
@@ -54,7 +58,7 @@ function graphvizSvgFixer(context) {
                             !route.startsWith('/__docusaurus');
                     });
                     htmlFilesToFix = [];
-                    allSvgFiles = [];
+                    svgsMap = [];
                     for (_i = 0, routes_1 = routes; _i < routes_1.length; _i++) {
                         route = routes_1[_i];
                         filePath = "".concat(props.outDir).concat(route, "/index.html");
@@ -64,45 +68,81 @@ function graphvizSvgFixer(context) {
                             htmlFilesToFix.push(htmlFile);
                         }
                     }
-                    // // we get all the svg files to fix foreach html
-                    // // TODO: remove g > path and fix the size
-                    // let htmlIndex = 0;
-                    // while (htmlIndex < htmlFilesToFix.length) {
-                    //   let htmlFile = htmlFilesToFix[htmlIndex];
-                    //   const $ = cheerio.load(htmlFile.html);
-                    //   let svgFiles = $('svg.graphviz');
-                    //   for (let svgFile of svgFiles) {
-                    //     let svgFileObj: SvgFile = { route: htmlFile.route, svg: $(svgFile), htmlIndex };
-                    //     allSvgFiles.push(svgFileObj);
-                    //   }
-                    //   htmlIndex++;
-                    // }
-                    // // delete all the svgs from the html files
-                    // for (let htmlFile of htmlFilesToFix) {
-                    //   const $ = cheerio.load(htmlFile.html);
-                    //   $('svg.graphviz').remove();
-                    //   // log a thing that shows that svg has been removed (like $('svg.graphviz').length)
-                    //   console.log($(`svg.graphviz`).length);
-                    //   fs.writeFileSync(`${props.outDir}/${htmlFile.route}/index.html`, $.html());
-                    // }
-                    (function () {
-                        return __awaiter(this, void 0, void 0, function () {
-                            var _i, htmlFilesToFix_1, htmlFile, html, $, prev, next;
-                            return __generator(this, function (_a) {
-                                for (_i = 0, htmlFilesToFix_1 = htmlFilesToFix; _i < htmlFilesToFix_1.length; _i++) {
-                                    htmlFile = htmlFilesToFix_1[_i];
-                                    html = fs.readFileSync("".concat(props.outDir, "/").concat(htmlFile.route, "/index.html"));
-                                    $ = cheerio.load(html);
-                                    prev = $.html();
-                                    $('svg.graphviz').remove();
-                                    next = $.html();
-                                    console.log(prev == next);
-                                    fs.writeFileSync("".concat(props.outDir, "/").concat(htmlFile.route, "/index.html"), $.html());
+                    htmlIndex = 0;
+                    while (htmlIndex < htmlFilesToFix.length) {
+                        htmlFile = htmlFilesToFix[htmlIndex];
+                        $ = cheerio.load(htmlFile.html);
+                        svgElements = $('svg.graphviz');
+                        for (_a = 0, svgElements_1 = svgElements; _a < svgElements_1.length; _a++) {
+                            svgElement = svgElements_1[_a];
+                            cluster = $(svgElement).find('g > g.cluster')[0];
+                            clusterTitle = $(cluster).find('title').text().split("__")[1];
+                            svgsMap[clusterTitle] = htmlFile.route;
+                        }
+                        htmlIndex++;
+                    }
+                    _loop_1 = function (htmlFile) {
+                        var $ = cheerio.load(htmlFile.html);
+                        // take all the svgs with selector
+                        $('svg.graphviz').each(function (index, svg) {
+                            // take all the g > g.node with at max 2 children
+                            $(svg).find('g > g.node').each(function (index, node) {
+                                if ($(node).children().length == 2) {
+                                    var text = $(node).find('text');
+                                    var cropped_text_1 = text.text().split('__')[0];
+                                    var cropped_text_array = cropped_text_1.split('_');
+                                    var CroppedText = '';
+                                    for (var i = 0; i < cropped_text_array.length; i++) {
+                                        CroppedText += cropped_text_array[i].charAt(0).toUpperCase() + cropped_text_array[i].slice(1);
+                                    }
+                                    var croppedDashText = cropped_text_1.replace(/_/g, '-');
+                                    if (svgsMap[cropped_text_1] != undefined) {
+                                        var externalLink = "\n                  <a xlink:href=\"".concat(svgsMap[cropped_text_1], ".html#img-").concat(croppedDashText, "\" xlink:title=\"").concat(CroppedText, "\">\n                    ").concat(CroppedText, "\n                  </a>\n                ");
+                                        text.html(externalLink);
+                                    }
+                                    else {
+                                        // delete the node
+                                        $(node).remove();
+                                        // delete the associated edges
+                                        $(svg).find('g > g.edge').each(function (index, edge) {
+                                            if ($(edge).find('title').text().includes(cropped_text_1)) {
+                                                $(edge).remove();
+                                            }
+                                        });
+                                    }
                                 }
-                                return [2 /*return*/];
                             });
+                            fixSvgDimensions($, svg);
                         });
-                    })();
+                        // remove the path from the svg
+                        $('svg > g > path').remove();
+                        // adjust the viewbox for all the svg.graphviz
+                        // the new one has to fit the dimensions of the svg > g.graph
+                        var svgList = $('svg.graphviz');
+                        for (var _d = 0, svgList_1 = svgList; _d < svgList_1.length; _d++) {
+                            var svg = svgList_1[_d];
+                            var _e = Array.from(svg.children).reduce(function (acc, el) {
+                                var bbox = el.getBBox();
+                                if (!acc.xMin || bbox.x < acc.xMin)
+                                    acc.xMin = bbox.x;
+                                if (!acc.xMax || bbox.x + bbox.width > acc.xMax)
+                                    acc.xMax = bbox.x + bbox.width;
+                                if (!acc.yMin || bbox.y < acc.yMin)
+                                    acc.yMin = bbox.y;
+                                if (!acc.yMax || bbox.y + bbox.height > acc.yMax)
+                                    acc.yMax = bbox.y + bbox.height;
+                                return acc;
+                            }, {}), xMin = _e.xMin, xMax = _e.xMax, yMin = _e.yMin, yMax = _e.yMax;
+                            var viewBox = "".concat(xMin, " ").concat(yMin, " ").concat(xMax - xMin, " ").concat(yMax - yMin);
+                            $(svg).attr('viewBox', viewBox);
+                        }
+                        fs.writeFileSync("".concat(props.outDir, "/").concat(htmlFile.route, "/index.html"), $.html());
+                    };
+                    // for each html file
+                    for (_b = 0, htmlFilesToFix_1 = htmlFilesToFix; _b < htmlFilesToFix_1.length; _b++) {
+                        htmlFile = htmlFilesToFix_1[_b];
+                        _loop_1(htmlFile);
+                    }
                     return [2 /*return*/];
                 });
             });
