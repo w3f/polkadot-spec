@@ -305,7 +305,7 @@ Arguments
 
 - A byte array that contains the transaction.
 
-  ###### Definition 224. TransactionSource {#defn-transaction-source}
+  ###### Definition -def-num- TransactionSource {#defn-transaction-source}
 
   **TransactionSource** is an enum describing the source of a transaction and can have one of the following values:
 
@@ -320,7 +320,7 @@ Arguments
 Return  
 - This function returns a *Result* as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-result-type) which contains the type *ValidTransaction* as defined in [Definition -def-num-ref-](chap-runtime-api#defn-valid-transaction) on success and the type *TransactionValidityError* as defined in [Definition -def-num-ref-](chap-runtime-api#defn-rte-transaction-validity-error) on failure.
 
-  ###### Definition 225. ValidTransaction {#defn-valid-transaction}
+  ###### Definition -def-num- ValidTransaction {#defn-valid-transaction}
 
   **ValidTransaction** is a tuple that contains information concerning a valid transaction.
 

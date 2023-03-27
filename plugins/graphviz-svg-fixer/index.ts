@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as cheerio from 'cheerio';
 import { Plugin, LoadContext } from '@docusaurus/types';
-import * as fsc from 'fs-cheerio';
 
 export interface HtmlFile {
   route: string;
@@ -70,7 +69,7 @@ export default function graphvizSvgFixer(
       // }
 
       (async function(){
-        
+
         for (let htmlFile of htmlFilesToFix) {
           let html = fs.readFileSync(`${props.outDir}/${htmlFile.route}/index.html`);
           const $ = cheerio.load(html);
