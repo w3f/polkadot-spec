@@ -22,4 +22,4 @@ yarn-error.log*
 multipage-html
 docs-old
 docs-old-2
-static/img/kaitai_render
+# static/img/kaitai_render

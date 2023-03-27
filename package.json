@@ -6,6 +6,7 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "./kaitai_render.sh; docusaurus build",
+    "build_no_kaitai": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",
