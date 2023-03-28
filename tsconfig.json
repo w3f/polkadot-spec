@@ -3,9 +3,5 @@
   "extends": "@tsconfig/docusaurus/tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
-    "esModuleInterop": true,
-    "target": "es5",
-    "downlevelIteration": true,
-    "allowJs": true
-  }, 
+  },
 }

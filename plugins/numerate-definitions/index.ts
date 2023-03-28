@@ -1,10 +1,10 @@
 import * as fs from 'fs';
 import * as cheerio from 'cheerio';
 import { Plugin, LoadContext } from '@docusaurus/types';
-import sidebarRoutes from '../sidebarRoutes';
+const sidebarRoutes = require('../sidebarRoutes');
 
 export interface HtmlFile {
-  route: string;
+  routeId: string;
   html: string;
 }
 
@@ -15,13 +15,12 @@ export default function numerateDefinitions(
     name: 'numerate-definitions',
     async postBuild(props) {
       let htmlFilesToFix: HtmlFile[] = [];
-
       for (const route of sidebarRoutes) {
-        const filePath = `${props.outDir}/${route}/index.html`;
+        const filePath = `${props.outDir}/${route.id}/index.html`;
         const html = fs.readFileSync(filePath, 'utf8');
   
         if (html.includes('-def-num-')) {
-          let htmlFile: HtmlFile = { route: route, html };
+          let htmlFile: HtmlFile = { routeId: route.id, html };
           htmlFilesToFix.push(htmlFile);
         }
       }
@@ -33,7 +32,7 @@ export default function numerateDefinitions(
         let $ = cheerio.load(htmlFile.html);
         // find h6 which text include -def-num-, and replace -def-num- with the counter
         let h6s = $('h6');
-        for (let h6 of h6s) {
+        for (let h6 of Array.from(h6s)) {
           let h6Text = $(h6).text();
           if (h6Text.includes('-def-num-')) {
             let id = $(h6).attr('id');
@@ -50,7 +49,7 @@ export default function numerateDefinitions(
         let $ = cheerio.load(htmlFile.html);
         // find a which text include -def-num-ref-, and replace -def-num-ref- with the correct definition number
         let a = $('a');
-        for (let aItem of a) {
+        for (let aItem of Array.from(a)) {
           let aText = $(aItem).text();
           if (aText.includes('-def-num-ref-')) {
             let href = $(aItem).attr('href');
@@ -60,7 +59,7 @@ export default function numerateDefinitions(
             $(aItem).text(newAText);
           }
         }
-        fs.writeFileSync(`${props.outDir}/${htmlFile.route}/index.html`, $.html());
+        fs.writeFileSync(`${props.outDir}/${htmlFile.routeId}/index.html`, $.html());
       }
 
     },

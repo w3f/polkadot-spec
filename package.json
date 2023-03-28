@@ -5,8 +5,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "./kaitai_render.sh; docusaurus build",
-    "build_no_kaitai": "docusaurus build",
+    "build": "./kaitai_render.sh; ./compile_plugins.sh; docusaurus build",
+    "build_no_kaitai": "./compile_plugins.sh; docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

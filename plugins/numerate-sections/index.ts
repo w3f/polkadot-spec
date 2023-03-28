@@ -1,66 +1,98 @@
 import * as fs from 'fs';
 import * as cheerio from 'cheerio';
 import { Plugin, LoadContext } from '@docusaurus/types';
-import sidebarRoutes from '../sidebarRoutes';
+const sidebarRoutes = require('../sidebarRoutes');
 
 export interface HtmlFile {
-  route: string;
+  routeId: string;
   html: string;
 }
 
-export default function numerateDefinitions(
+export default function numerateSections(
   context: LoadContext,
 ): Plugin {
   return {
-    name: 'numerate-definitions',
+    name: 'numerate-sections',
     async postBuild(props) {
+      // init html files array and sectionNumbers mapping
       let htmlFilesToFix: HtmlFile[] = [];
-
+      let sectionsNumbersMap = []; // routeId -> sectionNumber
+      let normalSectionsCounter = 1;
+      let appendixSectionsCounter = "A";
       for (const route of sidebarRoutes) {
-        const filePath = `${props.outDir}/${route}/index.html`;
-        const html = fs.readFileSync(filePath, 'utf8');
-  
-        if (html.includes('-sec-num-')) {
-          let htmlFile: HtmlFile = { route: route, html };
-          htmlFilesToFix.push(htmlFile);
+        // we don't want to include the main chapters and index in the numbering
+        if (route.level != 0 || route.label.includes('Appendix')) {
+          if (route.label.includes('Appendix')) {
+            sectionsNumbersMap[route.id] = appendixSectionsCounter;
+            appendixSectionsCounter = String.fromCharCode(appendixSectionsCounter.charCodeAt(0) + 1);
+          } else {
+            sectionsNumbersMap[route.id] = normalSectionsCounter;
+            normalSectionsCounter++;
+          }
+          const filePath = `${props.outDir}/${route.id}/index.html`;
+          const html = fs.readFileSync(filePath, 'utf8');
+          if (html.includes('-sec-num-')) {
+            let htmlFile: HtmlFile = { routeId: route.id, html };
+            htmlFilesToFix.push(htmlFile);
+          }
         }
       }
 
-      let definitionsMap = [];
-      let defCounter = 1;
+      let sectionLevelCounter = {}; // level -> sectionNumber
+      let subsectionMap = []; // subsectionId -> subsectionNumber
       
+      // TODO: replace -sec-num- also inside table of contents
       for (let htmlFile of htmlFilesToFix) {
         let $ = cheerio.load(htmlFile.html);
-        // find h6 which text include -def-num-, and replace -def-num- with the counter
-        let h6s = $('h6');
-        for (let h6 of h6s) {
-          let h6Text = $(h6).text();
-          if (h6Text.includes('-def-num-')) {
-            let id = $(h6).attr('id');
-            definitionsMap[id] = defCounter;
-            let newH6Text = h6Text.replace('-def-num-', defCounter.toString()+".");
-            $(h6).text(newH6Text);
-            defCounter++;
+        // take all headings that include -sec-num- (no h6)
+        let sectionNumber = sectionsNumbersMap[htmlFile.routeId];
+        console.log(sectionNumber)
+        sectionLevelCounter = {
+          1: sectionNumber,
+          2: 0,
+          3: 0,
+          4: 0,
+          5: 0,
+        };
+        let headings = $('h2, h3, h4, h5');
+        let prevLevel = 1;
+        for (let heading of Array.from(headings)) {
+          let level = +$(heading).prop('tagName').replace('H', '');
+          let headingText = $(heading).text();
+          if (headingText.includes('-sec-num-')) {
+            let subsectionId = $(heading).attr('id');
+            let subsectionNumber = "";
+            if (level > prevLevel) {
+              sectionLevelCounter[level] = 0;
+            }
+            sectionLevelCounter[level]++;
+            for (let i = 1; i <= level; i++) {
+              subsectionNumber += sectionLevelCounter[i] + ".";
+            }
+            subsectionMap[subsectionId] = subsectionNumber;
+            let newHeadingText = headingText.replace('-sec-num-', subsectionNumber);
+            $(heading).text(newHeadingText);
+            prevLevel = level;
           }
         }
         htmlFile.html = $.html();
       }
 
+      // replace references placeholders
       for (let htmlFile of htmlFilesToFix) {
         let $ = cheerio.load(htmlFile.html);
-        // find a which text include -def-num-ref-, and replace -def-num-ref- with the correct definition number
         let a = $('a');
-        for (let aItem of a) {
+        for (let aItem of Array.from(a)) {
           let aText = $(aItem).text();
-          if (aText.includes('-def-num-ref-')) {
+          if (aText.includes('-sec-num-ref-')) {
             let href = $(aItem).attr('href');
-            let defId = href.split('#')[1];
-            let defNumber = definitionsMap[defId];
-            let newAText = aText.replace('-def-num-ref-', defNumber);
+            let subsectionId = href.split('#')[1];
+            let subsectionNumber = subsectionMap[subsectionId];
+            let newAText = aText.replace('-sec-num-ref-', subsectionNumber);
             $(aItem).text(newAText);
           }
         }
-        fs.writeFileSync(`${props.outDir}/${htmlFile.route}/index.html`, $.html());
+        fs.writeFileSync(`${props.outDir}/${htmlFile.routeId}/index.html`, $.html());
       }
 
     },

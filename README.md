@@ -2,16 +2,12 @@
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
-### Installation
-
-```
-$ yarn
-```
-
 ### Local Development
 
-```
-$ yarn start
+```bash
+npm i
+npm run build_no_kaitai # or just buiid to also rebuild kaitai SVG files
+npm run serve
 ```
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
