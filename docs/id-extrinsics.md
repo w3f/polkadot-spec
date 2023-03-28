@@ -2,11 +2,11 @@
 title: Extrinsics
 ---
 
-## 9.1. Introduction {#id-introduction-5}
+## -sec-num- Introduction {#id-introduction-5}
 
 An extrinsic is a SCALE encoded array consisting of a version number, signature, and varying data types indicating the resulting Runtime function to be called, including the parameters required for that function to be executed.
 
-## 9.2. Preliminaries {#id-preliminaries-3}
+## -sec-num- Preliminaries {#id-preliminaries-3}
 
 ###### Definition -def-num- Extrinsic {#defn-extrinsic}
 
@@ -16,7 +16,7 @@ $$
 {t}{x}\:={\left({T}_{{v}},{T}_{{b}}\right)}
 $$
 
-The value of ${T}_{{b}}$ varies for each version. The current version 4 is described in [Section 9.3.1](id-extrinsics#sect-version-four).
+The value of ${T}_{{b}}$ varies for each version. The current version 4 is described in [Section -sec-num-ref-](id-extrinsics#sect-version-four).
 
 ###### Definition -def-num- Extrinsic Version {#defn-extrinsic-version}
 
@@ -24,9 +24,9 @@ ${T}_{{v}}$ is a 8-bit bitfield and defines the extrinsic version. The required 
 
 The most significant bit of ${T}_{{v}}$ indicates whether the transaction is **signed** (${1}$) or **unsigned** (${0}$). The remaining 7-bits represent the version number. As an example, for extrinsic format version 4, an signed extrinsic represents ${T}_{{v}}$ as `132` while a unsigned extrinsic represents it as `4`.
 
-## 9.3. Extrinsics Body {#id-extrinsics-body}
+## -sec-num- Extrinsics Body {#id-extrinsics-body}
 
-### 9.3.1. Version 4 {#sect-version-four}
+### -sec-num- Version 4 {#sect-version-four}
 
 Version 4 of the Polkadot extrinsic format is defined as follows:
 
@@ -68,9 +68,9 @@ where
 
 - ${E}$: the extra data ([Definition -def-num-ref-](id-extrinsics#defn-extra-data)).
 
-- ${R}_{{v}}$: a UINT32 containing the specification version (`spec_version`) of the Runtime ([Section C.4.1](chap-runtime-api#defn-rt-core-version)), which can be updated and is therefore subject to change.
+- ${R}_{{v}}$: a UINT32 containing the specification version (`spec_version`) of the Runtime ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)), which can be updated and is therefore subject to change.
 
-- ${F}_{{v}}$: a UINT32 containing the transaction version (`transaction_version`) of the Runtime ([Section C.4.1](chap-runtime-api#defn-rt-core-version)), which can be updated and is therefore subject to change.
+- ${F}_{{v}}$: a UINT32 containing the transaction version (`transaction_version`) of the Runtime ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)), which can be updated and is therefore subject to change.
 
 - ${H}_{{h}}{\left({G}\right)}$: a 32-byte array containing the genesis hash.
 
@@ -111,11 +111,11 @@ The value of ${m}_{{i}}$ varies for each Polkadot module, since every module off
 
 ${B}{a}{l}{a}{n}{c}{e}{s}_{{i}}\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{0},&\text{transfer}$ 1, & \text{set_balance} ${2},&\text{force_transfer}$ 3, & \text{transfer_keep_alive} $\ldots&{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}$
 
-### 9.3.2. Mortality {#id-mortality}
+### -sec-num- Mortality {#id-mortality}
 
 ###### Definition -def-num- Extrinsic Mortality {#defn-extrinsic-mortality}
 
-Extrinsic **mortality** is a mechanism which ensures that an extrinsic is only valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can also be immortal, as clarified in [Section 9.3.2.2](id-extrinsics#sect-mortality-encoding).
+Extrinsic **mortality** is a mechanism which ensures that an extrinsic is only valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can also be immortal, as clarified in [Section -sec-num-ref-](id-extrinsics#sect-mortality-encoding).
 
 The mortality mechanism works with two related values:
 
@@ -129,13 +129,13 @@ $$
 {M}_{pha}={H}_{{i}}{\left({B}\right)} \; mod \; {M}_{{{p}{e}{r}}}
 $$
 
-${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$ are then included in the extrinsic, as clarified in [Definition -def-num-ref-](id-extrinsics#defn-extra-data), in the SCALE encoded form of ${T}_{mor}$ ([Section 9.3.2.2](id-extrinsics#sect-mortality-encoding)). Polkadot validators can use ${M}_{{{p}{h}{a}}}$ to figure out the block hash included in the payload, which will therefore result in a valid signature if the extrinsic is within the specified period or an invalid signature if the extrinsic "died".
+${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$ are then included in the extrinsic, as clarified in [Definition -def-num-ref-](id-extrinsics#defn-extra-data), in the SCALE encoded form of ${T}_{mor}$ ([Section -sec-num-ref-](id-extrinsics#sect-mortality-encoding)). Polkadot validators can use ${M}_{{{p}{h}{a}}}$ to figure out the block hash included in the payload, which will therefore result in a valid signature if the extrinsic is within the specified period or an invalid signature if the extrinsic "died".
 
-#### 9.3.2.1. Example {#id-example}
+#### -sec-num- Example {#id-example}
 
 The extrinsic author choses ${M}_{{{p}{e}{r}}}={256}$ at block `10'000`, resulting with ${M}_{{{p}{h}{a}}}={16}$. The extrinsic is then valid for blocks ranging from `10'000` to `10'256`.
 
-#### 9.3.2.2. Encoding {#sect-mortality-encoding}
+#### -sec-num- Encoding {#sect-mortality-encoding}
 
 ${T}_{mor}$ refers to the SCALE encoded form of type ${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$. ${T}_{mor}$ is the size of two bytes if the extrinsic is considered mortal, or simply one bytes with the value equal to zero if the extrinsic is considered immortal.
 

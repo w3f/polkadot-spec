@@ -5,6 +5,7 @@
     "baseUrl": ".",
     "esModuleInterop": true,
     "target": "es5",
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "allowJs": true
   }, 
 }

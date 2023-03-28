@@ -20,7 +20,7 @@ export default function numerateDefinitions(
         const filePath = `${props.outDir}/${route}/index.html`;
         const html = fs.readFileSync(filePath, 'utf8');
   
-        if (html.includes('-def-num-')) {
+        if (html.includes('-sec-num-')) {
           let htmlFile: HtmlFile = { route: route, html };
           htmlFilesToFix.push(htmlFile);
         }

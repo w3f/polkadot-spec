@@ -2,19 +2,19 @@
 title: Light Clients
 ---
 
-## 7.1. Requirements for Light Clients {#sect-requirements-lightclient}
+## -sec-num- Requirements for Light Clients {#sect-requirements-lightclient}
 
 We list requirements of a Light Client categorized along the the three dimensions of Functionality, Efficiency, and Security.
 
 - **Functional Requirements:**
 
-  1.  Update state ([Section 2.4](chap-state#sect-state-storage)) to reflect the latest view of the blockchain via synchronization with full nodes.
+  1.  Update state ([Section -sec-num-ref-](chap-state#sect-state-storage)) to reflect the latest view of the blockchain via synchronization with full nodes.
 
-  2.  (Optional) Verify validity of runtime transitions ([Section 2.6](chap-state#sect-runtime-interaction)).
+  2.  (Optional) Verify validity of runtime transitions ([Section -sec-num-ref-](chap-state#sect-runtime-interaction)).
 
   3.  Make queries for data at the latest block height or across a range of blocks.
 
-  4.  Append extrinsics ([Section 2.3](chap-state#sect-extrinsics)) to the blockchain via full nodes.
+  4.  Append extrinsics ([Section -sec-num-ref-](chap-state#sect-extrinsics)) to the blockchain via full nodes.
 
 - **Efficiency Requirements:**
 
@@ -46,11 +46,11 @@ We list requirements of a Light Client categorized along the the three dimension
 
   6.  The client MUST support the @substrate/connect [connection extension protocol](https://github.com/paritytech/substrate-connect/tree/main/packages/connect-extension-protocol): `ToApplicationError`, `ToApplicationChainReady`, `ToApplicationRpc`, `ToExtensionAddChain`, `ToExtensionAddWellKnownChain`, `ToExtensionRpc`, `ToExtensionRemoveChain`.
 
-## 7.2. Warp Sync for Light Clients {#sect-sync-warp-lightclient}
+## -sec-num- Warp Sync for Light Clients {#sect-sync-warp-lightclient}
 
-Warp sync ([Section 4.8.4](chap-networking#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so-called fragments ([Definition -def-num-ref-](chap-networking#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition -def-num-ref-](sect-finality#defn-grandpa-justification)). This protocol allows nodes to arrive at the desired state much faster than fast sync. Warp sync is primarily designed for Light Clients. Although, warp sync could be used by full nodes, the sync process may lack information to cater to complete functionality set of full nodes.
+Warp sync ([Section -sec-num-ref-](chap-networking#sect-msg-warp-sync)) only downloads the block headers where authority set changes occurred, so-called fragments ([Definition -def-num-ref-](chap-networking#defn-warp-sync-proof)), and by verifying the GRANDPA justifications ([Definition -def-num-ref-](sect-finality#defn-grandpa-justification)). This protocol allows nodes to arrive at the desired state much faster than fast sync. Warp sync is primarily designed for Light Clients. Although, warp sync could be used by full nodes, the sync process may lack information to cater to complete functionality set of full nodes.
 
-For light clients, it is too expensive to download the state (approx. 550MB) to respond to queries. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. Requests for warp sync are performed using the `/dot/sync/warp` *Request-Response* substream, the corresponding network messages are detailed in [Section 4.7](chap-networking#sect-protocols-substreams).
+For light clients, it is too expensive to download the state (approx. 550MB) to respond to queries. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. Requests for warp sync are performed using the `/dot/sync/warp` *Request-Response* substream, the corresponding network messages are detailed in [Section -sec-num-ref-](chap-networking#sect-protocols-substreams).
 
 Light clients base their trust in provided snapshots and the ability to slash grandpa votes for equivocation for the period they are syncing via warp sync. Full nodes and above in contrast verify each block indvidually.
 
@@ -90,17 +90,17 @@ ${Q}{u}{e}{r}{y}{F}\underline{{l}}{N}{o}{d}{e}$: Returns the response to the que
 
 ${v}{a}{l}{i}{d}{i}{t}{y}{C}{h}{e}{c}{k}_{{{\root}}}$: Predicate that checks the validity of response ${r}{e}{s}$ and associated merkle proof $\pi$ by matching it against the Commit Root Hash ${\sqrt[$]{}} obtained as a result of warp sync.
 
-## 7.3. Runtime Environment for Light Clients {#sect-runtime-environment-lightclient}
+## -sec-num- Runtime Environment for Light Clients {#sect-runtime-environment-lightclient}
 
 Technically, though a runtime execution environment is not necessary to build a light client, most clients require interacting with the Runtime and the state of the blockchain for integrity checks at the minimum. One can imagine an application scenarios like an on-chain light client which only listens to the latest state without ever adding extrinsics. Current implementations of Light Nodes (for e.g. Smoldot) uses the wasmtime as its runtime environment to drastically simplify the code. The performance of wasmtime is satisfying enough to not require a native runtime. The details of runtime API that the environment needs to suppport can be found in Appendix C ([Appendix C](chap-runtime-api)).
 
-## 7.4. Light Client Messages {#sect-light-msg}
+## -sec-num- Light Client Messages {#sect-light-msg}
 
 Light clients are applications that fetch the required data that they need from a Polkadot node with an associated proof to validate the data. This makes it possible to interact with the Polkadot network without requiring to run a full node or having to trust the remote peers. The light client messages make this functionality possible.
 
 All light client messages are protobuf encoded and are sent over the `/dot/light/2` substream.
 
-### 7.4.1. Request {#id-request}
+### -sec-num- Request {#id-request}
 
 A message with all possible request messages. All message are sent as part of this message.
 
@@ -116,7 +116,7 @@ Where the `request` can be one of the following fields:
 | `RemoteReadRequest`      | 2   | A remote read request ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-request))              |
 | `RemoteReadChildRequest` | 4   | A remote read child request ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-child-request)) |
 
-### 7.4.2. Response {#id-response}
+### -sec-num- Response {#id-response}
 
 A message with all possible response messages. All message are sent as part of this message.
 
@@ -131,7 +131,7 @@ Where the `response` can be one of the following fields:
 | `RemoteCallResponse` | 1   | A remote call response ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-call-response)) |
 | `RemoteReadResponse` | 2   | A remote read response ([Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-response)) |
 
-### 7.4.3. Remote Call Messages {#id-remote-call-messages}
+### -sec-num- Remote Call Messages {#id-remote-call-messages}
 
 Execute a call to a contract at the given block.
 
@@ -153,7 +153,7 @@ Remote call response.
 |---------|-----|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | `bytes` | 2   | An *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the call proof or *None* if proof generation failed. |
 
-### 7.4.4. Remote Read Messages {#id-remote-read-messages}
+### -sec-num- Remote Read Messages {#id-remote-read-messages}
 
 Read a storage value at the given block.
 
@@ -174,7 +174,7 @@ Remote read response.
 |---------|-----|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | `bytes` | 2   | An *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the read proof or *None* if proof generation failed. |
 
-### 7.4.5. Remote Read Child Messages {#id-remote-read-child-messages}
+### -sec-num- Remote Read Child Messages {#id-remote-read-child-messages}
 
 Read a child storage value at the given block.
 
@@ -190,6 +190,6 @@ Remote read child request.
 
 The response is the same as for the *Remote Read Request* message, respectively [Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-response).
 
-## 7.5. Storage for Light Clients {#sect-storage-lightclient}
+## -sec-num- Storage for Light Clients {#sect-storage-lightclient}
 
-The light client requires a persistent storage for saving the state of the blockchain. In addition it requires efficient Serialization/ De-serialization methods to transform SCALE ([Section A.2.2](id-cryptography-encoding#sect-scale-codec)) encoded network traffic for storing and reading from the persistent storage.
+The light client requires a persistent storage for saving the state of the blockchain. In addition it requires efficient Serialization/ De-serialization methods to transform SCALE ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) encoded network traffic for storing and reading from the persistent storage.

@@ -41,6 +41,8 @@ const config = {
     path.join(__dirname, 'plugins', 'numerate-definitions'),
   ],
 
+  // clientModules: [path.resolve(__dirname, './src/js/resizeSvg.js')],
+
   presets: [
     [
       'classic',
@@ -59,6 +61,7 @@ const config = {
         blog: false, // Optional: disable the blog plugin
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
+
         },
         debug: true,
       }),

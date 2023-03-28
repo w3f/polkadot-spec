@@ -2,7 +2,7 @@
 title: Finality
 ---
 
-## 6.1. Introduction {#id-introduction-4}
+## -sec-num- Introduction {#id-introduction-4}
 
 The Polkadot Host uses GRANDPA Finality protocol to finalize blocks. Finality is obtained by consecutive rounds of voting by the validator nodes. Validators execute GRANDPA finality process in parallel to Block Production as an independent service. In this section, we describe the different functions that GRANDPA service performs to successfully participate in the block-finalization process.
 
@@ -14,7 +14,7 @@ $$
 {\mathbb{{V}}}={\tt{grandpa\_authorities}}{\left({B}\right)}
 $$
 
-where ${\tt{grandpa\_authorities}}$ is a function entrypoint of the Runtime described in [Section C.10.1](chap-runtime-api#sect-rte-grandpa-auth). We refer to ${\mathbb{{V}}}_{{B}}$ as ${\mathbb{{V}}}$ when there is no chance of ambiguity.
+where ${\tt{grandpa\_authorities}}$ is a function entrypoint of the Runtime described in [Section -sec-num-ref-](chap-runtime-api#sect-rte-grandpa-auth). We refer to ${\mathbb{{V}}}_{{B}}$ as ${\mathbb{{V}}}$ when there is no chance of ambiguity.
 
 Analogously we say that a Polkadot node is a **non-voter node** for block ${B}$, if it does not own any of the key pairs in ${\mathbb{{V}}}_{{B}}$.
 
@@ -53,7 +53,7 @@ Voters engage in a maximum of two sub-rounds of voting for each round ${r}$. The
 
 By ${{V}_{{v}}^{{{r},\text{pv}}}}$ and ${{V}_{{v}}^{{{r},\text{pc}}}}$ we refer to the vote cast by voter ${v}$ in round ${r}$ (for block ${B}$) during the pre-vote and the pre-commit sub-round respectively.
 
-Voting is done by means of broadcasting voting messages ([Section 4.8.6](chap-networking#sect-msg-grandpa)) to the network. Validators inform their peers about the block finalized in round ${r}$ by broadcasting a commit message ([Play-Grandpa-Round](sect-finality#algo-grandpa-round)).
+Voting is done by means of broadcasting voting messages ([Section -sec-num-ref-](chap-networking#sect-msg-grandpa)) to the network. Validators inform their peers about the block finalized in round ${r}$ by broadcasting a commit message ([Play-Grandpa-Round](sect-finality#algo-grandpa-round)).
 
 ###### Definition -def-num- Vote Signature {#defn-sign-round-vote}
 
@@ -108,7 +108,7 @@ $$
 {{\mathcal{{E}}}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{stage}}}}
 $$
 
-The Polkadot Host must detect equivocations committed by other validators and submit those to the Runtime as described in [Section C.10.2](chap-runtime-api#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic).
+The Polkadot Host must detect equivocations committed by other validators and submit those to the Runtime as described in [Section -sec-num-ref-](chap-runtime-api#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic).
 
 A vote ${{V}_{{v}}^{{{r},\text{stage}}}}={V}{\left({B}\right)}$ is **invalid** if
 
@@ -192,7 +192,7 @@ where
 |-----|---------------------------------------------------------------------------------------------------------------------------------------------|
 |     | The BEEFY protocol is still under construction. The following part will be updated in the future and certain information will be clarified. |
 
-$\text{CM}_{{y}}$, the consensus message for BEEFY ([Section 6.7](sect-finality#sect-grandpa-beefy)), is of the following format:
+$\text{CM}_{{y}}$, the consensus message for BEEFY ([Section -sec-num-ref-](sect-finality#sect-grandpa-beefy)), is of the following format:
 
 $$
 \text{CM}_{{y}}={\left\lbrace\begin{matrix}{1}&{\left({V}_{{B}},{V}_{{i}}\right)}\\{2}&{A}_{{i}}\\{3}&{R}\end{matrix}\right.}
@@ -206,13 +206,13 @@ where
 | 2   | implies **on disabled**: an index to the individual authorty in ${V}_{{B}}$ that should be immediately disabled until the next authority change.                                     |
 | 3   | implies **MMR root**: a 32-byte array containing the MMR root.                                                                                                                   |
 
-## 6.2. Initiating the GRANDPA State {#id-initiating-the-grandpa-state}
+## -sec-num- Initiating the GRANDPA State {#id-initiating-the-grandpa-state}
 
 In order to participate coherently in the voting process, a validator must initiate its state and sync it with other active validators. In particular, considering that voting is happening in different distinct rounds where each round of voting is assigned a unique sequential round number ${r}_{{v}}$, it needs to determine and set its round counter ${r}$ equal to the voting round ${r}_{{n}}$ currently undergoing in the network. The mandated initialization procedure for the GRANDPA protocol for a joining validator is described in detail in [Initiate-Grandpa](sect-finality#algo-initiate-grandpa).
 
 The process of joining a new voter set is different from the one of rejoining the current voter set after a network disconnect. The details of this distinction are described further in this section.
 
-### 6.2.1. Voter Set Changes {#id-voter-set-changes}
+### -sec-num- Voter Set Changes {#id-voter-set-changes}
 
 A GRANDPA voter node which is initiating GRANDPA protocol as part of joining a new authority set is required to execute [Initiate-Grandpa](sect-finality#algo-initiate-grandpa). The algorithm mandates the initialization procedure for GRANDPA protocol.
 
@@ -220,17 +220,17 @@ A GRANDPA voter node which is initiating GRANDPA protocol as part of joining a n
 |-----|---------------------------------------------------------------------|
 |     | The GRANDPA round number reset to 0 for every authority set change. |
 
-Voter set changes are signaled by Runtime via a consensus engine message ([Section 3.3.2](chap-sync#sect-consensus-message-digest)). When Authorities process such messages they must not vote on any block with a higher number than the block at which the change is supposed to happen. The new authority set should reinitiate GRANDPA protocol by executing [Initiate-Grandpa](sect-finality#algo-initiate-grandpa).
+Voter set changes are signaled by Runtime via a consensus engine message ([Section -sec-num-ref-](chap-sync#sect-consensus-message-digest)). When Authorities process such messages they must not vote on any block with a higher number than the block at which the change is supposed to happen. The new authority set should reinitiate GRANDPA protocol by executing [Initiate-Grandpa](sect-finality#algo-initiate-grandpa).
 
 \input ${r}_{{{l}\ast}},{B}_{{{l}\ast}}$ \state \textsc{Last-Finalized-Block} $\leftarrow{B}_{{{l}\ast}}$ \state \textsc{Best-Final-Candidate}${\left({0}\right)}\leftarrow{B}_{{{l}\ast}}$ \state \textsc{GRANDPA-GHOST}${\left({0}\right)}\leftarrow{B}_{{{l}\ast}}$ \state \textsc{Last-Completed-Round}$\leftarrow{0}$ \state ${r}_{{n}}\leftarrow{1}$ \state \call{Play-Grandpa-round}{${r}_{{n}}$}
 
 where ${B}_{{\text{last}}}$ is the last block which has been finalized on the chain ([Definition -def-num-ref-](sect-finality#defn-finalized-block)). ${r}_{{\text{last}}}$ is equal to the latest round the voter has observed that other voters are voting on. The voter obtains this information through various gossiped messages including those mentioned in [Definition -def-num-ref-](sect-finality#defn-finalized-block). ${r}_{{\text{last}}}$ is set to *0* if the GRANDPA node is initiating the GRANDPA voting process as a part of a new authority set. This is because the GRANDPA round number resets to *0* for every authority set change.
 
-## 6.3. Rejoining the Same Voter Set {#id-rejoining-the-same-voter-set}
+## -sec-num- Rejoining the Same Voter Set {#id-rejoining-the-same-voter-set}
 
-When a voter node rejoins the network after a disconnect from the voter set and with the condition that there has been no change to the voter set at the time of the disconnect, the node must continue performing the GRANDPA protocol at the same state as before getting disconnected from the network, ignoring any possible progress in GRANDPA finalization. Following reconnection, the node eventually gets updated to the current GRANDPA round and synchronizes its state with the rest of the voting set through the process called Catchup ([Section 6.6.1](sect-finality#sect-grandpa-catchup)).
+When a voter node rejoins the network after a disconnect from the voter set and with the condition that there has been no change to the voter set at the time of the disconnect, the node must continue performing the GRANDPA protocol at the same state as before getting disconnected from the network, ignoring any possible progress in GRANDPA finalization. Following reconnection, the node eventually gets updated to the current GRANDPA round and synchronizes its state with the rest of the voting set through the process called Catchup ([Section -sec-num-ref-](sect-finality#sect-grandpa-catchup)).
 
-## 6.4. Voting Process in Round ${r}$ {#id-voting-process-in-round-r}
+## -sec-num- Voting Process in Round ${r}$ {#id-voting-process-in-round-r}
 
 For each round ${r}$, an honest voter ${v}$ must participate in the voting process by following [Play-Grandpa-Round](sect-finality#algo-grandpa-round).
 
@@ -294,7 +294,7 @@ This prevents us from proceeding to round 3 until either:
 
 Both scenarios unblock [Play-Grandpa-Round](sect-finality#algo-grandpa-round), ${\mathtt{\text{Last-Finalized-Block}}}\ge{\mathtt{\text{Best-Final-Candidate}}}{\left({r}-{1}\right)}$ albeit in different ways: the former with increasing the ${\mathtt{\text{Last-Finalized-Block}}}$ and the latter with decreasing ${\mathtt{\text{Best-Final-Candidate}}}{\left({r}-{1}\right)}$.
 
-## 6.5. Forced Authority Set Changes {#sect-finality-forced-changes}
+## -sec-num- Forced Authority Set Changes {#sect-finality-forced-changes}
 
 In a case of emergency where the Polkadot network is unable to finalize blocks, such as in an event of mass validator outage, the Polkadot governance mechanism must enact a forced change, which the Host must handle in a specific manner. Given that in such a case finality cannot be relied on, the Host must detect the forced change ([Definition -def-num-ref-](sect-finality#defn-consensus-message-grandpa)) in a (valid) block and apply it to all forks.
 
@@ -308,7 +308,7 @@ Figure 2. Applying a scheduled change
 
 Figure 3. Applying a forced change
 
-## 6.6. Block Finalization {#sect-block-finalization}
+## -sec-num- Block Finalization {#sect-block-finalization}
 
 ###### Definition -def-num- Justified Block Header {#defn-justified-block-header}
 
@@ -334,17 +334,17 @@ for:
 
 - Any round ${r}$ if the node ${n}$ is *not* a GRANDPA voter.
 
-- Only for round ${r}$ for which the node ${n}$ has invoked [Play-Grandpa-Round](sect-finality#algo-grandpa-round) and round ${r}+{1}$ if ${n}$ is a GRANDPA voter and has already caught up to its peers according to the process described in Section [Section 6.6.1](sect-finality#sect-grandpa-catchup).
+- Only for round ${r}$ for which the node ${n}$ has invoked [Play-Grandpa-Round](sect-finality#algo-grandpa-round) and round ${r}+{1}$ if ${n}$ is a GRANDPA voter and has already caught up to its peers according to the process described in Section [Section -sec-num-ref-](sect-finality#sect-grandpa-catchup).
 
 Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit messages regardless of their GRANDPA voter status.
 
-### 6.6.1. Catching up {#sect-grandpa-catchup}
+### -sec-num- Catching up {#sect-grandpa-catchup}
 
 When a Polkadot node (re)joins the network, it requests the history of state transitions in the form of blocks, which it is missing.
 
 Nonetheless, the process is different for a GRANDPA voter node. When a voter node joins the network, it needs to gather the justification ([Definition -def-num-ref-](sect-finality#defn-grandpa-justification)) of the rounds it has missed. Through this process, they can safely join the voting process of the current round, on which the voting is taking place.
 
-#### 6.6.1.1. Sending the catch-up requests {#sect-sending-catchup-request}
+#### -sec-num- Sending the catch-up requests {#sect-sending-catchup-request}
 
 When a Polkadot voter node has the same authority list as a peer voter node who is reporting a higher number for the *finalized round* field, it should send a catch-up request message ([Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-request-msg)) to the reporting peer. This will allow the node to to catch up to the more advanced finalized round, provided that the following criteria hold:
 
@@ -352,7 +352,7 @@ When a Polkadot voter node has the same authority list as a peer voter node who 
 
 - The last known finalized round for the Polkadot node is at least 2 rounds behind the finalized round for the peer.
 
-#### 6.6.1.2. Processing the catch-up requests {#id-processing-the-catch-up-requests}
+#### -sec-num- Processing the catch-up requests {#id-processing-the-catch-up-requests}
 
 Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute [Process-Catchup-Request](sect-finality#algo-process-catchup-request). Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which [Play-Grandpa-Round](sect-finality#algo-grandpa-round) is not concluded.
 
@@ -371,7 +371,7 @@ where
 
 - ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response ([Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-response-msg)).
 
-#### 6.6.1.3. Processing catch-up responses {#id-processing-catch-up-responses}
+#### -sec-num- Processing catch-up responses {#id-processing-catch-up-responses}
 
 A Catch-up response message contains critical information for the requester node to update their view on the active rounds which are being voted on by GRANDPA voters. As such, the requester node should verify the content of the catch-up response message and subsequently updates its view of the state of the finality of the Relay chain according to [Process-Catchup-Response](sect-finality#algo-process-catchup-response).
 
@@ -379,7 +379,7 @@ A Catch-up response message contains critical information for the requester node
 
 where ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response received from node ${v}$ ([Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-response-msg)).
 
-## 6.7. Bridge design (BEEFY) {#sect-grandpa-beefy}
+## -sec-num- Bridge design (BEEFY) {#sect-grandpa-beefy}
 
 |     |                                                                                                                           |
 |-----|---------------------------------------------------------------------------------------------------------------------------|
@@ -389,7 +389,7 @@ The BEEFY (Bridge Effiency Enabling Finality Yielder) is a secondary protocol to
 
 Storing all the information necessary to verify the state of the remote chain, such as the block headers, is too expensive. BEEFY stores the information in a space-efficient way and clients can request additional information over the protocol.
 
-### 6.7.1. Preliminaries {#id-preliminaries-2}
+### -sec-num- Preliminaries {#id-preliminaries-2}
 
 ###### Definition -def-num- Merkle Mountain Ranges {#defn-mmr}
 
@@ -417,15 +417,15 @@ The light client is expected to know who the validators are and has access to th
 
 A **relayer** (or "prover") is an abstract entity which takes finality proofs from the Polkadot network and makes those available to the light clients. Inherently, the relayer tries to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates offchain and can for example be a node or a collection of nodes.
 
-### 6.7.2. Voting on Statements {#id-voting-on-statements}
+### -sec-num- Voting on Statements {#id-voting-on-statements}
 
 The Polkadot Host signs a statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)) and gossips it as part of a vote ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)) to its peers on every new, finalized block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum has better compatibility for it compared to SR25519 or ED25519.
 
-### 6.7.3. Committing Witnesses {#sect-beefy-committing-witnesses}
+### -sec-num- Committing Witnesses {#sect-beefy-committing-witnesses}
 
 The relayer ([Definition -def-num-ref-](sect-finality#defn-beefy-relayer)) participates in the Polkadot network by collecting the gossiped votes ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)). Those votes are converted into the witness data structure ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)). The relayer saves the data on the chain of the remote network. The occurrence of saving witnesses on remote networks is undefined.
 
-### 6.7.4. Requesting Signed Commitments {#id-requesting-signed-commitments}
+### -sec-num- Requesting Signed Commitments {#id-requesting-signed-commitments}
 
 A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the witness data ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
 

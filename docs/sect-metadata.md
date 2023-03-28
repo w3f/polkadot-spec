@@ -4,9 +4,9 @@ title: Metadata
 
 The runtime metadata structure contains all the information necessary on how to interact with the Polkadot runtime. Considering that Polkadot runtimes are upgradable and therefore any interfaces are subject to change, the metadata allows developers to structure any extrinsics or storage entries accordingly.
 
-The metadata of a runtime is provided by a call to `Metadata_metadata` ([Section C.5.1](chap-runtime-api#sect-rte-metadata-metadata)) and is returned as a scale encoded ([Section A.2.2](id-cryptography-encoding#sect-scale-codec)) binary blob. How to interpret and decode this data is described in this chapter.
+The metadata of a runtime is provided by a call to `Metadata_metadata` ([Section -sec-num-ref-](chap-runtime-api#sect-rte-metadata-metadata)) and is returned as a scale encoded ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) binary blob. How to interpret and decode this data is described in this chapter.
 
-## 12.1. Structure {#sect-rtm-structure}
+## -sec-num- Structure {#sect-rtm-structure}
 
 The Runtime Metadata is a datastructure of the following format:
 
@@ -30,7 +30,7 @@ where
 
 - ${R}$ is a sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of type definitions ${r}_{{i}}$ ([Definition -def-num-ref-](sect-metadata#defn-rtm-registry-entry)).
 
-- ${P}$ is a sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of pallet metadata ${p}_{{i}}$ ([Section 12.2](sect-metadata#sect-rtm-pallet-metadata)).
+- ${P}$ is a sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of pallet metadata ${p}_{{i}}$ ([Section -sec-num-ref-](sect-metadata#sect-rtm-pallet-metadata)).
 
 - ${t}_{{e}}$ is the type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) of the extrinsics.
 
@@ -81,7 +81,7 @@ import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
 
 ###### Definition -def-num- Runtime Type Id {#defn-rtm-type-id}
 
-The **runtime type Id** is a compact integer representing the index of the entry ([Definition -def-num-ref-](sect-metadata#defn-rtm-registry-entry)) in ${R},{P}$ or ${E}$ of the runtime metadata structure ([Section 12.1](sect-metadata#sect-rtm-structure)), depending on context (starting at ${0}$).
+The **runtime type Id** is a compact integer representing the index of the entry ([Definition -def-num-ref-](sect-metadata#defn-rtm-registry-entry)) in ${R},{P}$ or ${E}$ of the runtime metadata structure ([Section -sec-num-ref-](sect-metadata#sect-rtm-structure)), depending on context (starting at ${0}$).
 
 ###### Definition -def-num- Type Variant {#defn-rtm-type-definition}
 
@@ -183,9 +183,9 @@ import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_varian
 
 <MetadataTypeVariants className="graphviz" />
 
-## 12.2. Pallet Metadata {#sect-rtm-pallet-metadata}
+## -sec-num- Pallet Metadata {#sect-rtm-pallet-metadata}
 
-All the metadata about a pallet, part of the main structure ([Section 12.1](sect-metadata#sect-rtm-structure)) and of the following format:
+All the metadata about a pallet, part of the main structure ([Section -sec-num-ref-](sect-metadata#sect-rtm-structure)) and of the following format:
 
 $$
 {p}_{{i}}={\left({n},{S},{a},{e},{C},{e},{i}\right)}
@@ -316,9 +316,9 @@ import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 
 <PalletConstant className="graphviz" />
 
-## 12.3. Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
+## -sec-num- Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
 
-The metadata about a pallets extrinsics, part of the main structure ([Section 12.1](sect-metadata#sect-rtm-structure)) and of the following format:
+The metadata about a pallets extrinsics, part of the main structure ([Section -sec-num-ref-](sect-metadata#sect-rtm-structure)) and of the following format:
 
 ###### Definition -def-num- Signed Extension Metadata {#defn-rtm-signed-extension-metadata}
 

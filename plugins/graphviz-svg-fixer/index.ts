@@ -40,7 +40,6 @@ export default function graphvizSvgFixer(
       }
 
       // we get all the svg files to fix foreach html
-      // TODO: remove g > path and fix the size
       let htmlIndex = 0;
       while (htmlIndex < htmlFilesToFix.length) {
         let htmlFile = htmlFilesToFix[htmlIndex];
@@ -67,12 +66,17 @@ export default function graphvizSvgFixer(
               let cropped_text_array = cropped_text.split('_');
               let CroppedText = '';
               for (let i = 0; i < cropped_text_array.length; i++) {
-                CroppedText += cropped_text_array[i].charAt(0).toUpperCase() + cropped_text_array[i].slice(1);
+                CroppedText += 
+                  cropped_text_array[i].charAt(0).toUpperCase() +
+                  cropped_text_array[i].slice(1);
               }
               const croppedDashText = cropped_text.replace(/_/g, '-');
               if (svgsMap[cropped_text] != undefined) {
                 let externalLink = `
-                  <a xlink:href="${svgsMap[cropped_text]}.html#img-${croppedDashText}" xlink:title="${CroppedText}">
+                  <a 
+                    xlink:href="${svgsMap[cropped_text]}.html#img-${croppedDashText}" 
+                    xlink:title="${CroppedText}"
+                  >
                     ${CroppedText}
                   </a>
                 `;
@@ -90,13 +94,10 @@ export default function graphvizSvgFixer(
             }
           });
         });
-        // remove the path from the svg
-        $('svg > g > path').remove();
-        // adjust the viewbox for all the svg.graphviz
-        // the new one has to fit the dimensions of the svg > g.graph
-        
-
-        fs.writeFileSync(`${props.outDir}/${htmlFile.route}/index.html`, $.html());
+        fs.writeFileSync(
+          `${props.outDir}/${htmlFile.route}/index.html`,
+          $.html()
+        );
       }
     },
   }

@@ -38,10 +38,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var fs = require("fs");
 var cheerio = require("cheerio");
-var fixSvgDimensions = function ($, html) {
-    // remove the path
-    // now resize the svg viewbox
-};
 function graphvizSvgFixer(context) {
     return {
         name: 'graphviz-svg-fixer',
@@ -93,11 +89,13 @@ function graphvizSvgFixer(context) {
                                     var cropped_text_array = cropped_text_1.split('_');
                                     var CroppedText = '';
                                     for (var i = 0; i < cropped_text_array.length; i++) {
-                                        CroppedText += cropped_text_array[i].charAt(0).toUpperCase() + cropped_text_array[i].slice(1);
+                                        CroppedText +=
+                                            cropped_text_array[i].charAt(0).toUpperCase() +
+                                                cropped_text_array[i].slice(1);
                                     }
                                     var croppedDashText = cropped_text_1.replace(/_/g, '-');
                                     if (svgsMap[cropped_text_1] != undefined) {
-                                        var externalLink = "\n                  <a xlink:href=\"".concat(svgsMap[cropped_text_1], ".html#img-").concat(croppedDashText, "\" xlink:title=\"").concat(CroppedText, "\">\n                    ").concat(CroppedText, "\n                  </a>\n                ");
+                                        var externalLink = "\n                  <a \n                    xlink:href=\"".concat(svgsMap[cropped_text_1], ".html#img-").concat(croppedDashText, "\" \n                    xlink:title=\"").concat(CroppedText, "\"\n                  >\n                    ").concat(CroppedText, "\n                  </a>\n                ");
                                         text.html(externalLink);
                                     }
                                     else {
@@ -112,30 +110,7 @@ function graphvizSvgFixer(context) {
                                     }
                                 }
                             });
-                            fixSvgDimensions($, svg);
                         });
-                        // remove the path from the svg
-                        $('svg > g > path').remove();
-                        // adjust the viewbox for all the svg.graphviz
-                        // the new one has to fit the dimensions of the svg > g.graph
-                        var svgList = $('svg.graphviz');
-                        for (var _d = 0, svgList_1 = svgList; _d < svgList_1.length; _d++) {
-                            var svg = svgList_1[_d];
-                            var _e = Array.from(svg.children).reduce(function (acc, el) {
-                                var bbox = el.getBBox();
-                                if (!acc.xMin || bbox.x < acc.xMin)
-                                    acc.xMin = bbox.x;
-                                if (!acc.xMax || bbox.x + bbox.width > acc.xMax)
-                                    acc.xMax = bbox.x + bbox.width;
-                                if (!acc.yMin || bbox.y < acc.yMin)
-                                    acc.yMin = bbox.y;
-                                if (!acc.yMax || bbox.y + bbox.height > acc.yMax)
-                                    acc.yMax = bbox.y + bbox.height;
-                                return acc;
-                            }, {}), xMin = _e.xMin, xMax = _e.xMax, yMin = _e.yMin, yMax = _e.yMax;
-                            var viewBox = "".concat(xMin, " ").concat(yMin, " ").concat(xMax - xMin, " ").concat(yMax - yMin);
-                            $(svg).attr('viewBox', viewBox);
-                        }
                         fs.writeFileSync("".concat(props.outDir, "/").concat(htmlFile.route, "/index.html"), $.html());
                     };
                     // for each html file
