@@ -24,4 +24,4 @@ docs-old
 docs-old-2
 # static/img/kaitai_render
 
-!plugins/*/src/**/*.js
+plugins/*/*.js

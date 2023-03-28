@@ -40,13 +40,12 @@ export default function numerateSections(
 
       let sectionLevelCounter = {}; // level -> sectionNumber
       let subsectionMap = []; // subsectionId -> subsectionNumber
-      
-      // TODO: replace -sec-num- also inside table of contents
+      // first we replace the placeholders in the headings
+      // and we fill the subsectionMap
       for (let htmlFile of htmlFilesToFix) {
         let $ = cheerio.load(htmlFile.html);
         // take all headings that include -sec-num- (no h6)
         let sectionNumber = sectionsNumbersMap[htmlFile.routeId];
-        console.log(sectionNumber)
         sectionLevelCounter = {
           1: sectionNumber,
           2: 0,
@@ -78,9 +77,10 @@ export default function numerateSections(
         htmlFile.html = $.html();
       }
 
-      // replace references placeholders
+      // now that we have the subsectionMap, we can replace the references
       for (let htmlFile of htmlFilesToFix) {
         let $ = cheerio.load(htmlFile.html);
+        // replace references placeholders
         let a = $('a');
         for (let aItem of Array.from(a)) {
           let aText = $(aItem).text();
@@ -90,6 +90,19 @@ export default function numerateSections(
             let subsectionNumber = subsectionMap[subsectionId];
             let newAText = aText.replace('-sec-num-ref-', subsectionNumber);
             $(aItem).text(newAText);
+          }
+        }
+        // replace TOC placeholders
+        let tocLinks = $('a.table-of-contents__link');
+        for (let tocLink of Array.from(tocLinks)) {
+          let tocLinkText = $(tocLink).text();
+          if (tocLinkText.includes('-sec-num-')) {
+            let href = $(tocLink).attr('href');
+            // cut the first character (#)
+            let subsectionId = href.substring(1);
+            let subsectionNumber = subsectionMap[subsectionId];
+            let newTocLinkText = tocLinkText.replace('-sec-num-', subsectionNumber);
+            $(tocLink).text(newTocLinkText);
           }
         }
         fs.writeFileSync(`${props.outDir}/${htmlFile.routeId}/index.html`, $.html());

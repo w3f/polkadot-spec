@@ -45,7 +45,7 @@ export default function graphvizSvgFixer(
         let htmlFile = htmlFilesToFix[htmlIndex];
         const $ = cheerio.load(htmlFile.html);
         let svgElements = $('svg.graphviz');
-        for (let svgElement of svgElements) {
+        for (let svgElement of Array.from(svgElements)) {
           let cluster = $(svgElement).find('g > g.cluster')[0];
           let clusterTitle = $(cluster).find('title').text().split("__")[1];
           svgsMap[clusterTitle] = htmlFile.route;
