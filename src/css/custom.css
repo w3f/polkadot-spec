@@ -3,6 +3,11 @@
  * bundles Infima by default. Infima is a CSS framework designed to
  * work well for content-centric websites.
  */
+ @font-face {
+  font-family: "Unbounded";
+  src: url("../../static/fonts/Unbounded.ttf") format("woff2-variations");
+  font-weight: 100 900;
+}
 
 /* You can override the default Infima variables here. */
 :root {
@@ -15,6 +20,7 @@
   --ifm-color-primary-lightest: #ec6db1;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --headingFontFamily: "Unbounded", sans-serif !important;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -27,6 +33,17 @@
   --ifm-color-primary-lighter: #ed47a0;
   --ifm-color-primary-lightest: #ec6db1;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --headingFontFamily: "Unbounded", sans-serif !important;
+}
+
+h1 {
+  /* 
+    custom font-family needs to be once assigned directly to class from font-face definition
+    otherwise it will be omitted in the css bundle by webpack
+  */
+  font-family: "Unbounded", sans-serif !important;;
+  line-height: 1.333333;
+  padding-top: 1.2rem;
 }
 
 .graphviz {
