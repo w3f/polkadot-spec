@@ -8,11 +8,11 @@ export interface HtmlFile {
   html: string;
 }
 
-export default function numerateSections(
+export default function numerationSystem(
   context: LoadContext,
 ): Plugin {
   return {
-    name: 'numerate-sections',
+    name: 'numeration-system',
     async postBuild(props) {
       // init html files array and sectionNumbers mapping
       let htmlFilesToFix: HtmlFile[] = [];
@@ -32,19 +32,36 @@ export default function numerateSections(
         }
         const filePath = `${props.outDir}/${route.id}/index.html`;
         const html = fs.readFileSync(filePath, 'utf8');
-        if (html.includes('-sec-num-')) {
+        if (html.includes('-sec-num-' || '-def-num-')) {
           let htmlFile: HtmlFile = { routeId: route.id, html };
           htmlFilesToFix.push(htmlFile);
         }
       }
 
+      let definitionsMap = [];
+      let defCounter = 1;
       let sectionLevelCounter = {}; // level -> sectionNumber
       let subsectionMap = []; // subsectionId -> subsectionNumber
-      // first we replace the placeholders in the headings
-      // and we fill the subsectionMap
+
+      // first we replace the numbersplaceholders in the headings
+      // and we fill the mappings
       for (let htmlFile of htmlFilesToFix) {
         let $ = cheerio.load(htmlFile.html);
-        // take all headings that include -sec-num- (no h6)
+        // replace definitions numbers placeholders
+        // and fill the definitionsMap
+        let h6s = $('h6');
+        for (let h6 of Array.from(h6s)) {
+          let h6Text = $(h6).text();
+          if (h6Text.includes('-def-num-')) {
+            let id = $(h6).attr('id');
+            definitionsMap[id] = defCounter;
+            let newH6Text = h6Text.replace('-def-num-', defCounter.toString()+".");
+            $(h6).text(newH6Text);
+            defCounter++;
+          }
+        }
+        // replace section numbers placeholders
+        // and fill the subsectionMap
         let sectionNumber = sectionsNumbersMap[htmlFile.routeId];
         sectionLevelCounter = {
           1: sectionNumber,
@@ -77,13 +94,21 @@ export default function numerateSections(
         htmlFile.html = $.html();
       }
 
-      // now that we have the subsectionMap, we can replace the references
+      // now that we have the mappings, we can replace the references
       for (let htmlFile of htmlFilesToFix) {
         let $ = cheerio.load(htmlFile.html);
         // replace references placeholders
         let a = $('a');
         for (let aItem of Array.from(a)) {
           let aText = $(aItem).text();
+          // replace references to definitions
+          if (aText.includes('-def-num-ref-')) {
+            let href = $(aItem).attr('href');
+            let defId = href.split('#')[1];
+            let defNumber = definitionsMap[defId];
+            let newAText = aText.replace('-def-num-ref-', defNumber);
+            $(aItem).text(newAText);
+          }
           // replace references to sections
           if (aText.includes('-sec-num-ref-')) {
             let href = $(aItem).attr('href');
@@ -107,7 +132,6 @@ export default function numerateSections(
           let tocLinkText = $(tocLink).text();
           if (tocLinkText.includes('-sec-num-')) {
             let href = $(tocLink).attr('href');
-            // cut the first character (#)
             let subsectionId = href.substring(1);
             let subsectionNumber = subsectionMap[subsectionId];
             let newTocLinkText = tocLinkText.replace('-sec-num-', subsectionNumber);

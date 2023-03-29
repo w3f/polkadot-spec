@@ -38,8 +38,7 @@ const config = {
 
   plugins: [
     path.join(__dirname, 'plugins', 'graphviz-svg-fixer'),
-    path.join(__dirname, 'plugins', 'numerate-definitions'),
-    path.join(__dirname, 'plugins', 'numerate-sections'),
+    path.join(__dirname, 'plugins', 'numeration-system'),
   ],
 
   // clientModules: [path.resolve(__dirname, './src/js/resizeSvg.js')],
