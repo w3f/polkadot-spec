@@ -57,7 +57,7 @@ Arguments
 Return  
 - A datastructure of the following format:
 
-  ###### Table 6. Details of the version that the data type returns from the Runtime function. {#tabl-rt-core-version}
+  ###### Table -tab-num- Details of the version that the data type returns from the Runtime function. {#tabl-rt-core-version}
 
   | Name                  | Type                                                                  | Description                                     |
   |-----------------------|-----------------------------------------------------------------------|-------------------------------------------------|
@@ -140,7 +140,7 @@ Return
 
 **ApplyExtrinsicResult** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-result-type). This structure can contain multiple nested structures, indicating either module dispatch outcomes or transaction invalidity errors.
 
-###### Table 7. Possible values of varying data type *ApplyExtrinsicResult*. {#tabl-rte-apply-extrinsic-result}
+###### Table -tab-num- Possible values of varying data type *ApplyExtrinsicResult*. {#tabl-rte-apply-extrinsic-result}
 
 | **Id** | **Description**                                               | **Type**                                                                                                 |
 |--------|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
@@ -155,7 +155,7 @@ Return
 
 **DispatchOutcome** is the varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-result-type).
 
-###### Table 8. Possible values of varying data type *DispatchOutcome*. {#tabl-rte-dispatch-outcome}
+###### Table -tab-num- Possible values of varying data type *DispatchOutcome*. {#tabl-rte-dispatch-outcome}
 
 | **Id** | **Description**                                    | **Type**                                                                          |
 |--------|----------------------------------------------------|-----------------------------------------------------------------------------------|
@@ -166,7 +166,7 @@ Return
 
 **DispatchError** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type). Indicates various reasons why a dispatch call failed.
 
-###### Table 9. Possible values of varying data type *DispatchError*. {#tabl-rte-dispatch-error}
+###### Table -tab-num- Possible values of varying data type *DispatchError*. {#tabl-rte-dispatch-error}
 
 | **Id** | **Description**              | **Type**                                                                                   |
 |--------|------------------------------|--------------------------------------------------------------------------------------------|
@@ -179,7 +179,7 @@ Return
 
 **CustomModuleError** is a tuple appended after a possible error in as defined in [Definition -def-num-ref-](chap-runtime-api#defn-rte-dispatch-error).
 
-###### Table 10. Possible values of varying data type *CustomModuleError*. {#tabl-rte-custom-module-error}
+###### Table -tab-num- Possible values of varying data type *CustomModuleError*. {#tabl-rte-custom-module-error}
 
 | **Name** | **Description**                                  | **Type**                                                                                                                                                                           |
 |----------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -195,7 +195,7 @@ Return
 
 **TransactionValidityError** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type). It indicates possible errors that can occur while checking the validity of a transaction.
 
-###### Table 11. Possible values of varying data type *TransactionValidityError*. {#tabl-rte-transaction-validity-error}
+###### Table -tab-num- Possible values of varying data type *TransactionValidityError*. {#tabl-rte-transaction-validity-error}
 
 | **Id** | **Description**                           | **Type**                                                                                    |
 |--------|-------------------------------------------|---------------------------------------------------------------------------------------------|
@@ -206,7 +206,7 @@ Return
 
 **InvalidTransaction** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type) and specifies the invalidity of the transaction in more detail.
 
-###### Table 12. Possible values of varying data type *InvalidTransaction*. {#tabl-rte-invalid-transaction}
+###### Table -tab-num- Possible values of varying data type *InvalidTransaction*. {#tabl-rte-invalid-transaction}
 
 | **Id** | **Description**                                                                                  | **Type**               | **Reject** |
 |--------|--------------------------------------------------------------------------------------------------|------------------------|------------|
@@ -225,7 +225,7 @@ Return
 
 **UnknownTransaction** is a varying data type as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type) and specifies the unknown invalidity of the transaction in more detail.
 
-###### Table 13. Possible values of varying data type *UnknownTransaction*. {#tabl-rte-unknown-transaction}
+###### Table -tab-num- Possible values of varying data type *UnknownTransaction*. {#tabl-rte-unknown-transaction}
 
 | **Id** | **Description**                                                                 | **Type**               | **Reject** |
 |--------|---------------------------------------------------------------------------------|------------------------|------------|
@@ -309,7 +309,7 @@ Arguments
 
   **TransactionSource** is an enum describing the source of a transaction and can have one of the following values:
 
-  ###### Table 14. The *TransactionSource* enum {#tabl-rte-transaction-source}
+  ###### Table -tab-num- The *TransactionSource* enum {#tabl-rte-transaction-source}
 
   | Id  | Name       | Description                                                       |
   |-----|------------|-------------------------------------------------------------------|
@@ -324,7 +324,7 @@ Return
 
   **ValidTransaction** is a tuple that contains information concerning a valid transaction.
 
-  ###### Table 15. The tuple provided by in the case the transaction is judged to be valid.
+  ###### Table -tab-num- The tuple provided by in the case the transaction is judged to be valid.
 
   | **Name**    | **Description**                                                                                                                                                                                           | **Type**                      |
   |-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
@@ -732,7 +732,7 @@ Arguments
 Return  
 - A tuple containing configuration data used by the Babe consensus engine.
 
-  ###### Table 16. The tuple provided by **BabeApi_configuration**. {#tabl-babeapi-configuration}
+  ###### Table -tab-num- The tuple provided by **BabeApi_configuration**. {#tabl-babeapi-configuration}
 
   | **Name**             | **Description**                                                                                                                                                                                                             | **Type**                                                                                                                |
   |----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|

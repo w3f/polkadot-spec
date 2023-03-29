@@ -489,7 +489,7 @@ Interfaces for working with crypto related types from within the runtime.
 
 Cryptographic keys are stored in separate key stores based on their intended use case. The separate key stores are identified by a 4-byte ASCII **key type identifier**. The following known types are available:
 
-###### Table 4. Table of known key type identifiers {#tabl-key-type-ids}
+###### Table -tab-num- Table of known key type identifiers {#tabl-key-type-ids}
 
 | Id   | Description                                |
 |------|--------------------------------------------|
@@ -505,7 +505,7 @@ Cryptographic keys are stored in separate key stores based on their intended use
 
 **EcdsaVerifyError** is a varying data type ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) that specifies the error type when using ECDSA recovery functionality. Following values are possible:
 
-###### Table 5. Table of error types in ECDSA recovery {#tabl-ecdsa-verify-error}
+###### Table -tab-num- Table of error types in ECDSA recovery {#tabl-ecdsa-verify-error}
 
 | Id  | Description               |
 |-----|---------------------------|

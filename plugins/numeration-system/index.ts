@@ -8,6 +8,32 @@ export interface HtmlFile {
   html: string;
 }
 
+const defNum = '-def-num-';
+const defNumRef = '-def-num-ref-';
+const tabNum = '-tab-num-';
+const tabNumRef = '-tab-num-ref-';
+const secNum = '-sec-num-';
+const secNumRef = '-sec-num-ref-';
+const chapNumRef = '-chap-num-ref-';
+const toReplace = [defNum, defNumRef, tabNum, tabNumRef, secNum, secNumRef, chapNumRef];
+
+const replaceReferencePlaceholder = (
+  linkText: string,
+  placeholder: string,
+  linkItem: cheerio.Element,
+  map: any,
+  $: cheerio.CheerioAPI,
+  findId: (href: string) => string,
+) => {
+  if (linkText.includes(placeholder)) {
+    let href = $(linkItem).attr('href');
+    let id = findId(href);
+    let number = map[id];
+    let newLinkText = linkText.replace(placeholder, number);
+    $(linkItem).text(newLinkText);
+  }
+};
+
 export default function numerationSystem(
   context: LoadContext,
 ): Plugin {
@@ -16,32 +42,35 @@ export default function numerationSystem(
     async postBuild(props) {
       // init html files array and sectionNumbers mapping
       let htmlFilesToFix: HtmlFile[] = [];
-      let sectionsNumbersMap = []; // routeId -> sectionNumber
-      let normalSectionsCounter = 1;
-      let appendixSectionsCounter = "A";
+      let chaptersMap = []; // routeId -> sectionNumber
+      let chaptersCounter = 1;
+      let appendixsCounter = "A";
       for (const route of sidebarRoutes) {
         // we don't want to include the main chapters and index in the numbering
         if (route.level != 0 || route.label.includes('Appendix')) {
           if (route.label.includes('Appendix')) {
-            sectionsNumbersMap[route.id] = appendixSectionsCounter;
-            appendixSectionsCounter = String.fromCharCode(appendixSectionsCounter.charCodeAt(0) + 1);
+            chaptersMap[route.id] = appendixsCounter;
+            appendixsCounter = String.fromCharCode(appendixsCounter.charCodeAt(0) + 1);
           } else {
-            sectionsNumbersMap[route.id] = normalSectionsCounter;
-            normalSectionsCounter++;
+            chaptersMap[route.id] = chaptersCounter;
+            chaptersCounter++;
           }
         }
         const filePath = `${props.outDir}/${route.id}/index.html`;
         const html = fs.readFileSync(filePath, 'utf8');
-        if (html.includes('-sec-num-' || '-def-num-')) {
+        let isToFix = toReplace.some((item) => html.includes(item));
+        if (isToFix) {
           let htmlFile: HtmlFile = { routeId: route.id, html };
           htmlFilesToFix.push(htmlFile);
         }
       }
 
       let definitionsMap = [];
-      let defCounter = 1;
+      let defCounter = 0;
+      let tablesMap = [];
+      let tablesCounter = 0;
       let sectionLevelCounter = {}; // level -> sectionNumber
-      let subsectionMap = []; // subsectionId -> subsectionNumber
+      let sectionsMap = []; // subsectionId -> subsectionNumber
 
       // first we replace the numbersplaceholders in the headings
       // and we fill the mappings
@@ -52,17 +81,24 @@ export default function numerationSystem(
         let h6s = $('h6');
         for (let h6 of Array.from(h6s)) {
           let h6Text = $(h6).text();
-          if (h6Text.includes('-def-num-')) {
+          if (h6Text.includes(defNum)) {
+            defCounter++;
             let id = $(h6).attr('id');
             definitionsMap[id] = defCounter;
-            let newH6Text = h6Text.replace('-def-num-', defCounter.toString()+".");
+            let newH6Text = h6Text.replace(defNum, defCounter.toString()+".");
             $(h6).text(newH6Text);
-            defCounter++;
+          }
+          if (h6Text.includes(tabNum)) {
+            tablesCounter++;
+            let id = $(h6).attr('id');
+            tablesMap[id] = tablesCounter;
+            let newH6Text = h6Text.replace(tabNum, tablesCounter.toString()+".");
+            $(h6).text(newH6Text);
           }
         }
         // replace section numbers placeholders
-        // and fill the subsectionMap
-        let sectionNumber = sectionsNumbersMap[htmlFile.routeId];
+        // and fill the sectionsMap
+        let sectionNumber = chaptersMap[htmlFile.routeId];
         sectionLevelCounter = {
           1: sectionNumber,
           2: 0,
@@ -75,7 +111,7 @@ export default function numerationSystem(
         for (let heading of Array.from(headings)) {
           let level = +$(heading).prop('tagName').replace('H', '');
           let headingText = $(heading).text();
-          if (headingText.includes('-sec-num-')) {
+          if (headingText.includes(secNum)) {
             let subsectionId = $(heading).attr('id');
             let subsectionNumber = "";
             if (level > prevLevel) {
@@ -85,8 +121,8 @@ export default function numerationSystem(
             for (let i = 1; i <= level; i++) {
               subsectionNumber += sectionLevelCounter[i] + ".";
             }
-            subsectionMap[subsectionId] = subsectionNumber;
-            let newHeadingText = headingText.replace('-sec-num-', subsectionNumber);
+            sectionsMap[subsectionId] = subsectionNumber;
+            let newHeadingText = headingText.replace(secNum, subsectionNumber);
             $(heading).text(newHeadingText);
             prevLevel = level;
           }
@@ -102,45 +138,25 @@ export default function numerationSystem(
         for (let aItem of Array.from(a)) {
           let aText = $(aItem).text();
           // replace references to definitions
-          if (aText.includes('-def-num-ref-')) {
-            let href = $(aItem).attr('href');
-            let defId = href.split('#')[1];
-            let defNumber = definitionsMap[defId];
-            let newAText = aText.replace('-def-num-ref-', defNumber);
-            $(aItem).text(newAText);
-          }
-          // replace references to sections
-          if (aText.includes('-sec-num-ref-')) {
-            let href = $(aItem).attr('href');
-            let subsectionId = href.split('#')[1];
-            let subsectionNumber = subsectionMap[subsectionId];
-            let newAText = aText.replace('-sec-num-ref-', subsectionNumber);
-            $(aItem).text(newAText);
-          }
-          // replace references to chapters
-          if (aText.includes('-chap-num-ref-')) {
-            let href = $(aItem).attr('href');
-            let routeId = href.substring(1);
-            let sectionNumber = sectionsNumbersMap[routeId];
-            let newAText = aText.replace('-chap-num-ref-', sectionNumber);
-            $(aItem).text(newAText);
-          }
+          replaceReferencePlaceholder(aText, defNumRef, aItem, definitionsMap, $, (href) => href.split('#')[1]);
+          replaceReferencePlaceholder(aText, tabNumRef, aItem, tablesMap, $, (href) => href.split('#')[1]);
+          replaceReferencePlaceholder(aText, secNumRef, aItem, sectionsMap, $, (href) => href.split('#')[1]);
+          replaceReferencePlaceholder(aText, chapNumRef, aItem, chaptersMap, $, (href) => href.substring(1));
         }
         // replace TOC placeholders
         let tocLinks = $('a.table-of-contents__link');
         for (let tocLink of Array.from(tocLinks)) {
           let tocLinkText = $(tocLink).text();
-          if (tocLinkText.includes('-sec-num-')) {
+          if (tocLinkText.includes(secNum)) {
             let href = $(tocLink).attr('href');
             let subsectionId = href.substring(1);
-            let subsectionNumber = subsectionMap[subsectionId];
-            let newTocLinkText = tocLinkText.replace('-sec-num-', subsectionNumber);
+            let subsectionNumber = sectionsMap[subsectionId];
+            let newTocLinkText = tocLinkText.replace(secNum, subsectionNumber);
             $(tocLink).text(newTocLinkText);
           }
         }
         fs.writeFileSync(`${props.outDir}/${htmlFile.routeId}/index.html`, $.html());
       }
-
     },
   }
 };

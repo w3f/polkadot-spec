@@ -6,7 +6,6 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 const math = require('remark-math');
 const katex = require('rehype-katex');
 const path = require('path');
-// const numerateDefinitions = require('./plugins/numerate-definitions');
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
@@ -49,8 +48,8 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          remarkPlugins: [math],
-          rehypePlugins: [katex],
+          beforeDefaultRemarkPlugins: [math],
+          beforeDefaultRehypePlugins: [katex],
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -61,7 +60,6 @@ const config = {
         blog: false, // Optional: disable the blog plugin
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
-
         },
         debug: true,
       }),
