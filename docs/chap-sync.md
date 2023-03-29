@@ -46,7 +46,7 @@ The Polkadot Host must inspect the digest header of each block and delegate cons
 
 Block validation is the process by which a node asserts that a block is fit to be added to the blockchain. This means that the block is consistent with the current state of the system and transitions to a new valid state.
 
-New blocks can be received by the Polkadot Host via other peers ([Section -sec-num-ref-](chap-networking#sect-msg-block-request)) or from the Host’s own consensus engine ([Chapter 5](sect-block-production)). Both the Runtime and the Polkadot Host then need to work together to assure block validity. A block is deemed valid if the block author had authorship rights for the slot in which the block was produce as well as if the transactions in the block constitute a valid transition of states. The former criterion is validated by the Polkadot Host according to the block production consensus protocol. The latter can be verified by the Polkadot Host invoking entry into the Runtime as ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-execute-block)) as a part of the validation process. Any state changes created by this function on successful execution are persisted.
+New blocks can be received by the Polkadot Host via other peers ([Section -sec-num-ref-](chap-networking#sect-msg-block-request)) or from the Host’s own consensus engine ([Chapter -chap-num-ref-](sect-block-production)). Both the Runtime and the Polkadot Host then need to work together to assure block validity. A block is deemed valid if the block author had authorship rights for the slot in which the block was produce as well as if the transactions in the block constitute a valid transition of states. The former criterion is validated by the Polkadot Host according to the block production consensus protocol. The latter can be verified by the Polkadot Host invoking entry into the Runtime as ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-execute-block)) as a part of the validation process. Any state changes created by this function on successful execution are persisted.
 
 The Polkadot Host implements [Import-and-Validate-Block](chap-sync#algo-import-and-validate-block) to assure the validity of the block.
 
@@ -63,4 +63,4 @@ where
 
 - $\text{Verify-Authorship-Right}$ is part of the block production consensus protocol and is described in [Verify-Authorship-Right](sect-block-production#algo-verify-authorship-right).
 
-- *Finalized block* and *finality* are defined in [Chapter 6](sect-finality).
+- *Finalized block* and *finality* are defined in [Chapter -chap-num-ref-](sect-finality).

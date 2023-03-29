@@ -130,7 +130,7 @@ $$
 
 #### -sec-num- Transcript {#id-transcript}
 
-A VRF transcript serves as a domain-specific separator of cryptographic protocols and is represented as a mathematical object, as defined by Merlin, which defines how that object is generated and encoded. The usage of the transcript is implementation specific, such as for certain mechanisms in the Availability & Validity chapter ([Chapter 8](chapter-anv)), and is therefore described in more detail in those protocols. The input value used to initiate the transcript is referred to as a *context* ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-context)).
+A VRF transcript serves as a domain-specific separator of cryptographic protocols and is represented as a mathematical object, as defined by Merlin, which defines how that object is generated and encoded. The usage of the transcript is implementation specific, such as for certain mechanisms in the Availability & Validity chapter ([Chapter -chap-num-ref-](chapter-anv)), and is therefore described in more detail in those protocols. The input value used to initiate the transcript is referred to as a *context* ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-context)).
 
 ###### Definition -def-num- VRF Contex {#defn-vrf-context}
 
@@ -228,7 +228,7 @@ The **Controller key** is a type of account key that acts on behalf of the Stash
 | I’m Online | SR25519    |
 | Parachain  | SR25519    |
 
-Session keys must be accessible by certain Polkadot Host APIs defined in Appendix [Appendix B](chap-host-api). Session keys are *not* meant to control the majority of the users’ funds and should only be used for their intended purpose.
+Session keys must be accessible by certain Polkadot Host APIs defined in [Appendix -chap-num-ref-](chap-host-api). Session keys are *not* meant to control the majority of the users’ funds and should only be used for their intended purpose.
 
 #### -sec-num- Holding and staking funds {#sect-staking-funds}
 

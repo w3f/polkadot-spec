@@ -92,7 +92,7 @@ ${v}{a}{l}{i}{d}{i}{t}{y}{C}{h}{e}{c}{k}_{{{\root}}}$: Predicate that checks the
 
 ## -sec-num- Runtime Environment for Light Clients {#sect-runtime-environment-lightclient}
 
-Technically, though a runtime execution environment is not necessary to build a light client, most clients require interacting with the Runtime and the state of the blockchain for integrity checks at the minimum. One can imagine an application scenarios like an on-chain light client which only listens to the latest state without ever adding extrinsics. Current implementations of Light Nodes (for e.g. Smoldot) uses the wasmtime as its runtime environment to drastically simplify the code. The performance of wasmtime is satisfying enough to not require a native runtime. The details of runtime API that the environment needs to suppport can be found in Appendix C ([Appendix C](chap-runtime-api)).
+Technically, though a runtime execution environment is not necessary to build a light client, most clients require interacting with the Runtime and the state of the blockchain for integrity checks at the minimum. One can imagine an application scenarios like an on-chain light client which only listens to the latest state without ever adding extrinsics. Current implementations of Light Nodes (for e.g. Smoldot) uses the wasmtime as its runtime environment to drastically simplify the code. The performance of wasmtime is satisfying enough to not require a native runtime. The details of runtime API that the environment needs to suppport can be found in ([Appendix -chap-num-ref-](chap-runtime-api)).
 
 ## -sec-num- Light Client Messages {#sect-light-msg}
 

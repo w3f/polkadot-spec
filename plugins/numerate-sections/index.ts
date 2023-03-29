@@ -29,12 +29,12 @@ export default function numerateSections(
             sectionsNumbersMap[route.id] = normalSectionsCounter;
             normalSectionsCounter++;
           }
-          const filePath = `${props.outDir}/${route.id}/index.html`;
-          const html = fs.readFileSync(filePath, 'utf8');
-          if (html.includes('-sec-num-')) {
-            let htmlFile: HtmlFile = { routeId: route.id, html };
-            htmlFilesToFix.push(htmlFile);
-          }
+        }
+        const filePath = `${props.outDir}/${route.id}/index.html`;
+        const html = fs.readFileSync(filePath, 'utf8');
+        if (html.includes('-sec-num-')) {
+          let htmlFile: HtmlFile = { routeId: route.id, html };
+          htmlFilesToFix.push(htmlFile);
         }
       }
 
@@ -84,11 +84,20 @@ export default function numerateSections(
         let a = $('a');
         for (let aItem of Array.from(a)) {
           let aText = $(aItem).text();
+          // replace references to sections
           if (aText.includes('-sec-num-ref-')) {
             let href = $(aItem).attr('href');
             let subsectionId = href.split('#')[1];
             let subsectionNumber = subsectionMap[subsectionId];
             let newAText = aText.replace('-sec-num-ref-', subsectionNumber);
+            $(aItem).text(newAText);
+          }
+          // replace references to chapters
+          if (aText.includes('-chap-num-ref-')) {
+            let href = $(aItem).attr('href');
+            let routeId = href.substring(1);
+            let sectionNumber = sectionsNumbersMap[routeId];
+            let newAText = aText.replace('-chap-num-ref-', sectionNumber);
             $(aItem).text(newAText);
           }
         }

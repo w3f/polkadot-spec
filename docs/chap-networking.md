@@ -328,7 +328,7 @@ The Polkadot Host can request the state in form of a key/value list at a specifi
 
 When receiving state entries from the state response messages ([Definition -def-num-ref-](chap-networking#defn-msg-state-response)), the node can verify the entries with the entry proof (id *1* in *KeyValueStorage*) against the merkle root in the block header (of the block specified in [Definition -def-num-ref-](chap-networking#defn-msg-state-request)). Once the state response message claims that all entries have been sent (id *3* in *KeyValueStorage*), the node can use all collected entry proofs and validate it against the merkle root to confirm that claim.
 
-See the the synchronization chapter for more information ([Chapter 3](chap-sync)).
+See the the synchronization chapter for more information ([Chapter -chap-num-ref-](chap-sync)).
 
 ###### Definition -def-num- State Request {#defn-msg-state-request}
 
@@ -364,7 +364,7 @@ and *StateEntry*:
 
 The warp sync protocols allows nodes to retrieve blocks from remote peers where authority set changes occurred. This can be used to speed up synchronization to the latest state.
 
-See the the synchronization chapter for more information ([Chapter 3](chap-sync)).
+See the the synchronization chapter for more information ([Chapter -chap-num-ref-](chap-sync)).
 
 ###### Definition -def-num- Warp Sync Proof {#defn-warp-sync-proof}
 
@@ -407,7 +407,7 @@ Transactions are sent over the `/dot/transactions/1` substream.
 
 ### -sec-num- GRANDPA Messages {#sect-msg-grandpa}
 
-The exchange of GRANDPA messages is conducted on the substream. The process for the creation and distributing these messages is described in [Chapter 6](sect-finality). The underlying messages are specified in this section.
+The exchange of GRANDPA messages is conducted on the substream. The process for the creation and distributing these messages is described in [Chapter -chap-num-ref-](sect-finality). The underlying messages are specified in this section.
 
 ###### Definition -def-num- Grandpa Gossip Message {#defn-gossip-message}
 

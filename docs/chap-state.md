@@ -52,7 +52,7 @@ In the course of formation of a (distributed) blockchain, it is possible that th
 
 The **block tree** of a blockchain, denoted by ${B}{T}$ is the union of all different versions of the blockchain observed by the Polkadot Host such that every block is a node in the graph and ${B}_{{1}}$ is connected to ${B}_{{2}}$ if ${B}_{{1}}$ is a parent of ${B}_{{2}}$.
 
-When a block in the block tree gets finalized, there is an opportunity to prune the block tree to free up resources into branches of blocks that do not contain all of the finalized blocks or those that can never be finalized in the blockchain ([Chapter 6](sect-finality)).
+When a block in the block tree gets finalized, there is an opportunity to prune the block tree to free up resources into branches of blocks that do not contain all of the finalized blocks or those that can never be finalized in the blockchain ([Chapter -chap-num-ref-](sect-finality)).
 
 ###### Definition -def-num- Pruned Block Tree {#defn-pruned-tree}
 
@@ -578,7 +578,7 @@ The Polkadot Host executes the calls of Runtime entrypoints inside a Wasm Virtua
 
 It is acceptable behavior that the Runtime panics during execution of a function in order to indicate an error. The Polkadot Host must be able to catch that panic and recover from it.
 
-In this section, we specify the general setup for an Executor that calls into the Runtime. In [Appendix C](chap-runtime-api) we specify the parameters and return values for each Runtime entrypoint separately.
+In this section, we specify the general setup for an Executor that calls into the Runtime. In [Appendix -chap-num-ref-](chap-runtime-api) we specify the parameters and return values for each Runtime entrypoint separately.
 
 ###### Definition -def-num- Call Runtime Entrypoint {#defn-call-into-runtime}
 

@@ -116,7 +116,7 @@ Arguments
 - None.
 
 Return  
-- The scale-encoded ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) runtime metadata as described in [Chapter 12](sect-metadata).
+- The scale-encoded ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) runtime metadata as described in [Chapter -chap-num-ref-](sect-metadata).
 
 ## -sec-num- Module BlockBuilder {#sect-runtime-blockbuilder-module}
 

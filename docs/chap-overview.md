@@ -6,7 +6,7 @@ The Polkadot Protocol differentiates between different classes of Polkadot Hosts
 
 ## -sec-num- Light Client {#sect-client-light}
 
-The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on recent state of the blockchain, and to add extrinsics (transactions). It does not maintain the full state, rather queries the full node on the latest finalized state and verifies the authenticity of the responses trustlessly. Details of specifications focused for Light Clients can be found in [Chapter 7](sect-lightclient).
+The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource constrained environments like browsers, mobile devices or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on recent state of the blockchain, and to add extrinsics (transactions). It does not maintain the full state, rather queries the full node on the latest finalized state and verifies the authenticity of the responses trustlessly. Details of specifications focused for Light Clients can be found in [Chapter -chap-num-ref-](sect-lightclient).
 
 ## -sec-num- Full Node {#sect-node-full}
 
@@ -32,14 +32,14 @@ The authoring node covers all the features of the full node but instead of just 
 
   1.  Verify that the Host’s session key is included in the current Epoch’s authority set ([Section -sec-num-ref-](chap-sync#sect-authority-set)).
 
-  2.  Run the BABE lottery ([Chapter 5](sect-block-production)) and wait for the next assigned slot in order to produce a block.
+  2.  Run the BABE lottery ([Chapter -chap-num-ref-](sect-block-production)) and wait for the next assigned slot in order to produce a block.
 
   3.  Gossip any produced blocks to all connected peers ([Section -sec-num-ref-](chap-networking#sect-msg-block-announce)).
 
   4.  Run the catch-up protocol ([Section -sec-num-ref-](sect-finality#sect-grandpa-catchup)) to make sure that the node is participating in the current round and not a past round.
 
-  5.  Run the GRANDPA rounds protocol ([Chapter 6](sect-finality)).
+  5.  Run the GRANDPA rounds protocol ([Chapter -chap-num-ref-](sect-finality)).
 
 ## -sec-num- Relaying Node {#sect-node-relaying}
 
-The relaying node covers all the features of the authoring node, but also participants in the availability and validity process to process new parachain blocks as described in [Chapter 8](chapter-anv).
+The relaying node covers all the features of the authoring node, but also participants in the availability and validity process to process new parachain blocks as described in [Chapter -chap-num-ref-](chapter-anv).
