@@ -135,25 +135,20 @@ export default function numerationSystem(
         let $ = cheerio.load(htmlFile.html);
         // replace references placeholders
         let a = $('a');
+        let defaultFindId = (href: string) => href.split('#')[1];
         for (let aItem of Array.from(a)) {
           let aText = $(aItem).text();
           // replace references to definitions
-          replaceReferencePlaceholder(aText, defNumRef, aItem, definitionsMap, $, (href) => href.split('#')[1]);
-          replaceReferencePlaceholder(aText, tabNumRef, aItem, tablesMap, $, (href) => href.split('#')[1]);
-          replaceReferencePlaceholder(aText, secNumRef, aItem, sectionsMap, $, (href) => href.split('#')[1]);
+          replaceReferencePlaceholder(aText, defNumRef, aItem, definitionsMap, $, defaultFindId);
+          replaceReferencePlaceholder(aText, tabNumRef, aItem, tablesMap, $, defaultFindId);
+          replaceReferencePlaceholder(aText, secNumRef, aItem, sectionsMap, $, defaultFindId);
           replaceReferencePlaceholder(aText, chapNumRef, aItem, chaptersMap, $, (href) => href.substring(1));
         }
         // replace TOC placeholders
         let tocLinks = $('a.table-of-contents__link');
         for (let tocLink of Array.from(tocLinks)) {
           let tocLinkText = $(tocLink).text();
-          if (tocLinkText.includes(secNum)) {
-            let href = $(tocLink).attr('href');
-            let subsectionId = href.substring(1);
-            let subsectionNumber = sectionsMap[subsectionId];
-            let newTocLinkText = tocLinkText.replace(secNum, subsectionNumber);
-            $(tocLink).text(newTocLinkText);
-          }
+          replaceReferencePlaceholder(tocLinkText, defNumRef, tocLink, definitionsMap, $, defaultFindId);
         }
         fs.writeFileSync(`${props.outDir}/${htmlFile.routeId}/index.html`, $.html());
       }

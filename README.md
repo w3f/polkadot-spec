@@ -12,6 +12,8 @@ npm run serve
 
 This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
+**NOTE**: To see the results of the plugins, for now you need to clean the `/build/assets/js` folder after the build.
+
 ### Build
 
 ```
