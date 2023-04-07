@@ -75,7 +75,7 @@ export default function numerationSystem(
       // first we replace the numbersplaceholders in the headings
       // and we fill the mappings
       for (let htmlFile of htmlFilesToFix) {
-        let $ = cheerio.load(htmlFile.html);
+        let $ = cheerio.load(htmlFile.html) as cheerio.CheerioAPI;
         // replace definitions numbers placeholders
         // and fill the definitionsMap
         let h6s = $('h6');
@@ -132,7 +132,7 @@ export default function numerationSystem(
 
       // now that we have the mappings, we can replace the references
       for (let htmlFile of htmlFilesToFix) {
-        let $ = cheerio.load(htmlFile.html);
+        let $ = cheerio.load(htmlFile.html) as cheerio.CheerioAPI;
         // replace references placeholders
         let a = $('a');
         let defaultFindId = (href: string) => href.split('#')[1];
@@ -148,7 +148,7 @@ export default function numerationSystem(
         let tocLinks = $('a.table-of-contents__link');
         for (let tocLink of Array.from(tocLinks)) {
           let tocLinkText = $(tocLink).text();
-          replaceReferencePlaceholder(tocLinkText, defNumRef, tocLink, definitionsMap, $, defaultFindId);
+          replaceReferencePlaceholder(tocLinkText, secNum, tocLink, sectionsMap, $, defaultFindId);
         }
         fs.writeFileSync(`${props.outDir}/${htmlFile.routeId}/index.html`, $.html());
       }

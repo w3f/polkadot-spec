@@ -13,16 +13,6 @@
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="8,-98 8,-797 780,-797 780,-98 8,-98"/>
 <text text-anchor="middle" x="394" y="-781.8" font-family="Times,serif" font-size="14.00">MetadataTypeDefinition</text>
 </g>
-<g id="clust2" class="cluster">
-<title>cluster__array</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="525.5,-397 525.5,-508 758.5,-508 758.5,-397 525.5,-397"/>
-<text text-anchor="middle" x="642" y="-492.8" font-family="Times,serif" font-size="14.00">MetadataTypeDefinition::Array</text>
-</g>
-<g id="clust3" class="cluster">
-<title>cluster__sequence</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="530.5,-300 530.5,-389 753.5,-389 753.5,-300 530.5,-300"/>
-<text text-anchor="middle" x="642" y="-373.8" font-family="Times,serif" font-size="14.00">MetadataTypeDefinition::Sequence</text>
-</g>
 <g id="clust4" class="cluster">
 <title>cluster__primitive</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="538,-203 538,-292 747,-292 747,-203 538,-203"/>
@@ -42,6 +32,16 @@
 <title>cluster__compact</title>
 <polygon fill="none" stroke="black" stroke-dasharray="1,5" points="530.5,-106 530.5,-195 753.5,-195 753.5,-106 530.5,-106"/>
 <text text-anchor="middle" x="642" y="-179.8" font-family="Times,serif" font-size="14.00">MetadataTypeDefinition::Compact</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster__array</title>
+<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="525.5,-397 525.5,-508 758.5,-508 758.5,-397 525.5,-397"/>
+<text text-anchor="middle" x="642" y="-492.8" font-family="Times,serif" font-size="14.00">MetadataTypeDefinition::Array</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster__sequence</title>
+<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="530.5,-300 530.5,-389 753.5,-389 753.5,-300 530.5,-300"/>
+<text text-anchor="middle" x="642" y="-373.8" font-family="Times,serif" font-size="14.00">MetadataTypeDefinition::Sequence</text>
 </g>
 <!-- metadata_type_definition__seq -->
 <g id="node1" class="node">
