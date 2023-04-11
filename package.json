@@ -5,7 +5,7 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "./kaitai_render.sh; ./compile_plugins.sh; docusaurus build",
+    "build": "./kaitai_render.sh; ./compile_plugins.sh; node plugins/numeration-system-2/index.js; docusaurus build",
     "build_no_kaitai": "./compile_plugins.sh; docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

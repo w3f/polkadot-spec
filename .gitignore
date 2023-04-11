@@ -25,3 +25,4 @@ docs-old-2
 # static/img/kaitai_render
 
 plugins/*/*.js
+docs/*.md
