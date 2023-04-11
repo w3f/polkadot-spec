@@ -35,6 +35,11 @@ const replaceReferencePlaceholder = (
   }
 };
 
+const getIdFromHeaderLine = (line: string) => {
+  let id = line.split(' ').pop();
+  return id.substring(2, id.length - 1);
+}
+
 const numerationSystem = () => {
   // init md files array and sectionNumbers mapping
   let mdFilesToCompile: MdFile[] = [];
@@ -91,14 +96,14 @@ const numerationSystem = () => {
       if (line.startsWith('######')) {
         if (line.includes(defNum)) {
           defCounter++;
-          let id = line.split(' ')[1];
+          let id = getIdFromHeaderLine(line)
           definitionsMap[id] = defCounter;
           let newLine = line.replace(defNum, defCounter.toString()+".");
           lines[i] = newLine;
         }
         if (line.includes(tabNum)) {
           tablesCounter++;
-          let id = line.split(' ')[1];
+          let id = getIdFromHeaderLine(line)
           tablesMap[id] = tablesCounter;
           let newLine = line.replace(tabNum, tablesCounter.toString()+".");
           lines[i] = newLine;
@@ -106,8 +111,7 @@ const numerationSystem = () => {
       } else if (line.startsWith('##')) {
         if (line.includes(secNum)) {
           // split the line by spaces and take last element, it will be like this: {#id-ext_storage_read}
-          let subsectionId = line.split(' ').pop();
-          subsectionId = subsectionId.substring(1, subsectionId.length - 1);
+          let subsectionId = getIdFromHeaderLine(line)
           let level = +line.split(' ')[0].length;
           if (level > prevLevel) {
             sectionLevelCounter[level] = 0;
@@ -127,12 +131,13 @@ const numerationSystem = () => {
     mdFile.md = lines.join('\n');
   }
 
+  const defaultFindId = (href: string) => href.split('#')[1];
   // now that we have the mappings, we can replace the references
   for (let mdFile of mdFilesToCompile) {
     // find all the links, they are in the format [XXX -placeholder-](YYY*ZZZ)
-    const defaultFindId = (href: string) => href.split('#')[1];
-    let links = mdFile.md.match(/\[.*\]\(.*\)/g);
-    console.log(links)
+    // so inside [] we have two strings separated by a space, and inside () we have just one string
+    // match exactly links that have a placeholder
+    let links = mdFile.md.match(/\[[^\]]+\]\([^\)]+\)/g);
     if (links) {
       for (let link of links) {
         let linkText = link.split(']')[0].substring(1);
@@ -141,7 +146,7 @@ const numerationSystem = () => {
         replaceReferencePlaceholder(mdFile, link, linkText, href, defNumRef, definitionsMap, defaultFindId);
         replaceReferencePlaceholder(mdFile, link, linkText, href, tabNumRef, tablesMap, defaultFindId);
         replaceReferencePlaceholder(mdFile, link, linkText, href, secNumRef, sectionsMap, defaultFindId);
-        replaceReferencePlaceholder(mdFile, link, linkText, href, chapNumRef, chaptersMap, (href) => href.substring(1));
+        replaceReferencePlaceholder(mdFile, link, linkText, href, chapNumRef, chaptersMap, (href) => href);
       }
     }
   }
