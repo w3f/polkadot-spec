@@ -5,8 +5,10 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "build": "./kaitai_render.sh; ./compile_plugins.sh; docusaurus build",
-    "build_no_kaitai": "./compile_plugins.sh; docusaurus build",
+    "build": "./scripts/kaitai_render.sh; ./scripts/compile_preBuild.sh; npm run run_preBuild; docusaurus build",
+    "run_preBuild": "node ./preBuild/graphviz-svg-fixer/index.js; node ./preBuild/numeration-system/index.js",
+    "run_preBuild_no_kaitai": "node ./preBuild/numeration-system/index.js",
+    "build_no_kaitai": "./scripts/compile_preBuild.sh; npm run run_preBuild_no_kaitai; docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "clear": "docusaurus clear",

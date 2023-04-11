@@ -35,11 +35,6 @@ const config = {
     locales: ['en'],
   },
 
-  plugins: [
-    path.join(__dirname, 'plugins', 'graphviz-svg-fixer'),
-    path.join(__dirname, 'plugins', 'numeration-system'),
-  ],
-
   // clientModules: [path.resolve(__dirname, './src/js/resizeSvg.js')],
 
   presets: [
