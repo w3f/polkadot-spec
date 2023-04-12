@@ -1,8 +1,8 @@
-module.exports = function () {
+const resizeSvg = () => {
     const script = () => {
-        ;(function() {
-            var pushState = history.pushState;
-            var replaceState = history.replaceState;
+        (function() {
+            const pushState = history.pushState;
+            const replaceState = history.replaceState;
         
             history.pushState = function() {
                 pushState.apply(history, arguments);
@@ -21,7 +21,7 @@ module.exports = function () {
             });
         })();
 
-        const script = () => {
+        const adjustSvg = () => {
             const svgList = document.querySelectorAll('svg.graphviz');
             svgList.forEach(svg => {
                 if (svg.classList.contains('fixed')) return;
@@ -33,14 +33,18 @@ module.exports = function () {
                 }
             
                 // adjust the viewbox
-                const { xMin, xMax, yMin, yMax } = [...svg.children].reduce((acc, el) => {
-                    const { x, y, width, height } = el.getBBox();
-                    if (!acc.xMin || x < acc.xMin) acc.xMin = x;
-                    if (!acc.xMax || x + width > acc.xMax) acc.xMax = x + width;
-                    if (!acc.yMin || y < acc.yMin) acc.yMin = y;
-                    if (!acc.yMax || y + height > acc.yMax) acc.yMax = y + height;
-                    return acc;
-                }, {});
+                const { xMin, xMax, yMin, yMax } = Array.from(svg.children).reduce(
+                    (acc, el) => {
+                        const { x, y, width, height } = (el as any).getBBox();
+                        if (!acc.xMin || x < acc.xMin) acc.xMin = x;
+                        if (!acc.xMax || x + width > acc.xMax) acc.xMax = x + width;
+                        if (!acc.yMin || y < acc.yMin) acc.yMin = y;
+                        if (!acc.yMax || y + height > acc.yMax) acc.yMax = y + height;
+                        return acc;
+                    },
+                    { xMin: 0, xMax: 0, yMin: 0, yMax: 0 } as { xMin: number, xMax: number, yMin: number, yMax: number }
+                );
+                  
 
                 const viewbox = `${xMin} ${yMin} ${xMax - xMin} ${yMax - yMin}`;
             
@@ -56,7 +60,7 @@ module.exports = function () {
             pageUrl = window.location.href.split("#")[0];
             if (pageUrl !== prevPageUrl) {
                 prevPageUrl = pageUrl;
-                setTimeout(script, 1000);
+                setTimeout(adjustSvg, 1000);
             }
         }
 
@@ -73,3 +77,5 @@ module.exports = function () {
         },
     };
 };
+
+export = resizeSvg;

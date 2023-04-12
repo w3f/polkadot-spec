@@ -36,7 +36,7 @@ const config = {
   },
 
   plugins: [
-    path.resolve(__dirname, 'plugins', 'resizeSvg.js'),
+    path.resolve(__dirname, 'plugins', 'resizeSvg', 'index.js'),
   ],
 
   presets: [

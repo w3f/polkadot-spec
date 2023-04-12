@@ -25,4 +25,5 @@ docs-old-2
 # static/img/kaitai_render
 
 preBuild/*/*.js
+plugins/*/*.js
 docs/*.md
