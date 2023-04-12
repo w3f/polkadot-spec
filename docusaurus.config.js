@@ -35,7 +35,9 @@ const config = {
     locales: ['en'],
   },
 
-  // clientModules: [path.resolve(__dirname, './src/js/resizeSvg.js')],
+  plugins: [
+    path.resolve(__dirname, 'plugins', 'resizeSvg.js'),
+  ],
 
   presets: [
     [
