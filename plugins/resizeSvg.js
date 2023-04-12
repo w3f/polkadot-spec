@@ -29,6 +29,7 @@ module.exports = function () {
                         const script = () => {
                             const svgList = document.querySelectorAll('svg.graphviz');
                             svgList.forEach(svg => {
+                                if (svg.classList.contains('fixed')) return;
                                 // remove the path which is svg > g > path
                                 const childElement = svg.firstElementChild;
                                 const pathTag = childElement.querySelector('path');
@@ -54,23 +55,23 @@ module.exports = function () {
                                 const viewbox = a + " " + b + " " + c + " " + d;
                             
                                 svg.setAttribute('viewBox', viewbox);
+                                svg.classList.add('fixed');
                             });
                         }
 
                         let prevPageUrl = "";
-
-                        window.addEventListener("load", (event) => {
-                            prevPageUrl = window.location.href.split("#")[0];
-                            script();
-                        });
+                        let pageUrl = "";
                         
-                        window.addEventListener('locationchange', function(){
-                            let pageUrl = window.location.href.split("#")[0];
+                        const runScript = () => {
+                            pageUrl = window.location.href.split("#")[0];
                             if (pageUrl !== prevPageUrl) {
-                                setTimeout(script, 1000);
                                 prevPageUrl = pageUrl;
+                                setTimeout(script, 1000);
                             }
-                        })
+                        }
+
+                        window.addEventListener("load", runScript);
+                        window.addEventListener('locationchange', runScript);
                     </script>`
                 ],
             };
