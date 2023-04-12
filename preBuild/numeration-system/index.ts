@@ -14,6 +14,8 @@ const tabNum = '-tab-num-';
 const tabNumRef = '-tab-num-ref-';
 const secNum = '-sec-num-';
 const secNumRef = '-sec-num-ref-';
+const imgNum = '-img-num-';
+const imgNumRef = '-img-num-ref-';
 const chapNumRef = '-chap-num-ref-';
 const toReplace = [defNum, defNumRef, tabNum, tabNumRef, secNum, secNumRef, chapNumRef];
 
@@ -75,6 +77,8 @@ const numerationSystem = () => {
   let tablesCounter = 0;
   let sectionLevelCounter = {}; // level -> sectionNumber
   let sectionsMap = []; // subsectionId -> subsectionNumber
+  let imgMap = [];
+  let imgCounter = 0;
 
   // first we replace the numbersplaceholders in the headings
   // and we fill the mappings
@@ -106,6 +110,13 @@ const numerationSystem = () => {
           let id = getIdFromHeaderLine(line)
           tablesMap[id] = tablesCounter;
           let newLine = line.replace(tabNum, tablesCounter.toString()+".");
+          lines[i] = newLine;
+        }
+        if (line.includes(imgNum)) {
+          imgCounter++;
+          let id = getIdFromHeaderLine(line)
+          imgMap[id] = imgCounter;
+          let newLine = line.replace(imgNum, imgCounter.toString()+".");
           lines[i] = newLine;
         }
       } else if (line.startsWith('##')) {
@@ -147,6 +158,7 @@ const numerationSystem = () => {
         replaceReferencePlaceholder(mdFile, link, linkText, href, tabNumRef, tablesMap, defaultFindId);
         replaceReferencePlaceholder(mdFile, link, linkText, href, secNumRef, sectionsMap, defaultFindId);
         replaceReferencePlaceholder(mdFile, link, linkText, href, chapNumRef, chaptersMap, (href) => href);
+        replaceReferencePlaceholder(mdFile, link, linkText, href, imgNumRef, imgMap, defaultFindId);
       }
     }
   }

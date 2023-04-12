@@ -590,7 +590,7 @@ $$
 {R}={\left\lbrace\begin{matrix}{0}&->&{A}\\{1}&->&\phi\end{matrix}\right.}
 $$
 $$
-{A}={\left({P}_{{{o}{v}}},{D}_{{{p}{v}}}\right)}
+{A}={\left({P}_{{{ov}}},{D}_{{{pv}}}\right)}
 $$
 
 where *0* is followed by the available data, ${A}$, and *1* indicates the the requested candidate hash was not found. ${P}_{{{o}{v}}}$ is the PoV block ([Definition -def-num-ref-](chapter-anv#defn-para-block)) and ${D}_{{{p}{v}}}$ is the persisted validation data ([Definition -def-num-ref-](chap-runtime-api#defn-persisted-validation-data)).
@@ -600,7 +600,7 @@ where *0* is followed by the available data, ${A}$, and *1* indicates the the re
 The collation fetching request is sent by clients who want to retrieve the advertised collation at the specified relay chain block. The request is a datastructure of the following format:
 
 $$
-{\left({B}_{{h}},{P}_{{{i}{d}}}\right)}
+{\left({B}_{{h}},{P}_{{{id}}}\right)}
 $$
 
 where ${B}_{{h}}$ is the hash of the relay chain block and ${P}_{{{i}{d}}}$ is the parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)). The response message is defined in [Definition -def-num-ref-](chapter-anv#net-msg-collation-fetching-response).

@@ -92,10 +92,10 @@ Polkadot nodes replicate each other’s state by syncing the history of the extr
 
 A Polkadot block consists a *block header* ([Definition -def-num-ref-](chap-state#defn-block-header)) and a *block body* ([Definition -def-num-ref-](chap-state#defn-block-body)). The *block body* in turn is made up out of *extrinsics* , which represent the generalization of the concept of *transactions*. *Extrinsics* can contain any set of external data the underlying chain wishes to validate and track.
 
-###### Image: Block {#img-block}
+###### Image -img-num- Block {#img-block}
 import Block from '/static/img/kaitai_render/block.svg';
 
-<Block className="graphviz" />
+<Block className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Block Header {#defn-block-header}
 
@@ -111,10 +111,10 @@ The **header of block B**, ${H}_{{h}}{\left({B}\right)}$, is a 5-tuple containin
 
 - **digest:** this field is used to store any chain-specific auxiliary data, which could help the light clients interact with the block without the need of accessing the full storage as well as consensus-related data including the block signature. This field is indicated as ${H}_{{d}}$ ([Definition -def-num-)).
 
-###### Image: Block Header {#img-block-header}
+###### Image -img-num- Block Header {#img-block-header}
 import BlockHeader from '/static/img/kaitai_render/block_header.svg';
 
-<BlockHeader className="graphviz" />
+<BlockHeader className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Header Digest {#defn-digest}
 
@@ -142,10 +142,10 @@ where
 
 [TABLE]
 
-###### Image: Digest {#img-digest}
+###### Image -img-num- Digest {#img-digest}
 import Digest from '/static/img/kaitai_render/digest.svg';
 
-<Digest className="graphviz" />
+<Digest className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Header Hash {#defn-block-header-hash}
 
@@ -165,10 +165,10 @@ $$
 
 Where each ${E}_{{i}}\in{\mathbb{{B}}}$ is a SCALE encoded extrinsic.
 
-###### Image: Block Body {#img-block-body}
+###### Image -img-num- Block Body {#img-block-body}
 import BlockBody from '/static/img/kaitai_render/block_body.svg';
 
-<BlockBody className="graphviz"/>
+<BlockBody className="graphviz fix-img-size"/>
 
 ## -sec-num- Extrinsics {#sect-extrinsics}
 
@@ -207,7 +207,7 @@ where
 
 - $\text{Longest-Chain}$ is defined in [Definition -def-num-ref-](chap-state#defn-longest-chain).
 
-- ${\tt{TaggedTransactionQueue\_validate\_transaction}}$ is a Runtime entrypoint specified in [Section -sec-num-ref-](chap-runtime-api#sect-rte-validate-transaction) and ${R}{e}{q}{u}{i}{r}{e}{s}{\left({R}\right)}$, ${P}{r}{i}{\quad\text{or}\quad}{i}{t}{y}{\left({R}\right)}$ and ${P}{r}{o}{p}{a}{g}{a}{t}{e}{\left({R}\right)}$ refer to the corresponding fields in the tuple returned by the entrypoint when it deems that ${T}$ is valid.
+- ${\tt{TaggedTransactionQueue\_validate\_transaction}}$ is a Runtime entrypoint specified in [Section -sec-num-ref-](chap-runtime-api#sect-rte-validate-transaction) and ${Requires}{\left({R}\right)}$, ${Priority}{\left({R}\right)}$ and ${Propagate}{\left({R}\right)}$ refer to the corresponding fields in the tuple returned by the entrypoint when it deems that ${T}$ is valid.
 
 - $\text{Provided-Tags}{\left({T}\right)}$ is the list of tags that transaction ${T}$ provides. The Polkadot Host needs to keep track of tags that transaction ${T}$ provides as well as requires after validating it.
 
@@ -601,7 +601,7 @@ The size of the provided WASM memory should be based on the value of the storage
 In general, all data exchanged between the Polkadot Host and the Runtime is encoded using SCALE codec described in [Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec). Therefore all runtime entrypoints have the following identical Wasm function signatures:
 
 ``` rouge
-(func ${r}{u}{n}{t}{i}{m}{e}_{{e}}{n}{t}{r}{y}{p}\oint{\left({p}{a}{r}{a}{m}$\right.}data i32) (param $len i32) (result i64))
+(func $runtime_entrypoint (param $data i32) (param $len i32) (result i64))
 ```
 
 In each invocation of a Runtime entrypoints, the argument(s) which are supposed to be sent to the entrypoint, need to be SCALE encoded into a byte array ${B}$ ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) and copied into a section of Wasm shared memory managed by the shared allocator described in [Section -sec-num-ref-](chap-state#sect-memory-management).

@@ -40,10 +40,10 @@ where
 
 - ${t}_{{r}}$ is the type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) of the runtime.
 
-###### Image: Metadata {#img-metadata}
+###### Image -img-num- Metadata {#img-metadata}
 import Metadata from '/static/img/kaitai_render/metadata.svg';
 
-<Metadata className="graphviz" />
+<Metadata className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Runtime Registry Type Entry {#defn-rtm-registry-entry}
 
@@ -74,10 +74,10 @@ where
 
 - ${c}$ is the documentation as sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of strings.
 
-###### Image: Metadata Type {#img-metadata-type}
+###### Image -img-num- Metadata Type {#img-metadata-type}
 import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
 
-<MetadataType className="graphviz" /> 
+<MetadataType className="graphviz fix-img-size" /> 
 
 ###### Definition -def-num- Runtime Type Id {#defn-rtm-type-id}
 
@@ -132,10 +132,10 @@ where
 
   - ${o}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) the bit order type ([external reference](https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder)).
 
-###### Image: Metadata Type Definition {#img-metadata-type-definition}
+###### Image -img-num- Metadata Type Definition {#img-metadata-type-definition}
 import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_definition.svg';
 
-<MetadataTypeDefinition className="graphviz"  />
+<MetadataTypeDefinition className="graphviz fix-img-size"  />
 
 ###### Definition -def-num- Field {#defn-rtm-field}
 
@@ -155,10 +155,10 @@ where
 
 - ${C}$ is a sequence of varying length containing strings of documentation.
 
-###### Image: Metadata Type Fields {#img-metadata-type-fields}
+###### Image -img-num- Metadata Type Fields {#img-metadata-type-fields}
 import MetadataTypeFields from '/static/img/kaitai_render/metadata_type_fields.svg';
 
-<MetadataTypeFields className="graphviz" />
+<MetadataTypeFields className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Variant {#defn-rtm-variant}
 
@@ -178,10 +178,10 @@ where
 
 - ${C}$ is a sequence of strings containing the documentation.
 
-###### Image: Metadata Type Variants {#img-metadata-type-variants}
+###### Image -img-num- Metadata Type Variants {#img-metadata-type-variants}
 import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_variants.svg';
 
-<MetadataTypeVariants className="graphviz" />
+<MetadataTypeVariants className="graphviz fix-img-size" />
 
 ## -sec-num- Pallet Metadata {#sect-rtm-pallet-metadata}
 
@@ -207,10 +207,10 @@ where
 
 - ${i}$ is an unsigned 8-bit integers indicating the index of the pallet, which is used for encoding pallet events and calls.
 
-###### Image: Metadata Pallet {#img-metadata-pallet}
+###### Image -img-num- Metadata Pallet {#img-metadata-pallet}
 import MetadataPallet from '/static/img/kaitai_render/metadata_pallet.svg';
 
-<MetadataPallet className="graphviz" />
+<MetadataPallet className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Pallet Storage Metadata {#defn-rtm-pallet-storage-metadata}
 
@@ -252,10 +252,10 @@ where
 
 - ${C}$ is an array of varying length of strings containing the documentation.
 
-###### Image: Pallet Storage {#img-pallet-storage}
+###### Image -img-num- Pallet Storage {#img-pallet-storage}
 import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
 
-<PalletStorage className="graphviz" />
+<PalletStorage className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Storage Entry Modifier {#defn-rtm-storage-entry-modifier}
 
@@ -281,10 +281,10 @@ $$
 
 where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)). ${H}$ is an array of varying length containing the storage hasher ([Definition -def-num-ref-](sect-metadata#defn-rtm-storage-hasher)).
 
-###### Image: Storage Definition {#img-storage-definition}
+###### Image -img-num- Storage Definition {#img-storage-definition}
 import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg';
 
-<StorageDefinition className="graphviz" />
+<StorageDefinition className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Storage Hasher {#defn-rtm-storage-hasher}
 
@@ -311,10 +311,10 @@ where
 
 - ${C}$ is an array of varying length containing string with the documentation.
 
-###### Image: Pallet Constant {#img-pallet-constant}
+###### Image -img-num- Pallet Constant {#img-pallet-constant}
 import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 
-<PalletConstant className="graphviz" />
+<PalletConstant className="graphviz fix-img-size" />
 
 ## -sec-num- Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
 
@@ -335,7 +335,7 @@ where
 
 - ${a}$ is the type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) of the additional signed data, with the data to be included in the signed payload.
 
-###### Image: Metadata Extrinsic {#img-metadata-extrinsic}
+###### Image -img-num- Metadata Extrinsic {#img-metadata-extrinsic}
 import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';
 
-<MetadataExtrinsic className="graphviz" />
+<MetadataExtrinsic className="graphviz fix-img-size" />

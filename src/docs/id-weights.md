@@ -185,7 +185,7 @@ Information such as legal name must be verified by ID card or passport submissio
 
 The function `request_judgement` from the `identity` pallet allows users to request judgement from a specific registrar.
 
-    (func ${r}{e}{q}{u}{e}{s}{t}_{{j}}{u}{d}\ge{m}{e}{n}{t}{\left({p}{a}{r}{a}{m}$\right.}req_index int) (param $max_fee int))
+    (func $request_judgement (param $req_index int) (param $max_fee int))
 
 - `req_index`: the index which is assigned to the registrar.
 
@@ -246,40 +246,40 @@ The following points must be considered:
 
 The Polkadot Runtime specifies the `MaxRegistrars` constant, which will prevent the list of registrars of reaching an undesired length. This value should have some influence on the benchmarking process.
 
-The benchmarking implementation of for the function ${r}{e}{q}{u}{e}{s}{t}$judgement$ can be defined as follows:
+The benchmarking implementation of for the function ${request}$ ${judgement}$ can be defined as follows:
 
 \Ensure ${\mathcal{{{W}}}}$ \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${a}{m}{o}{u}{n}{t}\leftarrow{1},{M}{a}{x}{R}{e}{g}{i}{s}{t}{r}{a}{r}{s}$} \State \call{Generate-Registrars}{${a}{m}{o}{u}{n}{t}${\rbrace}{S}{t}{a}{t}{e}${c}{a}{l}\le{r}\leftarrow$ \call{Create-Account}{${c}{a}{l}\le{r},{1}$} \State \call{Set-Balance}{${c}{a}{l}\le{r},{100}${\rbrace}{S}{t}{a}{t}{e}${t}{i}{m}{e}\leftarrow$ \call{Timer}{\call{Request-Judgement}{\call{Random}{${a}{m}{o}{u}{n}{t}${\rbrace}$,{100}$}} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}${\rbrace}{E}{n}{d}{F}{\quad\text{or}\quad}{S}{t}{a}{t}{e}${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$
 
 where  
-- Generate-Registrars(${a}{m}{o}{u}{n}{t}$)
+- Generate-Registrars(${amount}$)
 
   Creates number of registrars and inserts those records into storage.
 
-- Create-Account(${n}{a}{m}{e}$, $\in{d}{e}{x}$)
+- Create-Account(${name}$, ${index}$)
 
   Creates a Blake2 hash of the concatenated input of name and index represent- ing the address of a account. This function only creates an address and does not conduct any I/O.
 
-- Set-Balance(${a}{\mathcal{{o}}}{u}{n}{t}$, ${b}{a}{l}{a}{n}{c}{e}$)
+- Set-Balance(${amount}$, ${balance}$)
 
   Sets a initial balance for the specified account in the storage state.
 
-- Timer(${f}{u}{n}{c}{t}{i}{o}{n}$)
+- Timer(${function}$)
 
   Measures the time from the start of the specified f unction to its completion.
 
-- Request-Judgement(${r}{e}{g}{i}{s}{t}{r}{a}{r}$\in{d}{e}{x}$, $max${f}{e}{e}$)
+- Request-Judgement(${registrar}$ ${index}$, ${max}$ ${fee}$)
 
   Calls the corresponding request_judgement Runtime function and passes on the required parameters.
 
-- Random($\nu{m}$)
+- Random(${num}$)
 
   Picks a random number between 0 and num. This should be used when the benchmark should account for unpredictable values.
 
-- Add-To(${c}{o}{l}\le{c}{t}{i}{o}{n}$, ${t}{i}{m}{e}$)
+- Add-To(${collection}$, ${time}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Compute-Weight(${c}{o}{l}\le{c}{t}{i}{o}{n}$)
+- Compute-Weight(${collection}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
@@ -371,7 +371,7 @@ H̱istory Depth indicated as `MaxNominatorRewardedPerValidator` is a fixed const
 
 M̱aximum Nominator Rewarded Per Validator indicated as `MaxNominatorRewardedPerValidator`, specifies the maximum amount of the highest-staked nominators which will get a reward. Those values should have some influence in the benchmarking process.
 
-The benchmarking implementation for the function ${p}{a}{y}{o}{u}{t}$stakers$ can be defined as follows:
+The benchmarking implementation for the function ${payout}$ ${stakers}$ can be defined as follows:
 
 \Ensure ${\mathcal{{{W}}}}$ \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${a}{m}{o}{u}{n}{t}\leftarrow{1},{M}{a}{x}{N}{o}\min{a}\to{r}{R}{e}{w}{a}{r}{d}{e}{d}{P}{e}{r}{V}{a}{l}{i}{d}{a}\to{r}${\rbrace}{F}{\quad\text{or}\quad}{\left\lbrace$\right.}{e}{r}{a}$depth \leftarrow 1,HistoryDepth${\rbrace}{S}{t}{a}{t}{e}$validator \leftarrow${c}{a}{l}{l}{\left\lbrace{G}{e}\ne{r}{a}{t}{e}-{V}{a}{l}{i}{d}{a}\to{r}\right\rbrace}{\left\lbracenull\right\rbrace}{S}{t}{a}{t}{e}{c}{a}{l}{l}{\left\lbrace{V}{a}{l}{i}{d}{a}{t}{e}\right\rbrace}{\left\lbrace$\right.}validator$} \State $nominators \leftarrow${c}{a}{l}{l}{\left\lbrace{G}{e}\ne{r}{a}{t}{e}-{N}{o}\min{a}\to{r}{s}\right\rbrace}{\left\lbrace$\right.}amount$} \For{$nominator \in nominators${\rbrace}{S}{t}{a}{t}{e}{c}{a}{l}{l}{\left\lbrace{N}{o}\min{a}{t}{e}\right\rbrace}{\left\lbrace$\right.}validator, nominator$} \EndFor \State ${e}{r}{a}$\in{d}{e}{x}\leftarrow$ \call{Create-Rewards}{${v}{a}{l}{i}{d}{a}\to{r},{n}{o}\min{a}\to{r}{s},{e}{r}{a}$depth$} \State ${t}{i}{m}{e}\leftarrow${c}{a}{l}{l}{\left\lbrace{T}{i}{m}{e}{r}\right\rbrace}{\left\lbrace{c}{a}{l}{l}{\left\lbrace{P}{a}{y}{o}{u}{t}-{S}{t}{a}{k}{e}{r}{s}\right\rbrace}{\left\lbrace$\right.}\right.}validator$}$, era$\in{d}{e}{x}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$
 
@@ -380,37 +380,37 @@ where
 
   Creates a validators with some unbonded balances.
 
-- Validate(${v}{a}{l}{i}{d}{a}\to{r}$)
+- Validate(${validator}$)
 
   Bonds balances of validator and bonds balances.
 
-- Generate-Nominators(${a}{m}{o}{u}{n}{t}$)
+- Generate-Nominators(${amount}$)
 
   Creates the amount of nominators with some unbonded balances.
 
-- Nominate(${v}{a}{l}{i}{d}{a}\to{r}$, ${n}{o}\min{a}\to{r}$)
+- Nominate(${validator}$, ${nominator}$)
 
   Starts nomination of nominator for validator by bonding balances.
 
-- Create-Rewards(${v}{a}{l}{i}{d}{a}\to{r}$, ${n}{o}\min{a}\to{r}{s}$, $era$depth$)
+- Create-Rewards(${validator}$, ${nominators}$, ${era}$ ${depth}$)
 
   Starts an Era and creates pending rewards for validator and nominators.
 
-- Timer(${f}{u}{n}{c}{t}{i}{o}{n}$)
+- Timer(${function}$)
 
   Measures the time from the start of the specified f unction to its completion.
 
-- Add-To(${c}{o}{l}\le{c}{t}{i}{o}{n}$, ${t}{i}{m}{e}$)
+- Add-To(${collection}$, ${time}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Compute-Weight(${c}{o}{l}\le{c}{t}{i}{o}{n}$)
+- Compute-Weight(${collection}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
 ### -sec-num- Practical Example \#3: `transfer` {#id-practical-example-3-transfer}
 
-The ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ function of the `balances` module is designed to move the specified balance by the sender to the receiver.
+The ${transfer}$ function of the `balances` module is designed to move the specified balance by the sender to the receiver.
 
 #### -sec-num- Analysis {#id-analysis-3}
 
@@ -462,36 +462,36 @@ Executing a benchmark for each balance increment within the balance range for ea
 
 - …​
 
-The parameters itself do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights#algo-benchmark-transfer).
+The parameters itself do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The ${transfer}$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights#algo-benchmark-transfer).
 
 #### -sec-num- Benchmarking Framework {#id-benchmarking-framework-3}
 
-The benchmarking implementation for the Polkadot Runtime function ${t}{r}{a}{n}{\mathsf{{e}}}{r}$ is defined as follows (starting with the Main function):
+The benchmarking implementation for the Polkadot Runtime function ${transfer}$ is defined as follows (starting with the Main function):
 
 \Ensure{${c}{o}{l}\le{c}{t}{i}{o}{n}$: a collection of time measurements of all benchmark iterations} \Function{Main}{} \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \State \textbf{init} ${b}{a}{l}{a}{n}{c}{e}={1}'{000}$ \For{$\in{d}{e}{x}\ge{t}{s}{1},{1}'{000}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Run-Benchmark}{$\in{d}{e}{x},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State \textbf{init} $\in{d}{e}{x}={1}'{000}$ \For{${b}{a}{l}{a}{n}{c}{e}\ge{t}{s}{2},{1}'{000}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Run-Benchmark}{$\in{d}{e}{x},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$ \EndFunction \Function{Run-Benchmark}{$\in{d}{e}{x}$, ${b}{a}{l}{a}{n}{c}{e}$} \State ${s}{e}{n}{d}{e}{r}\leftarrow$ \call{Create-Account}{${c}{a}{l}\le{r},\in{d}{e}{x}$} \State ${r}{e}{c}{i}\pi{e}{n}{t}\leftarrow$ \call{Create-Accouny}{${r}{e}{c}{i}\pi{e}{n}{t},\in{d}{e}{x}$} \State \call{Set-Balance}{${s}{e}{n}{d}{e}{r},{b}{a}{l}{a}{n}{c}{e}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Timer}{\call{Transfer}{${s}{e}{n}{d}{e}{r},{r}{e}{c}{i}\pi{e}{n}{t},{b}{a}{l}{a}{n}{c}{e}$}} \Return ${t}{i}{m}{e}$ \EndFunction
 
 where  
-- Create-Account(${n}{a}{m}{e}$, $\in{d}{e}{x}$)
+- Create-Account(${name}$, ${index}$)
 
   Creates a Blake2 hash of the concatenated input of name and index representing the address of a account. This function only creates an address and does not conduct any I/O.
 
-- Set-Balance(${a}{\mathcal{{o}}}{u}{n}{t}$, ${b}{a}{l}{a}{n}{c}{e}$)
+- Set-Balance(${account}$, ${balance}$)
 
   Sets a initial balance for the specified account in the storage state.
 
-- Transfer(${s}{e}{n}{d}{e}{r}$, ${r}{e}{c}{i}\pi{e}{n}{t}$, ${b}{a}{l}{a}{n}{c}{e}$)
+- Transfer(${sender}$, ${recipient}$, ${balance}$)
 
   Transfers the specified balance from sender to recipient by calling the corresponding Runtime function. This represents the target Runtime function to be benchmarked.
 
-- Add-To(${c}{o}{l}\le{c}{t}{i}{o}{n}$, ${t}{i}{m}{e}$)
+- Add-To(${collection}$, ${time}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Timer(${f}{u}{n}{c}{t}{i}{o}{n}$)
+- Timer(${function}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Compute-Weight(${c}{o}{l}\le{c}{t}{i}{o}{n}$)
+- Compute-Weight(${collection}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
@@ -535,6 +535,7 @@ if ledger.unlocking.is_empty() && ledger.active.is_zero() {
   T::Currency::remove_lock(STAKING_ID, &stash);
   // This is worst case scenario, so we use the full weight and return None
   None
+}
 ```
 
 The resulting call to `Self::kill_stash()` triggers:
@@ -587,19 +588,19 @@ The benchmarking implementation for the Polkadot Runtime function `withdraw_unbo
 \Ensure ${\mathcal{{{W}}}}$ \Function{Main}{} \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${b}{a}{l}{a}{n}{c}{e}\ge{t}{s}{1},{100}$} \State ${s}{t}{a}{s}{h}\leftarrow$ \call{Create-Account}{${s}{t}{a}{s}{h},{1}$} \State ${c}{o}{n}{t}{r}{o}{l}\le{r}\leftarrow$ \call{Create-Account}{${c}{o}{n}{t}{r}{o}{l}\le{r},{1}$} \State \call{Set-Balance}{${s}{t}{a}{s}{h},{100}$} \State \call{Set-Balance}{${c}{o}{n}{t}{r}{o}{l}\le{r},{1}$} \State \call{Bond}{${s}{t}{a}{s}{h},{c}{o}{n}{t}{r}{o}{l}\le{r},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Pass-Era}{} \State \call{UnBond}{${c}{o}{n}{t}{r}{o}{l}\le{r},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Pass-Era}{} \State $time \leftarrow$ \call{Timer}{\call{Withdraw-Unbonded}{${c}{o}{n}{t}{r}{o}{l}\le{r}$}} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$ \EndFunction
 
 where  
-- Create-Account(${n}{a}{m}{e}$, $index$)
+- Create-Account(${name}$, $index$)
 
   Creates a Blake2 hash of the concatenated input of name and index representing the address of a account. This function only creates an address and does not conduct any I/O.
 
-- Set-Balance(${a}{\mathcal{{o}}}{u}{n}{t}$, ${b}{a}{l}{a}{n}{c}{e}$)
+- Set-Balance(${amount}$, ${balance}$)
 
   Sets a initial balance for the specified account in the storage state.
 
-- Bond(${s}{t}{a}{s}{h}$, ${c}{o}{n}{t}{r}{o}{l}\le{r}$, ${a}{m}{o}{u}{n}{t}$)
+- Bond(${stash}$, ${controller}$, ${amount}$)
 
   Bonds the specified amount for the stash and controller pair.
 
-- UnBond(${a}{\mathcal{{o}}}{u}{n}{t}$, ${a}{m}{o}{u}{n}{t}$)
+- UnBond(${account}$, ${amount}$)
 
   Unbonds the specified amount for the given account.
 
@@ -607,19 +608,19 @@ where
 
   Pass one era. Forces the function `withdraw_unbonded` to update the ledger and eventually delete information.
 
-- Withdraw-Unbonded(${c}{o}{n}{t}{r}{o}{l}\le{r}$)
+- Withdraw-Unbonded(${controller}$)
 
   Withdraws the the full unbonded amount of the specified controller account. This represents the target Runtime function to be benchmarked.
 
-- Add-To(${c}{o}{l}\le{c}{t}{i}{o}{n}$, ${t}{i}{m}{e}$)
+- Add-To(${collection}$, ${time}$)
 
   Adds a returned time measurement (time) to collection.
 
-- Timer(${f}{u}{n}{c}{t}{i}{o}{n}$)
+- Timer(${function}$)
 
   Measures the time from the start of the specified f unction to its completion.
 
-- Compute-Weight(${c}{o}{l}\le{c}{t}{i}{o}{n}$)
+- Compute-Weight(${collection}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 
@@ -651,7 +652,7 @@ The Polkadot Runtime defines the following values:
 
 - Weight to fee conversion:
 
-  ${w}{e}{i}{g}{h}{t}$ fee = weight \times (100${u}{D}{O}{T}{s}\div{\left({10}\times{10}'{000}\right)}{)}$
+  ${weight}$ fee = weight \times (100${u}{D}{O}{T}{s}\div{\left({10}\times{10}'{000}\right)}{)}$
 
   A weight of 10’000 (the smallest non-zero weight) is mapped to ${\frac{{{1}}}{{{10}}}}$ of 100 uDOT. This fee will never exceed the max size of an unsigned 128 bit integer.
 

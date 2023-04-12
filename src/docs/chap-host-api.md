@@ -55,7 +55,7 @@ Sets the value under a given key into storage.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype}
 
     (func $ext_storage_set_version_1
-        (param ${k}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}value i64))
+        (param $key i64) (param $value i64))
 
 Arguments  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
@@ -83,7 +83,7 @@ Gets the given key from storage, placing the value into a buffer and returning t
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-3}
 
     (func $ext_storage_read_version_1
-        (param ${k}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}value_out i64) (param $offset i32) (result i64))
+        (param $key i64) (param $value_out i64) (param $offset i32) (result i64))
 
 Arguments  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
@@ -135,7 +135,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype}
 
     (func $ext_storage_clear_prefix_version_2
-        (param ${p}{r}{e}{f}{i}{x}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}limit i64)
+        (param $prefix i64) (param $limit i64)
         (return i64))
 
 Arguments  
@@ -164,7 +164,7 @@ To improve performance, this function is allowed to skip decoding the entire SCA
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-7}
 
     (func $ext_storage_append_version_1
-        (param ${k}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}value i64))
+        (param $key i64) (param $value i64))
 
 Arguments  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
@@ -283,7 +283,7 @@ Sets the value under a given key into the child storage.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-13}
 
     (func $ext_default_child_storage_set_version_1
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64) (param $value i64))
+        (param $child_storage_key i64) (param $key i64) (param $value i64))
 
 Arguments  
 - `child_storage_key` : a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
@@ -299,7 +299,7 @@ Retrieves the value associated with the given key from the child storage.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-14}
 
     (func $ext_default_child_storage_get_version_1
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64) (result i64))
+        (param $child_storage_key i64) (param $key i64) (result i64))
 
 Arguments  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
@@ -315,7 +315,7 @@ Gets the given key from storage, placing the value into a buffer and returning t
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-15}
 
     (func $ext_default_child_storage_read_version_1
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64) (param $value_out i64)
+        (param $child_storage_key i64) (param $key i64) (param $value_out i64)
         (param $offset i32) (result i64))
 
 Arguments  
@@ -336,7 +336,7 @@ Clears the storage of the given key and its value from the child storage. Non-ex
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-16}
 
     (func $ext_default_child_storage_clear_version_1
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64))
+        (param $child_storage_key i64) (param $key i64))
 
 Arguments  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
@@ -358,7 +358,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-2}
 
     (func $ext_default_child_storage_storage_kill_version_2
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}limit i64)
+        (param $child_storage_key i64) (param $limit i64)
         (return i32))
 
 Arguments  
@@ -371,7 +371,7 @@ Arguments
 #### -sec-num- Version 3 - Prototype {#id-version-3-prototype}
 
     (func $ext_default_child_storage_storage_kill_version_3
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}limit i64)
+        (param $child_storage_key i64) (param $limit i64)
         (return i64))
 
 Arguments  
@@ -394,7 +394,7 @@ Checks whether the given key exists in the child storage.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-18}
 
     (func $ext_default_child_storage_exists_version_1
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64) (return i32))
+        (param $child_storage_key i64) (param $key i64) (return i32))
 
 Arguments  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
@@ -410,7 +410,7 @@ Clears the child storage of each key/value pair where the key starts with the gi
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-19}
 
     (func $ext_default_child_storage_clear_prefix_version_1
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}prefix i64))
+        (param $child_storage_key i64) (param $prefix i64))
 
 Arguments  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
@@ -420,7 +420,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-3}
 
     (func $ext_default_child_storage_clear_prefix_version_2
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}prefix i64)
+        (param $child_storage_key i64) (param $prefix i64)
         (param $limit i64) (return i64))
 
 Arguments  
@@ -455,7 +455,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-4}
 
     (func $ext_default_child_storage_root_version_2
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}version i32)
+        (param $child_storage_key i64) (param $version i32)
         (return i64))
 
 Arguments  
@@ -472,7 +472,7 @@ Gets the next key in storage after the given one in lexicographic order ([Defini
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-21}
 
     (func $ext_default_child_storage_next_key_version_1
-        (param $\chi{l}{d}_{{s}}\to{r}{a}\ge_{{k}}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64) (return i64))
+        (param $child_storage_key i64) (param $key i64) (return i64))
 
 Arguments  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
@@ -538,7 +538,7 @@ Generates an *ed25519* key for the given key type using an optional BIP-39 seed 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-23}
 
     (func $ext_crypto_ed25519_generate_version_1
-        (param ${k}{e}{y}_{{t}}{y}{p}{e}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}seed i64) (return i32))
+        (param $key_type_id i32) (param $seed i64) (return i32))
 
 Arguments  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key type identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
@@ -554,7 +554,7 @@ Signs the given message with the `ed25519` key that corresponds to the given pub
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-24}
 
     (func $ext_crypto_ed25519_sign_version_1
-        (param ${k}{e}{y}_{{t}}{y}{p}{e}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}key i32) (param $msg i64) (return i64))
+        (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
 
 Arguments  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key type identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
@@ -572,7 +572,7 @@ Verifies an *ed25519* signature.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-25}
 
     (func $ext_crypto_ed25519_verify_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i64) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
@@ -590,7 +590,7 @@ Registers a ed25519 signature for batch verification. Batch verification is enab
 #### -sec-num- Version 1 {#id-version-1}
 
     (func $ext_crypto_ed25519_batch_verify_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i64) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
@@ -626,7 +626,7 @@ Generates an *sr25519* key for the given key type using an optional BIP-39 seed 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-27}
 
     (func $ext_crypto_sr25519_generate_version_1
-        (param ${k}{e}{y}_{{t}}{y}{p}{e}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}seed i64) (return i32))
+        (param $key_type_id i32) (param $seed i64) (return i32))
 
 Arguments  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
@@ -642,7 +642,7 @@ Signs the given message with the *sr25519* key that corresponds to the given pub
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-28}
 
     (func $ext_crypto_sr25519_sign_version_1
-        (param ${k}{e}{y}_{{t}}{y}{p}{e}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}key i32) (param $msg i64) (return i64))
+        (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
 
 Arguments  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
@@ -660,7 +660,7 @@ Verifies an sr25519 signature.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-29}
 
     (func $ext_crypto_sr25519_verify_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i64) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
@@ -674,7 +674,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-5}
 
     (func $ext_crypto_sr25519_verify_version_2
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i64) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
@@ -692,7 +692,7 @@ Registers a sr25519 signature for batch verification. Batch verification is enab
 #### -sec-num- Version 1 {#id-version-1-2}
 
     (func $ext_crypto_sr25519_batch_verify_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i64) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
@@ -728,7 +728,7 @@ Generates an *ecdsa* key for the given key type using an optional BIP-39 seed an
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-31}
 
     (func $ext_crypto_ecdsa_generate_version_1
-        (param ${k}{e}{y}_{{t}}{y}{p}{e}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}seed i64) (return i32))
+        (param $key_type_id i32) (param $seed i64) (return i32))
 
 Arguments  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
@@ -744,7 +744,7 @@ Signs the hash of the given message with the *ecdsa* key that corresponds to the
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-32}
 
     (func $ext_crypto_ecdsa_sign_version_1
-        (param ${k}{e}{y}_{{t}}{y}{p}{e}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}key i32) (param $msg i64) (return i64))
+        (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
 
 Arguments  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
@@ -762,7 +762,7 @@ Signs the prehashed message with the *ecdsa* key that corresponds to the given p
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-33}
 
     (func $ext_crypto_ecdsa_sign_prehashed_version_1
-        (param ${k}{e}{y}_{{t}}{y}{p}{e}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}key i32) (param $msg i64) (return i64))
+        (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
 
 Arguments  
 - `key_type_id`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
@@ -782,7 +782,7 @@ Verifies the hash of the given message against a ECDSA signature.
 This function allows the verification of non-standard, overflowing ECDSA signatures, an implemenation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature#method.parse_overflowing) function.
 
     (func $ext_crypto_ecdsa_verify_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i64) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature. The signature is 65-bytes in size, where the first 512-bits represent the signature and the other 8 bits represent the recovery ID.
@@ -798,7 +798,7 @@ Arguments
 Does not allow the verification of non-standard, overflowing ECDSA signatures.
 
     (func $ext_crypto_ecdsa_verify_version_2
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i64) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature. The signature is 65-bytes in size, where the first 512-bits represent the signature and the other 8 bits represent the recovery ID.
@@ -816,7 +816,7 @@ Verifies the prehashed message against a ECDSA signature.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-35}
 
     (func $ext_crypto_ecdsa_verify_prehashed_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i32) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i32) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature. The signature is 65-bytes in size, where the first 512-bits represent the signature and the other 8 bits represent the recovery ID.
@@ -834,7 +834,7 @@ Registers a ECDSA signature for batch verification. Batch verification is enable
 #### -sec-num- Version 1 {#id-version-1-3}
 
     (func $ext_crypto_ecdsa_batch_verify_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i64) (param $key i32) (return i32))
+        (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
@@ -854,7 +854,7 @@ Verify and recover a *secp256k1* ECDSA signature.
 This function can handle non-standard, overflowing ECDSA signatures, an implemenation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature#method.parse_overflowing) function.
 
     (func $ext_crypto_secp256k1_ecdsa_recover_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i32) (return i64))
+        (param $sig i32) (param $msg i32) (return i64))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature in RSV format. V should be either `0/1` or `27/28`.
@@ -868,7 +868,7 @@ Arguments
 Does not handle non-standard, overflowing ECDSA signatures.
 
     (func $ext_crypto_secp256k1_ecdsa_recover_version_2
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i32) (return i64))
+        (param $sig i32) (param $msg i32) (return i64))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature in RSV format. V should be either or .
@@ -886,7 +886,7 @@ Verify and recover a *secp256k1* ECDSA signature.
 This function can handle non-standard, overflowing ECDSA signatures, an implemenation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature#method.parse_overflowing) function.
 
     (func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_1
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i32) (return i64))
+        (param $sig i32) (param $msg i32) (return i64))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature in RSV format. V should be either `0/1` or `27/28`.
@@ -900,7 +900,7 @@ Arguments
 Does not handle non-standard, overflowing ECDSA signatures.
 
     (func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_2
-        (param ${s}{i}{g}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}msg i32) (return i64))
+        (param $sig i32) (param $msg i32) (return i64))
 
 Arguments  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature in RSV format. V should be either `0/1` or `27/28`.
@@ -1158,7 +1158,7 @@ Pause the execution until the `deadline` is reached.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-52}
 
-    (func ${e}{x}{t}_{{o}}{f}{f}{c}{h}{a}\in_{{s}}\le{e}{p}_{{u}}{n}{t}{i}{l}_{{v}}{e}{r}{s}{i}{o}{n}_{{1}}{\left({p}{a}{r}{a}{m}$\right.}deadline i64))
+    (func $ext_offchain_sleep_until_version_1 (param $deadline i64))
 
 Arguments  
 - `deadline`: an u64 integer (typed as i64 due to wasm types) specifying the UNIX timestamp ([Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time)).
@@ -1181,7 +1181,7 @@ Sets a value in the local storage. This storage is not part of the consensus, it
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-54}
 
     (func $ext_offchain_local_storage_set_version_1
-        (param ${k}\in{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64) (param $value i64))
+        (param $kind i32) (param $key i64) (param $value i64))
 
 Arguments  
 - `kind`: an i32 integer indicating the storage kind. A value equal to *1* is used for a persistent storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-persistent-storage)) and a value equal to *2* for local storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-local-storage)).
@@ -1197,7 +1197,7 @@ Remove a value from the local storage.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-55}
 
     (func $ext_offchain_local_storage_clear_version_1
-        (param ${k}\in{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64))
+        (param $kind i32) (param $key i64))
 
 Arguments  
 - `kind`: an i32 integer indicating the storage kind. A value equal to *1* is used for a persistent storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-persistent-storage)) and a value equal to *2* for local storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-local-storage)).
@@ -1211,7 +1211,7 @@ Sets a new value in the local storage if the condition matches the current value
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-56}
 
     (fund $ext_offchain_local_storage_compare_and_set_version_1
-        (param ${k}\in{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64) (param $old_value i64)
+        (param $kind i32) (param $key i64) (param $old_value i64)
         (param $new_value i64) (result i32))
 
 Arguments  
@@ -1232,7 +1232,7 @@ Gets a value from the local storage.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-57}
 
     (func $ext_offchain_local_storage_get_version_1
-        (param ${k}\in{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}key i64) (result i64))
+        (param $kind i32) (param $key i64) (result i64))
 
 Arguments  
 - `kind`: an i32 integer indicating the storage kind. A value equal to *1* is used for a persistent storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-persistent-storage)) and a value equal to *2* for local storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-local-storage)).
@@ -1248,7 +1248,7 @@ Initiates a HTTP request given by the HTTP method and the URL. Returns the Id of
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-58}
 
     (func $ext_offchain_http_request_start_version_1
-      (param ${m}{e}{t}{h}{o}{d}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}uri i64) (param $meta i64) (result i64))
+      (param $method i64) (param $uri i64) (param $meta i64) (result i64))
 
 Arguments  
 - `method`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the HTTP method. Possible values are “GET” and “POST”.
@@ -1266,7 +1266,7 @@ Append header to the request. Returns an error if the request identifier is inva
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-59}
 
     (func $ext_offchain_http_request_add_header_version_1
-        (param ${r}{e}{q}{u}{e}{s}{t}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}name i64) (param $value i64) (result i64))
+        (param $request_id i32) (param $name i64) (param $value i64) (result i64))
 
 Arguments  
 - `request_id`: an i32 integer indicating the ID of the started request.
@@ -1284,7 +1284,7 @@ Writes a chunk of the request body. Returns a non-zero value in case the deadlin
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-60}
 
     (func $ext_offchain_http_request_write_body_version_1
-        (param ${r}{e}{q}{u}{e}{s}{t}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}chunk i64) (param $deadline i64) (result i64))
+        (param $request_id i32) (param $chunk i64) (param $deadline i64) (result i64))
 
 Arguments  
 - `request_id`: an i32 integer indicating the ID of the started request.
@@ -1302,7 +1302,7 @@ Returns an array of request statuses (the length is the same as IDs). Note that 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-61}
 
     (func $ext_offchain_http_response_wait_version_1
-        (param ${i}{d}{s}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}deadline i64) (result i64))
+        (param $ids i64) (param $deadline i64) (result i64))
 
 Arguments  
 - `ids`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded array of started request IDs.
@@ -1332,7 +1332,7 @@ Reads a chunk of body response to the given buffer. Returns the number of bytes 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-63}
 
     (func $ext_offchain_http_response_read_body_version_1
-        (param ${r}{e}{q}{u}{e}{s}{t}_{{i}}{d}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}buffer i64) (param $deadline i64) (result i64))
+        (param $request_id i32) (param $buffer i64) (param $deadline i64) (result i64))
 
 Arguments  
 - `request_id`: an i32 integer indicating the ID of the started request.
@@ -1364,7 +1364,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-9}
 
     (func $ext_trie_blake2_256_root_version_2
-        (param ${d}{a}{t}{a}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}version i32)
+        (param $data i64) (param $version i32)
         (result i32))
 
 Arguments  
@@ -1391,7 +1391,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-10}
 
     (func $ext_trie_blake2_256_ordered_root_version_2
-        (param ${d}{a}{t}{a}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}version i32)
+        (param $data i64) (param $version i32)
         (result i32))
 
 Arguments  
@@ -1418,7 +1418,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-11}
 
     (func $ext_trie_keccak_256_root_version_2
-        (param ${d}{a}{t}{a}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}version i32)
+        (param $data i64) (param $version i32)
         (result i32))
 
 Arguments  
@@ -1445,7 +1445,7 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-12}
 
     (func $ext_trie_keccak_256_ordered_root_version_2
-        (param ${d}{a}{t}{a}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}version i32)
+        (param $data i64) (param $version i32)
         (result i32))
 
 Arguments  
@@ -1462,8 +1462,8 @@ Verifies a key/value pair against a Blake2 256-bit merkle root.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-68}
 
     (func $ext_trie_blake2_256_verify_proof_version_1
-        (param ${\sqrt[{i}]{{32}}}{)}{\left({p}{a}{r}{a}{m}$\right.}proof i64)
-        (param ${k}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}value i64)
+        (param $root i32) (param $proof i64)
+        (param $key i64) (param $value i64)
         (result i32))
 
 Arguments  
@@ -1480,8 +1480,8 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-13}
 
     (func $ext_trie_blake2_256_verify_proof_version_2
-        (param ${\sqrt[{i}]{{32}}}{)}{\left({p}{a}{r}{a}{m}$\right.}proof i64)
-        (param ${k}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}value i64)
+        (param $root i32) (param $proof i64)
+        (param $key i64) (param $value i64)
         (param $version i32) (result i32))
 
 Arguments  
@@ -1504,8 +1504,8 @@ Verifies a key/value pair against a Keccak 256-bit merkle root.
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-69}
 
     (func $ext_trie_keccak_256_verify_proof_version_1
-        (param ${\sqrt[{i}]{{32}}}{)}{\left({p}{a}{r}{a}{m}$\right.}proof i64)
-        (param ${k}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}value i64)
+        (param $root i32) (param $proof i64)
+        (param $key i64) (param $value i64)
         (result i32))
 
 Arguments  
@@ -1522,8 +1522,8 @@ Arguments
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-14}
 
     (func $ext_trie_keccak_256_verify_proof_version_2
-        (param ${\sqrt[{i}]{{32}}}{)}{\left({p}{a}{r}{a}{m}$\right.}proof i64)
-        (param ${k}{e}{y}{i}{64}{)}{\left({p}{a}{r}{a}{m}$\right.}value i64)
+        (param $root i32) (param $proof i64)
+        (param $key i64) (param $value i64)
         (param $version i32) (result i32))
 
 Arguments  
@@ -1549,7 +1549,7 @@ Print a number.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-70}
 
-    (func ${e}{x}{t}_{{m}}{i}{s}{c}_{{p}}{r}\int_{\nu}{m}_{{v}}{e}{r}{s}{i}{o}{n}_{{1}}{\left({p}{a}{r}{a}{m}$\right.}value i64))
+    (func $ext_misc_print_num_version_1 (param $value i64))
 
 Arguments  
 - `value`: the number to be printed.
@@ -1560,7 +1560,7 @@ Print a valid UTF8 encoded buffer.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-71}
 
-    (func ${e}{x}{t}_{{m}}{i}{s}{c}_{{p}}{r}\int_{{u}}{t}{f}{8}_{{v}}{e}{r}{s}{i}{o}{n}_{{1}}{\left({p}{a}{r}{a}{m}$\right.}data i64))
+    (func $ext_misc_print_utf8_version_1 (param $data i64))
 
 **Arguments**:
 
@@ -1572,7 +1572,7 @@ Print any buffer in hexadecimal representation.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-72}
 
-    (func ${e}{x}{t}_{{m}}{i}{s}{c}_{{p}}{r}\int_{{h}}{e}{x}_{{v}}{e}{r}{s}{i}{o}{n}_{{1}}{\left({p}{a}{r}{a}{m}$\right.}data i64))
+    (func $ext_misc_print_hex_version_1 (param $data i64))
 
 **Arguments**:
 
@@ -1588,7 +1588,7 @@ Extract the Runtime version of the given Wasm blob by calling `Core_version` ([S
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-73}
 
-    (func ${e}{x}{t}_{{m}}{i}{s}{c}_{{r}}{u}{n}{t}{i}{m}{e}_{{v}}{e}{r}{s}{i}{o}{n}_{{v}}{e}{r}{s}{i}{o}{n}_{{1}}{\left({p}{a}{r}{a}{m}$\right.}data i64) (result i64))
+    (func $ext_misc_runtime_version_version_1 (param $data i64) (result i64))
 
 Arguments  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the Wasm blob.
@@ -1605,7 +1605,7 @@ Allocates the given number of bytes and returns the pointer to that memory locat
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-74}
 
-    (func ${e}{x}{t}_{{a}}{l}{l}{o}{c}{a}\to{r}_{{m}}{a}{l}{l}{o}{c}_{{v}}{e}{r}{s}{i}{o}{n}_{{1}}{\left({p}{a}{r}{a}{m}$\right.}size i32) (result i32))
+    (func $ext_allocator_malloc_version_1 (param $size i32) (result i32))
 
 Arguments  
 - `size`: the size of the buffer to be allocated.
@@ -1618,7 +1618,7 @@ Free the given pointer.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-75}
 
-    (func ${e}{x}{t}_{{a}}{l}{l}{o}{c}{a}\to{r}_{{\mathfrak{{e}}}}{e}_{{v}}{e}{r}{s}{i}{o}{n}_{{1}}{\left({p}{a}{r}{a}{m}$\right.}ptr i32))
+    (func $ext_allocator_free_version_1 (param $ptr i32))
 
 Arguments  
 - `ptr`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the memory buffer to be freed.
@@ -1642,7 +1642,7 @@ Request to print a log message on the host. Note that this will be only displaye
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-76}
 
     (func $ext_logging_log_version_1
-        (param $\le{v}{e}{l}{i}{32}{)}{\left({p}{a}{r}{a}{m}$\right.}target i64) (param $message i64))
+        (param $level i32) (param $target i64) (param $message i64))
 
 Arguments  
 - `level`: the log level ([Definition -def-num-ref-](chap-host-api#defn-logging-log-level)).

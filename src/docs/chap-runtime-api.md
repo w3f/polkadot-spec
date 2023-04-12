@@ -30,7 +30,7 @@ The **Runtime API Call Convention** describes that all functions receive and ret
 
 ``` rouge
 (func $generic_runtime_entry
-  (param ${p}{t}{r}{i}{32}{)}{\left({p}{a}{r}{m}$\right.}len i32) (result i64))
+  (param $ptr i32) (parm $len i32) (result i64))
 ```
 
 where `ptr` points to the SCALE encoded tuple of the parameters passed to the function and `len` is the length of this data, while `result` is a pointer-size (Definition [Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE-encoded return data.

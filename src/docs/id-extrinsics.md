@@ -31,13 +31,13 @@ The most significant bit of ${T}_{{v}}$ indicates whether the transaction is **s
 Version 4 of the Polkadot extrinsic format is defined as follows:
 
 $$
-{T}_{{b}}\:={\left({A}_{{i}},{S}{i}{g},{E},{M}_{{i}},{F}_{{i}}{\left({m}\right)}\right)}
+{T}_{{b}}\:={\left({A}_{{i}},{Sig},{E},{M}_{{i}},{F}_{{i}}{\left({m}\right)}\right)}
 $$
 
 where  
 - ${A}_{{i}}$: the 32-byte address of the sender ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-address)).
 
-- ${S}{i}{g}$: the signature of the sender ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-signature)).
+- ${Sig}$: the signature of the sender ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-signature)).
 
 - ${E}$: the extra data for the extrinsic ([Definition -def-num-ref-](id-extrinsics#defn-extra-data)).
 
@@ -51,9 +51,9 @@ Account Id, ${A}_{{i}}$, is the 32-byte address of the sender of the extrinsic a
 
 ###### Definition -def-num- Extrinsic Signature {#defn-extrinsic-signature}
 
-The signature, ${S}{i}{g}$, is a varying data type indicating the used signature type, followed by the signature created by the extrinsic author. The following types are supported:
+The signature, ${Sig}$, is a varying data type indicating the used signature type, followed by the signature created by the extrinsic author. The following types are supported:
 
-${S}{i}{g}\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{0},&\text{Ed25519, followed by: }\ {\left({b}_{{0}},\ldots,{b}_{{{63}}}\right)}$ 1, & \text{Sr25519, followed by: } (b_0, ...,b\_{63}) ${2},&\text{Ecdsa, followed by: }\ {\left({b}_{{0}},\ldots,{b}_{{{64}}}\right)}{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}$
+${Sig}:=\begin{\left\lbrace{cases}\right\rbrace}{0},&\text{Ed25519, followed by: }\ {\left({b}_{{0}},\ldots,{b}_{{{63}}}\right)}$ 1, & \text{Sr25519, followed by: } (b_0, ...,b\_{63}) ${2},&\text{Ecdsa, followed by: }\ {\left({b}_{{0}},\ldots,{b}_{{{64}}}\right)}\end{\left\lbrace{cases}\right\rbrace}$
 
 Signature types vary in sizes, but each individual type is always fixed-size and therefore does not contain a length prefix. `Ed25519` and `Sr25519` signatures are 512-bit while `Ecdsa` is 520-bit, where the last 8 bits are the recovery ID.
 
@@ -119,44 +119,44 @@ Extrinsic **mortality** is a mechanism which ensures that an extrinsic is only v
 
 The mortality mechanism works with two related values:
 
-- ${M}_{{{p}{e}{r}}}$: the period of validity in terms of block numbers from the block hash specified as ${H}_{{h}}{\left({B}\right)}$ in the payload ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-signature)). The requirement is ${M}_{{{p}{e}{r}}}\geq{4}$ and ${M}_{{{p}{e}{r}}}$ must be the power of two, such as `32`, `64`, `128`, etc.
+- ${M}_{{{per}}}$: the period of validity in terms of block numbers from the block hash specified as ${H}_{{h}}{\left({B}\right)}$ in the payload ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-signature)). The requirement is ${M}_{{{per}}}\geq{4}$ and ${M}_{{{per}}}$ must be the power of two, such as `32`, `64`, `128`, etc.
 
-- ${M}_{{{p}{h}{a}}}$: the phase in the period that this extrinsic’s lifetime begins. This value is calculated with a formula and validators can use this value in order to determine which block hash is included in the payload. The requirement is ${M}_{{{p}{h}{a}}}<{M}_{{{p}{e}{r}}}$.
+- ${M}_{{{pha}}}$: the phase in the period that this extrinsic’s lifetime begins. This value is calculated with a formula and validators can use this value in order to determine which block hash is included in the payload. The requirement is ${M}_{{{pha}}}<{M}_{{{per}}}$.
 
-In order to tie a transaction’s lifetime to a certain block (${H}_{{i}}{\left({B}\right)}$) after it was issued, without wasting precious space for block hashes, block numbers are divided into regular periods and the lifetime is instead expressed as a "phase" (${M}_{{{p}{h}{a}}}$) from these regular boundaries:
+In order to tie a transaction’s lifetime to a certain block (${H}_{{i}}{\left({B}\right)}$) after it was issued, without wasting precious space for block hashes, block numbers are divided into regular periods and the lifetime is instead expressed as a "phase" (${M}_{{{pha}}}$) from these regular boundaries:
 
 $$
-{M}_{pha}={H}_{{i}}{\left({B}\right)} \; mod \; {M}_{{{p}{e}{r}}}
+{M}_{pha}={H}_{{i}}{\left({B}\right)} \; mod \; {M}_{{{per}}}
 $$
 
-${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$ are then included in the extrinsic, as clarified in [Definition -def-num-ref-](id-extrinsics#defn-extra-data), in the SCALE encoded form of ${T}_{mor}$ ([Section -sec-num-ref-](id-extrinsics#sect-mortality-encoding)). Polkadot validators can use ${M}_{{{p}{h}{a}}}$ to figure out the block hash included in the payload, which will therefore result in a valid signature if the extrinsic is within the specified period or an invalid signature if the extrinsic "died".
+${M}_{{{per}}}$ and ${M}_{{{pha}}}$ are then included in the extrinsic, as clarified in [Definition -def-num-ref-](id-extrinsics#defn-extra-data), in the SCALE encoded form of ${T}_{mor}$ ([Section -sec-num-ref-](id-extrinsics#sect-mortality-encoding)). Polkadot validators can use ${M}_{{{pha}}}$ to figure out the block hash included in the payload, which will therefore result in a valid signature if the extrinsic is within the specified period or an invalid signature if the extrinsic "died".
 
 #### -sec-num- Example {#id-example}
 
-The extrinsic author choses ${M}_{{{p}{e}{r}}}={256}$ at block `10'000`, resulting with ${M}_{{{p}{h}{a}}}={16}$. The extrinsic is then valid for blocks ranging from `10'000` to `10'256`.
+The extrinsic author choses ${M}_{{{per}}}={256}$ at block `10'000`, resulting with ${M}_{{{pha}}}={16}$. The extrinsic is then valid for blocks ranging from `10'000` to `10'256`.
 
 #### -sec-num- Encoding {#sect-mortality-encoding}
 
-${T}_{mor}$ refers to the SCALE encoded form of type ${M}_{{{p}{e}{r}}}$ and ${M}_{{{p}{h}{a}}}$. ${T}_{mor}$ is the size of two bytes if the extrinsic is considered mortal, or simply one bytes with the value equal to zero if the extrinsic is considered immortal.
+${T}_{mor}$ refers to the SCALE encoded form of type ${M}_{{{per}}}$ and ${M}_{{{pha}}}$. ${T}_{mor}$ is the size of two bytes if the extrinsic is considered mortal, or simply one bytes with the value equal to zero if the extrinsic is considered immortal.
 
 $$
-{T}_{mor}\:={E}{n}{c}_{{{S}{C}}}{\left({M}_{{{p}{e}{r}}},{M}_{{{p}{h}{a}}}\right)}
+{T}_{mor}\:={E}{n}{c}_{{{S}{C}}}{\left({M}_{{{per}}},{M}_{{{pha}}}\right)}
 $$
 
 The SCALE encoded representation of mortality ${T}_{mor}$ deviates from most other types, as it’s specialized to be the smallest possible value, as described in [Encode Mortality](id-extrinsics#algo-mortality-encode) and [Decode Mortality](id-extrinsics#algo-mortality-decode).
 
 If the extrinsic is immortal, specify a single byte with the value equal to zero.
 
-\Require{${M}_{{{p}{e}{r}}},{M}_{{{p}{h}{a}}}$} \Return ${0}{e}{n}{s}{p}{a}{c}{e}\text{}{f}{\left\lbrace{\quad\text{if}\quad}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}\text{}{t}{\left\lbrace{e}{x}{t}{r}\in{s}{i}{c}{i}{s}{i}{m}{mor}{t}{a}{l}\right\rbrace}$ \State \textbf{init} ${f}{a}{c}\to{r}=$\call{Limit}{${M}_{{{p}{e}{r}}}>>{12},{1},\phi$} \State \textbf{init} $\le{f}{t}=$\call{Limit}{\call{TZ}{${M}_{{{p}{e}{r}}}$}$-{1},{1},{15}$} \State \textbf{init} ${r}{i}{g}{h}{t}={\frac{{{M}_{{{p}{h}{a}}}}}{{{f}{a}{c}\to{r}}}}<<{4}$ \Return $\le{f}{t}{\mid}{r}{i}{g}{h}{t}$ \Require{${T}_{mor}$} \Return $\text{}{t}{\left\lbrace{I}{m}{mor}{t}{a}{l}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}\text{}{f}{\left\lbrace{\quad\text{if}\quad}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}{T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}={0}$ \State \textbf{init} ${e}{n}{c}={T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}+{\left({T}^{{{b}{1}}}_{\left\lbrace{mor}\right\rbrace}<<{8}\right)}$ \State \textbf{init} ${M}_{{{p}{e}{r}}}={2}<<{\left({e}{n}{c}$\right.} mod${\left({1}<<{4}\right)}{)}$ \State \textbf{init} ${f}{a}{c}\to{r}=$ \call{Limit}{${M}_{{{p}{e}{r}}}>>{12},{1},\phi$} \State \textbf{init} ${M}_{{{p}{h}{a}}}={\left({e}{n}{c}>>{4}\right)}\cdot{f}{a}{c}\to{r}$ \Return ${\left({M}_{{{p}{e}{r}}},{M}_{{{p}{h}{a}}}\right)}$
+\Require{${M}_{{{per}}},{M}_{{{pha}}}$} \Return ${0}{e}{n}{s}{p}{a}{c}{e}\text{}{f}{\left\lbrace{\quad\text{if}\quad}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}\text{}{t}{\left\lbrace{e}{x}{t}{r}\in{s}{i}{c}{i}{s}{i}{m}{mor}{t}{a}{l}\right\rbrace}$ \State \textbf{init} ${f}{a}{c}\to{r}=$\call{Limit}{${M}_{{{per}}}>>{12},{1},\phi$} \State \textbf{init} $\le{f}{t}=$\call{Limit}{\call{TZ}{${M}_{{{per}}}$}$-{1},{1},{15}$} \State \textbf{init} ${r}{i}{g}{h}{t}={\frac{{{M}_{{{pha}}}}}{{{f}{a}{c}\to{r}}}}<<{4}$ \Return $\le{f}{t}{\mid}{r}{i}{g}{h}{t}$ \Require{${T}_{mor}$} \Return $\text{}{t}{\left\lbrace{I}{m}{mor}{t}{a}{l}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}\text{}{f}{\left\lbrace{\quad\text{if}\quad}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}{T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}={0}$ \State \textbf{init} ${e}{n}{c}={T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}+{\left({T}^{{{b}{1}}}_{\left\lbrace{mor}\right\rbrace}<<{8}\right)}$ \State \textbf{init} ${M}_{{{per}}}={2}<<{\left({e}{n}{c}$\right.} mod${\left({1}<<{4}\right)}{)}$ \State \textbf{init} ${f}{a}{c}\to{r}=$ \call{Limit}{${M}_{{{per}}}>>{12},{1},\phi$} \State \textbf{init} ${M}_{{{pha}}}={\left({e}{n}{c}>>{4}\right)}\cdot{f}{a}{c}\to{r}$ \Return ${\left({M}_{{{per}}},{M}_{{{pha}}}\right)}$
 
 where  
 - ${T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}$: the first byte of ${T}_{mor}$.
 
 - ${T}^{{{b}{1}}}_{\left\lbrace{mor}\right\rbrace}$: the second byte of ${T}_{mor}$.
 
-- Limit($\nu{m}$, $\min$, $\max$): Ensures that $\nu{m}$ is between $\min$ and $\max$. If $\min$ or $\max$ is defined as $\phi$, then there is no requirement for the specified minimum/maximum.
+- Limit(${num}$, ${min}$, ${max}$): Ensures that ${num}$ is between ${min}$ and ${max}$. If ${min}$ or ${max}$ is defined as $\phi$, then there is no requirement for the specified minimum/maximum.
 
-- TZ($\nu{m}$): returns the number of trailing zeros in the binary representation of $\nu{m}$. For example, the binary representation of `40` is `0010 1000`, which has three trailing zeros.
+- TZ(${num}$): returns the number of trailing zeros in the binary representation of ${num}$. For example, the binary representation of `40` is `0010 1000`, which has three trailing zeros.
 
 - $>>$: performs a binary right shift operation.
 

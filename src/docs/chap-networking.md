@@ -483,7 +483,7 @@ $$
 where  
 - ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-- ${i}{d}_{{{\mathbb{{V}}}}}$ is the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+- ${id}_{{{\mathbb{{V}}}}}$ is the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
 - ${{V}_{{v}}^{{r}}}{\left({B}\right)}$ is a 256-bit array containing the GRANDPA vote for block ${B}$ ([Definition -def-num-)).
 
