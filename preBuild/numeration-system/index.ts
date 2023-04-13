@@ -97,7 +97,7 @@ const numerationSystem = () => {
     };
     for (let i = 0; i < lines.length; i++) {
       let line = lines[i];
-      if (line.startsWith('######')) {
+      if (line.includes('######')) {
         if (line.includes(defNum)) {
           defCounter++;
           let id = getIdFromHeaderLine(line)
@@ -119,7 +119,7 @@ const numerationSystem = () => {
           let newLine = line.replace(imgNum, imgCounter.toString()+".");
           lines[i] = newLine;
         }
-      } else if (line.startsWith('##')) {
+      } else if (line.includes('##')) {
         if (line.includes(secNum)) {
           // split the line by spaces and take last element, it will be like this: {#id-ext_storage_read}
           let subsectionId = getIdFromHeaderLine(line)

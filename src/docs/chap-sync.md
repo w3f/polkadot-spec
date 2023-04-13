@@ -38,7 +38,7 @@ The authorities and their corresponding weights can be retrieved from the Runtim
 
 ### -sec-num- Runtime-to-Consensus Engine Message {#sect-consensus-message-digest}
 
-The authority list ([Definition -def-num-) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition -def-num-)) to the block header of block ${B}$ which caused the transition in the authority set.
+The authority list ([Definition -def-num-ref-](chap-sync##defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition -def-num-ref-](chap-state#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
 
 The Polkadot Host must inspect the digest header of each block and delegate consensus messages to their consensus engines. The BABE and GRANDPA consensus engine must react based on the type of consensus messages it receives. The active GRANDPA authorities can only vote for blocks that occurred after the finalized block in which they were selected. Any votes for blocks before the came into effect would get rejected.
 
@@ -53,9 +53,9 @@ The Polkadot Host implements [Import-and-Validate-Block](chap-sync#algo-import-a
 \require \$B, \text{Just}(B)\$ \state \call{Set-Storage-State-At}{\$P(B)\$} \if{\$\text{Just}(B) \neq \emptyset\$} \state \call{Verify-Block-Justification}{\$B, \text{Just}(B)\$} \if{\$B~\textbf{is}~\text{Finalized}~\textbf{and}~P(B)~\textbf{is not}~\text{Finalized}\$} \state \call{Mark-as-Final}{\$P(B)\$} \endif \endif \if{\$H_p(B) \notin PBT\$} \return \endif \state \call{Verify-Authorship-Right}{\$\text{Head}(B)\$} \state \$B \leftarrow\$ \call{Remove-Seal}{\$B\$} \state \$R \leftarrow\$ \call{Call-Runtime-Entry}{\$\texttt{Core\\execute\\block}, B\$} \state \$B \leftarrow\$ \call{Add-Seal}{\$B\$} \if{\$R =\$ \textsc{True}} \state \call{Persist-State}{} \endif
 
 where  
-- $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition -def-num-)) before submitting it to the Runtime.
+- $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition -def-num-ref-](chap-state#defn-digest)) before submitting it to the Runtime.
 
-- $\text{Add-Seal}$ adds the Seal digest back to the block ([Definition -def-num-)) for later propagation.
+- $\text{Add-Seal}$ adds the Seal digest back to the block ([Definition -def-num-ref-](chap-state#defn-digest)) for later propagation.
 
 - $\text{Persist-State}$ implies the persistence of any state changes created by ${\mathtt{\text{Core\_execute\_block}}}$ ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-execute-block)) on successful execution.
 

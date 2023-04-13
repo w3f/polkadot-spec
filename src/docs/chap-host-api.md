@@ -146,7 +146,7 @@ Arguments
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the following variant, ${k}$:
 
   $$
-  {k}={\left\lbrace\begin{matrix}{0}&->{c}\\{1}&->{c}\end{matrix}\right.}
+  {k}={\left\lbrace\begin{matrix}{0}&\rightarrow{c}\\{1}&\rightarrow{c}\end{matrix}\right.}
   $$
 
   where *0* indicates that all keys of the child storage have been removed, followed by the number of removed keys, ${c}$. The variant *1* indicates that there are remaining keys, followed by the number of removed keys.
@@ -382,7 +382,7 @@ Arguments
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the following variant, ${k}$:
 
   $$
-  {k}={\left\lbrace\begin{matrix}{0}&->{c}\\{1}&->{c}\end{matrix}\right.}
+  {k}={\left\lbrace\begin{matrix}{0}&\rightarrow{c}\\{1}&\rightarrow{c}\end{matrix}\right.}
   $$
 
   where *0* indicates that all keys of the child storage have been removed, followed by the number of removed keys, ${c}$. The variant *1* indicates that there are remaining keys, followed by the number of removed keys.
@@ -433,7 +433,7 @@ Arguments
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the following variant, ${k}$:
 
   $$
-  {k}={\left\lbrace\begin{matrix}{0}&->{c}\\{1}&->{c}\end{matrix}\right.}
+  {k}={\left\lbrace\begin{matrix}{0}&\rightarrow{c}\\{1}&\rightarrow{c}\end{matrix}\right.}
   $$
 
   where *0* indicates that all keys of the child storage have been removed, followed by the number of removed keys, ${c}$. The variant *1* indicates that there are remaining keys, followed by the number of removed keys.

@@ -64,7 +64,7 @@ $$
 $$
 
 where  
-- $\text{msg}$: is an byte array containing the message to be signed ([Definition -def-num-)).
+- $\text{msg}$: is an byte array containing the message to be signed ([Definition -def-num-ref-](sect-finality#defn-vote)).
 
 - ${r}$: is an unsigned 64-bit integer is the round number.
 
@@ -94,7 +94,7 @@ Note that ${J}^{{{r},\text{pc}}}{\left({B}\right)}$ can only be used by a non-vo
 
 The GRANDPA protocol dictates how an honest voter should vote in each sub-round, which is described by [Play-Grandpa-Round](sect-finality#algo-grandpa-round). After defining what constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
 
-###### Definition -def-num- Equivocation {#defn-equivocation}
+###### Definition -def-num- Equivocation {#defn-voter-equivocation}
 
 Voter ${v}$ **equivocates** if they broadcast two or more valid votes to blocks during one voting sub-round. In such a situation, we say that ${v}$ is an **equivocator** and any vote ${{V}_{{v}}^{{{r},\text{stage}}}}{\left({B}\right)}$ cast by ${v}$ in that sub-round is an **equivocatory vote**, and
 
@@ -174,7 +174,7 @@ $$
 
 Note that in practice we only need to check the inequality for those ${B}'>{{B}_{{v}}^{{{r},\text{pv}}}}$ where ${\left|{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{pc}}}}{\left({B}'\right)}\right|}>{0}$.
 
-###### Definition -def-num- GRANDPA Consensus Message {#defn-consensus-message-babe}
+###### Definition -def-num- GRANDPA Consensus Message {#defn-consensus-message-grandpa}
 
 $\text{CM}_{{g}}$, the consensus message for GRANDPA, is of the following format:
 
@@ -184,7 +184,40 @@ $$
 
 where
 
-[TABLE]
+**$N_{\text{delay}}$** is an unsigned 32-bit integer indicating how deep in the
+chain the announcing block must be before the change is applied.
+
+**1** Implies *scheduled change*: Schedule an authority set change after the
+given delay of ${N_{\text{delay}} := |\text{SubChain}(B,B')|}$ where ${B'}$ is the
+block where the change is applied. The earliest digest of this type in a
+single block will be respected, unless a force change is present, in which case
+the force change takes precedence.
+
+**2** Implies *forced change*: Schedule a forced authority set change after the
+given delay of ${N_{\text{delay}} := |\text{SubChain}(B,m + B')|}$ where ${B'}$ is
+the block where the change is applied. The earliest digest
+of this type in a block will be respected.
+
+Forced changes are explained further in [Section -sec-num-ref-](sect-finality#sect-finality-forced-changes).
+
+**3** Implies *on disabled*: An index to the individual authority in the current
+authority list ([Definition -def-num-ref-](chap-sync#defn-authority-list)) that should be immediately disabled
+until the next authority set changes. When an authority gets disabled, the node
+should stop performing any authority functionality from that authority,
+including authoring blocks and casting GRANDPA votes for finalization.
+Similarly, other nodes should ignore all messages from the indicated authority
+which pertain to their authority role.
+
+**4** Implies *pause*: A signal to pause the current authority set after the
+given delay of ${N_{\text{delay}} := |\text{SubChain}(B,B')|}$ where ${B'}$ is a
+block where the change is applied. Once applied, the authorities should stop
+voting.
+
+**5** Implies *resume*: A signal to resume the current authority set after the
+given delay of ${N_{\text{delay}} := |\text{SubChain}(B,B')|}$ where ${B'}$ is the
+block where the change is applied. Once applied, the authorities should resume
+voting.
+
 
 ###### Definition -def-num- BEEFY Consensus Message {#defn-consensus-message-beefy}
 
@@ -272,7 +305,7 @@ where
 
 where the condition for *completability* is defined in [Definition -def-num-ref-](sect-finality#defn-grandpa-completable).
 
-Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although [Play-Grandpa-Round](sect-finality#algo-grandpa-round) prevents us from moving to the round ${r}+{1}$ before finalizing the best final candidate of round ${r}-{1}$) The example in [Definition -def-num-ref-](sect-finality#exmp-candid-unfinalized) serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
+Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although [Play-Grandpa-Round](sect-finality#algo-grandpa-round) prevents us from moving to the round ${r}+{1}$ before finalizing the best final candidate of round ${r}-{1}$) The example in [Definition -def-num-ref-](sect-finality#defn-unfinalized-candidate) serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
 
 ###### Definition -def-num- Unfinalized Candidate {#defn-unfinalized-candidate}
 

@@ -89,7 +89,7 @@ This function executes a full block and all its extrinsics and updates the state
 
 This function should be called when a fully complete block is available that is not actively being built on, such as blocks received from other peers. State changes resulted from calling this function are usually meant to persist when the block is imported successfully.
 
-Additionally, the seal digest in the block header, as described in [Definition -def-num-), must be removed by the Polkadot host before submitting the block.
+Additionally, the seal digest in the block header, as described in [Definition -def-num-ref-](chap-state#defn-digest), must be removed by the Polkadot host before submitting the block.
 
 Arguments  
 - A block represented as a tuple consisting of a block header, as described in [Definition -def-num-ref-](chap-state#defn-block-header), and the block body, as described in [Definition -def-num-ref-](chap-state#defn-block-body).
@@ -421,7 +421,7 @@ Return
 - An array of core states, S, of the following format:
 
   $$
-  {S}={\left\lbrace\begin{matrix}{0}&->&{C}_{{o}}\\{1}&->&{C}_{{s}}\\{2}&->&\phi\end{matrix}\right.}
+  {S}={\left\lbrace\begin{matrix}{0}&\rightarrow&{C}_{{o}}\\{1}&\rightarrow&{C}_{{s}}\\{2}&\rightarrow&\phi\end{matrix}\right.}
   $$ 
   $$
   {C}_{{o}}={\left({n}_{{u}},{B}_{{o}},{B}_{{t}},{n}_{{t}},{b},{G}_{{i}},{C}_{{h}},{C}_{{d}}\right)}
@@ -468,7 +468,7 @@ Return
 A occupied core assumption is used for fetching certain pieces of information about a parachain by using the relay chain API. The assumption indicates how the Runtime API should compute the result. The assumptions, A, is a varying datatype of the following format:
 
 $$
-{A}={\left\lbrace\begin{matrix}{0}&->&\phi\\{1}&->&\phi\\{2}&->&\phi\end{matrix}\right.}
+{A}={\left\lbrace\begin{matrix}{0}&\rightarrow&\phi\\{1}&\rightarrow&\phi\\{2}&\rightarrow&\phi\end{matrix}\right.}
 $$
 
 where *0* indicates that the candidate occupying the core was made available and included to free the core, *1* indicates that it timed-out and freed the core without advancing the parachain and *2* indicates that the core was not occupied to begin with.
@@ -563,7 +563,7 @@ Return
 - An array of single candidate events, E, of the following format:
 
   $$
-  {E}={\left\lbrace\begin{matrix}{0}&->&{d}\\{1}&->&{d}\\{2}&->&{\left({C}_{{r}},{h},{I}_{{c}}\right)}\end{matrix}\right.}
+  {E}={\left\lbrace\begin{matrix}{0}&\rightarrow&{d}\\{1}&\rightarrow&{d}\\{2}&\rightarrow&{\left({C}_{{r}},{h},{I}_{{c}}\right)}\end{matrix}\right.}
   $$
   $$
   {d}={\left({C}_{{r}},{h},{I}_{{c}},{G}_{{i}}\right)}
@@ -674,7 +674,7 @@ Return
 
 ### -sec-num- `GrandpaApi_submit_report_equivocation_unsigned_extrinsic` {#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic}
 
-A GRANDPA equivocation occurs when a validator votes for multiple blocks during one voting subround, as described further in [Definition -def-num-). The Polkadot Host is expected to identify equivocators and report those to the Runtime by calling this function.
+A GRANDPA equivocation occurs when a validator votes for multiple blocks during one voting subround, as described further in [Definition -def-num-ref-](sect-finality#defn-voter-equivocation). The Polkadot Host is expected to identify equivocators and report those to the Runtime by calling this function.
 
 Arguments  
 - The equivocation proof of the following format:

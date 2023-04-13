@@ -32,7 +32,7 @@ A **path graph** or a **path** of ${n}$ nodes formally referred to as **${P}_{{n
 
 ###### Definition -def-num- Blockchain {#defn-blockchain}
 
-A **blockchain** ${C}$ is a [directed path graph](https://en.wikipedia.org/wiki/Directed_graph). Each node of the graph is called **Block** and indicated by **${B}$**. The unique sink of ${C}$ is called **Genesis Block**, and the source is called the $\text{Head}$ of ${C}$. For any vertex ${\left({B}_{{1}},{B}_{{2}}\right)}$ where ${B}_{{1}}->{B}_{{2}}$ we say ${B}_{{2}}$ is the **parent** of ${B}_{{1}}$, which is the **child** of ${B}_{{2}}$, respectively. We indicate that by:
+A **blockchain** ${C}$ is a [directed path graph](https://en.wikipedia.org/wiki/Directed_graph). Each node of the graph is called **Block** and indicated by **${B}$**. The unique sink of ${C}$ is called **Genesis Block**, and the source is called the $\text{Head}$ of ${C}$. For any vertex ${\left({B}_{{1}},{B}_{{2}}\right)}$ where ${B}_{{1}}\rightarrow{B}_{{2}}$ we say ${B}_{{2}}$ is the **parent** of ${B}_{{1}}$, which is the **child** of ${B}_{{2}}$, respectively. We indicate that by:
 
 $$
 B_2 := P(B_1)
@@ -62,7 +62,7 @@ By **Pruned Block Tree**, denoted by $\text{PBT}$, we refer to a subtree of the 
 
 ###### Definition -def-num- Subchain {#defn-chain-subchain}
 
-Let ${G}$ be the root of the block tree and ${B}$ be one of its nodes. By $\text{Chain}{\left({B}\right)}$, we refer to the path graph from ${G}$ to ${B}$ in $\text{BT}$. Conversely, for a chain ${C}={\mid}\text{Chain}{\left({B}\right)}$, we define **the head of ${C}$** to be ${B}$, formally noted as ${B}\:=\overline{{C}}$. We define ${\left|{C}\right|}$, the length of ${C}$ as a path graph.
+Let ${G}$ be the root of the block tree and ${B}$ be one of its nodes. By $\text{Chain}{\left({B}\right)}$, we refer to the path graph from ${G}$ to ${B}$ in $\text{BT}$. Conversely, for a chain ${C}=\text{Chain}{\left({B}\right)}$, we define **the head of ${C}$** to be ${B}$, formally noted as ${B}\:=\overline{{C}}$. We define ${\left|{C}\right|}$, the length of ${C}$ as a path graph.
 
 If ${B}'$ is another node on $\text{Chain}{\left({B}\right)}$, then by $\text{SubChain}{\left({B}',{B}\right)}$ we refer to the subgraph of $\text{Chain}{\left({B}\right)}$ path graph which contains ${B}$ and ends at ${B}'$ and by ${\left|\text{SubChain}{\left({B}',{B}\right)}\right|}$ we refer to its length.
 
@@ -109,7 +109,7 @@ The **header of block B**, ${H}_{{h}}{\left({B}\right)}$, is a 5-tuple containin
 
 - **extrinsics_root:** is the field which is reserved for the Runtime to validate the integrity of the extrinsics composing the block body. For example, it can hold the root hash of the Merkle trie which stores an ordered list of the extrinsics being validated in this block. The extrinsics_root is set by the runtime and its value is opaque to the Polkadot Host. This element is formally referred to as ${H}_{{e}}$.
 
-- **digest:** this field is used to store any chain-specific auxiliary data, which could help the light clients interact with the block without the need of accessing the full storage as well as consensus-related data including the block signature. This field is indicated as ${H}_{{d}}$ ([Definition -def-num-)).
+- **digest:** this field is used to store any chain-specific auxiliary data, which could help the light clients interact with the block without the need of accessing the full storage as well as consensus-related data including the block signature. This field is indicated as ${H}_{{d}}$ ([Definition -def-num-ref-](chap-state#defn-digest)).
 
 ###### Image -img-num- Block Header {#img-block-header}
 import BlockHeader from '/static/img/kaitai_render/block_header.svg';
@@ -140,7 +140,16 @@ where
 
 - $\text{m}$ is a scale encoded byte array containing the message payload
 
-[TABLE]
+**$t = 4$: Consensus Message**, contains scale-encoded message $m$ from the Runtime to the consensus engine. The receiving engine is determined by the *id* identifier:
+- *id* = BABE: a message to BABE engine ([Definition -def-num-ref-](sect-block-production#defn-consensus-message-babe))
+- *id* = FRNK: a message to GRANDPA engine ([Definition -def-num-ref-](sect-finality#defn-consensus-message-grandpa))
+- *id* = BEEF: a message to BEEFY engine ([Definition -def-num-ref-](sect-finality#defn-consensus-message-beefy))
+
+**$t = 5$: Seal**, is produced by the consensus engine and proves the authorship of the block producer. The engine used for this is provided through *id* (at the moment `BABE`), while $m$ contains the scale-encoded signature ([Definition -def-num-ref-](sect-block-production#defn-block-signature)) of the block producer. In particular, the Seal digest item must be the last item in the digest array and must be stripped off by the Polkadot Host before the block is submitted to any Runtime function including for validation. The Seal must be added back to the digest afterward.
+
+**$t = 6$: Pre-Runtime digest**, contains messages from the consensus engines to the runtime. Currently only used by BABE to pass the scale encoded BABE Header ([Definition -def-num-ref-](sect-block-production#defn-babe-header)) in $m$ with *id* = `BABE`.
+
+**$t = 8$: Runtime Environment Updated digest**, indicates that changes regarding the Runtime code or heap pages ([Section -sec-num-ref-](chap-state#sect-memory-management)) occurred. No additional data is provided.
 
 ###### Image -img-num- Digest {#img-digest}
 import Digest from '/static/img/kaitai_render/digest.svg';
@@ -445,10 +454,10 @@ $$
 \text{ChildrenBitmap:}
 $$
 $$
-{\mathcal{{N}}}_{{b}}->{\mathbb{{B}}}_{{2}}
+{\mathcal{{N}}}_{{b}}\rightarrow{\mathbb{{B}}}_{{2}}
 $$
 $$
-{N}_{{b}}->{\left({b}_{{{15}}},\ldots,{b}_{{8}},{b}_{{7}},\ldots,{b}_{{0}}\right)}_{{2}}
+{N}_{{b}}\rightarrow{\left({b}_{{{15}}},\ldots,{b}_{{8}},{b}_{{7}},\ldots,{b}_{{0}}\right)}_{{2}}
 $$
 
 where
@@ -492,7 +501,7 @@ To increase performance, a merkle proof can be generated by inserting the hash o
 For a given node ${N}$, the **Merkle value** of ${N}$, denoted by ${H}{\left({N}\right)}$ is defined as follows:
 
 $$
-{H}:{\mathbb{{B}}}->{{U}_{{{i}->{0}}}^{{{32}}}}{\mathbb{{B}}}_{{32}}
+{H}:{\mathbb{{B}}}\rightarrow{{U}_{{{i}\rightarrow{0}}}^{{{32}}}}{\mathbb{{B}}}_{{32}}
 $$
 $$
 {H}{\left({N}\right)}:{\left\lbrace\begin{matrix}{v}_{{N}}&{\left|{\left|{v}_{{N}}\right|}\right|}<{32}\ \text{ and }\ {N}\ne{R}\\\text{Blake2b}{\left({v}_{{n}}\right)}&{\left|{\left|{v}_{{N}}\right|}\right|}\ge{32}\ \text{ or }\ {N}={R}\end{matrix}\right.}
@@ -565,7 +574,7 @@ $$
 
 which is the ASCII byte representation of the string `:code` ([Section -sec-num-ref-](id-cryptography-encoding#chapter-genesis)). As a result of storing the Runtime as part of the state, the Runtime code itself becomes state sensitive and calls to Runtime can change the Runtime code itself. Therefore the Polkadot Host needs to always make sure to provide the Runtime corresponding to the state in which the entrypoint has been called. Accordingly, we define ${R}_{{B}}$ ([Definition -def-num-ref-](chap-state#defn-runtime-code-at-state)).
 
-The initial Runtime code of the chain is provided as part of the genesis state ([Section -sec-num-ref-](id-cryptography-encoding#chapter-genesis)) and subsequent calls to the Runtime have the ability to, in turn, upgrade the Runtime by replacing this Wasm blob with the help of the storage API ([Section -sec-num-ref-](chap-host-api#sect-storage-api)). Therefore, the executor **must always** load the latest Runtime from storage - or preferably detect Runtime upgrades ([Definition -def-num-)) - either based on the parent block when importing blocks or the best/highest block when creating new blocks.
+The initial Runtime code of the chain is provided as part of the genesis state ([Section -sec-num-ref-](id-cryptography-encoding#chapter-genesis)) and subsequent calls to the Runtime have the ability to, in turn, upgrade the Runtime by replacing this Wasm blob with the help of the storage API ([Section -sec-num-ref-](chap-host-api#sect-storage-api)). Therefore, the executor **must always** load the latest Runtime from storage - or preferably detect Runtime upgrades ([Definition -def-num-ref-](chap-state#defn-digest)) - either based on the parent block when importing blocks or the best/highest block when creating new blocks.
 
 ###### Definition -def-num- Runtime Code at State {#defn-runtime-code-at-state}
 

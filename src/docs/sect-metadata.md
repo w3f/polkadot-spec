@@ -88,7 +88,7 @@ The **runtime type Id** is a compact integer representing the index of the entry
 The type definition ${D}$ is a varying datatype ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) and indicates all the possible types of encodable values a type can have.
 
 $$
-{D}={\left\lbrace\begin{matrix}{0}&->&{C}&\text{composite type (e.g. structure or tuple)}\\{1}&->&{V}&\text{variant type}\\{2}&->&{s}_{{v}}&\text{sequence type varying length}\\{3}&->&{S}&\text{sequence with fixed length}\\{4}&->&{T}&\text{tuple type}\\{5}&->&{P}&\text{primitive type}\\{6}&->&{e}&\text{compact encoded type}\\{7}&->&{B}&\text{sequence of bits}\end{matrix}\right.}
+{D}={\left\lbrace\begin{matrix}{0}&\rightarrow&{C}&\text{composite type (e.g. structure or tuple)}\\{1}&\rightarrow&{V}&\text{variant type}\\{2}&\rightarrow&{s}_{{v}}&\text{sequence type varying length}\\{3}&\rightarrow&{S}&\text{sequence with fixed length}\\{4}&\rightarrow&{T}&\text{tuple type}\\{5}&\rightarrow&{P}&\text{primitive type}\\{6}&\rightarrow&{e}&\text{compact encoded type}\\{7}&\rightarrow&{B}&\text{sequence of bits}\end{matrix}\right.}
 $$
 
 where  
@@ -276,7 +276,7 @@ where *0* indicates that the entry returns an *Option* type and therefore *None*
 The type of the storage value is a varying datatype ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) that indicates how the entry is stored.
 
 $$
-{y}={\left\lbrace\begin{matrix}{0}&->&{t}&\text{plain type}\\{1}&->&{\left({H},{k},{v}\right)}&\text{storage map}\end{matrix}\right.}
+{y}={\left\lbrace\begin{matrix}{0}&\rightarrow&{t}&\text{plain type}\\{1}&\rightarrow&{\left({H},{k},{v}\right)}&\text{storage map}\end{matrix}\right.}
 $$
 
 where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)). ${H}$ is an array of varying length containing the storage hasher ([Definition -def-num-ref-](sect-metadata#defn-rtm-storage-hasher)).

@@ -32,7 +32,7 @@ We refer to the number of slots in epoch ${\mathcal{{E}}}_{{n}}$ by ${s}{c}_{{n}
 
 By ${\text{SubChain}{\left({\mathcal{{E}}}_{{n}}\right)}}$ for epoch ${\mathcal{{E}}}_{{n}}$, we refer to the path graph of ${B}{T}$ containing all the blocks generated during the slots of epoch ${\mathcal{{E}}}_{{n}}$. When there is more than one block generated at a slot, we choose the one which is also on $\text{Longest-Chain}{\left({B}{T}\right)}$.
 
-###### Definition -def-num- Equivocation {#defn-equivocation}
+###### Definition -def-num- Equivocation {#defn-producer-equivocation}
 
 A block producer **equivocates** if they produce more than one block at the same slot. The proof of equivocation are the given distinct headers that were signed by the validator and which include the slot number.
 
@@ -48,11 +48,44 @@ $$
 
 where
 
-[TABLE]
+**1** implies *next epoch data*: The Runtime issues this message on every first
+block of an epoch. The supplied authority set [Definition -def-num-ref-](chap-sync#defn-authority-list),
+${\text{Auth}_C}$, and randomness [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness), ${r}$, are used
+in the next epoch $\mathcal E_n + 1$.
+
+**2** implies *on disabled*: A 32-bit integer, ${A_i}$, indicating the
+individual authority in the current authority list that should be immediately
+disabled until the next authority set changes. This message initial intension
+was to cause an immediate suspension of all authority functionality with the
+specified authority.
+
+**3** implies *next epoch descriptor*: These messages are only issued on
+configuration change and in the first block of an epoch. The supplied
+configuration data are intended to be used from the next epoch onwards.
+
+$$
+D = \{1, (c,2_{\text{nd}})\}
+$$
+
+where ${c}$ is the probability that a slot will not be empty
+[Definition -def-num-ref-](sect-block-production#defn-babe-constant). It is encoded as a tuple of two unsigned 64-bit
+integers ${c_{nominator},c_{denominator}}$ which are used to compute
+the rational ${c = \frac{c_{nominator}}{c_{denominator}}}$.
+
+${2_{\text{nd}}}$ describes what secondary slot [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots),
+if any, is to be used. It is encoded as one-byte varying datatype:
+
+$$
+s_{\text{2nd}} = \begin{cases}
+0 \rightarrow \text{no secondary slot} \\
+1 \rightarrow \text{plain secondary slot} \\
+2 \rightarrow \text{secondary slot with VRF output}
+\end{cases}
+$$
 
 ## -sec-num- Block Production Lottery {#sect-block-production-lottery}
 
-The babe constant ([Definition -def-num-) is initialized at genesis to the value returned by calling `BabeApi_configuration` ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)). For efficiency reasons, it is generally updated by the Runtime through the *next config data* consensus message in the digest ([Definition -def-num-)) of the first block of an epoch for the next epoch.
+The babe constant ([Definition -def-num-ref-](sect-block-production#defn-babe-constant)) is initialized at genesis to the value returned by calling `BabeApi_configuration` ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)). For efficiency reasons, it is generally updated by the Runtime through the *next config data* consensus message in the digest ([Definition -def-num-ref-](chap-state#defn-digest)) of the first block of an epoch for the next epoch.
 
 A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should run \<algo-block-production-lottery\>\> to identify the slots it is awarded. These are the slots during which the block producer is allowed to build a block. The ${s}{k}$ is the block producer lottery secret key and ${n}$ is the index of the epoch for whose slots the block producer is running the lottery.
 
@@ -220,7 +253,7 @@ Throughout each epoch, each block producer should run [Invoke-Block-Authoring](s
 The **Pre-Digest**, or BABE header, ${P}$, is a varying datatype of the following format:
 
 $$
-{P}={\left\lbrace\begin{matrix}{1}&->&{\left({a}_{\text{id}},{s},{o},{p}\right)}\\{2}&->&{\left({a}_{\text{id}},{s}\right)}\\{3}&->&{\left({a}_{\text{id}},{s},{o},{p}\right)}\end{matrix}\right.}
+{P}={\left\lbrace\begin{matrix}{1}&\rightarrow&{\left({a}_{\text{id}},{s},{o},{p}\right)}\\{2}&\rightarrow&{\left({a}_{\text{id}},{s}\right)}\\{3}&\rightarrow&{\left({a}_{\text{id}},{s},{o},{p}\right)}\end{matrix}\right.}
 $$
 
 where  
@@ -234,11 +267,11 @@ where
 
 - ${p}$ is VRF proof ([Block-Production-Lottery](sect-block-production#algo-block-production-lottery) respectively [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)).
 
-The Pre-Digest must be included as a digest item of Pre-Runtime type in the header digest ([Definition -def-num-)) ${H}_{{d}}{\left({B}\right)}$.
+The Pre-Digest must be included as a digest item of Pre-Runtime type in the header digest ([Definition -def-num-ref-](chap-state#defn-digest)) ${H}_{{d}}{\left({B}\right)}$.
 
 \require ${s}{k},{p}{k},{n},{B}{T}$ \state ${A}\leftarrow$ \call{Block-production-lottery}{${s}{k},{n}$} \for{${s}\leftarrow{1}~\text{}{f}{\left\lbrace\to\right\rbrace}~{s}{c}_{{n}}$} \state \call{Wait-Until}{\call{Slot-Time}{${s}$}} \state ${\left({d},\pi\right)}\leftarrow{A}{\left[{s}\right]}$ \if{${d}<\tau$} \state ${C}_{{{B}{e}{s}{t}}}\leftarrow$ \call{Longest-Chain}{${B}{T}$} \state ${B}_{{s}}\leftarrow$ \call{Build-Block}{${C}_{{{B}{e}{s}{t}}}$} \state \call{Add-Digest-Item}{${B}_{{s}},\text{Pre-Runtime},{E}_{{{i}{d}}}{\left(\text{BABE}\right)},{H}_{\text{BABE}}{\left({B}_{{s}}\right)}$} \state \call{Add-Digest-Item}{${B}_{{s}},\text{Seal},{S}_{{B}}$} \state \call{Broadcast-Block}{${B}_{{s}}$} \endif \endfor
 
-where $\text{BT}$ is the current block tree, $\text{Block-Production-Lottery}$ is defined in [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) and $\text{Add-Digest-Item}$ appends a digest item to the end of the header digest ${H}_{{d}}{\left({B}\right)}$ ([Definition -def-num-)).
+where $\text{BT}$ is the current block tree, $\text{Block-Production-Lottery}$ is defined in [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) and $\text{Add-Digest-Item}$ appends a digest item to the end of the header digest ${H}_{{d}}{\left({B}\right)}$ ([Definition -def-num-ref-](chap-state#defn-digest)).
 
 ###### Definition -def-num- Block Signature {#defn-block-signature}
 
@@ -248,13 +281,13 @@ $$
 \text{Sig}_{{\text{SR25519},{\text{sk}_{{j}}^{{s}}}}}{\left({H}_{{h}}{\left({B}\right)}\right)}
 $$
 
-${m}$ should be included in ${H}_{{d}}{\left({B}\right)}$ as the Seal digest item ([Definition -def-num-)) of value:
+${m}$ should be included in ${H}_{{d}}{\left({B}\right)}$ as the Seal digest item ([Definition -def-num-ref-](chap-state#defn-digest)) of value:
 
 $$
 {\left({t},\text{id}{\left(\text{BABE}\right)},{m}\right)}
 $$
 
-in which, ${t}={5}$ is the seal digest identifier and $\text{id}{\left(\text{BABE}\right)}$ is the BABE consensus engine unique identifier ([Definition -def-num-)). The Seal digest item is referred to as the **BABE Seal**.
+in which, ${t}={5}$ is the seal digest identifier and $\text{id}{\left(\text{BABE}\right)}$ is the BABE consensus engine unique identifier ([Definition -def-num-ref-](chap-state#defn-digest)). The Seal digest item is referred to as the **BABE Seal**.
 
 ## -sec-num- Epoch Randomness {#sect-epoch-randomness}
 
@@ -275,11 +308,11 @@ where
 
 - ${T}_{{B}}$ is ${B}$’s arrival time ([Definition -def-num-ref-](sect-block-production#defn-block-time)).
 
-- ${H}_{{d}}{\left({B}\right)}$ is the digest sub-component ([Definition -def-num-)) of $\text{Head}{\left({B}\right)}$ ([Definition -def-num-ref-](chap-state#defn-block-header)).
+- ${H}_{{d}}{\left({B}\right)}$ is the digest sub-component ([Definition -def-num-ref-](chap-state#defn-digest)) of $\text{Head}{\left({B}\right)}$ ([Definition -def-num-ref-](chap-state#defn-block-header)).
 
-- The Seal ${D}_{{s}}$ is the last element in the digest array ${H}_{{d}}{\left({B}\right)}$ as described in [Definition -def-num-).
+- The Seal ${D}_{{s}}$ is the last element in the digest array ${H}_{{d}}{\left({B}\right)}$ as described in [Definition -def-num-ref-](chap-state#defn-digest).
 
-- $\text{Seal-Id}$ is the type index showing that a digest item ([Definition -def-num-)) of varying type ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-variable-type)) is of type *Seal*.
+- $\text{Seal-Id}$ is the type index showing that a digest item ([Definition -def-num-ref-](chap-state#defn-digest)) of varying type ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-variable-type)) is of type *Seal*.
 
 - $\text{AuthorityDirectory}^{{{\mathcal{{E}}}_{{c}}}}$ is the set of Authority ID for block producers of epoch ${\mathcal{{E}}}_{{c}}$.
 

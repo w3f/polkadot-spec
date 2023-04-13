@@ -345,7 +345,7 @@ $$
 Accordingly, we define the function ${\mathsf{\text{Enc}}}_{{{\mathsf{\text{LE}}}}}$:
 
 $$
-{\mathsf{\text{Enc}}}_{{{\mathsf{\text{LE}}}}}:{\mathbb{{Z}}}^{+}->{\mathbb{{B}}};{\left({B}_{{n}}\ldots{B}_{{0}}\right)}_{{256}}{\mid}->{\left({B}_{{{0},}}{B}_{{1}},\ldots,{B}_{{n}}\right)}
+{\mathsf{\text{Enc}}}_{{{\mathsf{\text{LE}}}}}:{\mathbb{{Z}}}^{+}\rightarrow{\mathbb{{B}}};{\left({B}_{{n}}\ldots{B}_{{0}}\right)}_{{256}}{\mid}\rightarrow{\left({B}_{{{0},}}{B}_{{1}},\ldots,{B}_{{n}}\right)}
 $$
 
 ###### Definition -def-num- UINT32 {#defn-uint32}
@@ -457,10 +457,10 @@ where ${\text{Enc}_{{\text{SC}}}^{{\text{Size}}}}$ is encoded the same way as ${
 The SCALE codec for a **boolean value** ${b}$ defined as a byte as follows:
 
 $$
-\text{Enc}_{{\text{SC}}}:{\left\lbrace\text{False},\text{True}\right\rbrace}->{\mathbb{{B}}}_{{1}}
+\text{Enc}_{{\text{SC}}}:{\left\lbrace\text{False},\text{True}\right\rbrace}\rightarrow{\mathbb{{B}}}_{{1}}
 $$
 $$
-{b}->{\left\lbrace\begin{matrix}{0}&{b}=\text{False}\\{1}&{b}=\text{True}\end{matrix}\right.}
+{b}\rightarrow{\left\lbrace\begin{matrix}{0}&{b}=\text{False}\\{1}&{b}=\text{True}\end{matrix}\right.}
 $$
 
 ###### Definition -def-num- String {#defn-scale-string}
@@ -484,10 +484,10 @@ SCALE Length encoding is used to encode integer numbers of variying sizes promin
 **SCALE Length encoding**, ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}$, also known as a *compact encoding*, of a non-negative number ${n}$ is defined as follows:
 
 $$
-{\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}:{\mathbb{{N}}}->{\mathbb{{B}}}
+{\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}:{\mathbb{{N}}}\rightarrow{\mathbb{{B}}}
 $$
 $$
-{n}->{b}\:={\left\lbrace\begin{matrix}{l}_{{1}}&{0}\le{n}<{2}^{{6}}\\{i}_{{1}}{i}_{{2}}&{2}^{{6}}\le{n}<{2}^{{14}}\\{j}_{{1}}{j}_{{2}}{j}_{{3}}&{2}^{{14}}\le{n}<{2}^{{30}}\\{k}_{{1}}{k}_{{2}}\ldots{k}_{{m}}&{2}^{{30}}\le{n}\end{matrix}\right.}
+{n}\rightarrow{b}\:={\left\lbrace\begin{matrix}{l}_{{1}}&{0}\le{n}<{2}^{{6}}\\{i}_{{1}}{i}_{{2}}&{2}^{{6}}\le{n}<{2}^{{14}}\\{j}_{{1}}{j}_{{2}}{j}_{{3}}&{2}^{{14}}\le{n}<{2}^{{30}}\\{k}_{{1}}{k}_{{2}}\ldots{k}_{{m}}&{2}^{{30}}\le{n}\end{matrix}\right.}
 $$
 
 in where the least significant bits of the first byte of byte array b are defined as follows:
@@ -526,7 +526,7 @@ Practically, it is more convenient and efficient to store and process data which
 Suppose that $\text{PK}={\left({k}_{{1}},\ldots{k}_{{n}}\right)}$ is a sequence of nibbles, then:
 
 $$
-\text{Enc}_{{\text{HE}}}{\left(\text{PK}\right)}\:={\left\lbrace\begin{matrix}\text{Nibbles}_{{4}}&->&{\mathbb{{B}}}\\\text{PK}={\left({k}_{{1}},\ldots{k}_{{n}}\right)}&->&{\left\lbrace\begin{matrix}{\left({16}{k}_{{1}}+{k}_{{2}},\ldots,{16}{k}_{{{2}{i}-{1}}}+{k}_{{{2}{i}}}\right)}&{n}={2}{i}\\{\left({k}_{{1}},{16}{k}_{{2}}+{k}_{{3}},\ldots,{16}{k}_{{{2}{i}}}+{k}_{{{2}{i}+{1}}}\right)}&{n}={2}{i}+{1}\end{matrix}\right.}\end{matrix}\right.}
+\text{Enc}_{{\text{HE}}}{\left(\text{PK}\right)}\:={\left\lbrace\begin{matrix}\text{Nibbles}_{{4}}&\rightarrow&{\mathbb{{B}}}\\\text{PK}={\left({k}_{{1}},\ldots{k}_{{n}}\right)}&\rightarrow&{\left\lbrace\begin{matrix}{\left({16}{k}_{{1}}+{k}_{{2}},\ldots,{16}{k}_{{{2}{i}-{1}}}+{k}_{{{2}{i}}}\right)}&{n}={2}{i}\\{\left({k}_{{1}},{16}{k}_{{2}}+{k}_{{3}},\ldots,{16}{k}_{{{2}{i}}}+{k}_{{{2}{i}+{1}}}\right)}&{n}={2}{i}+{1}\end{matrix}\right.}\end{matrix}\right.}
 $$
 
 ## -sec-num- Genesis State {#chapter-genesis}

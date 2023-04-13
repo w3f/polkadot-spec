@@ -65,7 +65,7 @@ $$
 {S}={\left({d},{A}_{{i}},{A}_{{s}}\right)}
 $$
 $$
-{d}={\left\lbrace\begin{matrix}{1}&->&{C}_{{r}}\\{2}&->&{C}_{{h}}\end{matrix}\right.}
+{d}={\left\lbrace\begin{matrix}{1}&\rightarrow&{C}_{{r}}\\{2}&\rightarrow&{C}_{{h}}\end{matrix}\right.}
 $$
 
 where  
@@ -101,7 +101,7 @@ $$
 {V}={\left({a}_{{n}},…{a}_{{m}}\right)}
 $$
 $$
-{a}={\left\lbrace\begin{matrix}{1}&->&{s}\\{2}&->&{s}\end{matrix}\right.}
+{a}={\left\lbrace\begin{matrix}{1}&\rightarrow&{s}\\{2}&\rightarrow&{s}\end{matrix}\right.}
 $$
 $$
 {A}={\left({L}_{{n}},…{L}_{{m}}\right)}
@@ -482,7 +482,7 @@ $$
 {\left({k},{o},{p}\right)}
 $$
 $$
-{k}={\left\lbrace\begin{matrix}{0}&->&{s}\\{1}&->&{c}_{{i}}\end{matrix}\right.}
+{k}={\left\lbrace\begin{matrix}{0}&\rightarrow&{s}\\{1}&\rightarrow&{c}_{{i}}\end{matrix}\right.}
 $$
 
 where ${k}$ indicates the kind of the certificate, respectively the value *0* proves the availability core assignment ([Definition -def-num-ref-](chapter-anv#defn-availability-core-vrf-assignment)), followed by the sample number ${s}$, and the value *1* proves the delayed availability core assignment ([Definition -def-num-ref-](chapter-anv#delayed-availability-core-vrf-assignment)), followed by the core index ${c}_{{i}}$ ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-availability-cores)). ${o}$ is the VRF output and ${p}$ is the VRF proof.
@@ -506,7 +506,7 @@ The notification messages are exchanged between validators, including messages s
 The validator protocol message is a varying datatype used by validators to broadcast relevant information about certain steps in the A&V process. Specifically, this includes the backing process ([Section -sec-num-ref-](chapter-anv#sect-candidate-backing)) and the approval process ([Section -sec-num-ref-](chapter-anv#sect-approval-voting)). The validator protocol message, ${M}$, is a varying datatype of the following format:
 
 $$
-{M}={\left\lbrace\begin{matrix}{1}&->&{M}_{{f}}\\{3}&->&{M}_{{s}}\\{4}&->&{M}_{{a}}\end{matrix}\right.}
+{M}={\left\lbrace\begin{matrix}{1}&\rightarrow&{M}_{{f}}\\{3}&\rightarrow&{M}_{{s}}\\{4}&\rightarrow&{M}_{{a}}\end{matrix}\right.}
 $$
 
 where  
@@ -521,7 +521,7 @@ where
 The collation protocol message, M, is a varying datatype of the following format:
 
 $$
-{M}={\left\lbrace\begin{matrix}{0}&->&{M}_{{c}}\end{matrix}\right.}
+{M}={\left\lbrace\begin{matrix}{0}&\rightarrow&{M}_{{c}}\end{matrix}\right.}
 $$
 
 where ${M}_{{c}}$ is the collator message ([Definition -def-num-ref-](chapter-anv#net-msg-collator-message)).
@@ -531,7 +531,7 @@ where ${M}_{{c}}$ is the collator message ([Definition -def-num-ref-](chapter-an
 The collator message is sent as part of the collator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-collator-protocol-message)). The collator message, ${M}$, is a varying datatype of the following format:
 
 $$
-{M}={\left\lbrace\begin{matrix}{0}&->&{\left({C}_{{i}},{P}_{{i}},{C}_{{s}}\right)}\\{1}&->&{H}\\{4}&->&{\left({B}_{{h}},{S}\right)}\end{matrix}\right.}
+{M}={\left\lbrace\begin{matrix}{0}&\rightarrow&{\left({C}_{{i}},{P}_{{i}},{C}_{{s}}\right)}\\{1}&\rightarrow&{H}\\{4}&\rightarrow&{\left({B}_{{h}},{S}\right)}\end{matrix}\right.}
 $$
 
 where  
@@ -552,7 +552,7 @@ where
 The statement distribution message is sent as part of the validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-collator-protocol-message)) indicates the validity vote of a validator for a given candidate, described further in [Section -sec-num-ref-](chapter-anv#sect-candidate-statements). The statement distribution message, ${M}$, is of varying type of the following format:
 
 $$
-{M}={\left\lbrace\begin{matrix}{0}&->&{\left({B}_{{h}},{S}\right)}\\{1}&->&{S}_{{m}}\end{matrix}\right.}
+{M}={\left\lbrace\begin{matrix}{0}&\rightarrow&{\left({B}_{{h}},{S}\right)}\\{1}&\rightarrow&{S}_{{m}}\end{matrix}\right.}
 $$
 $$
 {S}_{{m}}={\left({B}_{{h}},{C}_{{h}},{A}_{{i}},{A}_{{s}}\right)}
@@ -574,7 +574,7 @@ where
 The bitfield distribution message is sent as part of the validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-validator-protocol-message)) and indicates the availability vote of a validator for a given candidate, described further in [Section -sec-num-ref-](chapter-anv#sect-availability-votes). This message is sent in form of a validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-validator-protocol-message)). The bitfield distribution message, ${M}$, is a datastructure of the following format:
 
 $$
-{M}={\left\lbrace\begin{matrix}{0}&->&{\left({B}_{{h}},{P}\right)}\end{matrix}\right.}
+{M}={\left\lbrace\begin{matrix}{0}&\rightarrow&{\left({B}_{{h}},{P}\right)}\end{matrix}\right.}
 $$
 $$
 {P}={\left({d},{A}_{{i}},{A}_{{s}}\right)}
@@ -594,7 +594,7 @@ where
 The approval distribution message is sent as part of the validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-validator-protocol-message)) and indicates the approval vote of a validator for a given candidate, described further in [Section -sec-num-ref-](chapter-anv#sect-availability-assignment-criteria). The approval distribution message, ${M}$, is a varying datatype of the following format:
 
 $$
-{M}={\left\lbrace\begin{matrix}{0}&->&{\left({\left({C}_{,}{I}_{{}}\right)}_{{0}}…{\left({C},{I}\right)}_{{n}}\right)}\\{1}&->&{\left({V}_{{0}},…{V}_{{n}}\right)}\end{matrix}\right.}
+{M}={\left\lbrace\begin{matrix}{0}&\rightarrow&{\left({\left({C}_{,}{I}_{{}}\right)}_{{0}}…{\left({C},{I}\right)}_{{n}}\right)}\\{1}&\rightarrow&{\left({V}_{{0}},…{V}_{{n}}\right)}\end{matrix}\right.}
 $$
 $$
 {C}={\left({B}_{{h}},{A}_{{i}},{c}_{{a}}\right)}
@@ -647,7 +647,7 @@ where ${C}_{{h}}$ is the 256-bit hash of the PoV block. The response message is 
 The PoV fetching response is sent by nodes to the clients who issued a PoV fetching request ([Definition -def-num-ref-](chapter-anv#net-msg-pov-fetching-request)). The response, ${R}$, is a varying datatype of the following format:
 
 $$
-{R}={\left\lbrace\begin{matrix}{0}&->&{B}\\{1}&->&\phi\end{matrix}\right.}
+{R}={\left\lbrace\begin{matrix}{0}&\rightarrow&{B}\\{1}&\rightarrow&\phi\end{matrix}\right.}
 $$
 
 where *0* is followed by the PoV block and *1* indicates that the PoV block was not found.
@@ -667,7 +667,7 @@ where ${C}_{{h}}$ is the 256-bit hash of the parachain candidate and ${i}$ is a 
 The chunk fetching response is sent by nodes to the clients who issued a chunk fetching request ([Definition -def-num-ref-](chapter-anv#net-msg-chunk-fetching-request)). The response, ${R}$, is a varying datatype of the following format:
 
 $$
-{R}={\left\lbrace\begin{matrix}{0}&->&{C}_{{r}}\\{1}&->&\phi\end{matrix}\right.}
+{R}={\left\lbrace\begin{matrix}{0}&\rightarrow&{C}_{{r}}\\{1}&\rightarrow&\phi\end{matrix}\right.}
 $$
 $$
 {C}_{{r}}={\left({c},{c}_{{p}}\right)}
@@ -690,7 +690,7 @@ where ${C}_{{h}}$ is the 256-bit candidate hash to get the available data for. T
 The available data response is sent by nodes to the clients who issued a available data request ([Definition -def-num-ref-](chapter-anv#net-msg-available-data-request)). The response, ${R}$, is a varying datatype of the following format:
 
 $$
-{R}={\left\lbrace\begin{matrix}{0}&->&{A}\\{1}&->&\phi\end{matrix}\right.}
+{R}={\left\lbrace\begin{matrix}{0}&\rightarrow&{A}\\{1}&\rightarrow&\phi\end{matrix}\right.}
 $$
 $$
 {A}={\left({P}_{{{ov}}},{D}_{{{pv}}}\right)}
@@ -713,7 +713,7 @@ where ${B}_{{h}}$ is the hash of the relay chain block and ${P}_{{{i}{d}}}$ is t
 The collation fetching response is sent by nodes to the clients who issued a collation fetching request ([Definition -def-num-ref-](chapter-anv#net-msg-collation-fetching-request)). The response, ${R}$, is a varying datatype of the following format:
 
 $$
-{R}={\left\lbrace\begin{matrix}{0}&->&{\left({C}_{{r}},{B}\right)}\end{matrix}\right.}
+{R}={\left\lbrace\begin{matrix}{0}&\rightarrow&{\left({C}_{{r}},{B}\right)}\end{matrix}\right.}
 $$
 
 where ${0}$ is followed by the candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-candidate-receipt)), ${C}_{{r}}$, as and the PoV block ([Definition -def-num-ref-](chapter-anv#defn-para-block)), ${B}$. This type does not notify the client about a statement that was not found.
@@ -733,7 +733,7 @@ where ${B}_{{h}}$ is the hash of the relay chain parent and ${C}_{{h}}$ is the c
 The statement fetching response is sent by nodes to the clients who issued a collation fetching request ([Definition -def-num-ref-](chapter-anv#net-msg-statement-fetching-request)). The response, ${R}$, is a varying datatype of the following format:
 
 $$
-{R}={\left\lbrace\begin{matrix}{0}&->&{C}_{{r}}\end{matrix}\right.}
+{R}={\left\lbrace\begin{matrix}{0}&\rightarrow&{C}_{{r}}\end{matrix}\right.}
 $$
 
 where ${C}_{{r}}$ is the committed candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-committed-candidate-receipt)). No response is returned if no statement is found.
@@ -752,10 +752,10 @@ $$
 {V}_{{v}}={\left({A}_{{i}},{A}_{{s}},{k}_{{v}}\right)}
 $$
 $$
-{k}_{{i}}={\left\lbrace\begin{matrix}{0}&->&\phi\end{matrix}\right.}
+{k}_{{i}}={\left\lbrace\begin{matrix}{0}&\rightarrow&\phi\end{matrix}\right.}
 $$
 $$
-{k}_{{v}}={\left\lbrace\begin{matrix}{0}&->&\phi\\{1}&->&{C}_{{h}}\\{2}&->&{C}_{{h}}\\{3}&->&\phi\end{matrix}\right.}
+{k}_{{v}}={\left\lbrace\begin{matrix}{0}&\rightarrow&\phi\\{1}&\rightarrow&{C}_{{h}}\\{2}&\rightarrow&{C}_{{h}}\\{3}&\rightarrow&\phi\end{matrix}\right.}
 $$
 
 where  
@@ -790,7 +790,7 @@ The response message is defined in [Section -sec-num-ref-](chapter-anv#net-msg-d
 The dispute response is sent by nodes to the clients who who issued a dispute request ([Section -sec-num-ref-](chapter-anv#net-msg-dispute-request)). The response, ${R}$, is a varying type of the following format:
 
 $$
-{R}={\left\lbrace\begin{matrix}{0}&->&\phi\end{matrix}\right.}
+{R}={\left\lbrace\begin{matrix}{0}&\rightarrow&\phi\end{matrix}\right.}
 $$
 
 where ${0}$ indicates that the dispute was successfully processed.
