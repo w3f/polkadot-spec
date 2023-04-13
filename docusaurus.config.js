@@ -56,7 +56,10 @@ const config = {
         },
         blog: false, // Optional: disable the blog plugin
         theme: {
-          customCss: require.resolve('./src/css/custom.css'),
+          customCss: [
+            require.resolve("./src/css/custom.css"),
+            require.resolve("./src/css/socicon.css"),
+          ],
         },
         debug: true,
       }),
@@ -71,6 +74,7 @@ const config = {
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
+    "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css",
   ],
 
   themeConfig:
@@ -98,45 +102,10 @@ const config = {
         ],
       },
       footer: {
-        style: 'dark',
-        links: [
-          {
-            title: 'Docs',
-            items: [
-              {
-                label: 'Index',
-                to: 'polkadot-spec',
-              },
-            ],
-          },
-          {
-            title: 'Community',
-            items: [
-              {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-              },
-              {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
-              },
-              {
-                label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
-              },
-            ],
-          },
-          {
-            title: 'More',
-            items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
-              },
-            ],
-          },
-        ],
-        copyright: `Copyright © ${new Date().getFullYear()} Polkadot, Built with Docusaurus.`,
+        copyright: `© ${new Date().getFullYear()} Web3 Foundation`,
+        logo: {
+          src: "img/Polkadot_Logo_Horizontal_White.svg",
+        },
       },
       prism: {
         theme: lightCodeTheme,
