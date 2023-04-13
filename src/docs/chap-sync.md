@@ -50,14 +50,14 @@ New blocks can be received by the Polkadot Host via other peers ([Section -sec-n
 
 The Polkadot Host implements [Import-and-Validate-Block](chap-sync#algo-import-and-validate-block) to assure the validity of the block.
 
-\require ${B},\text{Just}{\left({B}\right)}$ \state \call{Set-Storage-State-At}{${P}{\left({B}\right)}$} \if{$\text{Just}{\left({B}\right)}\ne{q}\emptyset$} \state \call{Verify-Block-Justification}{${B},\text{Just}{\left({B}\right)}$} \if{${B}~\text{}{f}{\left\lbrace{i}{s}\right\rbrace}~\text{Finalized}~\text{}{f}{\left\lbrace{\quad\text{and}\quad}\right\rbrace}~{P}{\left({B}\right)}~\text{}{f}{\left\lbrace{i}{s}\neg\right\rbrace}~\text{Finalized}$} \state \call{Mark-as-Final}{${P}{\left({B}\right)}$} \endif \endif \if{${H}_{{p}}{\left({B}\right)}\notin{P}{B}{T}$} \return \endif \state \call{Verify-Authorship-Right}{$\text{Head}{\left({B}\right)}$} \state ${B}\leftarrow$ \call{Remove-Seal}{${B}$} \state ${R}\leftarrow$ \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{C}{\quad\text{or}\quad}{e}$\right.}execute${b}{l}{o}{c}{k}{\rbrace},{B}$} \state ${B}\leftarrow$ \call{Add-Seal}{${B}$} \if{${R}=$ \textsc{True}} \state \call{Persist-State}{} \endif
+\require \$B, \text{Just}(B)\$ \state \call{Set-Storage-State-At}{\$P(B)\$} \if{\$\text{Just}(B) \neq \emptyset\$} \state \call{Verify-Block-Justification}{\$B, \text{Just}(B)\$} \if{\$B~\textbf{is}~\text{Finalized}~\textbf{and}~P(B)~\textbf{is not}~\text{Finalized}\$} \state \call{Mark-as-Final}{\$P(B)\$} \endif \endif \if{\$H_p(B) \notin PBT\$} \return \endif \state \call{Verify-Authorship-Right}{\$\text{Head}(B)\$} \state \$B \leftarrow\$ \call{Remove-Seal}{\$B\$} \state \$R \leftarrow\$ \call{Call-Runtime-Entry}{\$\texttt{Core\\execute\\block}, B\$} \state \$B \leftarrow\$ \call{Add-Seal}{\$B\$} \if{\$R =\$ \textsc{True}} \state \call{Persist-State}{} \endif
 
 where  
 - $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition -def-num-)) before submitting it to the Runtime.
 
 - $\text{Add-Seal}$ adds the Seal digest back to the block ([Definition -def-num-)) for later propagation.
 
-- $\text{Persist-State}$ implies the persistence of any state changes created by ${\mathtt{\text{Core_execute_block}}}$ ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-execute-block)) on successful execution.
+- $\text{Persist-State}$ implies the persistence of any state changes created by ${\mathtt{\text{Core\_execute\_block}}}$ ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-execute-block)) on successful execution.
 
 - $\text{PBT}$ is the pruned block tree ([Definition -def-num-ref-](chap-state#defn-block-tree)).
 

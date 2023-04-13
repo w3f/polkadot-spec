@@ -74,7 +74,12 @@ Return
 
 **ApiVersions** is a specialized type for the ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) function entry. It represents an array of tuples, where the first value of the tuple is an array of 8-bytes containing the Blake2b hash of the API name. The second value of the tuple is the version number of the corresponding API.
 
-${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{m}{a}{t}{h}{r}{m}{\left\lbrace{A}\pi{V}{e}{r}{s}{i}{o}{n}{s}\right\rbrace}\:=&{\left({T}_{{0}},\ldots,{T}_{{n}}\right)}$ T :=& ((b_0, \ldots, b_7), \mathrm{UINT32}) \end{aligned}$
+$$
+\begin{aligned}
+\mathrm{ApiVersions} :=& (T_0, \ldots, T_n) \\
+T :=& ((b_0, \ldots, b_7), \mathrm{UINT32})
+\end{aligned}
+$$
 
 Requires `Core_initialize_block` to be called beforehand.
 
@@ -674,7 +679,15 @@ A GRANDPA equivocation occurs when a validator votes for multiple blocks during 
 Arguments  
 - The equivocation proof of the following format:
 
-  ${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{G}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{E}{p}\right\rbrace}}}=&{\left({m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}_{{{\mathbb{{{V}}}}}},{e},{r},{A}_{{{m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}}},{B}^{{1}}_{h},{B}^{{1}}_{n}{A}^{{1}}_{\left\lbrace{m}{a}{t}{h}{r}{m}{\left\lbrace{s}{i}{g}\right\rbrace}\right\rbrace},{B}^{{2}}_{h},{B}^{{2}}_{n},{A}^{{2}}_{\left\lbrace{m}{a}{t}{h}{r}{m}{\left\lbrace{s}{i}{g}\right\rbrace}\right\rbrace}\right)}$ e =& \begin{cases} 0 &\quad \textrm{Equivocation at prevote stage} ${1}&\quad\text{}{m}{\left\lbrace{E}{q}{u}{i}{v}{o}{c}{a}{t}{i}{o}{n}{a}{t}\prec{o}{m}{m}{i}{t}{s}{t}{a}\ge\right\rbrace}{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{e}{n}{d}{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}$
+  $$
+  \begin{aligned}
+  G_{\mathrm{Ep}} =& (\mathrm{id}_{\mathbb{V}}, e, r, A_{\mathrm{id}}, B^1_h, B^1_n, A^1_{\mathrm{sig}}, B^2_h, B^2_n, A^2_{\mathrm{sig}}) \\
+  e =& \begin{cases} 
+  0 & \quad \textrm{Equivocation at prevote stage} \\
+  1 & \quad \textrm{Equivocation at precommit stage}
+  \end{cases}
+  \end{aligned}
+  $$
 
   where  
   - ${m}{a}{t}{h}{r}{m}{\left\lbrace{i}{d}\right\rbrace}_{{{\mathbb{{{V}}}}}}$ is the authority set id as defined in [Definition -def-num-ref-](sect-finality#defn-authority-set-id).
@@ -932,7 +945,15 @@ Return
 
   - ${c}$ is the "class" of the extrinsic, where class is a varying data ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) type defined as:
 
-    ${c}=\le{f}{t}$\begin{array}{l} 0 \quad \textrm{Normal extrinsic}${1}\quad\text{}{m}{\left\lbrace{O}{p}{e}{r}{a}{t}{i}{o}{n}{a}{l}{e}{x}{t}{r}\in{s}{i}{c}\right\rbrace}$ 2 \quad \textrm{Mandatory extrinsic, which is always included} \end{array}\right.$
+    $$
+    c = \left\{
+    \begin{array}{l}
+    0 \quad \textrm{Normal extrinsic} \\
+    1 \quad \textrm{Operational extrinsic} \\
+    2 \quad \textrm{Mandatory extrinsic, which is always included}
+    \end{array}
+    \right.
+    $$
 
   - ${f}$ is the inclusion fee of the extrinsic. This does not include a tip or anything else that depends on the signature.
 

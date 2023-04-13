@@ -50,11 +50,21 @@ P̱olkadot block limits as defined here should be respected by each block produc
 
 The P̱olkadot transaction weight function denoted by ${\mathcal{{{W}}}}$ as follows:
 
-${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{\mathcal{{{W}}}}&:{\mathcal{{{E}}}}\rightarrow{\mathbb{{{N}}}}$ \mathcal{W} &: E \mapsto w \end{aligned}$
+$$
+\begin{aligned}
+\mathcal{W} &: \mathcal{E} \rightarrow \mathbb{N} \\
+\mathcal{W} &: E \mapsto w
+\end{aligned}
+$$
 
 where ${w}$ is a non-negative integer representing the weight of the extrinsic ${E}$. We define the weight of all inherent extrinsics as defined in the [Section -sec-num-ref-](chap-state#sect-inherents) to be equal to 0. We extend the definition of ${\mathcal{{{W}}}}$ function to compute the weight of the block as sum of weight of all extrinsics it includes:
 
-${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{\mathcal{{{W}}}}&:{\mathcal{{{B}}}}\rightarrow{\mathbb{{{N}}}}$ \mathcal{W} &: B \mapsto \sum\_{E\in B}(W(E)) \end{aligned}$
+$$
+\begin{aligned}
+\mathcal{W} &: \mathcal{B} \rightarrow \mathbb{N} \\
+\mathcal{W} &: B \mapsto \sum_{E\in B}(W(E))
+\end{aligned}
+$$
 
 In the remainder of this section, we discuss the requirements to which the weight function needs to comply to.
 
@@ -640,7 +650,13 @@ Polkadot fees consists of three parts:
 
 The final fee can be summarized as:
 
-${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{f}{e}{e}&={b}{a}{s}{e}${f}{e}{e}$ &{} + length${\left\lbracenull\right\rbrace}+\le{n}\gt{h}$ of${t}{r}{a}{n}{s}{a}{c}{t}{i}{o}{n}$ in${b}{y}{t}{e}{s}\times\le{n}\gt{h}$ fee $ &{} + weight${\left\lbracenull\right\rbrace}+{w}{e}{i}{g}{h}{t}$ to$ fee $ \end{aligned}$
+$$
+\begin{aligned}
+fee &= base\ fee \\
+&{} + \text{length of transaction in bytes} \times \text{length fee} \\
+&{} + \text{weight to fee}
+\end{aligned}
+$$
 
 ### -sec-num- Definitions in Polkadot {#id-definitions-in-polkadot}
 
@@ -672,6 +688,12 @@ $$
 
 The `Update Multiplier` defines how the multiplier can change. The Polkadot Runtime internally updates the multiplier after each block according the following formula:
 
-${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{d}\Leftrightarrow&=&{\left({t}{a}{r}\ge{t}$\right.} weight - previous${b}{l}{o}{c}{k}$ weight) ${v}&=&{0.00004}$ next${w}{e}{i}{g}{h}{t}&=&{w}{e}{i}{g}{h}{t}\times{\left({1}+{\left({v}\times{d}\Leftrightarrow\right)}+\frac{{\left({v}\times{d}\Leftrightarrow\right)}^{{2}}}{{2}}\right)}$ \end{aligned}$
+$$
+\begin{aligned}
+diff &=& (target\ weight - previous\ block\ weight) \\
+v &=& 0.00004 \\
+next\ weight &=& weight \times (1 + (v \times diff) + (v \times diff)^2 / 2)
+\end{aligned}
+$$
 
 Polkadot defines the `target_weight` as 0.25 (25%). More information about this algorithm is described in the [Web3 Foundation research paper](https://research.web3.foundation/en/latest/polkadot/overview/2-token-economics#relay-chain-transaction-fees-and-per-block-transaction-limits).

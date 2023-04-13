@@ -338,17 +338,71 @@ The Runtime dictates how many assignments should be conducted by a validator, as
 
 The validator executes the following steps to retrieve a (possibly valid) core index:
 
-${t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'A&V MOD'}\right)}$ ${t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{'RC-VRF'},{R}_{{s}}\right)}$ ${t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'sample'},{s}\right)}$ ${t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'vrf-nm-pk'},{p}_{{k}}\right)}$ ${t}_{{5}}\leftarrow\text{meta-ad}{\left({t}_{{4}},\text{'VRFHash'},\text{False}\right)}$ ${t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},{64}_{{\text{le}}},\text{True}\right)}$ ${i}\leftarrow\text{prf}{\left({t}_{{6}},\text{False}\right)}$ ${o}={s}_{{k}}\cdot{i}$
+$$
+{t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'A\&V MOD'}\right)}
+$$ 
+$$
+{t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{'RC-VRF'},{R}_{{s}}\right)}
+$$
+$$
+{t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'sample'},{s}\right)}
+$$
+$$
+{t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'vrf-nm-pk'},{p}_{{k}}\right)}
+$$
+$$
+{t}_{{5}}\leftarrow\text{meta-ad}{\left({t}_{{4}},\text{'VRFHash'},\text{False}\right)}
+$$
+$$
+{t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},{64}_{{\text{le}}},\text{True}\right)}
+$$
+$$
+{i}\leftarrow\text{prf}{\left({t}_{{6}},\text{False}\right)}
+$$
+$$
+{o}={s}_{{k}}\cdot{i}
+$$
 
 where ${s}_{{k}}$ is the secret key, ${p}_{{k}}$ is the public key and ${64}_{{\text{le}}}$ is the integer *64* encoded as little endian. ${R}_{{s}}$ is the relay VRF story as defined in [Definition -def-num-ref-](chapter-anv#defn-relay-vrf-story). Following:
 
-${t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'VRFResult'}\right)}$ ${t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{''},\text{'A&V CORE'}\right)}$ ${t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'vrf-in'},{i}\right)}$ ${t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'vrf-out'},{o}\right)}$ ${t}_{{5}}\leftarrow\text{meta-ad}{\left({t}_{{4}},\text{''},\text{False}\right)}$ ${t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},{4}_{\text{le}},\text{True}\right)}$ ${r}\leftarrow\text{prf}{\left({t}_{{6}},\text{False}\right)}$ ${c}_{{i}}={r}\text{mod}{a}_{{c}}$
+$$
+{t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'VRFResult'}\right)}
+$$
+$$
+{t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{''},\text{'A\&V CORE'}\right)}
+$$
+$$
+{t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'vrf-in'},{i}\right)}
+$$
+$$
+{t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'vrf-out'},{o}\right)}
+$$
+$$
+{t}_{{5}}\leftarrow\text{meta-ad}{\left({t}_{{4}},\text{''},\text{False}\right)}
+$$
+$$
+{t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},{4}_{\text{le}},\text{True}\right)}
+$$
+$$
+{r}\leftarrow\text{prf}{\left({t}_{{6}},\text{False}\right)}
+$$
+$$
+{c}_{{i}}={r}\text{mod}{a}_{{c}}
+$$
 
 where ${4}_{{\text{le}}}$ is the integer *4* encoded as little endian, ${r}$ is the 4-byte challenge interpreted as a little endian encoded interger and ${a}_{{c}}$ is the number of availability cores used during the active session, as defined in the session info retrieved by the Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-session-info)). The resulting integer, ${c}_{{i}}$, indicates the parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)). If the parachain Id doesn’t exist, as can be retrieved by the Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-availability-cores)), the validator discards that value and continues with the next iteration. If the Id does exist, the validators continues with the following steps:
 
-${t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'A&V ASSIGNED'}\right)}$ ${t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{'core'},{c}_{{i}}\right)}$ ${p}\leftarrow\text{dleq_prove}{\left({t}_{{2}},{i}\right)}$
+$$
+{t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'A\&V ASSIGNED'}\right)}
+$$ 
+$$
+{t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{'core'},{c}_{{i}}\right)}
+$$
+$$
+{p}\leftarrow\text{dleq\_prove}{\left({t}_{{2}},{i}\right)}
+$$
 
-where $\text{dleq_prove}$ is described in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove). The resulting values of ${o}$, ${p}$ and ${s}$ are used to construct an assignment certificate ([Definition -def-num-ref-](chapter-anv#defn-assignment-cert)) of kind *0*.
+where $\text{dleq\_prove}$ is described in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove). The resulting values of ${o}$, ${p}$ and ${s}$ are used to construct an assignment certificate ([Definition -def-num-ref-](chapter-anv#defn-assignment-cert)) of kind *0*.
 
 ###### Definition -def-num- Delayed Availability Core VRF Assignment {#delayed-availability-core-vrf-assignment}
 
@@ -356,13 +410,62 @@ The **delayed availability core VRF assignments** determined at what point a val
 
 The validator executes the following steps:
 
-${t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'A&V DELAY'}\right)}$ ${t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{'RC-VRF'},{R}_{{s}}\right)}$ ${t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'core'},{c}_{{i}}\right)}$ ${t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'vrf-nm-pk'},{p}_{{k}}\right)}$ ${t}_{{5}}\leftarrow\text{meta-ad}{\left({t}_{{4}},\text{'VRFHash'},\text{False}\right)}$ ${t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},{64}_{{\text{le}}},\text{True}\right)}$ ${i}\leftarrow\text{prf}{\left({t}_{{6}},\text{False}\right)}$ ${o}={s}_{{k}}\cdot{i}$ ${p}\leftarrow\text{dleq_prove}{\left({t}_{{6}},{i}\right)}$
+$$
+{t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'A\&V DELAY'}\right)}
+$$
+$$
+{t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{'RC-VRF'},{R}_{{s}}\right)}
+$$
+$$
+{t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'core'},{c}_{{i}}\right)}
+$$
+$$
+{t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'vrf-nm-pk'},{p}_{{k}}\right)}
+$$
+$$
+{t}_{{5}}\leftarrow\text{meta-ad}{\left({t}_{{4}},\text{'VRFHash'},\text{False}\right)}
+$$
+$$
+{t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},{64}_{{\text{le}}},\text{True}\right)}
+$$
+$$
+{i}\leftarrow\text{prf}{\left({t}_{{6}},\text{False}\right)}
+$$
+$$
+{o}={s}_{{k}}\cdot{i}
+$$
+$$
+{p}\leftarrow\text{dleq\_prove}{\left({t}_{{6}},{i}\right)}
+$$
 
-The resulting value ${p}$ is the VRF proof ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-proof)). $\text{dleq_prove}$ is described in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove).
+The resulting value ${p}$ is the VRF proof ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-proof)). $\text{dleq\_prove}$ is described in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove).
 
 The tranche, ${d}$, is determined as:
 
-${t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'VRFResult'}\right)}$ ${t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{''},\text{'A&V TRANCHE'}\right)}$ ${t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'vrf-in'},{i}\right)}$ ${t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'vrf-out'},{o}\right)}$ ${t}_{{5}}\leftarrow\text{meta-ad}{\left({t}_{{4}},\text{''},\text{False}\right)}$ ${t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},{4}_{{\text{le}}},\text{True}\right)}$ ${c}\leftarrow\text{prf}{\left({t}_{{6}},\text{False}\right)}$ ${d}={d}\text{mod}{\left({d}_{{c}}+{d}_{{z}}\right)}-{d}_{{z}}$
+$$
+{t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'VRFResult'}\right)}
+$$
+$$
+{t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{''},\text{'A\&V TRANCHE'}\right)}
+$$
+$$
+{t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'vrf-in'},{i}\right)}
+$$
+$$
+{t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'vrf-out'},{o}\right)}
+$$
+$$
+{t}_{{5}}\leftarrow\text{meta-ad}{\left({t}_{{4}},\text{''},\text{False}\right)}
+$$
+$$
+{t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},{4}_{{\text{le}}},\text{True}\right)}
+$$
+$$
+{c}\leftarrow\text{prf}{\left({t}_{{6}},\text{False}\right)}
+$$
+$$
+{d}={d}\text{mod}{\left({d}_{{c}}+{d}_{{z}}\right)}-{d}_{{z}}
+$$
 
 where  
 - ${d}_{{c}}$ is the number of delayed tranches by total as specified by the session info, retrieved via the Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-session-info)).

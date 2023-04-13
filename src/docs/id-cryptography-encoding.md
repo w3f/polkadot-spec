@@ -51,7 +51,7 @@ where ${C}$ is the challenge and ${S}$ is the 32-byte Schnorr poof. Both are exp
 
 ###### Definition -def-num- `DLEQ Prove` {#defn-vrf-dleq-prove}
 
-The $\text{dleq_prove}{\left({t},{i}\right)}$ function creates a proof for a given input, ${i}$, based on the provided transcript, ${T}$.
+The $\text{dleq\_prove}{\left({t},{i}\right)}$ function creates a proof for a given input, ${i}$, based on the provided transcript, ${T}$.
 
 First:
 
@@ -64,11 +64,29 @@ $$
 
 Then the witness scalar is calculated, ${s}_{{w}}$, where ${w}$ is the 32-byte secret seed used for nonce generation in the context of sr25519.
 
-${t}_{{3}}=\text{meta-AD}{\left({t}_{{2}},\text{}'{p}{r}{o}{v}\in{g}$\right.}00'", "more=False")$t_4 = "meta-AD"(t_3, w_l, "more=True")$t_5 = "KEY"(t_4, w, "more=False")$t_6 = "meta-AD"(t_5, "'rng'", "more=False")$t_7 = "KEY"(t_6, r, "more=False")$ $t_8 = "meta-AD"(t_7, e\_(64), "more=False")$ $(phi, s_w) = "PRF"(t_8, "more=False")$
+$$
+\begin{aligned}
+t_3 &= \text{meta-AD}(t_2, \text{'proving\\00'}, \text{more=False}) \\
+t_4 &= \text{meta-AD}(t_3, w_l, \text{more=True}) \\
+t_5 &= \text{KEY}(t_4, w, \text{more=False}) \\
+t_6 &= \text{meta-AD}(t_5, \text{'rng'}, \text{more=False}) \\
+t_7 &= \text{KEY}(t_6, r, \text{more=False}) \\
+t_8 &= \text{meta-AD}(t_7, e\_(64), \text{more=False}) \\
+(\phi, s_w) &= \text{PRF}(t_8, \text{more=False})
+\end{aligned}
+$$
 
 where ${w}_{{l}}$ is length of the witness, encoded as a 32-bit little-endian integer. ${r}$ is a 32-byte array containing the secret witness scalar.
 
-${l}_{{1}}=\text{append}{\left({t}_{{2}},\text{'vrf:R=g^r'},{s}_{{w}}\right)}$ ${l}_{{2}}=\text{append}{\left({l}_{{1}},\text{'vrf:h^r'},{s}_{{i}}\right)}$ ${l}_{{3}}=\text{append}{\left({l}_{{2}},\text{'vrf:pk'},{s}_{{p}}\right)}$ ${l}_{{4}}=\text{append}{\left({l}_{{3}},\text{'vrf:h^sk'},\text{vrf}_{{o}}\right)}$
+$$
+\begin{aligned}
+l_1 &= \text{append}(t_2, \text{'}\text{vrf:R=g}^r\text{'}, s_w) \\
+l_2 &= \text{append}(l_1, \text{'}\text{vrf:h}^r\text{'}, s_i) \\
+l_3 &= \text{append}(l_2, \text{'}\text{vrf:pk}\text{'}, s_p) \\
+l_4 &= \text{append}(l_3, \text{'}\text{vrf:h}^{sk}\text{'}, \text{vrf}_{o})
+\end{aligned}
+$$
+
 
 where
 
@@ -100,9 +118,19 @@ where ${p}$ is the secret key.
 
 ###### Definition -def-num- `DLEQ Verify` {#defn-vrf-dleq-verify}
 
-The $\text{dleq_verify}{\left({i},{o},{P},{p}_{{k}}\right)}$ function verifiers the VRF input, ${i}$ against the output, ${o}$, with the associated proof ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-proof)) and public key, ${p}_{{k}}$.
+The $\text{dleq\_verify}{\left({i},{o},{P},{p}_{{k}}\right)}$ function verifiers the VRF input, ${i}$ against the output, ${o}$, with the associated proof ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-proof)) and public key, ${p}_{{k}}$.
 
-${t}_{{1}}=\text{append}{\left({t},\text{'proto-name'},\text{'DLEQProof'}\right)}$ ${t}_{{2}}=\text{append}{\left({t}_{{1}},\text{'vrf:h'},{s}_{{i}}\right)}$ ${t}_{{3}}=\text{append}{\left({t}_{{2}},\text{'vrf:R=g^r'},{R}\right)}$ ${t}_{{4}}=\text{append}{\left({t}_{{3}},\text{'vrf:h^r'},{H}\right)}$ ${t}_{{5}}=\text{append}{\left({t}_{{4}},\text{'vrf:pk'},{p}_{{k}}\right)}$ ${t}_{{6}}=\text{append}{\left({t}_{{5}},\text{'vrf:h^sk'},{o}\right)}$
+$$
+\begin{aligned}
+t_1 &= \text{append}(t, \text{'}\text{proto-name}\text{'}, \text{'}\text{DLEQProof}\text{'}) \\
+t_2 &= \text{append}(t_1, \text{'}\text{vrf:h}\text{'}, s_i) \\
+t_3 &= \text{append}(t_2, \text{'}\text{vrf:R=g}^r\text{'}, R) \\
+t_4 &= \text{append}(t_3, \text{'}\text{vrf:h}^r\text{'}, H) \\
+t_5 &= \text{append}(t_4, \text{'}\text{vrf:pk}\text{'}, p_k) \\
+t_6 &= \text{append}(t_5, \text{'}\text{vrf:h}^{sk}\text{'}, o)
+\end{aligned}
+$$
+
 
 where
 

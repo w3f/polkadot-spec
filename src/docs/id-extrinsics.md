@@ -53,13 +53,29 @@ Account Id, ${A}_{{i}}$, is the 32-byte address of the sender of the extrinsic a
 
 The signature, ${Sig}$, is a varying data type indicating the used signature type, followed by the signature created by the extrinsic author. The following types are supported:
 
-${Sig}:=\begin{\left\lbrace{cases}\right\rbrace}{0},&\text{Ed25519, followed by: }\ {\left({b}_{{0}},\ldots,{b}_{{{63}}}\right)}$ 1, & \text{Sr25519, followed by: } (b_0, ...,b\_{63}) ${2},&\text{Ecdsa, followed by: }\ {\left({b}_{{0}},\ldots,{b}_{{{64}}}\right)}\end{\left\lbrace{cases}\right\rbrace}$
+$$
+Sig :=
+\begin{cases}
+0, & \text{Ed25519, followed by: } (b_0, \ldots,b_{63}) \\
+1, & \text{Sr25519, followed by: } (b_0, \ldots,b_{63}) \\
+2, & \text{Ecdsa, followed by: } (b_0, \ldots,b_{64})
+\end{cases}
+$$
+
 
 Signature types vary in sizes, but each individual type is always fixed-size and therefore does not contain a length prefix. `Ed25519` and `Sr25519` signatures are 512-bit while `Ecdsa` is 520-bit, where the last 8 bits are the recovery ID.
 
 The signature is created by signing payload ${P}$.
 
-${b}{e}{g}\in{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}{P}&\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{R}{a}{w},&\text{if }\ {\left|{R}{a}{w}\right|}\leq{256}$ Blake2(Raw), & \text{if } \|Raw\| \> 256 ${e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}$ Raw &:= (M_i, F_i(m), E, R_v, F_v, H_h(G), H_h(B)) ${e}{n}{d}{\left\lbrace{a}{l}{i}{g}\ne{d}\right\rbrace}$
+$$
+\begin{aligned}
+P &:= \begin{cases}
+Raw, & \text{if } \|Raw\| \leq 256 \\
+\text{Blake2}(Raw), & \text{if } \|Raw\| > 256 \\
+\end{cases} \\
+Raw &:= (M_i, F_i(m), E, R_v, F_v, H_h(G), H_h(B))
+\end{aligned}
+$$
 
 where  
 - ${M}_{{i}}$: the module indicator ([Definition -def-num-ref-](id-extrinsics#defn-module-indicator)).
@@ -97,7 +113,15 @@ ${M}_{{i}}$ is an indicator for the Runtime to which Polkadot *module*, ${m}$, t
 
 ${M}_{{i}}$ is a varying data type pointing to every module exposed to the network.
 
-${M}_{{i}}\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{0},&\text{System}$ 1, & \text{Utility} $\ldots&$ 7, & \text{Balances} $\ldots&{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}$
+$$
+M_i := \begin{cases}
+0, & \text{System} \\
+1, & \text{Utility} \\
+\ldots & \\
+7, & \text{Balances} \\
+\ldots &
+\end{cases}
+$$
 
 ###### Definition -def-num- Function Indicator {#defn-function-indicator}
 
@@ -109,7 +133,15 @@ $$
 
 The value of ${m}_{{i}}$ varies for each Polkadot module, since every module offers different functions. As an example, the `Balances` module has the following functions:
 
-${B}{a}{l}{a}{n}{c}{e}{s}_{{i}}\:={b}{e}{g}\in{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}{0},&\text{transfer}$ 1, & \text{set_balance} ${2},&\text{force_transfer}$ 3, & \text{transfer_keep_alive} $\ldots&{e}{n}{d}{\left\lbrace{c}{a}{s}{e}{s}\right\rbrace}$
+$$
+Balances_i := \begin{cases}
+0, & \text{transfer} \\
+1, & \text{set\_balance} \\
+2, & \text{force\_transfer} \\
+3, & \text{transfer\_keep\_alive} \\
+\ldots &
+\end{cases}
+$$
 
 ### -sec-num- Mortality {#id-mortality}
 

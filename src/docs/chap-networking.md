@@ -374,7 +374,7 @@ $$
 {P}={\left({{f}_{{x}}\ldots}{{f}_{{y}},}{c}\right)}
 $$
 
-${{f}_{{x}}\ldots}{{f}_{{y}}$} is an array consisting of warp sync fragments of the following format:
+${{f}_{{x}}\ldots}{{f}_{{y}}}$ is an array consisting of warp sync fragments of the following format:
 
 $$
 {{f}_{{x}}=}{\left({B}_{{h}},{J}^{{{r},\text{stage}}}{\left({B}\right)}\right)}

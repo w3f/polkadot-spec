@@ -30,7 +30,7 @@ We refer to the number of slots in epoch ${\mathcal{{E}}}_{{n}}$ by ${s}{c}_{{n}
 
 ###### Definition -def-num- Epoch Subchain {#defn-epoch-subchain}
 
-By $\text{SubChain}{\left({\mathcal{{E}}}_{{n}}$\right.}) for epoch ${\mathcal{{E}}}_{{n}}$, we refer to the path graph of ${B}{T}$ containing all the blocks generated during the slots of epoch ${\mathcal{{E}}}_{{n}}$. When there is more than one block generated at a slot, we choose the one which is also on $\text{Longest-Chain}{\left({B}{T}\right)}$.
+By ${\text{SubChain}{\left({\mathcal{{E}}}_{{n}}\right)}}$ for epoch ${\mathcal{{E}}}_{{n}}$, we refer to the path graph of ${B}{T}$ containing all the blocks generated during the slots of epoch ${\mathcal{{E}}}_{{n}}$. When there is more than one block generated at a slot, we choose the one which is also on $\text{Longest-Chain}{\left({B}{T}\right)}$.
 
 ###### Definition -def-num- Equivocation {#defn-equivocation}
 
@@ -117,9 +117,38 @@ If ${i}_{{d}}$ points to the authority, that authority must claim the secondary 
 
 The BABE block production lottery requires a specific transcript structure ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-transcript)). That structure is used by both primary slots ([Block-Production-Lottery](sect-block-production#algo-block-production-lottery)) and secondary slots ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)).
 
-${t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'BABE'}\right)}$ ${t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{'slot number'},{s}\right)}$ ${t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'current epoch'},{e}_{{i}}\right)}$ ${t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'chain randomness'},{r}\right)}$ ${t}_{{5}}\leftarrow\text{append}{\left({t}_{{4}},\text{'vrf-nm-pk'},{p}_{{k}}\right)}$ ${t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},\text{'VRFHash'},\text{False}\right)}$ ${t}_{{7}}\leftarrow\text{meta-ad}{\left({t}_{{6}},{64}_{\text{le}},\text{True}\right)}$ ${h}\leftarrow\text{prf}{\left({t}_{{7}},\text{False}\right)}$ ${o}={s}_{{k}}\cdot{h}$ ${p}\leftarrow\text{dleq_prove}{\left({t}_{{7}},{h}\right)}$
+$$
+{t}_{{1}}\leftarrow\text{Transcript}{\left(\text{'BABE'}\right)}
+$$
+$$
+{t}_{{2}}\leftarrow\text{append}{\left({t}_{{1}},\text{'slot number'},{s}\right)}
+$$
+$$
+{t}_{{3}}\leftarrow\text{append}{\left({t}_{{2}},\text{'current epoch'},{e}_{{i}}\right)}
+$$
+$$
+{t}_{{4}}\leftarrow\text{append}{\left({t}_{{3}},\text{'chain randomness'},{r}\right)}
+$$
+$$
+{t}_{{5}}\leftarrow\text{append}{\left({t}_{{4}},\text{'vrf-nm-pk'},{p}_{{k}}\right)}
+$$
+$$
+{t}_{{6}}\leftarrow\text{meta-ad}{\left({t}_{{5}},\text{'VRFHash'},\text{False}\right)}
+$$
+$$
+{t}_{{7}}\leftarrow\text{meta-ad}{\left({t}_{{6}},{64}_{\text{le}},\text{True}\right)}
+$$
+$$
+{h}\leftarrow\text{prf}{\left({t}_{{7}},\text{False}\right)}
+$$
+$$
+{o}={s}_{{k}}\cdot{h}
+$$
+$$
+{p}\leftarrow\text{dleq\_prove}{\left({t}_{{7}},{h}\right)}
+$$
 
-The operators are defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-strobe-operations), $\text{dleq_prove}$ in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove). The computed outputs, ${o}$ and ${p}$, are included in the block Pre-Digest ([Definition -def-num-ref-](sect-block-production#defn-babe-header)).
+The operators are defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-strobe-operations), $\text{dleq\_prove}$ in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove). The computed outputs, ${o}$ and ${p}$, are included in the block Pre-Digest ([Definition -def-num-ref-](sect-block-production#defn-babe-header)).
 
 ## -sec-num- Slot Number Calculation {#sect-slot-number-calculation}
 
