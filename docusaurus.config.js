@@ -37,7 +37,6 @@ const config = {
 
   plugins: [
     path.resolve(__dirname, 'plugins', 'resizeSvg', 'index.js'),
-    path.resolve(__dirname, 'plugins', 'injectGreyBoxes', 'index.js'),
   ],
 
   presets: [

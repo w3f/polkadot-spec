@@ -19,11 +19,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-multipage-html
-docs-old
-docs-old-2
-# static/img/kaitai_render
-
 preBuild/*/*.js
 plugins/*/*.js
 docs/*.md
