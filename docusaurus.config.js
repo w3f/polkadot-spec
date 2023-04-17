@@ -37,6 +37,7 @@ const config = {
 
   plugins: [
     path.resolve(__dirname, 'plugins', 'resizeSvg', 'index.js'),
+    path.resolve(__dirname, 'plugins', 'injectGreyBoxes', 'index.js'),
   ],
 
   presets: [
@@ -53,6 +54,11 @@ const config = {
           editUrl:
             'https://github.com/0xCaso/polkadot-spec/tree/docusaurus/spec-website',
           routeBasePath: '/', // Serve the docs at the site's root
+          admonitions: {
+            tag: ':::',
+            keywords: ['definition'],
+            extendDefaults: true,
+          },
         },
         blog: false, // Optional: disable the blog plugin
         theme: {

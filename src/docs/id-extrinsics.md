@@ -9,6 +9,7 @@ An extrinsic is a SCALE encoded array consisting of a version number, signature,
 ## -sec-num- Preliminaries {#id-preliminaries-3}
 
 ###### Definition -def-num- Extrinsic {#defn-extrinsic}
+:::definition
 
 An extrinsic , ${t}{x}$, is a tuple consisting of the extrinsic version, ${T}_{{v}}$ ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-version)), and the body of the extrinsic, ${T}_{{b}}$.
 
@@ -18,12 +19,15 @@ $$
 
 The value of ${T}_{{b}}$ varies for each version. The current version 4 is described in [Section -sec-num-ref-](id-extrinsics#sect-version-four).
 
+:::
 ###### Definition -def-num- Extrinsic Version {#defn-extrinsic-version}
+:::definition
 
 ${T}_{{v}}$ is a 8-bit bitfield and defines the extrinsic version. The required format of an extrinsic body, ${T}_{{b}}$, is dictated by the Runtime. Older or unsupported version are rejected.
 
 The most significant bit of ${T}_{{v}}$ indicates whether the transaction is **signed** (${1}$) or **unsigned** (${0}$). The remaining 7-bits represent the version number. As an example, for extrinsic format version 4, an signed extrinsic represents ${T}_{{v}}$ as `132` while a unsigned extrinsic represents it as `4`.
 
+:::
 ## -sec-num- Extrinsics Body {#id-extrinsics-body}
 
 ### -sec-num- Version 4 {#sect-version-four}
@@ -34,7 +38,7 @@ $$
 {T}_{{b}}\:={\left({A}_{{i}},{Sig},{E},{M}_{{i}},{F}_{{i}}{\left({m}\right)}\right)}
 $$
 
-where  
+**where**  
 - ${A}_{{i}}$: the 32-byte address of the sender ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-address)).
 
 - ${Sig}$: the signature of the sender ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-signature)).
@@ -46,10 +50,13 @@ where
 - ${F}_{{i}}{\left({m}\right)}$: the indicator of the function of the Polkadot module ([Definition -def-num-ref-](id-extrinsics#defn-function-indicator)).
 
 ###### Definition -def-num- Extrinsic Address {#defn-extrinsic-address}
+:::definition
 
 Account Id, ${A}_{{i}}$, is the 32-byte address of the sender of the extrinsic as described in the [external SS58 address format](https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)).
 
+:::
 ###### Definition -def-num- Extrinsic Signature {#defn-extrinsic-signature}
+:::definition
 
 The signature, ${Sig}$, is a varying data type indicating the used signature type, followed by the signature created by the extrinsic author. The following types are supported:
 
@@ -77,7 +84,7 @@ Raw &:= (M_i, F_i(m), E, R_v, F_v, H_h(G), H_h(B))
 \end{aligned}
 $$
 
-where  
+**where**  
 - ${M}_{{i}}$: the module indicator ([Definition -def-num-ref-](id-extrinsics#defn-module-indicator)).
 
 - ${F}_{{i}}{\left({m}\right)}$: the function indicator of the module ([Definition -def-num-ref-](id-extrinsics#defn-function-indicator)).
@@ -92,7 +99,9 @@ where
 
 - ${H}_{{h}}{\left({B}\right)}$: a 32-byte array containing the hash of the block which starts the mortality period, as described in [Definition -def-num-ref-](id-extrinsics#defn-extrinsic-mortality).
 
+:::
 ###### Definition -def-num- Extra Data {#defn-extra-data}
+:::definition
 
 Extra data, ${E}$, is a tuple containing additional meta data about the extrinsic and the system it is meant to be executed in.
 
@@ -100,14 +109,16 @@ $$
 {E}\:={\left({T}_{mor},{N},{P}_{{t}}\right)}
 $$
 
-where  
+**where**  
 - ${T}_{mor}$: contains the SCALE encoded mortality of the extrinsic ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-mortality)).
 
 - ${N}$: a compact integer containing the nonce of the sender. The nonce must be incremented by one for each extrinsic created, otherwise the Polkadot network will reject the extrinsic.
 
 - ${P}_{{t}}$: a compact integer containing the transactor pay including tip.
 
+:::
 ###### Definition -def-num- Module Indicator {#defn-module-indicator}
+:::definition
 
 ${M}_{{i}}$ is an indicator for the Runtime to which Polkadot *module*, ${m}$, the extrinsic should be forwarded to.
 
@@ -123,7 +134,9 @@ M_i := \begin{cases}
 \end{cases}
 $$
 
+:::
 ###### Definition -def-num- Function Indicator {#defn-function-indicator}
+:::definition
 
 ${F}_{{i}}{\left({m}\right)}$ is a tuple which contains an indicator, ${m}_{{i}}$, for the Runtime to which *function* within the Polkadot *module*, ${m}$, the extrinsic should be forwarded to. This indicator is followed by the concatenated and SCALE encoded parameters of the corresponding function, ${p}{a}{r}{a}{m}{s}$.
 
@@ -143,9 +156,11 @@ Balances_i := \begin{cases}
 \end{cases}
 $$
 
+:::
 ### -sec-num- Mortality {#id-mortality}
 
 ###### Definition -def-num- Extrinsic Mortality {#defn-extrinsic-mortality}
+:::definition
 
 Extrinsic **mortality** is a mechanism which ensures that an extrinsic is only valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can also be immortal, as clarified in [Section -sec-num-ref-](id-extrinsics#sect-mortality-encoding).
 
@@ -163,6 +178,7 @@ $$
 
 ${M}_{{{per}}}$ and ${M}_{{{pha}}}$ are then included in the extrinsic, as clarified in [Definition -def-num-ref-](id-extrinsics#defn-extra-data), in the SCALE encoded form of ${T}_{mor}$ ([Section -sec-num-ref-](id-extrinsics#sect-mortality-encoding)). Polkadot validators can use ${M}_{{{pha}}}$ to figure out the block hash included in the payload, which will therefore result in a valid signature if the extrinsic is within the specified period or an invalid signature if the extrinsic "died".
 
+:::
 #### -sec-num- Example {#id-example}
 
 The extrinsic author choses ${M}_{{{per}}}={256}$ at block `10'000`, resulting with ${M}_{{{pha}}}={16}$. The extrinsic is then valid for blocks ranging from `10'000` to `10'256`.
@@ -181,7 +197,7 @@ If the extrinsic is immortal, specify a single byte with the value equal to zero
 
 \Require{${M}_{{{per}}},{M}_{{{pha}}}$} \Return ${0}{e}{n}{s}{p}{a}{c}{e}\text{}{f}{\left\lbrace{\quad\text{if}\quad}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}\text{}{t}{\left\lbrace{e}{x}{t}{r}\in{s}{i}{c}{i}{s}{i}{m}{mor}{t}{a}{l}\right\rbrace}$ \State \textbf{init} ${f}{a}{c}\to{r}=$\call{Limit}{${M}_{{{per}}}>>{12},{1},\phi$} \State \textbf{init} $\le{f}{t}=$\call{Limit}{\call{TZ}{${M}_{{{per}}}$}$-{1},{1},{15}$} \State \textbf{init} ${r}{i}{g}{h}{t}={\frac{{{M}_{{{pha}}}}}{{{f}{a}{c}\to{r}}}}<<{4}$ \Return $\le{f}{t}{\mid}{r}{i}{g}{h}{t}$ \Require{${T}_{mor}$} \Return $\text{}{t}{\left\lbrace{I}{m}{mor}{t}{a}{l}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}\text{}{f}{\left\lbrace{\quad\text{if}\quad}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}{T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}={0}$ \State \textbf{init} ${e}{n}{c}={T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}+{\left({T}^{{{b}{1}}}_{\left\lbrace{mor}\right\rbrace}<<{8}\right)}$ \State \textbf{init} ${M}_{{{per}}}={2}<<{\left({e}{n}{c}$\right.} mod${\left({1}<<{4}\right)}{)}$ \State \textbf{init} ${f}{a}{c}\to{r}=$ \call{Limit}{${M}_{{{per}}}>>{12},{1},\phi$} \State \textbf{init} ${M}_{{{pha}}}={\left({e}{n}{c}>>{4}\right)}\cdot{f}{a}{c}\to{r}$ \Return ${\left({M}_{{{per}}},{M}_{{{pha}}}\right)}$
 
-where  
+**where**  
 - ${T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}$: the first byte of ${T}_{mor}$.
 
 - ${T}^{{{b}{1}}}_{\left\lbrace{mor}\right\rbrace}$: the second byte of ${T}_{mor}$.

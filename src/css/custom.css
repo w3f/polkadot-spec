@@ -64,8 +64,15 @@ h1 {
   height: auto;
 }
 
-g.node > text > a {
+svg > g.graph > g.node > text > a {
   text-decoration: underline;
+}
+
+.alert--definition {
+  --ifm-alert-background-color: #e6007b07;
+  --ifm-alert-background-color-highlight: #54c7ec26;
+  --ifm-alert-foreground-color: var(--ifm-color-info-contrast-foreground);
+  --ifm-alert-border-color: #e6007a;
 }
 
 /* ==========================================================================

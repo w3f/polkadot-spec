@@ -1,10 +1,9 @@
 ---
 title: Polkadot Protocol
 ---
-
-|     |                                                                                                                                  |
-|-----|----------------------------------------------------------------------------------------------------------------------------------|
-|     | This specification is **Work-In-Progress** and any content, structure, design and/or hyper/anchor-link **is subject to change**. |
+:::caution
+This specification is **Work-In-Progress** and any content, structure, design and/or hyper/anchor-link **is subject to change**.
+:::
 
 Formally, Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. In Polkadot vocabulary, shards are called *parachains* and Polkadot *relay chain* is part of the protocol ensuring global consensus among all the parachains. The Polkadot relay chain protocol, henceforward called *Polkadot protocol*, can itself be considered as a replicated state machine on its own. As such, the protocol can be specified by identifying the state machine and the replication strategy.
 

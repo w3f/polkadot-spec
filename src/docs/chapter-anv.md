@@ -17,6 +17,7 @@ Parachain candidates contained in non-finalized relay chain blocks must then be 
 Collations are proposed candidates [Definition -def-num-ref-](chapter-anv#defn-candidate) to the Polkadot relay chain validators. The Polkodat network protocol is agnostic on what candidate productionis mechanism each parachain uses and does not specify or mandate any of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the relay chain validator host implementation itself does not directly interpret or process the internal transactions of the candidate, but rather rely on the parachain Runtime to validate the candidate ([Section -sec-num-ref-](chapter-anv#sect-candidate-validation)). Collators, which are parachain nodes which produce candidate proposals and send them to the relay chain validator, must prepare pieces of data ([Definition -def-num-ref-](chapter-anv#defn-collation)) in order to correctly comply with the requirements of the parachain protocol.
 
 ###### Definition -def-num- Collation {#defn-collation}
+:::definition
 
 A collation is a datastructure which contains the proposed parachain candidate, including an optional validation parachain Runtime update and upward messages. The collation datastructure, C, is a datastructure of the following format:
 
@@ -30,7 +31,7 @@ $$
 {H}={\left({z}_{{n}},…{z}_{{m}}\right)}
 $$
 
-where  
+**where**  
 - ${M}$ is an array of upward messages ([Definition -def-num-ref-](chapter-anv#defn-upward-message)), ${u}$, interpreted by the relay chain itself.
 
 - ${H}$ is an array of outbound horizontal messages ([Definition -def-num-ref-](chapter-anv#defn-outbound-hrmp-message)), ${z}$, interpreted by other parachains.
@@ -45,6 +46,7 @@ where
 
 - ${w}$ is an unsigned 32-bit integer indicating the mark up to which all inbound HRMP messages have been processed by the parachain.
 
+:::
 ## -sec-num- Candidate Backing {#sect-candidate-backing}
 
 The Polkadot validator receives an arbitrary number of parachain candidates with associated proofs from untrusted collators. The assigned validators of each parachain ([Definition -def-num-ref-](chapter-anv#defn-validator-groups)) must verify and select a specific quantity of the proposed candidates and issue those as backable candidates to its peers. A candidate is considered backable when at least 2/3 of all assigned validators have issued a *Valid* statement about that candidate, as described in [Section -sec-num-ref-](chapter-anv#sect-candidate-statements). Validators can retrieve information about assignments via the Runtime APIs [Section -sec-num-ref-](chap-runtime-api#sect-rt-api-validator-groups) respectively [Section -sec-num-ref-](chap-runtime-api#sect-rt-api-availability-cores).
@@ -58,6 +60,7 @@ This protocol attempts to produce as many backable candidates as possible, but d
 The validator issues validity statements votes in form of a validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-validator-protocol-message)).
 
 ###### Definition -def-num- Statement {#defn-statement}
+:::definition
 
 A statement, ${S}$, is a datastructure of the following format:
 
@@ -68,7 +71,7 @@ $$
 {d}={\left\lbrace\begin{matrix}{1}&\rightarrow&{C}_{{r}}\\{2}&\rightarrow&{C}_{{h}}\end{matrix}\right.}
 $$
 
-where  
+**where**  
 - ${d}$ is a varying datatype where *1* indicates that the validator “seconds” a candidate, meaning that the candidate should be included in the relay chain, followed by the committed candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-committed-candidate-receipt)), ${C}_{{r}}$. *2* indicates that the validator has deemed the candidate valid, followed by the candidate hash.
 
 - ${C}_{{h}}$ is the candidate hash.
@@ -77,11 +80,13 @@ where
 
 - ${A}_{{s}}$ is the signature of the validator.
 
+:::
 ### -sec-num- Inclusion {#sect-candidate-inclusion}
 
 The Polkadot validator includes the backed candidates as parachain inherent data ([Definition -def-num-ref-](chapter-anv#defn-parachain-inherent-data)) into a block as described [Section -sec-num-ref-](chap-state#sect-inherents). The relay chain block author decides on whatever metric which candidate should be selected for inclusion, as long as that candidate is valid and meets the validity quorum of 2/3+ as described in [Section -sec-num-ref-](chapter-anv#sect-candidate-statements). The candidate approval process ([Section -sec-num-ref-](chapter-anv#sect-approval-voting)) ensures that only relay chain blocks are finalized where each candidate for each availability core meets the requirement of 2/3+ availability votes.
 
 ###### Definition -def-num- Parachain Inherent Data {#defn-parachain-inherent-data}
+:::definition
 
 The parachain inherent data contains backed candidates and is included when authoring a relay chain block. The datastructure, ${I}$, is of the following format:
 
@@ -110,7 +115,7 @@ $$
 {L}={\left({b},{v}_{{i}},{s}\right)}
 $$
 
-where  
+**where**  
 - ${A}$ is an array of signed bitfields by validators claiming the candidate is available (or not). The array must be sorted by validator index corresponding to the authority set ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
 - ${T}$ is an array of backed candidates for inclusing in the current block.
@@ -135,7 +140,9 @@ where
 
 - ${v}_{{i}}$ is the validator index of the authority set ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
+:::
 ###### Definition -def-num- Candidate Receipt {#defn-candidate-receipt}
+:::definition
 
 A candidate receipt, ${R}$, contains information about the candidate and a proof of the results of its execution. It’s a datastructure of the following format:
 
@@ -145,7 +152,9 @@ $$
 
 where ${D}$ is the candidate descriptor ([Definition -def-num-ref-](chapter-anv#defn-candidate-descriptor)) and ${C}_{{h}}$ is the hash of candidate commitments ([Definition -def-num-ref-](chapter-anv#defn-candidate-commitments)).
 
+:::
 ###### Definition -def-num- Committed Candidate Receipt {#defn-committed-candidate-receipt}
+:::definition
 
 The committed candidate receipt, ${R}$, contains information about the candidate and the the result of its execution that is included in the relay chain. This type is similar to the candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-candidate-receipt)), but actually contains the execution results rather than just a hash of it. It’s a datastructure of the following format:
 
@@ -155,7 +164,9 @@ $$
 
 where ${D}$ is the candidate descriptor ([Definition -def-num-ref-](chapter-anv#defn-candidate-descriptor)) and ${C}$ is the candidate commitments ([Definition -def-num-ref-](chapter-anv#defn-candidate-commitments)).
 
+:::
 ###### Definition -def-num- Candidate Descriptor {#defn-candidate-descriptor}
+:::definition
 
 The candidate descriptor, ${D}$, is a unique descriptor of a candidate receipt. It’s a datastructure of the following format:
 
@@ -163,7 +174,7 @@ $$
 {D}={\left({p},{H},{C}_{{i}},{V},{B},{r},{s},{p}_{{h}},{R}_{{h}}\right)}
 $$
 
-where  
+**where**  
 - ${p}$ is the parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
 
 - ${H}$ is the hash of the relay chain block the candidate is executed in the context of.
@@ -182,7 +193,9 @@ where
 
 - ${R}_{{h}}$ is the hash of the parachain Runtime.
 
+:::
 ###### Definition -def-num- Candidate Commitments {#defn-candidate-commitments}
+:::definition
 
 The candidate commitments, ${C}$, is the result of the execution and validation of a parachain (or parathread) candidate whose produced values must be committed to the relay chain. Those values are retrieved from the validation result ([Definition -def-num-ref-](chapter-anv#defn-validation-result)). A candidate commitment is a datastructure of the following format:
 
@@ -190,7 +203,7 @@ $$
 {C}={\left({M}_{{u}},{M}_{{h}},{R},{h},{p},{w}\right)}
 $$
 
-where  
+**where**  
 - ${M}_{{u}}$ is an array of upward messages sent by the parachain. Each individual message, m, is an array of bytes.
 
 - ${M}_{{h}}$ is an array of individual outbound horizontal messages ([Definition -def-num-ref-](chapter-anv#defn-outbound-hrmp-message)) sent by the parachain.
@@ -203,6 +216,7 @@ where
 
 - ${w}$ is a unsigned 32-bit integer indicating the watermark which specifies the relay chain block number up to which all inbound horizontal messages have been processed.
 
+:::
 ## -sec-num- Candidate Validation {#sect-candidate-validation}
 
 Received candidates submitted by collators and must have its validity verified by the assigned Polkadot validators. For each candidate to be valid, the validator must successfully verify the following conditions in the following order:
@@ -222,6 +236,7 @@ Parachain Runtimes are stored in the relay chain state, and can either be fetche
 In order to validate a parachain block, the Polkadot validator must prepare the validation parameters ([Definition -def-num-ref-](chapter-anv#defn-validation-parameters)), then use its local Wasm execution environment ([Section -sec-num-ref-](chap-state#sect-code-executor)) to execute the validate_block parachain Runtime API by passing on the validation parameters as an argument. The parachain Runtime function returns the validation result ([Definition -def-num-ref-](chapter-anv#defn-validation-result)).
 
 ###### Definition -def-num- Validation Parameters {#defn-validation-parameters}
+:::definition
 
 The validation parameters structure, ${P}$, is required to validate a candidate against a parachain Runtime. It’s a datastructure of the following format:
 
@@ -229,7 +244,7 @@ $$
 {P}={\left({h},{b},{B}_{{i}},{S}_{{r}}\right)}
 $$
 
-where  
+**where**  
 - ${h}$ is the parachain head data ([Definition -def-num-ref-](chapter-anv#defn-head-data)).
 
 - ${b}$ is the block body ([Definition -def-num-ref-](chapter-anv#defn-para-block)).
@@ -238,7 +253,9 @@ where
 
 - ${S}_{{r}}$ is the relay chain block storage root ([Section -sec-num-ref-](chap-state#sect-merkl-proof)).
 
+:::
 ###### Definition -def-num- Validation Result {#defn-validation-result}
+:::definition
 
 The validation result is returned by the `validate_block` parachain Runtime API after attempting to validate a parachain block. Those results are then used in candidate commitments ([Definition -def-num-ref-](chapter-anv#defn-candidate-commitments)), which then will be inserted into the relay chain via the parachain inherent data ([Definition -def-num-ref-](chapter-anv#defn-parachain-inherent-data)). The validation result, ${V}$, is a datastructure of the following format:
 
@@ -252,7 +269,7 @@ $$
 {M}_{{h}}={\left({t}_{{0}},…{t}_{{n}}\right)}
 $$
 
-where  
+**where**  
 - ${h}$ is the parachain head data ([Definition -def-num-ref-](chapter-anv#defn-head-data)).
 
 - ${R}$ is an *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) that can contain a new parachain Runtime in case of an update.
@@ -265,6 +282,7 @@ where
 
 - ${w}$ is a unsigned 32-bit integer indicating the watermark which specifies the relay chain block number up to which all inbound horizontal messages have been processed.
 
+:::
 ### -sec-num- Runtime Compression {#sect-runtime-compression}
 
 |     |                                            |
@@ -312,6 +330,7 @@ Validators are required to track broadcasted assignments by other validators ass
 If enough approval votes have been collected as described in [Section -sec-num-ref-](chap-runtime-api#sect-rt-api-session-info), then assignees of later tranches do not have to start the approval process. Therefore, this tranche system serves as a mechanism to ensure that enough candidate approvals from a random set of validators are created without requiring all assigned validators to check the candidate.
 
 ###### Definition -def-num- Relay VRF Story {#defn-relay-vrf-story}
+:::definition
 
 The relay VRF story is an array of random bytes derived from the VRF submitted within the block by the block author. The relay VRF story, T, is used as input to determine approval voting criteria and generated the following way:
 
@@ -319,7 +338,7 @@ $$
 {T}=\text{Transcript}{\left({b}_{{r}},{b}_{{s}},{e}_{{i}},{A}\right)}
 $$
 
-where  
+**where**  
 - $\text{Transcript}$ constructs a VRF transcript ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-transcript)).
 
 - ${b}_{{r}}$ is the BABE randomness of the current epoch ([Definition -def-num-ref-](sect-block-production#defn-epoch-randomness)).
@@ -330,7 +349,9 @@ where
 
 - ${A}$ is the public key of the authority.
 
+:::
 ###### Definition -def-num- Availability Core VRF Assignment {#defn-availability-core-vrf-assignment}
+:::definition
 
 An availability core VRF assignment is computed by a relay chain validator to determine which availability core ([Definition -def-num-ref-](chapter-anv#defn-availability-core)) a validator is assigned to and should vote for approvals. Computing this assignement relies on the VRF mechanism, transcripts and STROBE operations described further in [Section -sec-num-ref-](id-cryptography-encoding#sect-vrf).
 
@@ -404,7 +425,9 @@ $$
 
 where $\text{dleq\_prove}$ is described in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove). The resulting values of ${o}$, ${p}$ and ${s}$ are used to construct an assignment certificate ([Definition -def-num-ref-](chapter-anv#defn-assignment-cert)) of kind *0*.
 
+:::
 ###### Definition -def-num- Delayed Availability Core VRF Assignment {#delayed-availability-core-vrf-assignment}
+:::definition
 
 The **delayed availability core VRF assignments** determined at what point a validator should start the approval process as described in [Section -sec-num-ref-](chapter-anv#sect-tranches). Computing this assignement relies on the VRF mechanism, transcripts and STROBE operations described further in [Section -sec-num-ref-](id-cryptography-encoding#sect-vrf).
 
@@ -467,14 +490,16 @@ $$
 {d}={d}\text{mod}{\left({d}_{{c}}+{d}_{{z}}\right)}-{d}_{{z}}
 $$
 
-where  
+**where**  
 - ${d}_{{c}}$ is the number of delayed tranches by total as specified by the session info, retrieved via the Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-session-info)).
 
 - ${d}_{{z}}$ is the zeroth delay tranche width as specified by the session info, retrieved via the Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-session-info))..
 
 The resulting tranche, ${n}$, cannot be less than ${0}$. If the tranche is less than ${0}$, then ${d}={0}$. The resulting values ${o}$, ${p}$ and ${c}_{{i}}$ are used to construct an assignment certificate (\<[Definition -def-num-ref-](chapter-anv#defn-assignment-cert)) of kind *1*.
 
+:::
 ###### Definition -def-num- Assignment Certificate {#defn-assignment-cert}
+:::definition
 
 The **Assignment Certificate** proves to the network that a Polkadot validator is assigned to an availability core and is therefore qualified for the approval of candidates, as clarified in [Definition -def-num-ref-](chapter-anv#defn-availability-core-vrf-assignment). This certificate contains the computed VRF output and is a datastructure of the following format:
 
@@ -487,11 +512,12 @@ $$
 
 where ${k}$ indicates the kind of the certificate, respectively the value *0* proves the availability core assignment ([Definition -def-num-ref-](chapter-anv#defn-availability-core-vrf-assignment)), followed by the sample number ${s}$, and the value *1* proves the delayed availability core assignment ([Definition -def-num-ref-](chapter-anv#delayed-availability-core-vrf-assignment)), followed by the core index ${c}_{{i}}$ ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-availability-cores)). ${o}$ is the VRF output and ${p}$ is the VRF proof.
 
+:::
 ## -sec-num- Disputes {#sect-disputes}
 
-|     |                                  |
-|-----|----------------------------------|
-|     | Disputes are not documented yet. |
+:::info
+Disputes are not documented yet.
+:::
 
 ## -sec-num- Network Messages {#sect-anv-network-messages}
 
@@ -502,6 +528,7 @@ The availability and validity process requires certain network messages to be ex
 The notification messages are exchanged between validators, including messages sent by collators to validators. The protocol messages are exchanged based on a streaming notification substream ([Section -sec-num-ref-](chap-networking#sect-connection-establishment)). The messages are SCALE encoded ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)).
 
 ###### Definition -def-num- Validator Protocol Message {#net-msg-validator-protocol-message}
+:::definition
 
 The validator protocol message is a varying datatype used by validators to broadcast relevant information about certain steps in the A&V process. Specifically, this includes the backing process ([Section -sec-num-ref-](chapter-anv#sect-candidate-backing)) and the approval process ([Section -sec-num-ref-](chapter-anv#sect-approval-voting)). The validator protocol message, ${M}$, is a varying datatype of the following format:
 
@@ -509,14 +536,16 @@ $$
 {M}={\left\lbrace\begin{matrix}{1}&\rightarrow&{M}_{{f}}\\{3}&\rightarrow&{M}_{{s}}\\{4}&\rightarrow&{M}_{{a}}\end{matrix}\right.}
 $$
 
-where  
+**where**  
 - ${M}_{{f}}$ is a bitfield distribution message ([Definition -def-num-ref-](chapter-anv#net-msg-bitfield-dist-msg)).
 
 - ${M}_{{s}}$ is a statement distribution message ([Definition -def-num-ref-](chapter-anv#net-msg-statement-distribution)).
 
 - ${M}_{{a}}$ is a approval distribution message ([Definition -def-num-ref-](chapter-anv#net-msg-approval-distribution)).
 
+:::
 ###### Definition -def-num- Collation Protocol Message {#net-msg-collator-protocol-message}
+:::definition
 
 The collation protocol message, M, is a varying datatype of the following format:
 
@@ -526,7 +555,9 @@ $$
 
 where ${M}_{{c}}$ is the collator message ([Definition -def-num-ref-](chapter-anv#net-msg-collator-message)).
 
+:::
 ###### Definition -def-num- Collator Message {#net-msg-collator-message}
+:::definition
 
 The collator message is sent as part of the collator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-collator-protocol-message)). The collator message, ${M}$, is a varying datatype of the following format:
 
@@ -534,7 +565,7 @@ $$
 {M}={\left\lbrace\begin{matrix}{0}&\rightarrow&{\left({C}_{{i}},{P}_{{i}},{C}_{{s}}\right)}\\{1}&\rightarrow&{H}\\{4}&\rightarrow&{\left({B}_{{h}},{S}\right)}\end{matrix}\right.}
 $$
 
-where  
+**where**  
 - ${M}$ is a varying datatype where *0* indicates the intent to advertise a collation and *1* indicates the advertisement of a collation to a validator. *4* indicates that a collation sent to a validator was seconded.
 
 - ${C}_{{i}}$ is the public key of the collator.
@@ -547,7 +578,9 @@ where
 
 - ${S}$ is a full statement ([Definition -def-num-ref-](chapter-anv#defn-statement)).
 
+:::
 ###### Definition -def-num- Statement Distribution Message {#net-msg-statement-distribution}
+:::definition
 
 The statement distribution message is sent as part of the validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-collator-protocol-message)) indicates the validity vote of a validator for a given candidate, described further in [Section -sec-num-ref-](chapter-anv#sect-candidate-statements). The statement distribution message, ${M}$, is of varying type of the following format:
 
@@ -558,7 +591,7 @@ $$
 {S}_{{m}}={\left({B}_{{h}},{C}_{{h}},{A}_{{i}},{A}_{{s}}\right)}
 $$
 
-where  
+**where**  
 - ${M}$ is a varying datatype where *0* indicates a signed statement and *1* contains metadata about a seconded statement with a larger payload, such as a runtime upgrade. The candidate itself can be fetched via the request/response message ([Definition -def-num-ref-](chapter-anv#net-msg-statement-fetching-request)).
 
 - ${B}_{{h}}$ is the hash of the relay chain parent, indicating the state this message is for.
@@ -569,7 +602,9 @@ where
 
 - ${A}_{{s}}$ is the signature of the validator.
 
+:::
 ###### Definition -def-num- Bitfield Distribution Message {#net-msg-bitfield-dist-msg}
+:::definition
 
 The bitfield distribution message is sent as part of the validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-validator-protocol-message)) and indicates the availability vote of a validator for a given candidate, described further in [Section -sec-num-ref-](chapter-anv#sect-availability-votes). This message is sent in form of a validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-validator-protocol-message)). The bitfield distribution message, ${M}$, is a datastructure of the following format:
 
@@ -580,7 +615,7 @@ $$
 {P}={\left({d},{A}_{{i}},{A}_{{s}}\right)}
 $$
 
-where  
+**where**  
 - ${B}_{{h}}$ is the hash of the relay chain parent, indicating the state this message is for.
 
 - ${d}$ is the bitfield array ([Definition -def-num-ref-](chapter-anv#defn-bitfield-array)).
@@ -589,7 +624,9 @@ where
 
 - ${A}_{{s}}$ is the signature of the validator.
 
+:::
 ###### Definition -def-num- Approval Distribution Message {#net-msg-approval-distribution}
+:::definition
 
 The approval distribution message is sent as part of the validator protocol message ([Definition -def-num-ref-](chapter-anv#net-msg-validator-protocol-message)) and indicates the approval vote of a validator for a given candidate, described further in [Section -sec-num-ref-](chapter-anv#sect-availability-assignment-criteria). The approval distribution message, ${M}$, is a varying datatype of the following format:
 
@@ -609,7 +646,7 @@ $$
 {V}={\left({B}_{{h}},{I},{A}_{{i}},{A}_{{s}}\right)}
 $$
 
-where  
+**where**  
 - ${M}$ is a varying datatype where *0* indicates assignments for candidates in recent, unfinalized blocks and *1* indicates approvals for candidates in some recent, unfinalized block.
 
 - ${C}$ is an assignment criterion which refers to the candidate under which the assignment is relevant by the block hash.
@@ -628,11 +665,13 @@ where
 
 - ${P}_{{o}}$ is a VRF output and ${P}_{{p}}$ its corresponding proof.
 
+:::
 ### -sec-num- Request & Response {#id-request-response}
 
 The request & response network messages are sent and received between peers in the Polkadot network, including collators and non-validator nodes. Those messages are conducted on the request-response substreams ([Section -sec-num-ref-](chap-networking#sect-connection-establishment)). The network messages are SCALE encoded as described in Section ?.
 
 ###### Definition -def-num- PoV Fetching Request {#net-msg-pov-fetching-request}
+:::definition
 
 The PoV fetching request is sent by clients who want to retrieve a PoV block from a node. The request is a datastructure of the following format:
 
@@ -642,7 +681,9 @@ $$
 
 where ${C}_{{h}}$ is the 256-bit hash of the PoV block. The response message is defined in [Definition -def-num-ref-](chapter-anv#net-msg-pov-fetching-response).
 
+:::
 ###### Definition -def-num- PoV Fetching Response {#net-msg-pov-fetching-response}
+:::definition
 
 The PoV fetching response is sent by nodes to the clients who issued a PoV fetching request ([Definition -def-num-ref-](chapter-anv#net-msg-pov-fetching-request)). The response, ${R}$, is a varying datatype of the following format:
 
@@ -652,7 +693,9 @@ $$
 
 where *0* is followed by the PoV block and *1* indicates that the PoV block was not found.
 
+:::
 ###### Definition -def-num- Chunk Fetching Request {#net-msg-chunk-fetching-request}
+:::definition
 
 The chunk fetching request is sent by clients who want to retrieve chunks of a parachain candidate. The request is a datastructure of the following format:
 
@@ -662,7 +705,9 @@ $$
 
 where ${C}_{{h}}$ is the 256-bit hash of the parachain candidate and ${i}$ is a 32-bit unsigned integer indicating the index of the chunk to fetch. The response message is defined in [Definition -def-num-ref-](chapter-anv#net-msg-chunk-fetching-response).
 
+:::
 ###### Definition -def-num- Chunk Fetching Response {#net-msg-chunk-fetching-response}
+:::definition
 
 The chunk fetching response is sent by nodes to the clients who issued a chunk fetching request ([Definition -def-num-ref-](chapter-anv#net-msg-chunk-fetching-request)). The response, ${R}$, is a varying datatype of the following format:
 
@@ -675,7 +720,9 @@ $$
 
 where *0* is followed by the chunk response, ${C}_{{r}}$ and *1* indicates that the requested chunk was not found. ${C}_{{r}}$ contains the erasure-encoded chunk of data belonging to the candidate block, ${c}$, and ${c}_{{p}}$ is that chunks proof in the Merkle tree. Both ${c}$ and ${c}_{{p}}$ are byte arrays of type ${\left({b}_{{n}}…{b}_{{m}}\right)}$.
 
+:::
 ###### Definition -def-num- Available Data Request {#net-msg-available-data-request}
+:::definition
 
 The available data request is sent by clients who want to retrieve the PoV block of a parachain candidate. The request is a datastructure of the following format:
 
@@ -685,7 +732,9 @@ $$
 
 where ${C}_{{h}}$ is the 256-bit candidate hash to get the available data for. The response message is defined in [Definition -def-num-ref-](chapter-anv#net-msg-available-data-response).
 
+:::
 ###### Definition -def-num- Available Data Response {#net-msg-available-data-response}
+:::definition
 
 The available data response is sent by nodes to the clients who issued a available data request ([Definition -def-num-ref-](chapter-anv#net-msg-available-data-request)). The response, ${R}$, is a varying datatype of the following format:
 
@@ -698,7 +747,9 @@ $$
 
 where *0* is followed by the available data, ${A}$, and *1* indicates the the requested candidate hash was not found. ${P}_{{{o}{v}}}$ is the PoV block ([Definition -def-num-ref-](chapter-anv#defn-para-block)) and ${D}_{{{p}{v}}}$ is the persisted validation data ([Definition -def-num-ref-](chap-runtime-api#defn-persisted-validation-data)).
 
+:::
 ###### Definition -def-num- Collation Fetching Request {#net-msg-collation-fetching-request}
+:::definition
 
 The collation fetching request is sent by clients who want to retrieve the advertised collation at the specified relay chain block. The request is a datastructure of the following format:
 
@@ -708,7 +759,9 @@ $$
 
 where ${B}_{{h}}$ is the hash of the relay chain block and ${P}_{{{i}{d}}}$ is the parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)). The response message is defined in [Definition -def-num-ref-](chapter-anv#net-msg-collation-fetching-response).
 
+:::
 ###### Definition -def-num- Collation Fetching Response {#net-msg-collation-fetching-response}
+:::definition
 
 The collation fetching response is sent by nodes to the clients who issued a collation fetching request ([Definition -def-num-ref-](chapter-anv#net-msg-collation-fetching-request)). The response, ${R}$, is a varying datatype of the following format:
 
@@ -718,7 +771,9 @@ $$
 
 where ${0}$ is followed by the candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-candidate-receipt)), ${C}_{{r}}$, as and the PoV block ([Definition -def-num-ref-](chapter-anv#defn-para-block)), ${B}$. This type does not notify the client about a statement that was not found.
 
+:::
 ###### Definition -def-num- Statement Fetching Request {#net-msg-statement-fetching-request}
+:::definition
 
 The statement fetching request is sent by clients who want to retrieve statements about a given candidate. The request is a datastructure of the following format:
 
@@ -728,7 +783,9 @@ $$
 
 where ${B}_{{h}}$ is the hash of the relay chain parent and ${C}_{{h}}$ is the candidate hash that was used to create a committed candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-committed-candidate-receipt)). The response message is defined in [Definition -def-num-ref-](chapter-anv#net-msg-statement-fetching-response).
 
+:::
 ###### Definition -def-num- Statement Fetching Response {#net-msg-statement-fetching-response}
+:::definition
 
 The statement fetching response is sent by nodes to the clients who issued a collation fetching request ([Definition -def-num-ref-](chapter-anv#net-msg-statement-fetching-request)). The response, ${R}$, is a varying datatype of the following format:
 
@@ -738,6 +795,7 @@ $$
 
 where ${C}_{{r}}$ is the committed candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-committed-candidate-receipt)). No response is returned if no statement is found.
 
+:::
 #### -sec-num- Dispute Request {#net-msg-dispute-request}
 
 The dispute request is sent by clients who want to issue a dispute about a candidate. The request, ${D}_{{r}}$, is a datastructure of the following format:
@@ -758,7 +816,7 @@ $$
 {k}_{{v}}={\left\lbrace\begin{matrix}{0}&\rightarrow&\phi\\{1}&\rightarrow&{C}_{{h}}\\{2}&\rightarrow&{C}_{{h}}\\{3}&\rightarrow&\phi\end{matrix}\right.}
 $$
 
-where  
+**where**  
 - ${C}_{{r}}$ is the candidate that is being disputed. The structure is a candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-candidate-receipt)).
 
 - ${S}_{{i}}$ is an unsigned 32-bit integer indicating the session index the candidate appears in.
@@ -798,42 +856,61 @@ where ${0}$ indicates that the dispute was successfully processed.
 ## -sec-num- Definitions {#sect-anv-definitions}
 
 ###### Definition -def-num- Collator {#defn-collator}
+:::definition
 
 A collator is a parachain node that sends parachain blocks, known as candidates ([Definition -def-num-ref-](chapter-anv#defn-candidate)), to the relay chain validators. The relay chain validators are not concerned how the collator works or how it creates candidates.
 
+:::
 ###### Definition -def-num- Candidate {#defn-candidate}
+:::definition
 
 A candidate is a submitted parachain block ([Definition -def-num-ref-](chapter-anv#defn-para-block)) to the relay chain validators. A parachain block stops being referred to as a candidate as soon it has been finalized.
 
+:::
 ###### Definition -def-num- Parachain Block {#defn-para-block}
+:::definition
 
 A parachain block or a Proof-of-Validity block (PoV block) contains the necessary data for the parachain specific state transition logic. Relay chain validators are not concerned with the inner structure of the block and treat it as a byte array.
 
+:::
 ###### Definition -def-num- Head Data {#defn-head-data}
+:::definition
 
 The head data is contains information about a parachain block ([Definition -def-num-ref-](chapter-anv#defn-para-block)). The head data is returned by executing the parachain Runtime and relay chain validators are not concerned with its inner structure and treat it as a byte arrays.
 
+:::
 ###### Definition -def-num- Parachain Id {#defn-para-id}
+:::definition
 
 The Parachain Id is a unique, unsigned 32-bit integer which serves as an identifier of a parachain, assigned by the Runtime.
 
+:::
 ###### Definition -def-num- Availability Core {#defn-availability-core}
+:::definition
 
 Availability cores are slots used to process parachains. The Runtime assigns each parachain to a availability core and validators can fetch information about the cores, such as parachain block candidates, by calling the appropriate Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-availability-cores)). Validators are not concerned with the internal workings from the Runtimes perspective.
 
+:::
 ###### Definition -def-num- Validator Groups {#defn-validator-groups}
+:::definition
 
 Validator groups indicate which validators are responsible for creating backable candidates for parachains ([Section -sec-num-ref-](chapter-anv#sect-candidate-backing)), and are assigned by the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-validator-groups)). Validators are not concerned with the internal workings from the Runtimes perspective. Collators can use this information for submitting blocks.
 
+:::
 ###### Definition -def-num- Upward Message {#defn-upward-message}
+:::definition
 
 An upward message is an opaque byte array sent from a parachain to a relay chain.
 
+:::
 ###### Definition -def-num- Downward Message {#defn-downward-message}
+:::definition
 
 A downward message is an opaque byte array received by the parachain from the relay chain.
 
+:::
 ###### Definition -def-num- Outbound HRMP Message {#defn-outbound-hrmp-message}
+:::definition
 
 An outbound HRMP message (Horizontal Relay-routed Message Passing) is sent from the perspective of a sender of a parachain to an other parachain by passing it through the relay chain. It’s a datastructure of the following format:
 
@@ -843,7 +920,9 @@ $$
 
 where ${I}$ is the recipient Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)) and ${M}$ is an upward message ([Definition -def-num-ref-](chapter-anv#defn-upward-message)).
 
+:::
 ###### Definition -def-num- Inbound HRMP Message {#defn-inbound-hrmp-message}
+:::definition
 
 An inbound HRMP message (Horizontal Relay-routed Message Passing) is seen from the perspective of a recipient parachain sent from an other parachain by passing it through the relay chain. It’s a datastructure of the following format:
 
@@ -853,6 +932,8 @@ $$
 
 where ${N}$ is the unsigned 32-bit integer indicating the relay chain block number at which the message was passed down to the recipient parachain and ${M}$ is a downward message ([Definition -def-num-ref-](chapter-anv#defn-downward-message)).
 
+:::
 ###### Definition -def-num- Bitfield Array {#defn-bitfield-array}
+:::definition
 
 A bitfield array contains single-bit values which indidate whether a candidate is available. The number of items is equal of to the number of availability cores ([Definition -def-num-ref-](chapter-anv#defn-availability-core)) and each bit represents a vote on the corresponding core in the given order. Respectively, if the single bit equals 1, then the Polkadot validator claims that the availability core is occupied, there exists a committed candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-committed-candidate-receipt)) and that the validator has a stored chunk of the parachain block ([Definition -def-num-ref-](chapter-anv#defn-para-block)).

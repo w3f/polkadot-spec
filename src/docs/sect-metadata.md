@@ -23,7 +23,7 @@ $$
 {E}={\left({e}_{{0}},\ldots,{e}_{{n}}\right)}
 $$
 
-where  
+**where**  
 - ${M}$ are the first four constant bytes, spelling "meta" in ASCII.
 
 - ${v}_{{m}}$ is an unsigned 8-bit integer indicating the format version of the metadata structure (currently the value of `14`).
@@ -46,6 +46,7 @@ import Metadata from '/static/img/kaitai_render/metadata.svg';
 <Metadata className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Runtime Registry Type Entry {#defn-rtm-registry-entry}
+:::definition
 
 A registry entry contains information about a type in its portable form for serialization. The entry is a datastructure of the following format:
 
@@ -59,7 +60,7 @@ $$
 {t}_{{i}}={\left({n},{y}\right)}
 $$
 
-where  
+**where**  
 - $\text{id}_{{t}}$ is a compact integer indicating the identifier of the type.
 
 - ${p}$ is the path of the type, optional and based on source file location. Encoded as a sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of strings.
@@ -78,12 +79,15 @@ where
 import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
 
 <MetadataType className="graphviz fix-img-size" /> 
-
+:::
 ###### Definition -def-num- Runtime Type Id {#defn-rtm-type-id}
+:::definition
 
 The **runtime type Id** is a compact integer representing the index of the entry ([Definition -def-num-ref-](sect-metadata#defn-rtm-registry-entry)) in ${R},{P}$ or ${E}$ of the runtime metadata structure ([Section -sec-num-ref-](sect-metadata#sect-rtm-structure)), depending on context (starting at ${0}$).
 
+:::
 ###### Definition -def-num- Type Variant {#defn-rtm-type-definition}
+:::definition
 
 The type definition ${D}$ is a varying datatype ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) and indicates all the possible types of encodable values a type can have.
 
@@ -91,7 +95,7 @@ $$
 {D}={\left\lbrace\begin{matrix}{0}&\rightarrow&{C}&\text{composite type (e.g. structure or tuple)}\\{1}&\rightarrow&{V}&\text{variant type}\\{2}&\rightarrow&{s}_{{v}}&\text{sequence type varying length}\\{3}&\rightarrow&{S}&\text{sequence with fixed length}\\{4}&\rightarrow&{T}&\text{tuple type}\\{5}&\rightarrow&{P}&\text{primitive type}\\{6}&\rightarrow&{e}&\text{compact encoded type}\\{7}&\rightarrow&{B}&\text{sequence of bits}\end{matrix}\right.}
 $$
 
-where  
+**where**  
 - ${C}$ is a sequence of the following format:
 
   ${C}={\left({{f}_{{0}},}\ldots,{f}_{{n}}\right)}$
@@ -136,8 +140,10 @@ where
 import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_definition.svg';
 
 <MetadataTypeDefinition className="graphviz fix-img-size"  />
+:::
 
 ###### Definition -def-num- Field {#defn-rtm-field}
+:::definition
 
 A field of a datastructure of the following format:
 
@@ -145,7 +151,7 @@ $$
 {{f}_{{i}}=}{\left({n},{y},{y}_{{n}},{C}\right)}
 $$
 
-where
+**where**
 
 - ${n}$ is an *Option* type containing the string that indicates the field name.
 
@@ -159,8 +165,10 @@ where
 import MetadataTypeFields from '/static/img/kaitai_render/metadata_type_fields.svg';
 
 <MetadataTypeFields className="graphviz fix-img-size" />
+:::
 
 ###### Definition -def-num- Variant {#defn-rtm-variant}
+:::definition
 
 A struct variant of the following format:
 
@@ -168,7 +176,7 @@ $$
 {v}_{{i}}={\left({n},{F},{k},{C}\right)}
 $$
 
-where
+**where**
 
 - ${n}$ is a string representing the name of the variant.
 
@@ -182,7 +190,7 @@ where
 import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_variants.svg';
 
 <MetadataTypeVariants className="graphviz fix-img-size" />
-
+:::
 ## -sec-num- Pallet Metadata {#sect-rtm-pallet-metadata}
 
 All the metadata about a pallet, part of the main structure ([Section -sec-num-ref-](sect-metadata#sect-rtm-structure)) and of the following format:
@@ -191,7 +199,7 @@ $$
 {p}_{{i}}={\left({n},{S},{a},{e},{C},{e},{i}\right)}
 $$
 
-where
+**where**
 
 - ${n}$ is a string representing the pallet name.
 
@@ -213,6 +221,7 @@ import MetadataPallet from '/static/img/kaitai_render/metadata_pallet.svg';
 <MetadataPallet className="graphviz fix-img-size" />
 
 ###### Definition -def-num- Pallet Storage Metadata {#defn-rtm-pallet-storage-metadata}
+:::definition
 
 The metadata about a pallets storage.
 
@@ -223,13 +232,15 @@ $$
 {E}={\left({e}_{{0}},\ldots,{e}_{{n}}\right)}
 $$
 
-where
+**where**
 
 - ${p}$ is the string representing the common prefix used by all storage entries.
 
 - ${E}$ is an array of varying length containing elements of storage entries ([Definition -def-num-ref-](sect-metadata#defn-rtm-storage-entry-metadata)).
 
+:::
 ###### Definition -def-num- Storage Entry Metadata {#defn-rtm-storage-entry-metadata}
+:::definition
 
 The metadata about a pallets storage entry.
 
@@ -240,7 +251,7 @@ $$
 {C}={\left({c}_{{0}},\ldots,{c}_{{n}}\right)}
 $$
 
-where
+**where**
 
 - ${n}$ is the string representing the variable name of the storage entry.
 
@@ -256,12 +267,13 @@ where
 import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
 
 <PalletStorage className="graphviz fix-img-size" />
-
+:::
 ###### Definition -def-num- Storage Entry Modifier {#defn-rtm-storage-entry-modifier}
+::::definition
 
-|     |                                                 |
-|-----|-------------------------------------------------|
-|     | This might be incorrect and has to be reviewed. |
+:::info
+This might be incorrect and has to be reviewed.
+:::
 
 The storage entry modifier is a varying datatype ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) and indicates how the storage entry is returned and how it behaves if the entry is not present.
 
@@ -271,7 +283,9 @@ $$
 
 where *0* indicates that the entry returns an *Option* type and therefore *None* if the storage entry is not present. *1* indicates that the entry returns the type ${y}$ with default value ${d}$ (in [Definition -def-num-ref-](sect-metadata#defn-rtm-storage-entry-metadata)) if the entry is not present.
 
+::::
 ###### Definition -def-num- Storage Entry Type {#defn-rtm-storage-entry-type}
+:::definition
 
 The type of the storage value is a varying datatype ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) that indicates how the entry is stored.
 
@@ -285,8 +299,10 @@ where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition -def
 import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg';
 
 <StorageDefinition className="graphviz fix-img-size" />
+:::
 
 ###### Definition -def-num- Storage Hasher {#defn-rtm-storage-hasher}
+:::definition
 
 The hashing algorithm used by storage maps.
 
@@ -294,7 +310,9 @@ $$
 {\left\lbrace\begin{matrix}{0}&\text{128-bit Blake2 hash}\\{1}&\text{256-bit Blake2 hash}\\{2}&\text{Multiple 128-bit Blake2 hashes concatenated}\\{3}&\text{128-bit XX hash}\\{4}&\text{256-bit XX hash}\\{5}&\text{Multiple 64-bit XX hashes concatenated}\\{6}&\text{Identity hashing}\end{matrix}\right.}
 $$
 
+:::
 ###### Definition -def-num- Pallet Constants {#defn-rtm-pallet-constants}
+:::definition
 
 The metadata about the pallets constants.
 
@@ -302,7 +320,7 @@ $$
 {c}_{{i}}={\left({n},{y},{v},{C}\right)}
 $$
 
-where  
+**where**  
 - ${n}$ is a string representing the name of the pallet constant.
 
 - ${y}$ is the type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) of the pallet constant.
@@ -315,12 +333,13 @@ where
 import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 
 <PalletConstant className="graphviz fix-img-size" />
-
+:::
 ## -sec-num- Extrinsic Metadata {#sect-rtm-extrinsic-metadata}
 
 The metadata about a pallets extrinsics, part of the main structure ([Section -sec-num-ref-](sect-metadata#sect-rtm-structure)) and of the following format:
 
 ###### Definition -def-num- Signed Extension Metadata {#defn-rtm-signed-extension-metadata}
+:::definition
 
 The metadata about the additional, signed data required to execute an extrinsic.
 
@@ -328,7 +347,7 @@ $$
 {e}_{{i}}={\left({n},{y},{a}\right)}
 $$
 
-where  
+**where**  
 - ${n}$ is a string representing the unique signed extension identifier, which may be different from the type name.
 
 - ${y}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) of the signed extension, with the data to be included in the extrinsic.
@@ -339,3 +358,4 @@ where
 import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';
 
 <MetadataExtrinsic className="graphviz fix-img-size" />
+:::

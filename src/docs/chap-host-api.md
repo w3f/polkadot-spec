@@ -9,18 +9,25 @@ Description of the expected environment available for import by the Polkadot Run
 The Polkadot Host API is a set of functions that the Polkadot Host exposes to Runtime to access external functions needed for various reasons, such as the Storage of the content, access and manipulation, memory allocation, and also efficiency. The encoding of each data type is specified or referenced in this section. If the encoding is not mentioned, then the default Wasm encoding is used, such as little-endian byte ordering for integers.
 
 ###### Definition -def-num- Exposed Host API {#defn-host-api-at-state}
+:::definition
 
 By $\text{RE}_{{B}}$ we refer to the API exposed by the Polkadot Host which interact, manipulate and response based on the state storage whose state is set at the end of the execution of block ${B}$.
 
+:::
 ###### Definition -def-num- Runtime Pointer {#defn-runtime-pointer}
+:::definition
 
 The **Runtime pointer** type is an unsigned 32-bit integer representing a pointer to data in memory. This pointer is the primary way to exchange data of fixed/known size between the Runtime and Polkadot Host.
 
+:::
 ###### Definition -def-num- Runtime Pointer Size {#defn-runtime-pointer-size}
+:::definition
 
 The **Runtime pointer-size** type is an unsigned 64-bit integer, representing two consecutive integers. The least significant is **Runtime pointer** ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)). The most significant provides the size of the data in bytes. This representation is the primary way to exchange data of arbitrary/dynamic sizes between the Runtime and the Polkadot Host.
 
+:::
 ###### Definition -def-num- Lexicographic ordering {#defn-lexicographic-ordering}
+:::definition
 
 **Lexicographic ordering** refers to the ascending ordering of bytes or byte arrays, such as:
 
@@ -30,15 +37,17 @@ $$
 
 The functions are specified in each subsequent subsection for each category of those functions.
 
+:::
 ## -sec-num- Storage {#sect-storage-api}
 
 Interface for accessing the storage from within the runtime.
 
-|     |                                                                                                                                                                                                                                                                                                                                                                                       |
-|-----|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | As of now, the storage API should silently ignore any keys that start with the `:child_storage:default:` prefix. This applies to reading and writing. If the function expects a return value, then *None* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) should be returned. See [substrate issue \#12461](https://github.com/paritytech/substrate/issues/12461). |
+:::danger
+As of now, the storage API should silently ignore any keys that start with the `:child_storage:default:` prefix. This applies to reading and writing. If the function expects a return value, then *None* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) should be returned. See [substrate issue \#12461](https://github.com/paritytech/substrate/issues/12461).
+:::
 
 ###### Definition -def-num- State Version {#defn-state-version}
+:::definition
 
 The state version, ${v}$, dictates how a merkle root should be constructed. The datastructure is a varying type of the following format:
 
@@ -48,6 +57,7 @@ $$
 
 where ${0}$ indicates that the values of the keys should be inserted into the trie directly and ${1}$ makes use of "node hashes" when calculating the merkle proof ([Definition -def-num-ref-](chap-state#defn-hashed-subvalue)).
 
+:::
 ### -sec-num- `ext_storage_set` {#sect-storage-set}
 
 Sets the value under a given key into storage.
@@ -57,7 +67,7 @@ Sets the value under a given key into storage.
     (func $ext_storage_set_version_1
         (param $key i64) (param $value i64))
 
-Arguments  
+**Arguments**  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
 
 - `value`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the value.
@@ -71,7 +81,7 @@ Retrieves the value associated with the given key from storage.
     (func $ext_storage_get_version_1
         (param $key i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
 
 - `result`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) returning the SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the value.
@@ -85,7 +95,7 @@ Gets the given key from storage, placing the value into a buffer and returning t
     (func $ext_storage_read_version_1
         (param $key i64) (param $value_out i64) (param $offset i32) (result i64))
 
-Arguments  
+**Arguments**  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
 
 - `value_out`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the buffer to which the value will be written to. This function will never write more then the length of the buffer, even if the value’s length is bigger.
@@ -103,7 +113,7 @@ Clears the storage of the given key and its value. Non-existent entries are sile
     (func $ext_storage_clear_version_1
         (param $key_data i64))
 
-Arguments  
+**Arguments**  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
 
 ### -sec-num- `ext_storage_exists` {#id-ext_storage_exists}
@@ -115,7 +125,7 @@ Checks whether the given key exists in storage.
     (func $ext_storage_exists_version_1
         (param $key_data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
 
 - `return`: an i32 integer value equal to *1* if the key exists or a value equal to *0* if otherwise.
@@ -129,7 +139,7 @@ Clear the storage of each key/value pair where the key starts with the given pre
     (func $ext_storage_clear_prefix_version_1
         (param $prefix i64))
 
-Arguments  
+**Arguments**  
 - `prefix`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the prefix.
 
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype}
@@ -138,7 +148,7 @@ Arguments
         (param $prefix i64) (param $limit i64)
         (return i64))
 
-Arguments  
+**Arguments**  
 - `prefix`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the prefix.
 
 - `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count towards the limit.
@@ -157,16 +167,16 @@ Append the SCALE encoded value to a SCALE encoded sequence ([Definition -def-num
 
 To improve performance, this function is allowed to skip decoding the entire SCALE encoded sequence and instead can just append the new item to the end of the existing data and increment the length prefix ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}$.
 
-|     |                                                                                                                                                             |
-|-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | If the storage item does not exist or is not SCALE encoded, the storage item will be set to the specified value, represented as a SCALE encoded byte array. |
+:::caution
+If the storage item does not exist or is not SCALE encoded, the storage item will be set to the specified value, represented as a SCALE encoded byte array.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-7}
 
     (func $ext_storage_append_version_1
         (param $key i64) (param $value i64))
 
-Arguments  
+**Arguments**  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
 
 - `value`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the value to be appended.
@@ -180,7 +190,7 @@ Compute the storage root.
     (func $ext_storage_root_version_1
         (return i64))
 
-Arguments  
+**Arguments**  
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to a buffer containing the 256-bit Blake2 storage root.
 
 #### -sec-num- Version 2 - Prototype {#sect-ext-storage-root-version-2}
@@ -188,23 +198,23 @@ Arguments
     (func $ext_storage_root_version_2
         (param $version i32) (return i64))
 
-Arguments  
+**Arguments**  
 - `version`: the state version ([Definition -def-num-ref-](chap-host-api#defn-state-version)).
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the buffer containing the 256-bit Blake2 storage root.
 
 ### -sec-num- `ext_storage_changes_root` {#sect-ext-storage-changes-root}
 
-|     |                                                                             |
-|-----|-----------------------------------------------------------------------------|
-|     | This function is not longer used and only exists for compatibility reasons. |
+:::info
+This function is not longer used and only exists for compatibility reasons.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-8}
 
     (func $ext_storage_changes_root_version_1
         (param $parent_hash i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `parent_hash`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded block hash.
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) that’s always *None*.
@@ -218,7 +228,7 @@ Get the next key in storage after the given one in lexicographic order ([Definit
     (func $ext_storage_next_key_version_1
         (param $key i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the next key in lexicographic order.
@@ -227,45 +237,45 @@ Arguments
 
 Start a new nested transaction. This allows to either commit or roll back all changes that are made after this call. For every transaction there must be a matching call to either `ext_storage_rollback_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-rollback-transaction)) or `ext_storage_commit_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-commit-transaction)). This is also effective for all values manipulated using the child storage API ([Section -sec-num-ref-](chap-host-api#sect-child-storage-api)). It’s legal to call this function multiple times in a row.
 
-|     |                                                                                                                                                                |
-|-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | This is a low level API that is potentially dangerous as it can easily result in unbalanced transactions. Runtimes should use high level storage abstractions. |
+:::caution
+This is a low level API that is potentially dangerous as it can easily result in unbalanced transactions. Runtimes should use high level storage abstractions.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-10}
 
     (func $ext_storage_start_transaction_version_1)
 
-Arguments  
+**Arguments**  
 - None.
 
 ### -sec-num- `ext_storage_rollback_transaction` {#sect-ext-storage-rollback-transaction}
 
 Rollback the last transaction started by `ext_storage_start_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-start-transaction)). Any changes made during that transaction are discarded. It’s legal to call this function multiple times in a row.
 
-|     |                                                                                                                                     |
-|-----|-------------------------------------------------------------------------------------------------------------------------------------|
-|     | Panics if `ext_storage_start_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-start-transaction)) was not called. |
+:::caution
+Panics if `ext_storage_start_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-start-transaction)) was not called.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-11}
 
     (func $ext_storage_rollback_transaction_version_1)
 
-Arguments  
+**Arguments**  
 - None.
 
 ### -sec-num- `ext_storage_commit_transaction` {#sect-ext-storage-commit-transaction}
 
 Commit the last transaction started by `ext_storage_start_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-start-transaction)). Any changes made during that transaction are committed to the main state. It’s legal to call this function multiple times in a row.
 
-|     |                                                                                                                                     |
-|-----|-------------------------------------------------------------------------------------------------------------------------------------|
-|     | Panics if `ext_storage_start_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-start-transaction)) was not called. |
+:::caution
+Panics if `ext_storage_start_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-start-transaction)) was not called.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-12}
 
     (func $ext_storage_commit_transaction_version_1)
 
-Arguments  
+**Arguments**  
 - None.
 
 ## -sec-num- Child Storage {#sect-child-storage-api}
@@ -273,9 +283,11 @@ Arguments
 Interface for accessing the child storage from within the runtime.
 
 ###### Definition -def-num- Child Storage {#defn-child-storage-type}
+:::definition
 
 **Child storage** key is a unprefixed location of the child trie in the main trie.
 
+:::
 ### -sec-num- `ext_default_child_storage_set` {#id-ext_default_child_storage_set}
 
 Sets the value under a given key into the child storage.
@@ -285,7 +297,7 @@ Sets the value under a given key into the child storage.
     (func $ext_default_child_storage_set_version_1
         (param $child_storage_key i64) (param $key i64) (param $value i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key` : a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -301,7 +313,7 @@ Retrieves the value associated with the given key from the child storage.
     (func $ext_default_child_storage_get_version_1
         (param $child_storage_key i64) (param $key i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -318,7 +330,7 @@ Gets the given key from storage, placing the value into a buffer and returning t
         (param $child_storage_key i64) (param $key i64) (param $value_out i64)
         (param $offset i32) (result i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -338,7 +350,7 @@ Clears the storage of the given key and its value from the child storage. Non-ex
     (func $ext_default_child_storage_clear_version_1
         (param $child_storage_key i64) (param $key i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -352,7 +364,7 @@ Clears an entire child storage.
     (func $ext_default_child_storage_storage_kill_version_1
         (param $child_storage_key i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 #### -sec-num- Version 2 - Prototype {#id-version-2-prototype-2}
@@ -361,7 +373,7 @@ Arguments
         (param $child_storage_key i64) (param $limit i64)
         (return i32))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count towards the limit.
@@ -374,7 +386,7 @@ Arguments
         (param $child_storage_key i64) (param $limit i64)
         (return i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count towards the limit.
@@ -396,7 +408,7 @@ Checks whether the given key exists in the child storage.
     (func $ext_default_child_storage_exists_version_1
         (param $child_storage_key i64) (param $key i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -412,7 +424,7 @@ Clears the child storage of each key/value pair where the key starts with the gi
     (func $ext_default_child_storage_clear_prefix_version_1
         (param $child_storage_key i64) (param $prefix i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `prefix`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the prefix.
@@ -423,7 +435,7 @@ Arguments
         (param $child_storage_key i64) (param $prefix i64)
         (param $limit i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `prefix`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the prefix.
@@ -447,7 +459,7 @@ Commits all existing operations and computes the resulting child storage root.
     (func $ext_default_child_storage_root_version_1
         (param $child_storage_key i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded storage root.
@@ -458,7 +470,7 @@ Arguments
         (param $child_storage_key i64) (param $version i32)
         (return i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `version`: the state version ([Definition -def-num-ref-](chap-host-api#defn-state-version)).
@@ -474,7 +486,7 @@ Gets the next key in storage after the given one in lexicographic order ([Defini
     (func $ext_default_child_storage_next_key_version_1
         (param $child_storage_key i64) (param $key i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -486,6 +498,7 @@ Arguments
 Interfaces for working with crypto related types from within the runtime.
 
 ###### Definition -def-num- Key Type Identifier {#defn-key-type-id}
+:::definition
 
 Cryptographic keys are stored in separate key stores based on their intended use case. The separate key stores are identified by a 4-byte ASCII **key type identifier**. The following known types are available:
 
@@ -500,8 +513,10 @@ Cryptographic keys are stored in separate key stores based on their intended use
 | audi | Key type for the AuthorityDiscovery module |
 | para | Key type for the Parachain Validator Key   |
 | asgn | Key type for the Parachain Assignment Key  |
+:::
 
 ###### Definition -def-num- ECDSA Verify Error {#defn-ecdsa-verify-error}
+:::definition
 
 **EcdsaVerifyError** is a varying data type ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) that specifies the error type when using ECDSA recovery functionality. Following values are possible:
 
@@ -512,7 +527,7 @@ Cryptographic keys are stored in separate key stores based on their intended use
 | 0   | Incorrect value of R or S |
 | 1   | Incorrect value of V      |
 | 2   | Invalid signature         |
-
+:::
 ### -sec-num- `ext_crypto_ed25519_public_keys` {#id-ext_crypto_ed25519_public_keys}
 
 Returns all *ed25519* public keys for the given key identifier from the keystore.
@@ -522,7 +537,7 @@ Returns all *ed25519* public keys for the given key identifier from the keystore
     (func $ext_crypto_ed25519_public_keys_version_1
         (param $key_type_id i32) (return i64))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key type identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an SCALE encoded 256-bit public keys.
@@ -531,16 +546,16 @@ Arguments
 
 Generates an *ed25519* key for the given key type using an optional BIP-39 seed and stores it in the keystore.
 
-|     |                                                                                                       |
-|-----|-------------------------------------------------------------------------------------------------------|
-|     | Panics if the key cannot be generated, such as when an invalid key type or invalid seed was provided. |
+:::caution
+Panics if the key cannot be generated, such as when an invalid key type or invalid seed was provided.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-23}
 
     (func $ext_crypto_ed25519_generate_version_1
         (param $key_type_id i32) (param $seed i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key type identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `seed`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the BIP-39 seed which must be valid UTF8.
@@ -556,7 +571,7 @@ Signs the given message with the `ed25519` key that corresponds to the given pub
     (func $ext_crypto_ed25519_sign_version_1
         (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key type identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `key`: a pointer to the buffer containing the 256-bit public key.
@@ -574,7 +589,7 @@ Verifies an *ed25519* signature.
     (func $ext_crypto_ed25519_verify_version_1
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
 
 - `msg`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the message that is to be verified.
@@ -592,7 +607,7 @@ Registers a ed25519 signature for batch verification. Batch verification is enab
     (func $ext_crypto_ed25519_batch_verify_version_1
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
 
 - `msg`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the message that is to be verified.
@@ -610,7 +625,7 @@ Returns all *sr25519* public keys for the given key id from the keystore.
     (func $ext_crypto_sr25519_public_keys_version_1
         (param $key_type_id i32) (return i64))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key type identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded 256-bit public keys.
@@ -619,16 +634,16 @@ Arguments
 
 Generates an *sr25519* key for the given key type using an optional BIP-39 seed and stores it in the keystore.
 
-|     |                                                                                                       |
-|-----|-------------------------------------------------------------------------------------------------------|
-|     | Panics if the key cannot be generated, such as when an invalid key type or invalid seed was provided. |
+:::caution
+Panics if the key cannot be generated, such as when an invalid key type or invalid seed was provided.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-27}
 
     (func $ext_crypto_sr25519_generate_version_1
         (param $key_type_id i32) (param $seed i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `seed`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the BIP-39 seed which must be valid UTF8.
@@ -644,7 +659,7 @@ Signs the given message with the *sr25519* key that corresponds to the given pub
     (func $ext_crypto_sr25519_sign_version_1
         (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `key`: a pointer to the buffer containing the 256-bit public key.
@@ -662,7 +677,7 @@ Verifies an sr25519 signature.
     (func $ext_crypto_sr25519_verify_version_1
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
 
 - `msg`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the message that is to be verified.
@@ -676,7 +691,7 @@ Arguments
     (func $ext_crypto_sr25519_verify_version_2
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
 
 - `msg`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the message that is to be verified.
@@ -694,7 +709,7 @@ Registers a sr25519 signature for batch verification. Batch verification is enab
     (func $ext_crypto_sr25519_batch_verify_version_1
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
 
 - `msg`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the message that is to be verified.
@@ -712,7 +727,7 @@ Returns all *ecdsa* public keys for the given key id from the keystore.
     (func $ext_crypto_ecdsa_public_key_version_1
         (param $key_type_id i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key type identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded 33-byte compressed public keys.
@@ -721,16 +736,16 @@ Arguments
 
 Generates an *ecdsa* key for the given key type using an optional BIP-39 seed and stores it in the keystore.
 
-|     |                                                                                                       |
-|-----|-------------------------------------------------------------------------------------------------------|
-|     | Panics if the key cannot be generated, such as when an invalid key type or invalid seed was provided. |
+:::caution
+Panics if the key cannot be generated, such as when an invalid key type or invalid seed was provided.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-31}
 
     (func $ext_crypto_ecdsa_generate_version_1
         (param $key_type_id i32) (param $seed i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `seed`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the BIP-39 seed which must be valid UTF8.
@@ -746,7 +761,7 @@ Signs the hash of the given message with the *ecdsa* key that corresponds to the
     (func $ext_crypto_ecdsa_sign_version_1
         (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `key`: a pointer to the buffer containing the 33-byte compressed public key.
@@ -764,7 +779,7 @@ Signs the prehashed message with the *ecdsa* key that corresponds to the given p
     (func $ext_crypto_ecdsa_sign_prehashed_version_1
         (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `key_type_id`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the key identifier ([Definition -def-num-ref-](chap-host-api#defn-key-type-id)).
 
 - `key`: a pointer to the buffer containing the 33-byte compressed public key.
@@ -784,7 +799,7 @@ This function allows the verification of non-standard, overflowing ECDSA signatu
     (func $ext_crypto_ecdsa_verify_version_1
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature. The signature is 65-bytes in size, where the first 512-bits represent the signature and the other 8 bits represent the recovery ID.
 
 - `msg`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the message that is to be verified.
@@ -800,7 +815,7 @@ Does not allow the verification of non-standard, overflowing ECDSA signatures.
     (func $ext_crypto_ecdsa_verify_version_2
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature. The signature is 65-bytes in size, where the first 512-bits represent the signature and the other 8 bits represent the recovery ID.
 
 - `msg`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the message that is to be verified.
@@ -818,7 +833,7 @@ Verifies the prehashed message against a ECDSA signature.
     (func $ext_crypto_ecdsa_verify_prehashed_version_1
         (param $sig i32) (param $msg i32) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature. The signature is 65-bytes in size, where the first 512-bits represent the signature and the other 8 bits represent the recovery ID.
 
 - `msg`: a pointer to the 32-bit prehashed message to be verified.
@@ -836,7 +851,7 @@ Registers a ECDSA signature for batch verification. Batch verification is enable
     (func $ext_crypto_ecdsa_batch_verify_version_1
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-byte signature.
 
 - `msg`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the message that is to be verified.
@@ -856,7 +871,7 @@ This function can handle non-standard, overflowing ECDSA signatures, an implemen
     (func $ext_crypto_secp256k1_ecdsa_recover_version_1
         (param $sig i32) (param $msg i32) (return i64))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature in RSV format. V should be either `0/1` or `27/28`.
 
 - `msg`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit Blake2 hash of the message.
@@ -870,7 +885,7 @@ Does not handle non-standard, overflowing ECDSA signatures.
     (func $ext_crypto_secp256k1_ecdsa_recover_version_2
         (param $sig i32) (param $msg i32) (return i64))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature in RSV format. V should be either or .
 
 - `msg`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit Blake2 hash of the message.
@@ -888,7 +903,7 @@ This function can handle non-standard, overflowing ECDSA signatures, an implemen
     (func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_1
         (param $sig i32) (param $msg i32) (return i64))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature in RSV format. V should be either `0/1` or `27/28`.
 
 - `msg`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit Blake2 hash of the message.
@@ -902,7 +917,7 @@ Does not handle non-standard, overflowing ECDSA signatures.
     (func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_2
         (param $sig i32) (param $msg i32) (return i64))
 
-Arguments  
+**Arguments**  
 - `sig`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 65-byte signature in RSV format. V should be either `0/1` or `27/28`.
 
 - `msg`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit Blake2 hash of the message.
@@ -917,23 +932,23 @@ Starts the verification extension. The extension is a separate background proces
 
     (func $ext_crypto_start_batch_verify_version_1)
 
-Arguments  
+**Arguments**  
 - None.
 
 ### -sec-num- `ext_crypto_finish_batch_verify` {#sect-ext-crypto-finish-batch-verify}
 
 Finish verifying the batch of signatures since the last call to this function. Blocks until all the signatures are verified.
 
-|     |                                                                                                                                     |
-|-----|-------------------------------------------------------------------------------------------------------------------------------------|
-|     | Panics if `ext_crypto_start_batch_verify` ([Section -sec-num-ref-](chap-host-api#sect-ext-crypto-start-batch-verify)) was not called. |
+:::caution
+Panics if `ext_crypto_start_batch_verify` ([Section -sec-num-ref-](chap-host-api#sect-ext-crypto-start-batch-verify)) was not called.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-39}
 
     (func $ext_crypto_finish_batch_verify_version_1
         (return i32))
 
-Arguments  
+**Arguments**  
 - `return`: an i32 integer value equal to *1* if all the signatures are valid or a value equal to *0* if one or more of the signatures are invalid.
 
 ## -sec-num- Hashing {#sect-hashing-api}
@@ -949,7 +964,7 @@ Conducts a 256-bit Keccak hash.
     (func $ext_hashing_keccak_256_version_1
         (param $data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the data to be hashed.
 
 - `return`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit hash result.
@@ -963,7 +978,7 @@ Conducts a 512-bit Keccak hash.
     (func $ext_hashing_keccak_512_version_1
         (param $data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the data to be hashed.
 
 - `return`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 512-bit hash result.
@@ -977,7 +992,7 @@ Conducts a 256-bit Sha2 hash.
     (func $ext_hashing_sha2_256_version_1
         (param $data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the data to be hashed.
 
 - `return`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit hash result.
@@ -991,7 +1006,7 @@ Conducts a 128-bit Blake2 hash.
     (func $ext_hashing_blake2_128_version_1
         (param $data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the data to be hashed.
 
 - `return`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 128-bit hash result.
@@ -1005,7 +1020,7 @@ Conducts a 256-bit Blake2 hash.
     (func $ext_hashing_blake2_256_version_1
         (param $data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the data to be hashed.
 
 - `return`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit hash result.
@@ -1019,7 +1034,7 @@ Conducts a 64-bit xxHash hash.
     (func $ext_hashing_twox_64_version_1
         (param $data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the data to be hashed.
 
 - `return`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 64-bit hash result.
@@ -1033,7 +1048,7 @@ Conducts a 128-bit xxHash hash.
     (func $ext_hashing_twox_128
         (param $data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the data to be hashed.
 
 - `return`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 128-bit hash result.
@@ -1047,7 +1062,7 @@ Conducts a 256-bit xxHash hash.
     (func $ext_hashing_twox_256
         (param $data i64) (return i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the data to be hashed.
 
 - `return`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit hash result.
@@ -1059,14 +1074,19 @@ The Offchain Workers allow the execution of long-running and possibly non-determ
 All data and results generated by Offchain workers are unique per node and nondeterministic. Information can be propagated to other nodes by submitting a transaction that should be included in the next block. As Offchain workers runs on their own execution environment they have access to their own separate storage. There are two different types of storage available which are defined in [Definition -def-num-ref-](chap-host-api#defn-offchain-persistent-storage) and [Definition -def-num-ref-](chap-host-api#defn-offchain-local-storage).
 
 ###### Definition -def-num- Persisted Storage {#defn-offchain-persistent-storage}
+:::definition
 
 **Persistent storage** is non-revertible and not fork-aware. It means that any value set by the offchain worker is persisted even if that block (at which the worker is called) is reverted as non-canonical (meaning that the block was surpassed by a longer chain). The value is available for the worker that is re-run at the new (different block with the same block number) and future blocks. This storage can be used by offchain workers to handle forks and coordinate offchain workers running on different forks.
 
+:::
 ###### Definition -def-num- Local Storage {#defn-offchain-local-storage}
+:::definition
 
 **Local storage** is revertible and fork-aware. It means that any value set by the offchain worker triggered at a certain block is reverted if that block is reverted as non-canonical. The value is NOT available for the worker that is re-run at the next or any future blocks.
 
+:::
 ###### Definition -def-num- HTTP Status Code {#defn-http-status-code}
+:::definition
 
 **HTTP status codes** that can get returned by certain Offchain HTTP functions.
 
@@ -1078,7 +1098,9 @@ All data and results generated by Offchain workers are unique per node and nonde
 
 - `100`-`999`: the request has finished with the given HTTP status code.
 
+:::
 ###### Definition -def-num- HTTP Error {#defn-http-error}
+:::definition
 
 HTTP error, ${E}$, is a varying data type ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) and specifies the error types of certain HTTP functions. Following values are possible:
 
@@ -1086,6 +1108,7 @@ $$
 {E}={\left\lbrace\begin{matrix}{0}&\text{The deadile was reached}\\{1}&\text{There was an IO error while processing the request}\\{2}&\text{The Id of the request is invalid}\end{matrix}\right.}
 $$
 
+:::
 ### -sec-num- `ext_offchain_is_validator` {#id-ext_offchain_is_validator}
 
 Check whether the local node is a potential validator. Even if this function returns *1*, it does not mean that any keys are configured or that the validator is registered in the chain.
@@ -1094,7 +1117,7 @@ Check whether the local node is a potential validator. Even if this function ret
 
     (func $ext_offchain_is_validator_version_1 (return i32))
 
-Arguments  
+**Arguments**  
 - `return`: a i32 integer which is equal to *1* if the local node is a potential validator or a integer equal to *0* if it is not.
 
 ### -sec-num- `ext_offchain_submit_transaction` {#sect-ext-offchain-submit-transaction}
@@ -1106,7 +1129,7 @@ Given a SCALE encoded extrinsic, this function submits the extrinsic to the Host
     (func $ext_offchain_submit_transaction_version_1
         (param $data i64) (return i64))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the byte array storing the encoded extrinsic.
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded *Result* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-result-type)). Neither on success or failure is there any additional data provided. The cause of a failure is implementation specific.
@@ -1116,6 +1139,7 @@ Arguments
 Returns the SCALE encoded, opaque information about the local node’s network state.
 
 ###### Definition -def-num- Opaque Network State {#defn-opaque-network-state}
+:::definition
 
 The **Opaque network state structure**, ${S}$, is a SCALE encoded blob holding information about the the *libp2p PeerId*, ${P}_{{\text{id}}}$, of the local node and a list of *libp2p Multiaddresses*, ${\left({M}_{{0}},\ldots{M}_{{n}}\right)}$, the node knows it can be reached at:
 
@@ -1123,7 +1147,7 @@ $$
 {S}={\left({P}_{{\text{id}}},{\left({M}_{{0}},\ldots{M}_{{n}}\right)}\right)}
 $$
 
-where
+**where**
 
 $$
 {P}_{{\text{id}}}={\left({b}_{{0}},\ldots{b}_{{n}}\right)}
@@ -1134,11 +1158,12 @@ $$
 
 The information contained in this structure is naturally opaque to the caller of this function.
 
+:::
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-50}
 
     (func $ext_offchain_network_state_version_1 (result i64))
 
-Arguments  
+**Arguments**  
 - `result`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded `Result` value ([Definition -def-num-ref-](id-cryptography-encoding#defn-result-type)). On success it contains the *Opaque network state* structure ([Definition -def-num-ref-](chap-host-api#defn-opaque-network-state)). On failure, an empty value is yielded where its cause is implementation specific.
 
 ### -sec-num- `ext_offchain_timestamp` {#id-ext_offchain_timestamp}
@@ -1149,7 +1174,7 @@ Returns the current timestamp.
 
     (func $ext_offchain_timestamp_version_1 (result i64))
 
-Arguments  
+**Arguments**  
 - `result`: an u64 integer (typed as i64 due to wasm types) indicating the current UNIX timestamp ([Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time)).
 
 ### -sec-num- `ext_offchain_sleep_until` {#id-ext_offchain_sleep_until}
@@ -1160,7 +1185,7 @@ Pause the execution until the `deadline` is reached.
 
     (func $ext_offchain_sleep_until_version_1 (param $deadline i64))
 
-Arguments  
+**Arguments**  
 - `deadline`: an u64 integer (typed as i64 due to wasm types) specifying the UNIX timestamp ([Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time)).
 
 ### -sec-num- `ext_offchain_random_seed` {#id-ext_offchain_random_seed}
@@ -1171,7 +1196,7 @@ Generates a random seed. This is a truly random non deterministic seed generated
 
     (func $ext_offchain_random_seed_version_1 (result i32))
 
-Arguments  
+**Arguments**  
 - `result`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit seed.
 
 ### -sec-num- `ext_offchain_local_storage_set` {#id-ext_offchain_local_storage_set}
@@ -1183,7 +1208,7 @@ Sets a value in the local storage. This storage is not part of the consensus, it
     (func $ext_offchain_local_storage_set_version_1
         (param $kind i32) (param $key i64) (param $value i64))
 
-Arguments  
+**Arguments**  
 - `kind`: an i32 integer indicating the storage kind. A value equal to *1* is used for a persistent storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-persistent-storage)) and a value equal to *2* for local storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-local-storage)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -1199,7 +1224,7 @@ Remove a value from the local storage.
     (func $ext_offchain_local_storage_clear_version_1
         (param $kind i32) (param $key i64))
 
-Arguments  
+**Arguments**  
 - `kind`: an i32 integer indicating the storage kind. A value equal to *1* is used for a persistent storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-persistent-storage)) and a value equal to *2* for local storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-local-storage)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -1214,7 +1239,7 @@ Sets a new value in the local storage if the condition matches the current value
         (param $kind i32) (param $key i64) (param $old_value i64)
         (param $new_value i64) (result i32))
 
-Arguments  
+**Arguments**  
 - `kind`: an i32 integer indicating the storage kind. A value equal to *1* is used for a persistent storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-persistent-storage)) and a value equal to *2* for local storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-local-storage)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -1234,7 +1259,7 @@ Gets a value from the local storage.
     (func $ext_offchain_local_storage_get_version_1
         (param $kind i32) (param $key i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `kind`: an i32 integer indicating the storage kind. A value equal to *1* is used for a persistent storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-persistent-storage)) and a value equal to *2* for local storage ([Definition -def-num-ref-](chap-host-api#defn-offchain-local-storage)).
 
 - `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the key.
@@ -1250,7 +1275,7 @@ Initiates a HTTP request given by the HTTP method and the URL. Returns the Id of
     (func $ext_offchain_http_request_start_version_1
       (param $method i64) (param $uri i64) (param $meta i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `method`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the HTTP method. Possible values are “GET” and “POST”.
 
 - `uri`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the URI.
@@ -1268,7 +1293,7 @@ Append header to the request. Returns an error if the request identifier is inva
     (func $ext_offchain_http_request_add_header_version_1
         (param $request_id i32) (param $name i64) (param $value i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `request_id`: an i32 integer indicating the ID of the started request.
 
 - `name`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the HTTP header name.
@@ -1286,7 +1311,7 @@ Writes a chunk of the request body. Returns a non-zero value in case the deadlin
     (func $ext_offchain_http_request_write_body_version_1
         (param $request_id i32) (param $chunk i64) (param $deadline i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `request_id`: an i32 integer indicating the ID of the started request.
 
 - `chunk`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the chunk of bytes. Writing an empty chunk finalizes the request.
@@ -1304,7 +1329,7 @@ Returns an array of request statuses (the length is the same as IDs). Note that 
     (func $ext_offchain_http_response_wait_version_1
         (param $ids i64) (param $deadline i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `ids`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded array of started request IDs.
 
 - `deadline`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the UNIX timestamp ([Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time)). Passing None blocks indefinitely.
@@ -1320,7 +1345,7 @@ Read all HTTP response headers. Returns an array of key/value pairs. Response he
     (func $ext_offchain_http_response_headers_version_1
         (param $request_id i32) (result i64))
 
-Arguments  
+**Arguments**  
 - `request_id`: an i32 integer indicating the ID of the started request.
 
 - `result`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to a SCALE encoded array of key/value pairs.
@@ -1334,7 +1359,7 @@ Reads a chunk of body response to the given buffer. Returns the number of bytes 
     (func $ext_offchain_http_response_read_body_version_1
         (param $request_id i32) (param $buffer i64) (param $deadline i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `request_id`: an i32 integer indicating the ID of the started request.
 
 - `buffer`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the buffer where the body gets written to.
@@ -1356,7 +1381,7 @@ Compute a 256-bit Blake2 trie root formed from the iterated items.
     (func $ext_trie_blake2_256_root_version_1
         (param $data i64) (result i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the iterated items from which the trie root gets formed. The items consist of a SCALE encoded array containing arbitrary key/value pairs (tuples).
 
 - `result`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit trie root.
@@ -1367,7 +1392,7 @@ Arguments
         (param $data i64) (param $version i32)
         (result i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the iterated items from which the trie root gets formed. The items consist of a SCALE encoded array containing arbitrary key/value pairs (tuples).
 
 - `version`: the state version ([Definition -def-num-ref-](chap-host-api#defn-state-version)).
@@ -1383,7 +1408,7 @@ Compute a 256-bit Blake2 trie root formed from the enumerated items.
     (func $ext_trie_blake2_256_ordered_root_version_1
         (param $data i64) (result i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the enumerated items from which the trie root gets formed. The items consist of a SCALE encoded array containing only values, where the corresponding key of each value is the index of the item in the array, starting at 0. The keys are compact encoded integers ([Definition -def-num-ref-](id-cryptography-encoding#defn-sc-len-encoding)).
 
 - `result`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit trie root result.
@@ -1394,7 +1419,7 @@ Arguments
         (param $data i64) (param $version i32)
         (result i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the enumerated items from which the trie root gets formed. The items consist of a SCALE encoded array containing only values, where the corresponding key of each value is the index of the item in the array, starting at 0. The keys are compact encoded integers ([Definition -def-num-ref-](id-cryptography-encoding#defn-sc-len-encoding)).
 
 - `version`: the state version ([Definition -def-num-ref-](chap-host-api#defn-state-version)).
@@ -1410,7 +1435,7 @@ Compute a 256-bit Keccak trie root formed from the iterated items.
     (func $ext_trie_keccak_256_root_version_1
         (param $data i64) (result i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the iterated items from which the trie root gets formed. The items consist of a SCALE encoded array containing arbitrary key/value pairs.
 
 - `result`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit trie root.
@@ -1421,7 +1446,7 @@ Arguments
         (param $data i64) (param $version i32)
         (result i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the iterated items from which the trie root gets formed. The items consist of a SCALE encoded array containing arbitrary key/value pairs.
 
 - `version`: the state version ([Definition -def-num-ref-](chap-host-api#defn-state-version)).
@@ -1437,7 +1462,7 @@ Compute a 256-bit Keccak trie root formed from the enumerated items.
     (func $ext_trie_keccak_256_ordered_root_version_1
         (param $data i64) (result i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the enumerated items from which the trie root gets formed. The items consist of a SCALE encoded array containing only values, where the corresponding key of each value is the index of the item in the array, starting at 0. The keys are compact encoded integers ([Definition -def-num-ref-](id-cryptography-encoding#defn-sc-len-encoding)).
 
 - `result`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the buffer containing the 256-bit trie root result.
@@ -1448,7 +1473,7 @@ Arguments
         (param $data i64) (param $version i32)
         (result i32))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the enumerated items from which the trie root gets formed. The items consist of a SCALE encoded array containing only values, where the corresponding key of each value is the index of the item in the array, starting at 0. The keys are compact encoded integers ([Definition -def-num-ref-](id-cryptography-encoding#defn-sc-len-encoding)).
 
 - `version`: the state version ([Definition -def-num-ref-](chap-host-api#defn-state-version)).
@@ -1466,7 +1491,7 @@ Verifies a key/value pair against a Blake2 256-bit merkle root.
         (param $key i64) (param $value i64)
         (result i32))
 
-Arguments  
+**Arguments**  
 - `root`: a pointer to the 256-bit merkle root.
 
 - `proof`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an array containing the node proofs.
@@ -1484,7 +1509,7 @@ Arguments
         (param $key i64) (param $value i64)
         (param $version i32) (result i32))
 
-Arguments  
+**Arguments**  
 - `root`: a pointer to the 256-bit merkle root.
 
 - `proof`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an array containing the node proofs.
@@ -1508,7 +1533,7 @@ Verifies a key/value pair against a Keccak 256-bit merkle root.
         (param $key i64) (param $value i64)
         (result i32))
 
-Arguments  
+**Arguments**  
 - `root`: a pointer to the 256-bit merkle root.
 
 - `proof`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an array containing the node proofs.
@@ -1526,7 +1551,7 @@ Arguments
         (param $key i64) (param $value i64)
         (param $version i32) (result i32))
 
-Arguments  
+**Arguments**  
 - `root`: a pointer to the 256-bit merkle root.
 
 - `proof`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an array containing the node proofs.
@@ -1551,7 +1576,7 @@ Print a number.
 
     (func $ext_misc_print_num_version_1 (param $value i64))
 
-Arguments  
+**Arguments**  
 - `value`: the number to be printed.
 
 ### -sec-num- `ext_misc_print_utf8` {#id-ext_misc_print_utf8}
@@ -1582,15 +1607,15 @@ Print any buffer in hexadecimal representation.
 
 Extract the Runtime version of the given Wasm blob by calling `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)). Returns the SCALE encoded runtime version or *None* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) if the call fails. This function gets primarily used when upgrading Runtimes.
 
-|     |                                                                                                                                                                                                                                                                                                                                              |
-|-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | Calling this function is very expensive and should only be done very occasionally. For getting the runtime version, it requires instantiating the Wasm blob ([Section -sec-num-ref-](chap-state#sect-loading-runtime-code)) and calling the `Core_version` function ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) in this blob. |
+:::caution
+Calling this function is very expensive and should only be done very occasionally. For getting the runtime version, it requires instantiating the Wasm blob ([Section -sec-num-ref-](chap-state#sect-loading-runtime-code)) and calling the `Core_version` function ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) in this blob.
+:::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-73}
 
     (func $ext_misc_runtime_version_version_1 (param $data i64) (result i64))
 
-Arguments  
+**Arguments**  
 - `data`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the Wasm blob.
 
 - `result`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the Runtime version of the given Wasm blob which is encoded as a byte array.
@@ -1607,7 +1632,7 @@ Allocates the given number of bytes and returns the pointer to that memory locat
 
     (func $ext_allocator_malloc_version_1 (param $size i32) (result i32))
 
-Arguments  
+**Arguments**  
 - `size`: the size of the buffer to be allocated.
 
 - `result`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the allocated buffer.
@@ -1620,7 +1645,7 @@ Free the given pointer.
 
     (func $ext_allocator_free_version_1 (param $ptr i32))
 
-Arguments  
+**Arguments**  
 - `ptr`: a pointer ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)) to the memory buffer to be freed.
 
 ## -sec-num- Logging {#sect-logging-api}
@@ -1628,6 +1653,7 @@ Arguments
 Interface that provides functions for logging from within the runtime.
 
 ###### Definition -def-num- Log Level {#defn-logging-log-level}
+:::definition
 
 The **Log Level**, ${L}$, is a varying data type ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) and implies the emergency of the log. Possible log levels and the corresponding identifier is as follows:
 
@@ -1635,6 +1661,7 @@ $$
 {L}={\left\lbrace\begin{matrix}{0}&\text{Error = 1}\\{1}&\text{Warn = 2}\\{2}&\text{Info = 3}\\{3}&\text{Debug = 4}\\{4}&\text{Trace = 5}\end{matrix}\right.}
 $$
 
+:::
 ### -sec-num- `ext_logging_log` {#id-ext_logging_log}
 
 Request to print a log message on the host. Note that this will be only displayed if the host is enabled to display log messages with given level and target.
@@ -1644,7 +1671,7 @@ Request to print a log message on the host. Note that this will be only displaye
     (func $ext_logging_log_version_1
         (param $level i32) (param $target i64) (param $message i64))
 
-Arguments  
+**Arguments**  
 - `level`: the log level ([Definition -def-num-ref-](chap-host-api#defn-logging-log-level)).
 
 - `target`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the string which contains the path, module or location from where the log was executed.
@@ -1664,5 +1691,5 @@ Aborts the execution of the runtime with a given message. Note that the message 
     (func $ext_panic_handler_abort_on_panic_version_1
         (param $message i64))
 
-Arguments  
+**Arguments**  
 - `message`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the UTF-8 encoded message.

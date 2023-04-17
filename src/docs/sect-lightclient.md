@@ -62,9 +62,9 @@ Eventually, the light client verifies the finality of the block returned by a fu
 
 2.  Check the timestamp of the last finalized block to ensure that no other blocks might have been finalized at a later timestamp.
 
-|     |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-|-----|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | **Long-Range Attack Vulnerabilities**: Warp syncing is particularly vulnerable to what is called long-range attacks. The authorities allowed to finalize blocks can generate multiple proofs of finality for multiple different blocks of the same height, hence, they can finalize more than one chain at a time. It is possible for two-thirds of the validators that were active at a certain past block N to collude and decide to finalize a different block N', even when N has been finalized for the first time several weeks or months in the past. When a client then warp syncs, it can be tricked to consider this alternative block N' as the finalized one. However, in practice, to mitigate Long-Range Attacks, the starting point of the warp syncing is not too far in the past. How far exactly depends on the logic of the runtime of the chain. For example, in Polkadot, the starting block for the sync should be at max 28 days old, to be within the purview of the slashing period for misbehaving nodes. Hence, even though in theory warp sync can start from Genesis Block, it is not advised to implement the same in practice. |
+:::caution
+**Long-Range Attack Vulnerabilities**: Warp syncing is particularly vulnerable to what is called long-range attacks. The authorities allowed to finalize blocks can generate multiple proofs of finality for multiple different blocks of the same height, hence, they can finalize more than one chain at a time. It is possible for two-thirds of the validators that were active at a certain past block N to collude and decide to finalize a different block N', even when N has been finalized for the first time several weeks or months in the past. When a client then warp syncs, it can be tricked to consider this alternative block N' as the finalized one. However, in practice, to mitigate Long-Range Attacks, the starting point of the warp syncing is not too far in the past. How far exactly depends on the logic of the runtime of the chain. For example, in Polkadot, the starting block for the sync should be at max 28 days old, to be within the purview of the slashing period for misbehaving nodes. Hence, even though in theory warp sync can start from Genesis Block, it is not advised to implement the same in practice.
+:::
 
 We outline the warp sync process, abstracting out details of verifying the finality and how the full node to sync with is selected.
 
@@ -136,6 +136,7 @@ Where the `response` can be one of the following fields:
 Execute a call to a contract at the given block.
 
 ###### Definition -def-num- Remote Call Request {#sect-light-remote-call-request}
+:::definition
 
 Remote call request.
 
@@ -145,7 +146,9 @@ Remote call request.
 | `string` | 3   | Method name                    |
 | `bytes`  | 4   | Call data                      |
 
+:::
 ###### Definition -def-num- Remote Call Response {#sect-light-remote-call-response}
+:::definition
 
 Remote call response.
 
@@ -153,11 +156,13 @@ Remote call response.
 |---------|-----|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | `bytes` | 2   | An *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the call proof or *None* if proof generation failed. |
 
+:::
 ### -sec-num- Remote Read Messages {#id-remote-read-messages}
 
 Read a storage value at the given block.
 
 ###### Definition -def-num- Remote Read Request {#sect-light-remote-read-request}
+:::definition
 
 Remote read request.
 
@@ -166,7 +171,9 @@ Remote read request.
 | `bytes`          | 2   | Block at which to perform call |
 | `repeated bytes` | 3   | Storage keys                   |
 
+:::
 ###### Definition -def-num- Remote Read Response {#sect-light-remote-read-response}
+:::definition
 
 Remote read response.
 
@@ -174,11 +181,13 @@ Remote read response.
 |---------|-----|-----------------------------------------------------------------------------------------------------------------------------------------------------|
 | `bytes` | 2   | An *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the read proof or *None* if proof generation failed. |
 
+:::
 ### -sec-num- Remote Read Child Messages {#id-remote-read-child-messages}
 
 Read a child storage value at the given block.
 
 ###### Definition -def-num- Remote Read Child Request {#sect-light-remote-read-child-request}
+:::definition
 
 Remote read child request.
 
@@ -190,6 +199,7 @@ Remote read child request.
 
 The response is the same as for the *Remote Read Request* message, respectively [Definition -def-num-ref-](sect-lightclient#sect-light-remote-read-response).
 
+:::
 ## -sec-num- Storage for Light Clients {#sect-storage-lightclient}
 
 The light client requires a persistent storage for saving the state of the blockchain. In addition it requires efficient Serialization/ De-serialization methods to transform SCALE ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) encoded network traffic for storing and reading from the persistent storage.

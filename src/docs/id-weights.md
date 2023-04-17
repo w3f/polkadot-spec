@@ -25,18 +25,25 @@ In this section, we define the concept of weight and we discuss the consideratio
 These concepts are formalized in [Definition -def-num-ref-](id-weights#defn-block-length) and [Definition -def-num-ref-](id-weights#defn-polkadot-block-limits):
 
 ###### Definition -def-num- Block Length {#defn-block-length}
+:::definition
 
 For a block ${B}$ with ${H}{e}{a}{d}{\left({B}\right)}$ and ${B}{o}{\left.{d}{y}\right.}{\left({B}\right)}$ the block length of ${B}$,${L}{e}{n}{\left({B}\right)}$, is defined as the amount of raw bytes of ${B}$.
 
+:::
 ###### Definition -def-num- Target Time per Block {#defn-target-time-per-block}
+:::definition
 
 Ṯargeted time per block denoted by ${T}{\left({B}\right)}$ implies the amount of seconds that a new block should be produced by a validator. The transaction weights must consider ${T}{\left({B}\right)}$ in order to set restrictions on time intensive transactions in order to saturate the block to its fullest potential until ${T}{\left({B}\right)}$ is reached.
 
+:::
 ###### Definition -def-num- Block Target Time {#defn-block-target-time}
+:::definition
 
 Available block ration reserved for normal, noted by ${R}{\left({B}\right)}$, is defined as the maximum weight of none-operational transactions in the Body of ${B}$ divided by ${L}{e}{n}{\left({B}\right)}$.
 
+:::
 ###### Definition -def-num- Block Limits {#defn-polkadot-block-limits}
+:::definition
 
 P̱olkadot block limits as defined here should be respected by each block producer for the produced block ${B}$ to be deemed valid:
 
@@ -46,7 +53,9 @@ P̱olkadot block limits as defined here should be respected by each block produc
 
 - ${R}{\left({B}\right)}\le{0.75}$
 
+:::
 ###### Definition -def-num- Weight Function {#defn-weight-function}
+:::definition
 
 The P̱olkadot transaction weight function denoted by ${\mathcal{{{W}}}}$ as follows:
 
@@ -82,11 +91,13 @@ $$
 
 Nonetheless, ${\mathcal{{{W}}}}{\left({E}\right)}$ can be manipulated depending on the priority of ${E}$ the chain is supposed to endorse.
 
+:::
 ### -sec-num- Limitations {#sect-limitations}
 
 In this section we discuss how applying the limitation defined in [Definition -def-num-ref-](id-weights#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition -def-num-ref-](id-weights#defn-block-weight):
 
 ###### Definition -def-num- Block Weight {#defn-block-weight}
+:::definition
 
 We define the block weight of block ${B}$, formally denoted as ${\mathcal{{{W}}}}{\left({B}\right)}$, to be:
 
@@ -99,6 +110,7 @@ We require that:
 $$
 {\mathcal{{{W}}}}{\left({B}\right)}<{2}'{000}'{000}'{000}'{000}
 $$
+:::
 
 The weights must fulfill the requirements as noted by the fundamentals and limitations, and can be assigned as the author sees fit. As a simple example, consider a maximum block weight of 1’000’000’000, an available ratio of 75% and a targeted transaction throughput of 500 transactions, we could assign the (average) weight for each transaction at about 1’500’000. Block producers have economic incentive to include as many extrinsics as possible (without exceeding limitations) into a block before reaching the targeted block time. Weights give indicators to block producers on which extrinsics to include in order to reach the blocks fullest potential.
 
@@ -156,9 +168,11 @@ Indicators for performance penalties:
 - **Input parameters** - Input parameters that users pass on to the Runtime function can result in expensive operations. Depending on the data type, it can be appropriate to add additional weights based on certain properties, such as data size, assuming the data type allows varying sizes. The Runtime must define limits on those properties. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the maximum value, as described in paragraph [Definition -def-num-ref-](id-weights#defn-max-value).
 
 ###### Definition -def-num- Maximum Value {#defn-max-value}
+:::definition
 
 What the maximum value should be really depends on the functionality that the Runtime function is trying to provide. If the choice for that value is not obvious, then it’s advised to run benchmarks on a big range of values and pick a conservative value below the `targeted time per block` limit as described in section [Section -sec-num-ref-](id-weights#sect-limitations).
 
+:::
 ### -sec-num- Parameters {#id-parameters}
 
 The inputs parameters highly vary depending on the Runtime function and must therefore be carefully selected. The benchmarks should use input parameters which will most likely be used in regular cases, as intended by the authors, but must also consider worst case scenarios and inputs which might decelerate or heavily impact performance of the function. The input parameters should be randomized in order to cause various effects in behaviors on certain values, such as memory relocations and other outcomes that can impact performance.
@@ -260,7 +274,7 @@ The benchmarking implementation of for the function ${request}$ ${judgement}$ ca
 
 \Ensure ${\mathcal{{{W}}}}$ \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${a}{m}{o}{u}{n}{t}\leftarrow{1},{M}{a}{x}{R}{e}{g}{i}{s}{t}{r}{a}{r}{s}$} \State \call{Generate-Registrars}{${a}{m}{o}{u}{n}{t}${\rbrace}{S}{t}{a}{t}{e}${c}{a}{l}\le{r}\leftarrow$ \call{Create-Account}{${c}{a}{l}\le{r},{1}$} \State \call{Set-Balance}{${c}{a}{l}\le{r},{100}${\rbrace}{S}{t}{a}{t}{e}${t}{i}{m}{e}\leftarrow$ \call{Timer}{\call{Request-Judgement}{\call{Random}{${a}{m}{o}{u}{n}{t}${\rbrace}$,{100}$}} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}${\rbrace}{E}{n}{d}{F}{\quad\text{or}\quad}{S}{t}{a}{t}{e}${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$
 
-where  
+**where**  
 - Generate-Registrars(${amount}$)
 
   Creates number of registrars and inserts those records into storage.
@@ -374,18 +388,22 @@ The following points must be considered:
 #### -sec-num- Benchmarking Framework {#id-benchmarking-framework-2}
 
 ###### Definition -def-num- History Depth {#defn-history-depth}
+:::definition
 
 H̱istory Depth indicated as `MaxNominatorRewardedPerValidator` is a fixed constant specified by the Polkadot Runtime which dictates the number of Eras the Runtime will reward nominators and validators for.
 
+:::
 ###### Definition -def-num- Maximum Nominator Reward {#defn-max-nominator-reward}
+:::definition
 
 M̱aximum Nominator Rewarded Per Validator indicated as `MaxNominatorRewardedPerValidator`, specifies the maximum amount of the highest-staked nominators which will get a reward. Those values should have some influence in the benchmarking process.
+:::
 
 The benchmarking implementation for the function ${payout}$ ${stakers}$ can be defined as follows:
 
 \Ensure ${\mathcal{{{W}}}}$ \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${a}{m}{o}{u}{n}{t}\leftarrow{1},{M}{a}{x}{N}{o}\min{a}\to{r}{R}{e}{w}{a}{r}{d}{e}{d}{P}{e}{r}{V}{a}{l}{i}{d}{a}\to{r}${\rbrace}{F}{\quad\text{or}\quad}{\left\lbrace$\right.}{e}{r}{a}$depth \leftarrow 1,HistoryDepth${\rbrace}{S}{t}{a}{t}{e}$validator \leftarrow${c}{a}{l}{l}{\left\lbrace{G}{e}\ne{r}{a}{t}{e}-{V}{a}{l}{i}{d}{a}\to{r}\right\rbrace}{\left\lbracenull\right\rbrace}{S}{t}{a}{t}{e}{c}{a}{l}{l}{\left\lbrace{V}{a}{l}{i}{d}{a}{t}{e}\right\rbrace}{\left\lbrace$\right.}validator$} \State $nominators \leftarrow${c}{a}{l}{l}{\left\lbrace{G}{e}\ne{r}{a}{t}{e}-{N}{o}\min{a}\to{r}{s}\right\rbrace}{\left\lbrace$\right.}amount$} \For{$nominator \in nominators${\rbrace}{S}{t}{a}{t}{e}{c}{a}{l}{l}{\left\lbrace{N}{o}\min{a}{t}{e}\right\rbrace}{\left\lbrace$\right.}validator, nominator$} \EndFor \State ${e}{r}{a}$\in{d}{e}{x}\leftarrow$ \call{Create-Rewards}{${v}{a}{l}{i}{d}{a}\to{r},{n}{o}\min{a}\to{r}{s},{e}{r}{a}$depth$} \State ${t}{i}{m}{e}\leftarrow${c}{a}{l}{l}{\left\lbrace{T}{i}{m}{e}{r}\right\rbrace}{\left\lbrace{c}{a}{l}{l}{\left\lbrace{P}{a}{y}{o}{u}{t}-{S}{t}{a}{k}{e}{r}{s}\right\rbrace}{\left\lbrace$\right.}\right.}validator$}$, era$\in{d}{e}{x}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$
 
-where  
+**where**  
 - Generate-Validator()
 
   Creates a validators with some unbonded balances.
@@ -480,7 +498,7 @@ The benchmarking implementation for the Polkadot Runtime function ${transfer}$ i
 
 \Ensure{${c}{o}{l}\le{c}{t}{i}{o}{n}$: a collection of time measurements of all benchmark iterations} \Function{Main}{} \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \State \textbf{init} ${b}{a}{l}{a}{n}{c}{e}={1}'{000}$ \For{$\in{d}{e}{x}\ge{t}{s}{1},{1}'{000}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Run-Benchmark}{$\in{d}{e}{x},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State \textbf{init} $\in{d}{e}{x}={1}'{000}$ \For{${b}{a}{l}{a}{n}{c}{e}\ge{t}{s}{2},{1}'{000}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Run-Benchmark}{$\in{d}{e}{x},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$ \EndFunction \Function{Run-Benchmark}{$\in{d}{e}{x}$, ${b}{a}{l}{a}{n}{c}{e}$} \State ${s}{e}{n}{d}{e}{r}\leftarrow$ \call{Create-Account}{${c}{a}{l}\le{r},\in{d}{e}{x}$} \State ${r}{e}{c}{i}\pi{e}{n}{t}\leftarrow$ \call{Create-Accouny}{${r}{e}{c}{i}\pi{e}{n}{t},\in{d}{e}{x}$} \State \call{Set-Balance}{${s}{e}{n}{d}{e}{r},{b}{a}{l}{a}{n}{c}{e}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Timer}{\call{Transfer}{${s}{e}{n}{d}{e}{r},{r}{e}{c}{i}\pi{e}{n}{t},{b}{a}{l}{a}{n}{c}{e}$}} \Return ${t}{i}{m}{e}$ \EndFunction
 
-where  
+**where**  
 - Create-Account(${name}$, ${index}$)
 
   Creates a Blake2 hash of the concatenated input of name and index representing the address of a account. This function only creates an address and does not conduct any I/O.
@@ -597,7 +615,7 @@ The benchmarking implementation for the Polkadot Runtime function `withdraw_unbo
 
 \Ensure ${\mathcal{{{W}}}}$ \Function{Main}{} \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${b}{a}{l}{a}{n}{c}{e}\ge{t}{s}{1},{100}$} \State ${s}{t}{a}{s}{h}\leftarrow$ \call{Create-Account}{${s}{t}{a}{s}{h},{1}$} \State ${c}{o}{n}{t}{r}{o}{l}\le{r}\leftarrow$ \call{Create-Account}{${c}{o}{n}{t}{r}{o}{l}\le{r},{1}$} \State \call{Set-Balance}{${s}{t}{a}{s}{h},{100}$} \State \call{Set-Balance}{${c}{o}{n}{t}{r}{o}{l}\le{r},{1}$} \State \call{Bond}{${s}{t}{a}{s}{h},{c}{o}{n}{t}{r}{o}{l}\le{r},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Pass-Era}{} \State \call{UnBond}{${c}{o}{n}{t}{r}{o}{l}\le{r},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Pass-Era}{} \State $time \leftarrow$ \call{Timer}{\call{Withdraw-Unbonded}{${c}{o}{n}{t}{r}{o}{l}\le{r}$}} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$ \EndFunction
 
-where  
+**where**  
 - Create-Account(${name}$, $index$)
 
   Creates a Blake2 hash of the concatenated input of name and index representing the address of a account. This function only creates an address and does not conduct any I/O.

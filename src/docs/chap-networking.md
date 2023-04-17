@@ -2,9 +2,9 @@
 title: Networking
 ---
 
-|     |                                                                                                                                                                                                                                                                                                                                              |
-|-----|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | This chapter in its current form is incomplete and considered work in progress. Authors appreciate receiving request for clarification or any reports regarding deviation from the current Polkadot network protocol. This can be done through filing an issue in [Polkadot Specification repository](https://github.com/w3f/polkadot-spec). |
+:::info
+This chapter in its current form is incomplete and considered work in progress. Authors appreciate receiving request for clarification or any reports regarding deviation from the current Polkadot network protocol. This can be done through filing an issue in [Polkadot Specification repository](https://github.com/w3f/polkadot-spec).
+:::
 
 ## -sec-num- Introduction {#id-introduction-2}
 
@@ -35,6 +35,7 @@ Each Polkadot Host node maintains an ED25519 key pair which is used to identify 
 Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId* as defined in [Definition -def-num-ref-](chap-networking#defn-peer-id) is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section -sec-num-ref-](chap-networking#sect-discovery-mechanism).
 
 ###### Definition -def-num- PeerId {#defn-peer-id}
+:::definition
 
 The Polkadot node’s PeerId, formally referred to as ${P}_{{{i}{d}}}$, is derived from the ED25519 public key and is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/), but does not fully conform to the specification. Specifically, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519.
 
@@ -62,7 +63,7 @@ $$
 {b}_{{{6}.{.37}}}=\ldots
 $$
 
-where
+**where**
 
 - ${b}_{{0}}$ is the [multihash prefix](https://github.com/multiformats/multihash#multihash) of value ${0}$ (implying no hashing is used).
 
@@ -72,6 +73,7 @@ where
 
 - ${b}_{{4}}$, ${b}_{{5}}$ and ${b}_{{{6}.{.37}}}$ are a protobuf encoded field-value pair where ${b}_{{5}}$ indicates the length of the public key followed by the the raw ED25519 public key itself, which varies for each Polkadot Host and is always 32 bytes (field ${2}$ contains the public key, which has a field value length prefix).
 
+:::
 ## -sec-num- Discovery mechanism {#sect-discovery-mechanism}
 
 The Polkadot Host uses various mechanisms to find peers within the network, to establish and maintain a list of peers and to share that list with other peers from the network as follows:
@@ -132,9 +134,9 @@ After the node establishes a connection with a peer, the use of multiplexing all
 
 The Polkadot Host uses multiple substreams whose usage depends on a specific purpose. Each substream is either a *Request-Response substream* or a *Notification substream*, as described in [Section -sec-num-ref-](chap-networking#sect-connection-establishment).
 
-|     |                                                                                                                                                                                                                                                                                           |
-|-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | The prefixes on those substreams are known as protocol identifiers and are used to segregate communications to specific networks. This prevents any interference with other networks. `dot` is used exclusively for Polkadot. Kusama, for example, uses the protocol identifier `ksmcc3`. |
+:::info
+The prefixes on those substreams are known as protocol identifiers and are used to segregate communications to specific networks. This prevents any interference with other networks. `dot` is used exclusively for Polkadot. Kusama, for example, uses the protocol identifier `ksmcc3`.
+:::
 
 - `/ipfs/ping/1.0.0` - Open a standardized substream *libp2p* to a peer and initialize a ping to verify if a connection is still alive. If the peer does not respond, the connection is dropped. This is a *Request-Response substream*.
 
@@ -152,65 +154,65 @@ The Polkadot Host uses multiple substreams whose usage depends on a specific pur
 
   The messages are specified in [Section -sec-num-ref-](sect-lightclient#sect-light-msg).
 
-  |     |                                                                                                   |
-  |-----|---------------------------------------------------------------------------------------------------|
-  |     | For backwards compatibility reasons, `/dot/light/2` is also a valid substream for those messages. |
+:::info
+  For backwards compatibility reasons, `/dot/light/2` is also a valid substream for those messages.
+:::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/block-announces/1` - a substream/notification protocol which sends blocks to connected peers. This is a *Notification substream*.
 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-block-announce).
 
-  |     |                                                                                                             |
-  |-----|-------------------------------------------------------------------------------------------------------------|
-  |     | For backwards compatibility reasons, `/dot/block-announces/1` is also a valid substream for those messages. |
+:::info
+  For backwards compatibility reasons, `/dot/block-announces/1` is also a valid substream for those messages.
+:::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/sync/2` - a request and response protocol that allows the Polkadot Host to request information about blocks. This is a *Request-Response substream*.
 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-block-request).
 
-  |     |                                                                                                  |
-  |-----|--------------------------------------------------------------------------------------------------|
-  |     | For backwards compatibility reasons, `/dot/sync/2` is also a valid substream for those messages. |
+:::info
+  For backwards compatibility reasons, `/dot/sync/2` is also a valid substream for those messages.
+:::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/sync/warp` - a request and response protocol that allows the Polkadot Host to perform a warp sync request. This is a *Request-Response substream*.
 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-warp-sync).
 
-  |     |                                                                                                     |
-  |-----|-----------------------------------------------------------------------------------------------------|
-  |     | For backwards compatibility reasons, `/dot/sync/warp` is also a valid substream for those messages. |
+:::info
+  For backwards compatibility reasons, `/dot/sync/warp` is also a valid substream for those messages.
+:::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/transactions/1` - a substream/notification protocol which sends transactions to connected peers. This is a *Notification substream*.
 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-transactions).
 
-  |     |                                                                                                          |
-  |-----|----------------------------------------------------------------------------------------------------------|
-  |     | For backwards compatibility reasons, `/dot/transactions/1` is also a valid substream for those messages. |
+:::info
+  For backwards compatibility reasons, `/dot/transactions/1` is also a valid substream for those messages.
+:::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/grandpa/1` - a substream/notification protocol that sends GRANDPA votes to connected peers. This is a *Notification substream*.
 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-grandpa).
 
-  |     |                                                                                                            |
-  |-----|------------------------------------------------------------------------------------------------------------|
-  |     | For backwards compatibility reasons, `/paritytech/grandpa/1` is also a valid substream for those messages. |
+:::info
+  For backwards compatibility reasons, `/paritytech/grandpa/1` is also a valid substream for those messages.
+:::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/beefy/1` - a substream/notification protocol which sends signed BEEFY statements, as described in [Section -sec-num-ref-](sect-finality#sect-grandpa-beefy), to connected peers. This is a *Notification* substream.
 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-grandpa-beefy).
 
-  |     |                                                                                                          |
-  |-----|----------------------------------------------------------------------------------------------------------|
-  |     | For backwards compatibility reasons, `/paritytech/beefy/1` is also a valid substream for those messages. |
+:::info
+  For backwards compatibility reasons, `/paritytech/beefy/1` is also a valid substream for those messages.
+:::
 
 ## -sec-num- Network Messages {#sect-network-messages}
 
 The Polkadot Host must actively communicate with the network in order to participate in the validation process or act as a full node.
 
-|     |                                                                                                                                                                                                                                                                                                       |
-|-----|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|     | The Polkadot network originally only used SCALE encoding for all message formats. Meanwhile, Protobuf has been adopted for certain messages. The encoding of each listed message is always SCALE encoded unless Protobuf is explicitly mentioned. Encoding and message formats are subject to change. |
+:::info
+  The Polkadot network originally only used SCALE encoding for all message formats. Meanwhile, Protobuf has been adopted for certain messages. The encoding of each listed message is always SCALE encoded unless Protobuf is explicitly mentioned. Encoding and message formats are subject to change.
+:::
 
 ### -sec-num- Announcing blocks {#sect-msg-block-announce}
 
@@ -219,6 +221,7 @@ When the node creates or receives a new block, it must be announced to the netwo
 Block announcements, requests and responses are sent over the substream as described in [Definition -def-num-ref-](chap-networking#defn-block-announce-handshake).
 
 ###### Definition -def-num- Block Announce Handshake {#defn-block-announce-handshake}
+:::definition
 
 The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once established, all `BlockAnounce` messages ([Definition -def-num-ref-](chap-networking#defn-block-announce)) created by the node are sent to the `/dot/block-announces/1` substream.
 
@@ -228,7 +231,7 @@ $$
 {B}{A}_{{h}}=\text{Enc}_{{\text{SC}}}{\left({R},{N}_{{B}},{h}_{{B}},{h}_{{G}}\right)}
 $$
 
-where:
+**where**
 
 $$
 {R}={\left\lbrace\begin{matrix}{1}&\text{The node is a full node}\\{2}&\text{The node is a light client}\\{4}&\text{The node is a validator}\end{matrix}\right.}
@@ -243,7 +246,9 @@ $$
 {h}_{{G}}=\text{Genesis block hash according to the node}
 $$
 
+:::
 ###### Definition -def-num- Block Announce {#defn-block-announce}
+:::definition
 
 The `BlockAnnounce` message is sent to the specified substream and indicates to remote peers that the node has either created or received a new block.
 
@@ -253,7 +258,7 @@ $$
 {B}{A}=\text{Enc}_{{\text{SC}}}{\left(\text{Head}{\left({B}\right)},{b}\right)}
 $$
 
-where:
+**where**
 
 $$
 \text{Head}{\left({B}\right)}=\text{Header of the announced block}
@@ -262,11 +267,13 @@ $$
 {b}={\left\lbrace\begin{matrix}{0}&\text{Is not part of the best chain}\\{1}&\text{Is the best block according to the node}\end{matrix}\right.}
 $$
 
+:::
 ### -sec-num- Requesting Blocks {#sect-msg-block-request}
 
 Block requests can be used to retrieve a range of blocks from peers. Those messages are sent over the `/dot/sync/2` substream.
 
 ###### Definition -def-num- Block Request {#defn-msg-block-request}
+:::definition
 
 The `BlockRequest` message is a Protobuf serialized structure of the following format:
 
@@ -277,7 +284,7 @@ The `BlockRequest` message is a Protobuf serialized structure of the following f
 | *Direction* | 5   | Sequence direction, interpreted as Id *0* (ascending) if missing. |         |
 | `uint32`    | 6   | Maximum amount (*optional*)                                       | ${B}_{{m}}$ |
 
-where  
+**where**  
 - ${B}_{{f}}$ indicates all the fields that should be included in the request. its **big-endian** encoded bitmask that applies to all desired fields with bitwise OR operations. For example, the ${B}_{{f}}$ value to request *Header* and *Justification* is *0001 0001* (17).
 
   | Field         | Value     |
@@ -302,7 +309,9 @@ where
 
 - ${B}_{{m}}$ is the number of blocks to be returned. An implementation defined maximum is used when unspecified.
 
+:::
 ###### Definition -def-num- Block Response {#defn-msg-block-response}
+:::definition
 
 The `BlockResponse` message is received after sending a `BlockRequest` message to a peer. The message is a Protobuf serialized structure of the following format:
 
@@ -322,6 +331,7 @@ where *BlockData* is a Protobuf structure containing the requested blocks. Do no
 | `bytes`          | 6   | Justification (optional)                                              | [Definition -def-num-ref-](sect-finality#defn-grandpa-justification) |
 | `bool`           | 7   | Indicates whether the justification is empty (i.e. should be ignored) |                                                                |
 
+:::
 ### -sec-num- Requesting States {#sect-msg-state-request}
 
 The Polkadot Host can request the state in form of a key/value list at a specified block.
@@ -331,12 +341,15 @@ When receiving state entries from the state response messages ([Definition -def-
 See the the synchronization chapter for more information ([Chapter -chap-num-ref-](chap-sync)).
 
 ###### Definition -def-num- State Request {#defn-msg-state-request}
+:::definition
 
 A **state request** is sent to a peer to request the state at a specified block. The message is a single 32-byte Blake2 hash which indicates the block from which the sync should start.
 
 Depending on what substream is used, he remote peer either sends back a state response ([Definition -def-num-ref-](chap-networking#defn-msg-state-response)) on the `/dot/sync/2` substream or a warp sync proof ([Definition -def-num-ref-](chap-networking#defn-warp-sync-proof)) on the `/dot/sync/warp`.
 
+:::
 ###### Definition -def-num- State Response {#defn-msg-state-response}
+:::definition
 
 The **state response** is sent to the peer that initialized the state request ([Definition -def-num-ref-](chap-networking#defn-msg-state-request)) and contains a list of key/value entries with an associated proof. This response is sent continuously until all key/value pairs have been submitted.
 
@@ -360,6 +373,7 @@ and *StateEntry*:
 | `bytes` | 1   | The key of the entry   |
 | `bytes` | 2   | The value of the entry |
 
+:::
 ### -sec-num- Warp Sync {#sect-msg-warp-sync}
 
 The warp sync protocols allows nodes to retrieve blocks from remote peers where authority set changes occurred. This can be used to speed up synchronization to the latest state.
@@ -367,6 +381,7 @@ The warp sync protocols allows nodes to retrieve blocks from remote peers where 
 See the the synchronization chapter for more information ([Chapter -chap-num-ref-](chap-sync)).
 
 ###### Definition -def-num- Warp Sync Proof {#defn-warp-sync-proof}
+:::definition
 
 The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition -def-num-ref-](chap-networking#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section -sec-num-ref-](chap-sync#sect-consensus-message-digest)). It’s a datastructure of the following format:
 
@@ -382,6 +397,7 @@ $$
 
 where ${B}_{{h}}$ is the last block header containing a digest item ([Definition -def-num-ref-](chap-state#defn-digest)) signaling an authority set change from which the next authority set change can be fetched from. ${J}^{{{r},\text{stage}}}{\left({B}\right)}$ is the GRANDPA justification ([Definition -def-num-ref-](sect-finality#defn-grandpa-justification)) and ${c}$ is a boolean that indicates whether the warp sync has been completed.
 
+:::
 ### -sec-num- Transactions {#sect-msg-transactions}
 
 Transactions ([Section -sec-num-ref-](chap-state#sect-extrinsics)) are sent directly to peers with which the Polkadot Host has an open transaction substream ([Definition -def-num-ref-](chap-networking#defn-transactions-message)). Polkadot Host implementers should implement a mechanism that only sends a transaction once to each peer and avoids sending duplicates. Sending duplicate transactions might result in undefined consequences such as being blocked for bad behavior by peers.
@@ -389,6 +405,7 @@ Transactions ([Section -sec-num-ref-](chap-state#sect-extrinsics)) are sent dire
 The mechanism for managing transactions is further described in Section [Section -sec-num-ref-](chap-state#sect-extrinsics).
 
 ###### Definition -def-num- Transaction Message {#defn-transactions-message}
+:::definition
 
 The **transactions message** is the structure of how the transactions are sent over the network. It is represented by ${M}_{{T}}$ and is defined as follows:
 
@@ -396,7 +413,7 @@ $$
 {M}_{{T}}\:=\text{Enc}_{{\text{SC}}}{\left({C}_{{1}},\ldots,{C}_{{n}}\right)}
 $$
 
-in which:
+**in which**
 
 $$
 {C}_{{i}}\:=\text{Enc}_{{\text{SC}}}{\left({E}_{{i}}\right)}$$
@@ -405,11 +422,13 @@ Where each ${E}_{{i}}$ is a byte array and represents a separate extrinsic. The 
 
 Transactions are sent over the `/dot/transactions/1` substream.
 
+:::
 ### -sec-num- GRANDPA Messages {#sect-msg-grandpa}
 
 The exchange of GRANDPA messages is conducted on the substream. The process for the creation and distributing these messages is described in [Chapter -chap-num-ref-](sect-finality). The underlying messages are specified in this section.
 
 ###### Definition -def-num- Grandpa Gossip Message {#defn-gossip-message}
+:::definition
 
 A **GRANDPA gossip message**, ${M}$, is a varying datatype ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) which identifies the message type that is cast by a voter followed by the message itself.
 
@@ -417,7 +436,7 @@ $$
 {M}={\left\lbrace\begin{matrix}{0}&\text{Vote message}&{V}_{{m}}\\{1}&\text{Commit message}&{C}_{{m}}\\{2}&\text{Neighbor message}&{N}_{{m}}\\{3}&\text{Catch-up request message}&{R}_{{m}}\\{4}&\text{Catch-up message}&{U}_{{m}}\end{matrix}\right.}
 $$
 
-where  
+**where**  
 - ${V}_{{m}}$ is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-vote-msg).
 
 - ${C}_{{m}}$ is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-commit-msg).
@@ -428,7 +447,9 @@ where
 
 - ${U}_{{M}}$ is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-response-msg).
 
+:::
 ###### Definition -def-num- GRANDPA Vote Messages {#defn-grandpa-vote-msg}
+:::definition
 
 A **GRANDPA vote message** by voter ${v}$, ${{M}_{{v}}^{{{r},\text{stage}}}}$, is gossip to the network by voter ${v}$ with the following structure:
 
@@ -442,7 +463,7 @@ $$
 \text{msg}\:=\text{Enc}_{{\text{SC}}}{\left(\text{stage},{{V}_{{v}}^{{{r},\text{stage}}}}{\left({B}\right)}\right)}
 $$
 
-where  
+**where**  
 - ${r}$ is an unsigned 64-bit integer indicating the Grandpa round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
 - $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
@@ -457,7 +478,9 @@ where
 
 This message is the sub-component of the GRANDPA gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id 0.
 
+:::
 ###### Definition -def-num- GRANDPA Compact Justification Format {#defn-grandpa-justifications-compact}
+:::definition
 
 The **GRANDPA compact justification format** is an optimized data structure to store a collection of pre-commits and their signatures to be submitted as part of a commit message. Instead of storing an array of justifications, it uses the following format:
 
@@ -465,14 +488,16 @@ $$
 {{J}_{{{v}_{{{0},\ldots{n}}}}}^{{{r},\text{comp}}}}\:={\left({\left\lbrace{{V}_{{{v}_{{0}}}}^{{{r},{p}{c}}}},\ldots{{V}_{{{v}_{{n}}}}^{{{r},{p}{c}}}}\right\rbrace},{\left\lbrace{\left({\text{Sig}_{{{v}_{{0}}}}^{{{r},{p}{c}}}},{v}_{{\text{id}_{{0}}}}\right)},\ldots{\left({\text{Sig}_{{{v}_{{n}}}}^{{{r},{p}{c}}}},{v}_{{\text{id}_{{n}}}}\right)}\right\rbrace}\right)}
 $$
 
-where  
+**where**  
 - ${{V}_{{{v}_{{i}}}}^{{{r},{p}{c}}}}$ is a 256-bit byte array containing the pre-commit vote of authority ${v}_{{i}}$ ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
 - ${\text{Sig}_{{{v}_{{i}}}}^{{{r},{p}{c}}}}$ is a 512-bit byte array containing the pre-commit signature of authority ${v}_{{i}}$ ([Definition -def-num-ref-](sect-finality#defn-sign-round-vote)).
 
 - ${v}_{{\text{id}_{{n}}}}$ is a 256-bit byte array containing the public key of authority ${v}_{{i}}$.
 
+:::
 ###### Definition -def-num- GRANDPA Commit Message {#defn-grandpa-commit-msg}
+:::definition
 
 A **GRANDPA commit message** for block ${B}$ in round ${r}$, ${{M}_{{v}}^{{{r},\text{Fin}}}}{\left({B}\right)}$, is a message broadcasted by voter ${v}$ to the network indicating that voter ${v}$ has finalized block ${B}$ in round ${r}$. It has the following structure:
 
@@ -480,7 +505,7 @@ $$
 {{M}_{{v}}^{{{r},\text{Fin}}}}{\left({B}\right)}\:=\text{Enc}_{{\text{SC}}}{\left({r},\text{id}_{{{\mathbb{{V}}}}},{{V}_{{v}}^{{r}}}{\left({B}\right)},{{J}_{{{v}_{{{0},\ldots{n}}}}}^{{{r},\text{comp}}}}\right)}
 $$
 
-where  
+**where**  
 - ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
 - ${id}_{{{\mathbb{{V}}}}}$ is the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
@@ -491,11 +516,13 @@ where
 
 This message is the sub-component of the GRANDPA gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *1*.
 
+:::
 #### -sec-num- GRANDPA Neighbor Messages {#sect-grandpa-neighbor-msg}
 
 Neighbor messages are sent to all connected peers but they are not repropagated on reception. A message should be send whenever the messages values change and at least every 5 minutes. The sender should take the recipients state into account and avoid sending messages to peers that are using a different voter sets or are in a different round. Messages received from a future voter set or round can be dropped and ignored.
 
 ###### Definition -def-num- GRANDPA Neighbor Message {#defn-grandpa-neighbor-msg}
+:::definition
 
 A **GRANDPA Neighbor Message** is defined as:
 
@@ -503,7 +530,7 @@ $$
 {M}^{{\text{neigh}}}\:=\text{Enc}_{{\text{SC}}}{\left({v},{r},\text{id}_{{{\mathbb{{V}}}}},{H}_{{i}}{\left({B}_{{\text{last}}}\right)}\right)}
 $$
 
-where  
+**where**  
 - ${v}$ is an unsigned 8-bit integer indicating the version of the neighbor message, currently *1*.
 
 - ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
@@ -514,6 +541,7 @@ where
 
 This message is the sub-component of the GRANDPA gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *2*.
 
+:::
 #### -sec-num- GRANDPA Catch-up Messages {#sect-grandpa-catchup-messages}
 
 Whenever a Polkadot node detects that it is lagging behind the finality procedure, it needs to initiate a *catch-up* procedure. GRANDPA Neighbor messages ([Definition -def-num-ref-](chap-networking#defn-grandpa-neighbor-msg)) reveal the round number for the last finalized GRANDPA round which the node’s peers have observed. This provides the means to identify a discrepancy in the latest finalized round number observed among the peers. If such a discrepancy is observed, the node needs to initiate the catch-up procedure explained in [Section -sec-num-ref-](sect-finality#sect-grandpa-catchup)).
@@ -521,6 +549,7 @@ Whenever a Polkadot node detects that it is lagging behind the finality procedur
 In particular, this procedure involves sending a *catch-up request* and processing *catch-up response* messages.
 
 ###### Definition -def-num- Catch-Up Request Message {#defn-grandpa-catchup-request-msg}
+:::definition
 
 A **GRANDPA catch-up request message** for round ${r}$, ${{M}_{{{i},{v}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$, is a message sent from node ${i}$ to its voting peer node ${v}$ requesting the latest status of a GRANDPA round ${r}'>{r}$ of the authority set ${\mathbb{{V}}}_{{\text{id}}}$ along with the justification of the status and has the following structure:
 
@@ -530,7 +559,9 @@ $$
 
 This message is the sub-component of the GRANDPA Gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *3*.
 
+:::
 ###### Definition -def-num- Catch-Up Response Message {#defn-grandpa-catchup-response-msg}
+:::definition
 
 A **GRANDPA catch-up response message** for round ${r}$, ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$, is a message sent by a node ${v}$ to node ${i}$ in response of a catch-up request ${{M}_{{{v},{i}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}'\right)}$ in which ${r}\ge{r}'$ is the latest GRANDPA round which v has prove of its finalization and has the following structure:
 
@@ -542,15 +573,17 @@ Where ${B}$ is the highest block which ${v}$ believes to be finalized in round $
 
 This message is the sub-component of the GRANDPA Gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *4*.
 
+:::
 ### -sec-num- GRANDPA BEEFY {#sect-msg-grandpa-beefy}
 
-|     |                                                                             |
-|-----|-----------------------------------------------------------------------------|
-|     | The BEEFY protocol is currently in early development and subject to change. |
+:::caution
+The BEEFY protocol is currently in early development and subject to change.
+:::
 
 This section defines the messages required for the GRANDPA BEEFY protocol ([Section -sec-num-ref-](sect-finality#sect-grandpa-beefy)). Those messages are sent over the `/paritytech/beefy/1` substream.
 
 ###### Definition -def-num- Commitment {#defn-grandpa-beefy-commitment}
+:::definition
 
 A **commitment**, ${C}$, contains the information extracted from the finalized block at height ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ as specified in the message body and a datastructure of the following format:
 
@@ -558,14 +591,16 @@ $$
 {C}={\left({R}_{{h}},{H}_{{i}}{\left({B}_{{\text{last}}}\right)},\text{id}_{{{\mathbb{{V}}}}}\right)}
 $$
 
-where  
+**where**  
 - ${R}_{{h}}$ is the MMR root of all the block header hashes leading up to the latest, finalized block.
 
 - ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ is the block number this commitment is for. Namely the latest, finalized block.
 
 - $\text{id}_{{{\mathbb{{V}}}}}$ is the current authority set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
+:::
 ###### Definition -def-num- Vote Message {#defn-msg-beefy-gossip}
+:::definition
 
 A **vote message**, ${M}_{{v}}$, is direct vote created by the Polkadot Host on every BEEFY round and is gossiped to its peers. The message is a datastructure of the following format:
 
@@ -573,14 +608,16 @@ $$
 {M}_{{v}}=\text{Enc}_{{\text{SC}}}{\left({C},{{A}_{{\text{id}}}^{{\text{bfy}}}},{A}_{{\text{sig}}}\right)}
 $$
 
-where  
+**where**  
 - ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
 
 - ${{A}_{{\text{id}}}^{{\text{bfy}}}}$ is the ECDSA public key of the Polkadot Host.
 
 - ${A}_{{\text{sig}}}$ is the signature created with ${{A}_{{\text{id}}}^{{\text{bfy}}}}$ by signing the statement ${R}_{{h}}$ in ${C}$.
 
+:::
 ###### Definition -def-num- Signed Commitment {#defn-grandpa-beefy-signed-commitment}
+:::definition
 
 A **signed commitment**, ${M}_{{\text{sc}}}$, is a datastructure of the following format:
 
@@ -591,14 +628,16 @@ $$
 {S}_{{n}}={\left({{A}_{{0}}^{{\text{sig}}}},\ldots{{A}_{{n}}^{{\text{sig}}}}\right)}
 $$
 
-where  
+**where**  
 - ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
 
 - ${S}_{{n}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)) in ${C}$. Individual items are of the type *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain a signature of a validator which signed the same statement (${R}_{{h}}$ in ${C}$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
 
   For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in ${S}_{{n}}$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
 
+:::
 ###### Definition -def-num- Signed Commitment Witness {#defn-grandpa-beefy-signed-commitment-witness}
+:::definition
 
 A **signed commitment witness**, ${{M}_{{\text{SC}}}^{{w}}}$, is a light version of the signed BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)). Instead of containing the entire list of signatures, it only claims which validator signed the statement.
 
@@ -608,7 +647,7 @@ $$
 {{M}_{{\text{SC}}}^{{w}}}=\text{Enc}_{{\text{SC}}}{\left({C},{V}_{{{0},\ldots{n}}},{R}_{{\text{sig}}}\right)}
 $$
 
-where  
+**where**  
 - ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
 
 - ${V}_{{{0},\ldots{n}}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ in ${C}$. Individual items are booleans which indicate whether the validator has signed the statement (*true*) or not (*false*). It’s critical that the boolean indicators are sorted based on their corresponding public key entry in the authority set.
