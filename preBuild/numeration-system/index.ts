@@ -163,6 +163,10 @@ const numerationSystem = () => {
     }
   }
 
+  if (!fs.existsSync(filePathOut)) {
+    fs.mkdirSync(filePathOut);
+  }
+
   // now we can write the files
   for (let mdFile of mdFilesToCompile) {
     fs.writeFileSync(`${filePathOut}/${mdFile.routeId}.md`, mdFile.md);

@@ -1,1 +1,2 @@
-docs/* linguist-detectable
+src/docs/* linguist-detectable
+src/css/* linguist-documentation
