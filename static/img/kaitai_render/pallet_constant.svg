@@ -9,22 +9,22 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-173 597,-173 597,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster__pallet_constant</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="188,-8 188,-161 449,-161 449,-8 188,-8"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="188,-8 188,-161 449,-161 449,-8 188,-8"/>
 <text text-anchor="middle" x="318.5" y="-145.8" font-family="Times,serif" font-size="14.00">PalletConstant</text>
 </g>
 <!-- pallet_constant__seq -->
 <g id="node1" class="node">
 <title>pallet_constant__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="204,-104.5 204,-125.5 229,-125.5 229,-104.5 204,-104.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="204,-104.5 204,-125.5 229,-125.5 229,-104.5 204,-104.5"/>
 <polygon fill="none" stroke="black" points="204,-104.5 204,-125.5 229,-125.5 229,-104.5 204,-104.5"/>
 <text text-anchor="start" x="207" y="-111.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="229,-104.5 229,-125.5 257,-125.5 257,-104.5 229,-104.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="229,-104.5 229,-125.5 257,-125.5 257,-104.5 229,-104.5"/>
 <polygon fill="none" stroke="black" points="229,-104.5 229,-125.5 257,-125.5 257,-104.5 229,-104.5"/>
 <text text-anchor="start" x="232" y="-111.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="257,-104.5 257,-125.5 365,-125.5 365,-104.5 257,-104.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="257,-104.5 257,-125.5 365,-125.5 365,-104.5 257,-104.5"/>
 <polygon fill="none" stroke="black" points="257,-104.5 257,-125.5 365,-125.5 365,-104.5 257,-104.5"/>
 <text text-anchor="start" x="299" y="-111.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="365,-104.5 365,-125.5 433,-125.5 433,-104.5 365,-104.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="365,-104.5 365,-125.5 433,-125.5 433,-104.5 365,-104.5"/>
 <polygon fill="none" stroke="black" points="365,-104.5 365,-125.5 433,-125.5 433,-104.5 365,-104.5"/>
 <text text-anchor="start" x="393.5" y="-111.3" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="204,-83.5 204,-104.5 229,-104.5 229,-83.5 204,-83.5"/>

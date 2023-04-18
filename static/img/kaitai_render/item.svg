@@ -9,22 +9,22 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-230 454,-230 454,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster__item</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="8,-45 8,-218 276,-218 276,-45 8,-45"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="8,-45 8,-218 276,-218 276,-45 8,-45"/>
 <text text-anchor="middle" x="142" y="-202.8" font-family="Times,serif" font-size="14.00">Item</text>
 </g>
 <!-- item__seq -->
 <g id="node1" class="node">
 <title>item__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="24,-162 24,-183 49,-183 49,-162 24,-162"/>
+<polygon fill="#e6007a4f" stroke="none" points="24,-162 24,-183 49,-183 49,-162 24,-162"/>
 <polygon fill="none" stroke="black" points="24,-162 24,-183 49,-183 49,-162 24,-162"/>
 <text text-anchor="start" x="27" y="-168.8" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="49,-162 49,-183 77,-183 77,-162 49,-162"/>
+<polygon fill="#e6007a4f" stroke="none" points="49,-162 49,-183 77,-183 77,-162 49,-162"/>
 <polygon fill="none" stroke="black" points="49,-162 49,-183 77,-183 77,-162 49,-162"/>
 <text text-anchor="start" x="52" y="-168.8" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="77,-162 77,-183 201,-183 201,-162 77,-162"/>
+<polygon fill="#e6007a4f" stroke="none" points="77,-162 77,-183 201,-183 201,-162 77,-162"/>
 <polygon fill="none" stroke="black" points="77,-162 77,-183 201,-183 201,-162 77,-162"/>
 <text text-anchor="start" x="127" y="-168.8" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="201,-162 201,-183 260,-183 260,-162 201,-162"/>
+<polygon fill="#e6007a4f" stroke="none" points="201,-162 201,-183 260,-183 260,-162 201,-162"/>
 <polygon fill="none" stroke="black" points="201,-162 201,-183 260,-183 260,-162 201,-162"/>
 <text text-anchor="start" x="225" y="-168.8" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="24,-141 24,-162 49,-162 49,-141 24,-141"/>

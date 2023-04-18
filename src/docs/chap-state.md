@@ -1,6 +1,13 @@
 ---
 title: States and Transitions
 ---
+import Block from '/static/img/kaitai_render/block.svg';
+import BlockBody from '/static/img/kaitai_render/block_body.svg';
+import BlockHeader from '/static/img/kaitai_render/block_header.svg';
+import Digest from '/static/img/kaitai_render/digest.svg';
+
+import Pseudocode from '@site/src/components/Pseudocode';
+import qSort from '!!raw-loader!@site/src/algorithms/quicksort.tex';
 
 ## -sec-num- Introduction {#id-introduction}
 
@@ -110,7 +117,6 @@ Polkadot nodes replicate each other’s state by syncing the history of the extr
 A Polkadot block consists a *block header* ([Definition -def-num-ref-](chap-state#defn-block-header)) and a *block body* ([Definition -def-num-ref-](chap-state#defn-block-body)). The *block body* in turn is made up out of *extrinsics* , which represent the generalization of the concept of *transactions*. *Extrinsics* can contain any set of external data the underlying chain wishes to validate and track.
 
 ###### Image -img-num- Block {#img-block}
-import Block from '/static/img/kaitai_render/block.svg';
 
 <Block className="graphviz fix-img-size" />
 
@@ -125,13 +131,12 @@ The **header of block B**, ${H}_{{h}}{\left({B}\right)}$, is a 5-tuple containin
 
 - **state_root:** formally indicated as ${H}_{{r}}$, is the root of the Merkle trie, whose leaves implement the storage for the system.
 
-- **extrinsics_root:** is the field which is reserved for the Runtime to validate the integrity of the extrinsics composing the block body. For example, it can hold the root hash of the Merkle trie which stores an ordered list of the extrinsics being validated in this block. The extrinsics_root is set by the runtime and its value is opaque to the Polkadot Host. This element is formally referred to as ${H}_{{e}}$.
+- **extrinsics\_root:** is the field which is reserved for the Runtime to validate the integrity of the extrinsics composing the block body. For example, it can hold the root hash of the Merkle trie which stores an ordered list of the extrinsics being validated in this block. The extrinsics\_root is set by the runtime and its value is opaque to the Polkadot Host. This element is formally referred to as ${H}_{{e}}$.
 
 - **digest:** this field is used to store any chain-specific auxiliary data, which could help the light clients interact with the block without the need of accessing the full storage as well as consensus-related data including the block signature. This field is indicated as ${H}_{{d}}$ ([Definition -def-num-ref-](chap-state#defn-digest)).
 
 :::
 ###### Image -img-num- Block Header {#img-block-header}
-import BlockHeader from '/static/img/kaitai_render/block_header.svg';
 
 <BlockHeader className="graphviz fix-img-size" />
 
@@ -173,7 +178,6 @@ $t = 8$ **Runtime Environment Updated digest**, indicates that changes regarding
 
 :::
 ###### Image -img-num- Digest {#img-digest}
-import Digest from '/static/img/kaitai_render/digest.svg';
 
 <Digest className="graphviz fix-img-size" />
 
@@ -199,7 +203,6 @@ $$
 Where each ${E}_{{i}}\in{\mathbb{{B}}}$ is a SCALE encoded extrinsic.
 
 ###### Image -img-num- Block Body {#img-block-body}
-import BlockBody from '/static/img/kaitai_render/block_body.svg';
 
 <BlockBody className="graphviz fix-img-size"/>
 :::
@@ -232,6 +235,12 @@ Additionally valid transactions that are supposed to be gossiped are propagated 
 The **Transaction Queue** of a block producer node, formally referred to as ${T}{Q}$ is a data structure which stores the transactions ready to be included in a block sorted according to their priorities ([Section -sec-num-ref-](chap-networking#sect-msg-transactions)). The **Transaction Pool**, formally referred to as ${T}{P}$, is a hash table in which the Polkadot Host keeps the list of all valid transactions not in the transaction queue.
 :::
 Furthermore [Validate-Transactions-and-Store](chap-state#algo-validate-transactions) updates the transaction pool and the transaction queue according to the received message:
+
+<Pseudocode
+    content={qSort}
+    algID="quicksort"
+    options={{ lineNumber: true, captionCount: 4 }}
+/>
 
 \state ${L}\leftarrow{D}{e}{c}_{{{S}{C}}}{\left({M}_{{T}}\right)}$ \forall{${T}\in{L}{m}{i}{d}{T}\notin{T}{Q}{m}{i}{d}{T}\notin{T}{P}$} \state ${B}_{{d}}\leftarrow$ \call{Head}{\call{Longest-Chain}{${B}{T}$}} \state ${N}\leftarrow{H}_{{n}}{\left({B}_{{d}}\right)}$ \state ${R}\leftarrow$ \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{T}{a}{g}\ge{d}{T}{r}{a}{n}{s}{a}{c}{t}{i}{o}{n}{Q}{u}{e}{u}{e}$\right.}validate${t}{r}{a}{n}{s}{a}{c}{t}{i}{o}{n}{\rbrace},{N},{T}$} \if{\call{Valid}{${R}$}} \if{\call{Requires}{${R}$}$\subset\bigcup_{{\forall{T}\in{\left({T}{Q}~\cup~{B}_{{i}}{m}{i}{d}\exists{i}<{d}\right)}}}$ \call{Provided-Tags}{${T}$}} \state \call{Insert-At}{${T}{Q},{T},$\call{Requires}{${R}$}$, $\call{Priority}{${R}$}} \else \state \call{Add-To}{${T}{P},{T}$} \endif \state \call{Maintain-Transaction-Pool}{} \if{\call{ShouldPropagate}{${R}$}} \state \call{Propagate}{${T}$} \endif \endif \endfor
 
@@ -266,10 +275,10 @@ Inherents are unsigned extrinsics inserted into a block by the block author and 
 
 ###### Table -tab-num- Inherent Data {#tabl-inherent-data}
 
-| Identifier | Value Type                                                                                | Description                                                                                |
-|------------|-------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
-| timstap0   | Unsigned 64-bit integer                                                                   | Unix epoch time ([Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time))           |
-| babeslot   | Unsigned 64-bit integer                                                                   | The babe slot (*DEPRECATED*) ([Definition -def-num-ref-](sect-block-production#defn-epoch-slot)) |
+| Identifier | Value Type | Description |
+|------------|------------|-------------|
+| timstap0   | Unsigned 64-bit integer | Unix epoch time ([Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time)) |
+| babeslot   | Unsigned 64-bit integer | The babe slot (*DEPRECATED*) ([Definition -def-num-ref-](sect-block-production#defn-epoch-slot)) |
 | parachn0   | Parachain inherent data ([Definition -def-num-ref-](chapter-anv#defn-parachain-inherent-data)) | Parachain candidate inclusion ([Section -sec-num-ref-](chapter-anv#sect-candidate-inclusion)) |
 
 ###### Definition -def-num- Inherent Data {#defn-inherent-data}
@@ -505,7 +514,7 @@ $$
 {N}_{{b}}\rightarrow{\left({b}_{{{15}}},\ldots,{b}_{{8}},{b}_{{7}},\ldots,{b}_{{0}}\right)}_{{2}}
 $$
 
-where
+**where**
 
 $$
 {b}_{{i}}\:={\left\lbrace\begin{matrix}{1}&\exists{N}_{{c}}\in{\mathcal{{N}}}:{k}_{{{N}_{{c}}}}={k}_{{{N}_{{b}}}}{\left|{\left|{i}\right|}\right|}{p}{k}_{{{N}_{{c}}}}\\{0}&\text{otherwise}\end{matrix}\right.}

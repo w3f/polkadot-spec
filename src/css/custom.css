@@ -69,7 +69,7 @@ svg > g.graph > g.node > text > a {
 }
 
 .alert--definition {
-  --ifm-alert-background-color: #e6007b07;
+  --ifm-alert-background-color: #e6007a0d;
   --ifm-alert-background-color-highlight: #54c7ec26;
   --ifm-alert-foreground-color: var(--ifm-color-info-contrast-foreground);
   --ifm-alert-border-color: #e6007a;

@@ -152,10 +152,10 @@ Apply the extrinsic outside of the block execution function. This does not attem
 
 ###### Table -tab-num- Possible values of varying data type *ApplyExtrinsicResult*. {#tabl-rte-apply-extrinsic-result}
 
-| **Id** | **Description**                                               | **Type**                                                                                                 |
-|--------|---------------------------------------------------------------|----------------------------------------------------------------------------------------------------------|
-| 0      | Outcome of dispatching the extrinsic.                         | *DispatchOutcome* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-dispatch-outcome))                    |
-| 1      | Possible errors while checking the validity of a transaction. | *TransactionValidityError* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-transaction-validity-error)) |
+| Id | Description | Type |
+|----|-------------|------|
+| 0 | Outcome of dispatching the extrinsic. | *DispatchOutcome* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-dispatch-outcome)) |
+| 1 | Possible errors while checking the validity of a transaction. | *TransactionValidityError* ([Definition -def-num-ref-](chap-runtime-api#defn-rte-transaction-validity-error)) |
 
 :::
 
@@ -196,11 +196,11 @@ As long as a *DispatchOutcome* ([Definition -def-num-ref-](chap-runtime-api#defn
 
 ###### Table -tab-num- Possible values of varying data type *CustomModuleError*. {#tabl-rte-custom-module-error}
 
-| **Name** | **Description**                                  | **Type**                                                                                                                                                                           |
-|----------|--------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Index    | Module index matching the metadata module index. | Unsigned 8-bit integer.                                                                                                                                                            |
-| Error    | Module specific error value.                     | Unsigned 8-bit integer                                                                                                                                                             |
-| Message  | Optional error message.                          | Varying data type *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)). The optional value is a SCALE encoded byte array containing a valid UTF-8 sequence. |
+| Name | Description | Type |
+|------|-------------|------|
+| Index | Module index matching the metadata module index. | Unsigned 8-bit integer. |
+| Error | Module specific error value. | Unsigned 8-bit integer |
+| Message | Optional error message. | Varying data type *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)). The optional value is a SCALE encoded byte array containing a valid UTF-8 sequence. |
 :::
 
 :::info
@@ -345,13 +345,14 @@ It indicates if the submitted blob represents a valid extrinsics, the order in w
 
   ###### Table -tab-num- The tuple provided by in the case the transaction is judged to be valid.
 
-  | **Name**    | **Description**                                                                                                                                                                                           | **Type**                      |
-  |-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------|
-  | *Priority*  | Determines the ordering of two transactions that have all their dependencies (required tags) are satisfied.                                                                                               | Unsigned 64bit integer        |
-  | *Requires*  | List of tags specifying extrinsics which should be applied before the current exrinsics can be applied.                                                                                                   | Array containing inner arrays |
-  | *Provides*  | Informs Runtime of the extrinsics depending on the tags in the list that can be applied after current extrinsics are being applied. Describes the minimum number of blocks for the validity to be correct | Array containing inner arrays |
-  | *Longevity* | After this period, the transaction should be removed from the pool or revalidated.                                                                                                                        | Unsigned 64-bit integer       |
-  | *Propagate* | A flag indicating if the transaction should be gossiped to other peers.                                                                                                                                   | Boolean                       |
+  | Name | Description | Type |
+  |------|-------------|------|
+  | *Priority* | Determines the ordering of two transactions that have all their dependencies (required tags) are satisfied. | Unsigned 64-bit integer |
+  | *Requires*  | List of tags specifying extrinsics which should be applied before the current extrinsics can be applied. | Array containing inner arrays |
+  | *Provides* | Informs Runtime of the extrinsics depending on the tags in the list that can be applied after current extrinsics are being applied. Describes the minimum number of blocks for the validity to be correct. | Array containing inner arrays |
+  | *Longevity* | After this period, the transaction should be removed from the pool or revalidated. | Unsigned 64-bit integer |
+  | *Propagate* | A flag indicating if the transaction should be gossiped to other peers. | Boolean |
+
 :::
 
 :::info
@@ -766,14 +767,14 @@ This entry is called to obtain the current configuration of the BABE consensus p
 
   ###### Table -tab-num- The tuple provided by **BabeApi_configuration**. {#tabl-babeapi-configuration}
 
-  | **Name**             | **Description**                                                                                                                                                                                                             | **Type**                                                                                                                |
-  |----------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
-  | *SlotDuration*       | The slot duration in milliseconds. Currently, only the value provided by this type at genesis will be used. Dynamic slot duration may be supported in the future.                                                           | Unsigned 64bit integer                                                                                                  |
-  | *EpochLength*        | The duration of epochs in slots.                                                                                                                                                                                            | Unsigned 64bit integer                                                                                                  |
-  | *Constant*           | A constant value that is used in the threshold calculation formula as defined in [Definition -def-num-ref-](sect-block-production#defn-babe-constant).                                                                            | Tuple containing two unsigned 64bit integers                                                                            |
-  | *GenesisAuthorities* | The authority list for the genesis epoch as defined in [Definition -def-num-ref-](chap-sync#defn-authority-list).                                                                                                                 | Array of tuples containing a 256-bit byte array and a unsigned 64bit integer                                            |
-  | *Randomness*         | The randomness for the genesis epoch                                                                                                                                                                                        | 32-byte array                                                                                                           |
-  | *SecondarySlot*      | Whether this chain should run with round-robin-style secondary slot and if this secondary slot requires the inclusion of an auxiliary VRF output ([Section -sec-num-ref-](sect-block-production#sect-block-production-lottery)). | A one-byte enum as defined in [Definition -def-num-ref-](sect-block-production#defn-consensus-message-babe) as ${2}_{{\text{nd}}}$. |
+  | **Name** | **Description** | **Type** |
+  |----------|-----------------|----------|
+  | *SlotDuration* | The slot duration in milliseconds. Currently, only the value provided by this type at genesis will be used. Dynamic slot duration may be supported in the future. | Unsigned 64bit integer |
+  | *EpochLength* | The duration of epochs in slots. | Unsigned 64bit integer |
+  | *Constant* | A constant value that is used in the threshold calculation formula as defined in [Definition -def-num-ref-](sect-block-production#defn-babe-constant). | Tuple containing two unsigned 64bit integers |
+  | *GenesisAuthorities* | The authority list for the genesis epoch as defined in [Definition -def-num-ref-](chap-sync#defn-authority-list). | Array of tuples containing a 256-bit byte array and a unsigned 64bit integer |
+  | *Randomness* | The randomness for the genesis epoch | 32-byte array |
+  | *SecondarySlot* | Whether this chain should run with round-robin-style secondary slot and if this secondary slot requires the inclusion of an auxiliary VRF output ([Section -sec-num-ref-](sect-block-production#sect-block-production-lottery)). | A one-byte enum as defined in [Definition -def-num-ref-](sect-block-production#defn-consensus-message-babe) as ${2}_{{\text{nd}}}$. |
 
 ### -sec-num- `BabeApi_current_epoch_start` {#id-babeapi_current_epoch_start}
 

@@ -61,6 +61,17 @@ const graphvizSvgFixer = () => {
           }
         }
       });
+      
+      let svgString = $.html(svg);
+      // replace transparent background with white
+      svgString = svgString.replace(
+        /fill="none" stroke="black" stroke-dasharray="1,5"/g,
+        'fill="white" stroke="black" stroke-dasharray="1,5"'
+      );
+      // replace green headings background with pink
+      svgString = svgString.replace(/#e0ffe0/g, '#e6007a4f');
+      svgString = svgString.replace(/#f0f2e4/g, '#e6007a4f');
+      $(svg).replaceWith(svgString);
     });
     fs.writeFileSync(svgPath + "/" + svgName, $.html());
   }

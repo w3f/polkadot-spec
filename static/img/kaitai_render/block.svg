@@ -9,22 +9,22 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-135 367,-135 367,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster__block</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="8,-12 8,-123 214,-123 214,-12 8,-12"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="8,-12 8,-123 214,-123 214,-12 8,-12"/>
 <text text-anchor="middle" x="111" y="-107.8" font-family="Times,serif" font-size="14.00">Block</text>
 </g>
 <!-- block__seq -->
 <g id="node1" class="node">
 <title>block__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="24,-66.5 24,-87.5 49,-87.5 49,-66.5 24,-66.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="24,-66.5 24,-87.5 49,-87.5 49,-66.5 24,-66.5"/>
 <polygon fill="none" stroke="black" points="24,-66.5 24,-87.5 49,-87.5 49,-66.5 24,-66.5"/>
 <text text-anchor="start" x="27" y="-73.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="49,-66.5 49,-87.5 77,-87.5 77,-66.5 49,-66.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="49,-66.5 49,-87.5 77,-87.5 77,-66.5 49,-66.5"/>
 <polygon fill="none" stroke="black" points="49,-66.5 49,-87.5 77,-87.5 77,-66.5 49,-66.5"/>
 <text text-anchor="start" x="52" y="-73.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="77,-66.5 77,-87.5 155,-87.5 155,-66.5 77,-66.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="77,-66.5 77,-87.5 155,-87.5 155,-66.5 77,-66.5"/>
 <polygon fill="none" stroke="black" points="77,-66.5 77,-87.5 155,-87.5 155,-66.5 77,-66.5"/>
 <text text-anchor="start" x="104" y="-73.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="155,-66.5 155,-87.5 198,-87.5 198,-66.5 155,-66.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="155,-66.5 155,-87.5 198,-87.5 198,-66.5 155,-66.5"/>
 <polygon fill="none" stroke="black" points="155,-66.5 155,-87.5 198,-87.5 198,-66.5 155,-66.5"/>
 <text text-anchor="start" x="171" y="-73.3" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="24,-45.5 24,-66.5 49,-66.5 49,-45.5 24,-45.5"/>

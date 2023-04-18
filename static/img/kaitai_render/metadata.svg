@@ -9,22 +9,22 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-383 667,-383 667,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster__metadata</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="188,-8 188,-371 484,-371 484,-8 188,-8"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="188,-8 188,-371 484,-371 484,-8 188,-8"/>
 <text text-anchor="middle" x="336" y="-355.8" font-family="Times,serif" font-size="14.00">Metadata</text>
 </g>
 <!-- metadata__seq -->
 <g id="node1" class="node">
 <title>metadata__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="204,-314.5 204,-335.5 229,-335.5 229,-314.5 204,-314.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="204,-314.5 204,-335.5 229,-335.5 229,-314.5 204,-314.5"/>
 <polygon fill="none" stroke="black" points="204,-314.5 204,-335.5 229,-335.5 229,-314.5 204,-314.5"/>
 <text text-anchor="start" x="207" y="-321.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="229,-314.5 229,-335.5 257,-335.5 257,-314.5 229,-314.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="229,-314.5 229,-335.5 257,-335.5 257,-314.5 229,-314.5"/>
 <polygon fill="none" stroke="black" points="229,-314.5 229,-335.5 257,-335.5 257,-314.5 229,-314.5"/>
 <text text-anchor="start" x="232" y="-321.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="257,-314.5 257,-335.5 365,-335.5 365,-314.5 257,-314.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="257,-314.5 257,-335.5 365,-335.5 365,-314.5 257,-314.5"/>
 <polygon fill="none" stroke="black" points="257,-314.5 257,-335.5 365,-335.5 365,-314.5 257,-314.5"/>
 <text text-anchor="start" x="299" y="-321.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="365,-314.5 365,-335.5 468,-335.5 468,-314.5 365,-314.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="365,-314.5 365,-335.5 468,-335.5 468,-314.5 365,-314.5"/>
 <polygon fill="none" stroke="black" points="365,-314.5 365,-335.5 468,-335.5 468,-314.5 365,-314.5"/>
 <text text-anchor="start" x="411" y="-321.3" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="204,-293.5 204,-314.5 229,-314.5 229,-293.5 204,-293.5"/>

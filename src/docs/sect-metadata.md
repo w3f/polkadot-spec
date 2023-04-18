@@ -1,6 +1,16 @@
 ---
 title: Metadata
 ---
+import Metadata from '/static/img/kaitai_render/metadata.svg';
+import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
+import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_definition.svg';
+import MetadataTypeFields from '/static/img/kaitai_render/metadata_type_fields.svg';
+import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_variants.svg';
+import MetadataPallet from '/static/img/kaitai_render/metadata_pallet.svg';
+import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
+import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg';
+import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
+import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';
 
 The runtime metadata structure contains all the information necessary on how to interact with the Polkadot runtime. Considering that Polkadot runtimes are upgradable and therefore any interfaces are subject to change, the metadata allows developers to structure any extrinsics or storage entries accordingly.
 
@@ -41,7 +51,6 @@ $$
 - ${t}_{{r}}$ is the type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) of the runtime.
 
 ###### Image -img-num- Metadata {#img-metadata}
-import Metadata from '/static/img/kaitai_render/metadata.svg';
 
 <Metadata className="graphviz fix-img-size" />
 
@@ -76,7 +85,6 @@ $$
 - ${c}$ is the documentation as sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of strings.
 
 ###### Image -img-num- Metadata Type {#img-metadata-type}
-import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
 
 <MetadataType className="graphviz fix-img-size" /> 
 :::
@@ -137,7 +145,6 @@ $$
   - ${o}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) the bit order type ([external reference](https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder)).
 
 ###### Image -img-num- Metadata Type Definition {#img-metadata-type-definition}
-import MetadataTypeDefinition from '/static/img/kaitai_render/metadata_type_definition.svg';
 
 <MetadataTypeDefinition className="graphviz fix-img-size"  />
 :::
@@ -162,7 +169,6 @@ $$
 - ${C}$ is a sequence of varying length containing strings of documentation.
 
 ###### Image -img-num- Metadata Type Fields {#img-metadata-type-fields}
-import MetadataTypeFields from '/static/img/kaitai_render/metadata_type_fields.svg';
 
 <MetadataTypeFields className="graphviz fix-img-size" />
 :::
@@ -187,7 +193,6 @@ $$
 - ${C}$ is a sequence of strings containing the documentation.
 
 ###### Image -img-num- Metadata Type Variants {#img-metadata-type-variants}
-import MetadataTypeVariants from '/static/img/kaitai_render/metadata_type_variants.svg';
 
 <MetadataTypeVariants className="graphviz fix-img-size" />
 :::
@@ -216,7 +221,6 @@ $$
 - ${i}$ is an unsigned 8-bit integers indicating the index of the pallet, which is used for encoding pallet events and calls.
 
 ###### Image -img-num- Metadata Pallet {#img-metadata-pallet}
-import MetadataPallet from '/static/img/kaitai_render/metadata_pallet.svg';
 
 <MetadataPallet className="graphviz fix-img-size" />
 
@@ -264,7 +268,6 @@ $$
 - ${C}$ is an array of varying length of strings containing the documentation.
 
 ###### Image -img-num- Pallet Storage {#img-pallet-storage}
-import PalletStorage from '/static/img/kaitai_render/pallet_storage.svg';
 
 <PalletStorage className="graphviz fix-img-size" />
 :::
@@ -296,7 +299,6 @@ $$
 where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)). ${H}$ is an array of varying length containing the storage hasher ([Definition -def-num-ref-](sect-metadata#defn-rtm-storage-hasher)).
 
 ###### Image -img-num- Storage Definition {#img-storage-definition}
-import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg';
 
 <StorageDefinition className="graphviz fix-img-size" />
 :::
@@ -330,7 +332,6 @@ $$
 - ${C}$ is an array of varying length containing string with the documentation.
 
 ###### Image -img-num- Pallet Constant {#img-pallet-constant}
-import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 
 <PalletConstant className="graphviz fix-img-size" />
 :::
@@ -355,7 +356,6 @@ $$
 - ${a}$ is the type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) of the additional signed data, with the data to be included in the signed payload.
 
 ###### Image -img-num- Metadata Extrinsic {#img-metadata-extrinsic}
-import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';
 
 <MetadataExtrinsic className="graphviz fix-img-size" />
 :::

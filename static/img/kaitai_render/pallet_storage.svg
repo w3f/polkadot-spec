@@ -9,27 +9,27 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-268.11 915,-268.11 915,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster__pallet_storage</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="188,-44 188,-256 745,-256 745,-44 188,-44"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="188,-44 188,-256 745,-256 745,-44 188,-44"/>
 <text text-anchor="middle" x="466.5" y="-240.8" font-family="Times,serif" font-size="14.00">PalletStorage</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster__item</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="469,-52 469,-225 737,-225 737,-52 469,-52"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="469,-52 469,-225 737,-225 737,-52 469,-52"/>
 <text text-anchor="middle" x="603" y="-209.8" font-family="Times,serif" font-size="14.00">PalletStorage::Item</text>
 </g>
 <!-- pallet_storage__seq -->
 <g id="node1" class="node">
 <title>pallet_storage__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="204,-179.5 204,-200.5 229,-200.5 229,-179.5 204,-179.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="204,-179.5 204,-200.5 229,-200.5 229,-179.5 204,-179.5"/>
 <polygon fill="none" stroke="black" points="204,-179.5 204,-200.5 229,-200.5 229,-179.5 204,-179.5"/>
 <text text-anchor="start" x="207" y="-186.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="229,-179.5 229,-200.5 257,-200.5 257,-179.5 229,-179.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="229,-179.5 229,-200.5 257,-200.5 257,-179.5 229,-179.5"/>
 <polygon fill="none" stroke="black" points="229,-179.5 229,-200.5 257,-200.5 257,-179.5 229,-179.5"/>
 <text text-anchor="start" x="232" y="-186.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="257,-179.5 257,-200.5 365,-200.5 365,-179.5 257,-179.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="257,-179.5 257,-200.5 365,-200.5 365,-179.5 257,-179.5"/>
 <polygon fill="none" stroke="black" points="257,-179.5 257,-200.5 365,-200.5 365,-179.5 257,-179.5"/>
 <text text-anchor="start" x="299" y="-186.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="365,-179.5 365,-200.5 433,-200.5 433,-179.5 365,-179.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="365,-179.5 365,-200.5 433,-200.5 433,-179.5 365,-179.5"/>
 <polygon fill="none" stroke="black" points="365,-179.5 365,-200.5 433,-200.5 433,-179.5 365,-179.5"/>
 <text text-anchor="start" x="393.5" y="-186.3" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="204,-158.5 204,-179.5 229,-179.5 229,-158.5 204,-158.5"/>
@@ -62,16 +62,16 @@
 <!-- item__seq -->
 <g id="node2" class="node">
 <title>item__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="485,-169 485,-190 510,-190 510,-169 485,-169"/>
+<polygon fill="#e6007a4f" stroke="none" points="485,-169 485,-190 510,-190 510,-169 485,-169"/>
 <polygon fill="none" stroke="black" points="485,-169 485,-190 510,-190 510,-169 485,-169"/>
 <text text-anchor="start" x="488" y="-175.8" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="510,-169 510,-190 538,-190 538,-169 510,-169"/>
+<polygon fill="#e6007a4f" stroke="none" points="510,-169 510,-190 538,-190 538,-169 510,-169"/>
 <polygon fill="none" stroke="black" points="510,-169 510,-190 538,-190 538,-169 510,-169"/>
 <text text-anchor="start" x="513" y="-175.8" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="538,-169 538,-190 662,-190 662,-169 538,-169"/>
+<polygon fill="#e6007a4f" stroke="none" points="538,-169 538,-190 662,-190 662,-169 538,-169"/>
 <polygon fill="none" stroke="black" points="538,-169 538,-190 662,-190 662,-169 538,-169"/>
 <text text-anchor="start" x="588" y="-175.8" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="662,-169 662,-190 721,-190 721,-169 662,-169"/>
+<polygon fill="#e6007a4f" stroke="none" points="662,-169 662,-190 721,-190 721,-169 662,-169"/>
 <polygon fill="none" stroke="black" points="662,-169 662,-190 721,-190 721,-169 662,-169"/>
 <text text-anchor="start" x="686" y="-175.8" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="485,-148 485,-169 510,-169 510,-148 485,-148"/>

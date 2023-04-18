@@ -9,22 +9,22 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-151 410,-151 410,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster__metadata_extrinsic</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="8,-8 8,-139 262,-139 262,-8 8,-8"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="8,-8 8,-139 262,-139 262,-8 8,-8"/>
 <text text-anchor="middle" x="135" y="-123.8" font-family="Times,serif" font-size="14.00">MetadataExtrinsic</text>
 </g>
 <!-- metadata_extrinsic__seq -->
 <g id="node1" class="node">
 <title>metadata_extrinsic__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="24,-83 24,-104 49,-104 49,-83 24,-83"/>
+<polygon fill="#e6007a4f" stroke="none" points="24,-83 24,-104 49,-104 49,-83 24,-83"/>
 <polygon fill="none" stroke="black" points="24,-83 24,-104 49,-104 49,-83 24,-83"/>
 <text text-anchor="start" x="27" y="-89.8" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="49,-83 49,-104 77,-104 77,-83 49,-83"/>
+<polygon fill="#e6007a4f" stroke="none" points="49,-83 49,-104 77,-104 77,-83 49,-83"/>
 <polygon fill="none" stroke="black" points="49,-83 49,-104 77,-104 77,-83 49,-83"/>
 <text text-anchor="start" x="52" y="-89.8" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="77,-83 77,-104 185,-104 185,-83 77,-83"/>
+<polygon fill="#e6007a4f" stroke="none" points="77,-83 77,-104 185,-104 185,-83 77,-83"/>
 <polygon fill="none" stroke="black" points="77,-83 77,-104 185,-104 185,-83 77,-83"/>
 <text text-anchor="start" x="119" y="-89.8" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="185,-83 185,-104 246,-104 246,-83 185,-83"/>
+<polygon fill="#e6007a4f" stroke="none" points="185,-83 185,-104 246,-104 246,-83 185,-83"/>
 <polygon fill="none" stroke="black" points="185,-83 185,-104 246,-104 246,-83 185,-83"/>
 <text text-anchor="start" x="210" y="-89.8" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="24,-62 24,-83 49,-83 49,-62 24,-62"/>

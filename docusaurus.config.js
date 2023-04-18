@@ -51,7 +51,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/0xCaso/polkadot-spec/tree/docusaurus/spec-website',
+            'https://github.com/0xCaso/polkadot-spec/blob/main//src',
           routeBasePath: '/', // Serve the docs at the site's root
           admonitions: {
             tag: ':::',
@@ -79,9 +79,14 @@ const config = {
         'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
       crossorigin: 'anonymous',
     },
-    "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css",
+    {
+      href: "https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css",
+    },
+    {
+      href: "https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.css"
+    }
   ],
-
+  
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -115,6 +120,11 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+      },
+      colorMode: {
+        defaultMode: 'light',
+        disableSwitch: true,
+        respectPrefersColorScheme: false,
       },
     }),
 };

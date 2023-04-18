@@ -49,7 +49,7 @@ P̱olkadot block limits as defined here should be respected by each block produc
 
 - ${L}{e}{n}{\left({B}\right)}\le{5}\times{1}'{024}\times{1}'{024}={5}'{242}'{880}$ Bytes
 
-- ${T}{\left({B}\right)}={6}$ seconds$
+- ${T}{\left({B}\right)}={6}$ seconds
 
 - ${R}{\left({B}\right)}\le{0.75}$
 

@@ -9,42 +9,42 @@
 <polygon fill="white" stroke="none" points="-4,4 -4,-491 823,-491 823,4 -4,4"/>
 <g id="clust1" class="cluster">
 <title>cluster__digest</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="8,-8 8,-479 722,-479 722,-8 8,-8"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="8,-8 8,-479 722,-479 722,-8 8,-8"/>
 <text text-anchor="middle" x="365" y="-463.8" font-family="Times,serif" font-size="14.00">Digest</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster__pre_runtime</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="506,-337 506,-448 714,-448 714,-337 506,-337"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="506,-337 506,-448 714,-448 714,-337 506,-337"/>
 <text text-anchor="middle" x="610" y="-432.8" font-family="Times,serif" font-size="14.00">Digest::PreRuntime</text>
 </g>
 <g id="clust3" class="cluster">
 <title>cluster__post_runtime</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="506,-218 506,-329 714,-329 714,-218 506,-218"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="506,-218 506,-329 714,-329 714,-218 506,-218"/>
 <text text-anchor="middle" x="610" y="-313.8" font-family="Times,serif" font-size="14.00">Digest::PostRuntime</text>
 </g>
 <g id="clust4" class="cluster">
 <title>cluster__seal</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="506,-99 506,-210 714,-210 714,-99 506,-99"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="506,-99 506,-210 714,-210 714,-99 506,-99"/>
 <text text-anchor="middle" x="610" y="-194.8" font-family="Times,serif" font-size="14.00">Digest::Seal</text>
 </g>
 <g id="clust5" class="cluster">
 <title>cluster__empty</title>
-<polygon fill="none" stroke="black" stroke-dasharray="1,5" points="544,-16 544,-91 676,-91 676,-16 544,-16"/>
+<polygon fill="white" stroke="black" stroke-dasharray="1,5" points="544,-16 544,-91 676,-91 676,-16 544,-16"/>
 <text text-anchor="middle" x="610" y="-75.8" font-family="Times,serif" font-size="14.00">Digest::Empty</text>
 </g>
 <!-- digest__seq -->
 <g id="node1" class="node">
 <title>digest__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="24,-244.5 24,-265.5 49,-265.5 49,-244.5 24,-244.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="24,-244.5 24,-265.5 49,-265.5 49,-244.5 24,-244.5"/>
 <polygon fill="none" stroke="black" points="24,-244.5 24,-265.5 49,-265.5 49,-244.5 24,-244.5"/>
 <text text-anchor="start" x="27" y="-251.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="49,-244.5 49,-265.5 77,-265.5 77,-244.5 49,-244.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="49,-244.5 49,-265.5 77,-265.5 77,-244.5 49,-244.5"/>
 <polygon fill="none" stroke="black" points="49,-244.5 49,-265.5 77,-265.5 77,-244.5 49,-244.5"/>
 <text text-anchor="start" x="52" y="-251.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="77,-244.5 77,-265.5 155,-265.5 155,-244.5 77,-244.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="77,-244.5 77,-265.5 155,-265.5 155,-244.5 77,-244.5"/>
 <polygon fill="none" stroke="black" points="77,-244.5 77,-265.5 155,-265.5 155,-244.5 77,-244.5"/>
 <text text-anchor="start" x="104" y="-251.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="155,-244.5 155,-265.5 191,-265.5 191,-244.5 155,-244.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="155,-244.5 155,-265.5 191,-265.5 191,-244.5 155,-244.5"/>
 <polygon fill="none" stroke="black" points="155,-244.5 155,-265.5 191,-265.5 191,-244.5 155,-244.5"/>
 <text text-anchor="start" x="167.5" y="-251.3" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="24,-223.5 24,-244.5 49,-244.5 49,-223.5 24,-223.5"/>
@@ -73,10 +73,10 @@
 <!-- digest__seq_value_switch -->
 <g id="node2" class="node">
 <title>digest__seq_value_switch</title>
-<polygon fill="#f0f2e4" stroke="none" points="243,-244.5 243,-265.5 393,-265.5 393,-244.5 243,-244.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="243,-244.5 243,-265.5 393,-265.5 393,-244.5 243,-244.5"/>
 <polygon fill="none" stroke="black" points="243,-244.5 243,-265.5 393,-265.5 393,-244.5 243,-244.5"/>
 <text text-anchor="start" x="306" y="-251.3" font-family="Times,serif" font-size="14.00">case</text>
-<polygon fill="#f0f2e4" stroke="none" points="393,-244.5 393,-265.5 470,-265.5 470,-244.5 393,-244.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="393,-244.5 393,-265.5 470,-265.5 470,-244.5 393,-244.5"/>
 <polygon fill="none" stroke="black" points="393,-244.5 393,-265.5 470,-265.5 470,-244.5 393,-244.5"/>
 <text text-anchor="start" x="419.5" y="-251.3" font-family="Times,serif" font-size="14.00">type</text>
 <polygon fill="none" stroke="black" points="243,-223.5 243,-244.5 393,-244.5 393,-223.5 243,-223.5"/>
@@ -105,16 +105,16 @@
 <!-- pre_runtime__seq -->
 <g id="node3" class="node">
 <title>pre_runtime__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="522,-391.5 522,-412.5 547,-412.5 547,-391.5 522,-391.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="522,-391.5 522,-412.5 547,-412.5 547,-391.5 522,-391.5"/>
 <polygon fill="none" stroke="black" points="522,-391.5 522,-412.5 547,-412.5 547,-391.5 522,-391.5"/>
 <text text-anchor="start" x="525" y="-398.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="547,-391.5 547,-412.5 575,-412.5 575,-391.5 547,-391.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="547,-391.5 547,-412.5 575,-412.5 575,-391.5 547,-391.5"/>
 <polygon fill="none" stroke="black" points="547,-391.5 547,-412.5 575,-412.5 575,-391.5 547,-391.5"/>
 <text text-anchor="start" x="550" y="-398.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="575,-391.5 575,-412.5 649,-412.5 649,-391.5 575,-391.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="575,-391.5 575,-412.5 649,-412.5 649,-391.5 575,-391.5"/>
 <polygon fill="none" stroke="black" points="575,-391.5 575,-412.5 649,-412.5 649,-391.5 575,-391.5"/>
 <text text-anchor="start" x="600" y="-398.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="649,-391.5 649,-412.5 698,-412.5 698,-391.5 649,-391.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="649,-391.5 649,-412.5 698,-412.5 698,-391.5 649,-391.5"/>
 <polygon fill="none" stroke="black" points="649,-391.5 649,-412.5 698,-412.5 698,-391.5 649,-391.5"/>
 <text text-anchor="start" x="668" y="-398.3" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="522,-370.5 522,-391.5 547,-391.5 547,-370.5 522,-370.5"/>
@@ -143,16 +143,16 @@
 <!-- post_runtime__seq -->
 <g id="node4" class="node">
 <title>post_runtime__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="522,-272.5 522,-293.5 547,-293.5 547,-272.5 522,-272.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="522,-272.5 522,-293.5 547,-293.5 547,-272.5 522,-272.5"/>
 <polygon fill="none" stroke="black" points="522,-272.5 522,-293.5 547,-293.5 547,-272.5 522,-272.5"/>
 <text text-anchor="start" x="525" y="-279.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="547,-272.5 547,-293.5 575,-293.5 575,-272.5 547,-272.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="547,-272.5 547,-293.5 575,-293.5 575,-272.5 547,-272.5"/>
 <polygon fill="none" stroke="black" points="547,-272.5 547,-293.5 575,-293.5 575,-272.5 547,-272.5"/>
 <text text-anchor="start" x="550" y="-279.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="575,-272.5 575,-293.5 649,-293.5 649,-272.5 575,-272.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="575,-272.5 575,-293.5 649,-293.5 649,-272.5 575,-272.5"/>
 <polygon fill="none" stroke="black" points="575,-272.5 575,-293.5 649,-293.5 649,-272.5 575,-272.5"/>
 <text text-anchor="start" x="600" y="-279.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="649,-272.5 649,-293.5 698,-293.5 698,-272.5 649,-272.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="649,-272.5 649,-293.5 698,-293.5 698,-272.5 649,-272.5"/>
 <polygon fill="none" stroke="black" points="649,-272.5 649,-293.5 698,-293.5 698,-272.5 649,-272.5"/>
 <text text-anchor="start" x="668" y="-279.3" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="522,-251.5 522,-272.5 547,-272.5 547,-251.5 522,-251.5"/>
@@ -181,16 +181,16 @@
 <!-- seal__seq -->
 <g id="node5" class="node">
 <title>seal__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="522,-153.5 522,-174.5 547,-174.5 547,-153.5 522,-153.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="522,-153.5 522,-174.5 547,-174.5 547,-153.5 522,-153.5"/>
 <polygon fill="none" stroke="black" points="522,-153.5 522,-174.5 547,-174.5 547,-153.5 522,-153.5"/>
 <text text-anchor="start" x="525" y="-160.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="547,-153.5 547,-174.5 575,-174.5 575,-153.5 547,-153.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="547,-153.5 547,-174.5 575,-174.5 575,-153.5 547,-153.5"/>
 <polygon fill="none" stroke="black" points="547,-153.5 547,-174.5 575,-174.5 575,-153.5 547,-153.5"/>
 <text text-anchor="start" x="550" y="-160.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="575,-153.5 575,-174.5 649,-174.5 649,-153.5 575,-153.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="575,-153.5 575,-174.5 649,-174.5 649,-153.5 575,-153.5"/>
 <polygon fill="none" stroke="black" points="575,-153.5 575,-174.5 649,-174.5 649,-153.5 575,-153.5"/>
 <text text-anchor="start" x="600" y="-160.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="649,-153.5 649,-174.5 698,-174.5 698,-153.5 649,-153.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="649,-153.5 649,-174.5 698,-174.5 698,-153.5 649,-153.5"/>
 <polygon fill="none" stroke="black" points="649,-153.5 649,-174.5 698,-174.5 698,-153.5 649,-153.5"/>
 <text text-anchor="start" x="668" y="-160.3" font-family="Times,serif" font-size="14.00">id</text>
 <polygon fill="none" stroke="black" points="522,-132.5 522,-153.5 547,-153.5 547,-132.5 522,-132.5"/>
@@ -219,16 +219,16 @@
 <!-- empty__seq -->
 <g id="node6" class="node">
 <title>empty__seq</title>
-<polygon fill="#e0ffe0" stroke="none" points="560,-31.5 560,-52.5 585,-52.5 585,-31.5 560,-31.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="560,-31.5 560,-52.5 585,-52.5 585,-31.5 560,-31.5"/>
 <polygon fill="none" stroke="black" points="560,-31.5 560,-52.5 585,-52.5 585,-31.5 560,-31.5"/>
 <text text-anchor="start" x="563" y="-38.3" font-family="Times,serif" font-size="14.00">pos</text>
-<polygon fill="#e0ffe0" stroke="none" points="585,-31.5 585,-52.5 613,-52.5 613,-31.5 585,-31.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="585,-31.5 585,-52.5 613,-52.5 613,-31.5 585,-31.5"/>
 <polygon fill="none" stroke="black" points="585,-31.5 585,-52.5 613,-52.5 613,-31.5 585,-31.5"/>
 <text text-anchor="start" x="588" y="-38.3" font-family="Times,serif" font-size="14.00">size</text>
-<polygon fill="#e0ffe0" stroke="none" points="613,-31.5 613,-52.5 643,-52.5 643,-31.5 613,-31.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="613,-31.5 613,-52.5 643,-52.5 643,-31.5 613,-31.5"/>
 <polygon fill="none" stroke="black" points="613,-31.5 613,-52.5 643,-52.5 643,-31.5 613,-31.5"/>
 <text text-anchor="start" x="616" y="-38.3" font-family="Times,serif" font-size="14.00">type</text>
-<polygon fill="#e0ffe0" stroke="none" points="643,-31.5 643,-52.5 660,-52.5 660,-31.5 643,-31.5"/>
+<polygon fill="#e6007a4f" stroke="none" points="643,-31.5 643,-52.5 660,-52.5 660,-31.5 643,-31.5"/>
 <polygon fill="none" stroke="black" points="643,-31.5 643,-52.5 660,-52.5 660,-31.5 643,-31.5"/>
 <text text-anchor="start" x="646" y="-38.3" font-family="Times,serif" font-size="14.00">id</text>
 </g>
