@@ -57,40 +57,25 @@ $$
 
 **where**
 
-**1** implies *next epoch data*: The Runtime issues this message on every first
-block of an epoch. The supplied authority set [Definition -def-num-ref-](chap-sync#defn-authority-list),
-${\text{Auth}_C}$, and randomness [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness), ${r}$, are used
-in the next epoch $\mathcal E_n + 1$.
+|   |     |
+|---|-----|
+| **1** | implies *next epoch data*: The Runtime issues this message on every first block of an epoch. The supplied authority set [Definition -def-num-ref-](chap-sync#defn-authority-list), ${\text{Auth}_C}$, and randomness [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness), ${r}$, are used in the next epoch $\mathcal E_n + 1$. |
+| **2** | implies *on disabled*: A 32-bit integer, ${A_i}$, indicating the individual authority in the current authority list that should be immediately disabled until the next authority set changes. This message initial intension was to cause an immediate suspension of all authority functionality with the specified authority. |
+| **3** | implies *next epoch descriptor*: These messages are only issued on configuration change and in the first block of an epoch. The supplied configuration data are intended to be used from the next epoch onwards. |
+  - $D$ is a varying datatype of the following format:
+    $$
+    D = \{1, (c,2_{\text{nd}})\}
+    $$
+    where ${c}$ is the probability that a slot will not be empty [Definition -def-num-ref-](sect-block-production#defn-babe-constant). It is encoded as a tuple of two unsigned 64-bit integers ${c_{nominator},c_{denominator}}$ which are used to compute the rational ${c = \frac{c_{nominator}}{c_{denominator}}}$.
+  - ${2_{\text{nd}}}$ describes what secondary slot [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots), if any, is to be used. It is encoded as one-byte varying datatype:
+    $$
+    s_{\text{2nd}} = \begin{cases}
+    0 \rightarrow \text{no secondary slot} \\
+    1 \rightarrow \text{plain secondary slot} \\
+    2 \rightarrow \text{secondary slot with VRF output}
+    \end{cases}
+    $$
 
-**2** implies *on disabled*: A 32-bit integer, ${A_i}$, indicating the
-individual authority in the current authority list that should be immediately
-disabled until the next authority set changes. This message initial intension
-was to cause an immediate suspension of all authority functionality with the
-specified authority.
-
-**3** implies *next epoch descriptor*: These messages are only issued on
-configuration change and in the first block of an epoch. The supplied
-configuration data are intended to be used from the next epoch onwards.
-
-$$
-D = \{1, (c,2_{\text{nd}})\}
-$$
-
-where ${c}$ is the probability that a slot will not be empty
-[Definition -def-num-ref-](sect-block-production#defn-babe-constant). It is encoded as a tuple of two unsigned 64-bit
-integers ${c_{nominator},c_{denominator}}$ which are used to compute
-the rational ${c = \frac{c_{nominator}}{c_{denominator}}}$.
-
-${2_{\text{nd}}}$ describes what secondary slot [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots),
-if any, is to be used. It is encoded as one-byte varying datatype:
-
-$$
-s_{\text{2nd}} = \begin{cases}
-0 \rightarrow \text{no secondary slot} \\
-1 \rightarrow \text{plain secondary slot} \\
-2 \rightarrow \text{secondary slot with VRF output}
-\end{cases}
-$$
 
 :::
 ## -sec-num- Block Production Lottery {#sect-block-production-lottery}

@@ -213,40 +213,14 @@ $$
 
 **where**
 
-**$N_{\text{delay}}$** is an unsigned 32-bit integer indicating how deep in the
-chain the announcing block must be before the change is applied.
-
-**1** Implies *scheduled change*: Schedule an authority set change after the
-given delay of ${N_{\text{delay}} := |\text{SubChain}(B,B')|}$ where ${B'}$ is the
-block where the change is applied. The earliest digest of this type in a
-single block will be respected, unless a force change is present, in which case
-the force change takes precedence.
-
-**2** Implies *forced change*: Schedule a forced authority set change after the
-given delay of ${N_{\text{delay}} := |\text{SubChain}(B,m + B')|}$ where ${B'}$ is
-the block where the change is applied. The earliest digest
-of this type in a block will be respected.
-
-Forced changes are explained further in [Section -sec-num-ref-](sect-finality#sect-finality-forced-changes).
-
-**3** Implies *on disabled*: An index to the individual authority in the current
-authority list ([Definition -def-num-ref-](chap-sync#defn-authority-list)) that should be immediately disabled
-until the next authority set changes. When an authority gets disabled, the node
-should stop performing any authority functionality from that authority,
-including authoring blocks and casting GRANDPA votes for finalization.
-Similarly, other nodes should ignore all messages from the indicated authority
-which pertain to their authority role.
-
-**4** Implies *pause*: A signal to pause the current authority set after the
-given delay of ${N_{\text{delay}} := |\text{SubChain}(B,B')|}$ where ${B'}$ is a
-block where the change is applied. Once applied, the authorities should stop
-voting.
-
-**5** Implies *resume*: A signal to resume the current authority set after the
-given delay of ${N_{\text{delay}} := |\text{SubChain}(B,B')|}$ where ${B'}$ is the
-block where the change is applied. Once applied, the authorities should resume
-voting.
-
+|  |  |
+|--|--|
+| **$N_{\text{delay}}$** | is an unsigned 32-bit integer indicating how deep in the chain the announcing block must be before the change is applied. |
+| **1** | Implies **scheduled change**: Schedule an authority set change after the given delay of ${N_{\text{delay}} := \|\text{SubChain}(B,B')\|}$ where ${B'}$ is the block where the change is applied. The earliest digest of this type in a single block will be respected, unless a force change is present, in which case the force change takes precedence. |
+| **2** | Implies **forced change**: Schedule a forced authority set change after the given delay of ${N_{\text{delay}} := \|\text{SubChain}(B,m + B')\|}$ where ${B'}$ is the block where the change is applied. The earliest digest of this type in a block will be respected. <br/><br/> Forced changes are explained further in [Section -sec-num-ref-](sect-finality#sect-finality-forced-changes). |
+| **3** | Implies **on disabled**: An index to the individual authority in the current authority list ([Definition -def-num-ref-](chap-sync#defn-authority-list)) that should be immediately disabled until the next authority set changes. When an authority gets disabled, the node should stop performing any authority functionality from that authority, including authoring blocks and casting GRANDPA votes for finalization. Similarly, other nodes should ignore all messages from the indicated authority which pertain to their authority role. |
+| **4** | Implies **pause**: A signal to pause the current authority set after the given delay of ${N_{\text{delay}} := \|\text{SubChain}(B,B')\|}$ where ${B'}$ is a block where the change is applied. Once applied, the authorities should stop voting. |
+| **5** | Implies **resume**: A signal to resume the current authority set after the given delay of ${N_{\text{delay}} := \|\text{SubChain}(B,B')\|}$ where ${B'}$ is the block where the change is applied. Once applied, the authorities should resume voting. |
 
 :::
 ###### Definition -def-num- BEEFY Consensus Message {#defn-consensus-message-beefy}

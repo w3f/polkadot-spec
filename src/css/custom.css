@@ -34,6 +34,9 @@
   --docsearch-searchbox-background: white;
   --docsearch-searchbox-shadow: var(--snowColor);
   --docusaurus-announcement-bar-height: auto !important;
+  --ifm-table-background: #fff;
+  --ifm-table-stripe-background: #f6f6f6;
+  --ifm-table-head-background: #00000012;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
