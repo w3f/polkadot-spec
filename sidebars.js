@@ -119,11 +119,6 @@ const sidebars = {
     },
     {
       type: 'doc',
-      label: 'Bibliography',
-      id: 'id-bibliography',
-    },
-    {
-      type: 'doc',
       label: 'Glossary',
       id: 'id-glossary',
     }

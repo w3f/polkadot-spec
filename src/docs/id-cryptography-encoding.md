@@ -12,7 +12,7 @@ Appendix chapter containing various protocol details
 
 BLAKE2 is a collection of cryptographic hash functions known for their high speed. Their design closely resembles BLAKE which has been a finalist in the SHA-3 competition.
 
-Polkadot is using the Blake2b variant which is optimized for 64-bit platforms. Unless otherwise specified, the Blake2b hash function with a 256-bit output is used whenever Blake2b is invoked in this document. The detailed specification and sample implementations of all variants of Blake2 hash functions can be found in RFC 7693 cite:\[saarinen_blake2_2015\].
+Polkadot is using the Blake2b variant which is optimized for 64-bit platforms. Unless otherwise specified, the Blake2b hash function with a 256-bit output is used whenever Blake2b is invoked in this document. The detailed specification and sample implementations of all variants of Blake2 hash functions can be found in RFC 7693 [@saarinen_blake2_2015].
 
 ### -sec-num- Randomness {#sect-randomness}
 
@@ -26,11 +26,11 @@ A Verifiable Random Function (VRF) is a mathematical operation that takes some i
 
 In Polkadot, VRFs are used for the BABE block production lottery by [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) and the parachain approval voting mechanism ([Section -sec-num-ref-](chapter-anv#sect-approval-voting)). The VRF uses mechanism similar to algorithms introduced in the following papers:
 
-- [Making NSEC5 Practical for DNSSEC](https://eprint.iacr.org/2017/099.pdf) cite:\[papadopoulos17\]
+- [Making NSEC5 Practical for DNSSEC](https://eprint.iacr.org/2017/099.pdf) [@papadopoulos17]
 
 - [DLEQ Proofs](https://blog.cloudflare.com/privacy-pass-the-math/#dleqproofs)
 
-- [Verifiable Random Functions (VRFs)](https://tools.ietf.org/id/draft-goldbe-vrf-01) cite:\[goldberg17\]
+- [Verifiable Random Functions (VRFs)](https://tools.ietf.org/id/draft-goldbe-vrf-01) [@goldberg17]
 
 It essentially generates a deterministic elliptic curve based Schnorr signature as a verifiable random value. The elliptic curve group used in the VRF function is the Ristretto group specified in:
 
@@ -243,7 +243,7 @@ Various types of keys are used in Polkadot to prove the identity of the actors i
 | Key Scheme | Description |
 |------------|-------------|
 | sr25519    | Schnorr signature on Ristretto compressed ed25519 points as implemented in TODO|
-| ed25519    | The ed25519 signature complies with cite:\[josefsson_edwards-curve_2017\] except for the verification process which adhere to Ed25519 Zebra variant specified in cite:\[devalence_ed25519zebra_2020\]. In short, the signature point is not assumed to be on in the prime ordered subgroup group. As such, the verifier must explicitly clear the cofactor during the course of verifying the signature equation. |
+| ed25519    | The ed25519 signature complies with [@josefsson_edwards-curve_2017] except for the verification process which adhere to Ed25519 Zebra variant specified in [@devalence_ed25519zebra_2020]. In short, the signature point is not assumed to be on in the prime ordered subgroup group. As such, the verifier must explicitly clear the cofactor during the course of verifying the signature equation. |
 | secp256k1  | Only for outgoing transfer transactions. |
 
 An account key can be used to sign transactions among other accounts and balance-related functions. There are two prominent subcategories of account keys namely "stash keys" and "controller keys", each being used for a different function. Keys defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-account-key), [Definition -def-num-ref-](id-cryptography-encoding#defn-stash-key) and [Definition -def-num-ref-](id-cryptography-encoding#defn-controller-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction, as defined in [Section -sec-num-ref-](id-cryptography-encoding#sect-creating-controller-key) and [Section -sec-num-ref-](id-cryptography-encoding#sect-certifying-keys) respectively.
@@ -615,3 +615,5 @@ The Polkadot genesis header is a data structure conforming to block header forma
 :::info
 Erasure Encoding has not been documented yet.
 :::
+
+## Bibliography {#bibliography}
