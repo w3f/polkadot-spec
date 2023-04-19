@@ -120,6 +120,7 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+        additionalLanguages: ['rust'],
       },
       colorMode: {
         defaultMode: 'light',

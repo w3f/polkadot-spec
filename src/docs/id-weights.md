@@ -209,7 +209,9 @@ Information such as legal name must be verified by ID card or passport submissio
 
 The function `request_judgement` from the `identity` pallet allows users to request judgement from a specific registrar.
 
-    (func $request_judgement (param $req_index int) (param $max_fee int))
+```
+(func $request_judgement (param $req_index int) (param $max_fee int))
+```
 
 - `req_index`: the index which is assigned to the registrar.
 
@@ -221,7 +223,7 @@ Studying this function reveals multiple design choices that can impact performan
 
 First, it fetches a list of current registrars from storage and then searches that list for the specified registrar index.
 
-``` rouge
+```rust
 let registrars = <Registrars<T>>::get();
 let registrar = registrars.get(reg_index as usize).and_then(Option::as_ref)
   .ok_or(Error::<T>::EmptyIndex)?;
@@ -229,13 +231,13 @@ let registrar = registrars.get(reg_index as usize).and_then(Option::as_ref)
 
 Then, it searches for the Identity Info from storage, based on the sender of the transaction.
 
-``` rouge
+```rust
 let mut id = <IdentityOf<T>>::get(&sender).ok_or(Error::<T>::NoIdentity)?;
 ```
 
 The Identity Info contains all fields that have a data in them, set by the corresponding owner of the identity, in an ordered form. It then proceeds to search for the specific field type that will be inserted or updated, such as email address. If the entry can be found, the corresponding value is to the value passed on as the function parameters (assuming the registrar is not "stickied", which implies it cannot be changed). If the entry cannot be found, the value is inserted into the index where a matching element can be inserted while maintaining sorted order. This results in memory reallocation, which increases resource consumption.
 
-``` rouge
+```rust
 match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
   Ok(i) => if id.judgements[i].1.is_sticky() {
     Err(Error::<T>::StickyJudgement)?
@@ -248,7 +250,7 @@ match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
 
 In the end, the function deposits the specified `max_fee` balance, which can later be redeemed by the registrar. Then, an event is created to insert the Identity Info into storage. The creation of events is lightweight, but its execution is what will actually commit the state changes.
 
-``` rouge
+```rust
 T::Currency::reserve(&sender, registrar.fee)?;
 <IdentityOf<T>>::insert(&sender, id);
 Self::deposit_event(RawEvent::JudgementRequested(sender, reg_index));
@@ -315,7 +317,7 @@ The function `payout_stakers` from the `staking` Pallet can be called by a singl
 
 First, this function makes few basic checks to verify if the specified era is not higher then the current era (as it is not in the future) and is within the allowed range also known as "history depth", as specified by the Runtime. After that, it fetches the era payout from storage and additionally verifies whether the specified account is indeed a validator and receives the corresponding "Ledger". The Ledger keeps information about the stash key, controller key and other informatin such as actively bonded balance and a list of tracked rewards. The function only retains the entries of the history depth, and conducts a binary search for the specified era.
 
-``` rouge
+```rust
 let era_payout = <ErasValidatorReward<T>>::get(&era)
   .ok_or_else(|| Error::<T>::InvalidEraToReward)?;
 
@@ -323,7 +325,7 @@ let controller = Self::bonded(&validator_stash).ok_or(Error::<T>::NotStash)?;
 let mut ledger = <Ledger<T>>::get(&controller).ok_or_else(|| Error::<T>::NotController)?;
 ```
 
-``` rouge
+```rust
 ledger.claimed_rewards.retain(|&x| x >= current_era.saturating_sub(history_depth));
 match ledger.claimed_rewards.binary_search(&era) {
   Ok(_) => Err(Error::<T>::AlreadyClaimed)?,
@@ -333,25 +335,25 @@ match ledger.claimed_rewards.binary_search(&era) {
 
 The retained claimed rewards are inserted back into storage.
 
-``` rouge
+```rust
 <Ledger<T>>::insert(&controller, &ledger);
 ```
 
 As an optimization, Runtime only fetches a list of the 64 highest staked nominators, although this might be changed in the future. Accordingly, any lower staked nominator gets no reward.
 
-``` rouge
+```rust
 let exposure = <ErasStakersClipped<T>>::get(&era, &ledger.stash);
 ```
 
 Next, the function gets the era reward points from storage.
 
-``` rouge
+```rust
 let era_reward_points = <ErasRewardPoints<T>>::get(&era);
 ```
 
 After that, the payout is split among the validator and its nominators. The validators receives the payment first, creating an insertion into storage and sending a deposit event to the scheduler.
 
-``` rouge
+```rust
 if let Some(imbalance) = Self::make_payout(
   &ledger.stash,
   validator_staking_payout + validator_commission_payout
@@ -362,7 +364,7 @@ if let Some(imbalance) = Self::make_payout(
 
 Then, the nominators receive their payout rewards. The functions loops over the nominator list, conducting an insertion into storage and a creation of a deposit event for each of the nominators.
 
-``` rouge
+```rust
 for nominator in exposure.others.iter() {
   let nominator_exposure_part = Perbill::from_rational_approximation(
     nominator.value,
@@ -444,7 +446,7 @@ The ${transfer}$ function of the `balances` module is designed to move the speci
 
 The source code of this function is quite short:
 
-``` rouge
+```rust
 let transactor = ensure_signed(origin)?;
 let dest = T::Lookup::lookup(dest)?;
 <Self as Currency<_>>::transfer(
@@ -531,7 +533,7 @@ The `withdraw_unbonded` function of the `staking` module is designed to move any
 
 Similarly to the `payout_stakers` function ([Section -sec-num-ref-](id-weights#sect-practical-example-payout-stakers)), this function fetches the Ledger which contains information about the stash, such as bonded balance and unlocking balance (balance that will eventually be freed and can be withdrawn).
 
-``` rouge
+```rust
 if let Some(current_era) = Self::current_era() {
   ledger = ledger.consolidate_unlocked(current_era)
 }
@@ -539,7 +541,7 @@ if let Some(current_era) = Self::current_era() {
 
 The function `consolidate_unlocked` does some cleaning up on the ledger, where it removes outdated entries from the unlocking balance (which implies that balance is now free and is no longer awaiting unlock).
 
-``` rouge
+```rust
 let mut total = self.total;
 let unlocking = self.unlocking.into_iter()
   .filter(|chunk| if chunk.era > current_era {
@@ -553,7 +555,7 @@ let unlocking = self.unlocking.into_iter()
 
 This function does a check on wether the updated ledger has any balance left in regards to staking, both in terms of locked, staking balance and unlocking balance. If not amount is left, the all information related to the stash will be deleted. This results in multiple I/O calls.
 
-``` rouge
+```rust
 if ledger.unlocking.is_empty() && ledger.active.is_zero() {
   // This account must have called `unbond()` with some value that caused the active
   // portion to fall below existential deposit + will have no more unlocking chunks
@@ -568,7 +570,7 @@ if ledger.unlocking.is_empty() && ledger.active.is_zero() {
 
 The resulting call to `Self::kill_stash()` triggers:
 
-``` rouge
+```rust
 slashing::clear_stash_metadata::<T>(stash, num_slashing_spans)?;
 <Bonded<T>>::remove(stash);
 <Ledger<T>>::remove(&controller);
@@ -579,14 +581,14 @@ slashing::clear_stash_metadata::<T>(stash, num_slashing_spans)?;
 
 Alternatively, if there’s some balance left, the adjusted ledger simply gets updated back into storage.
 
-``` rouge
+```rust
 // This was the consequence of a partial unbond. just update the ledger and move on.
 Self::update_ledger(&controller, &ledger);
 ```
 
 Finally, it withdraws the unlocked balance, making it ready for transfer:
 
-``` rouge
+```rust
 let value = old_total - ledger.total;
 Self::deposit_event(RawEvent::Withdrawn(stash, value));
 ```

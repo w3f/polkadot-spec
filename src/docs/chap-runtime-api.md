@@ -29,7 +29,7 @@ This constant indicates the beginning of the heap in memory. The space below is 
 
 The **Runtime API Call Convention** describes that all functions receive and return SCALE-encoded data and as a result have the following prototype signature:
 
-``` rouge
+```
 (func $generic_runtime_entry
   (param $ptr i32) (parm $len i32) (result i64))
 ```

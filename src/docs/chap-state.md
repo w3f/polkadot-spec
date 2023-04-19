@@ -677,7 +677,7 @@ The size of the provided WASM memory should be based on the value of the storage
 
 In general, all data exchanged between the Polkadot Host and the Runtime is encoded using SCALE codec described in [Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec). Therefore all runtime entrypoints have the following identical Wasm function signatures:
 
-``` rouge
+```
 (func $runtime_entrypoint (param $data i32) (param $len i32) (result i64))
 ```
 
