@@ -69,7 +69,7 @@ const resizeSvg = () => {
     }
 
     return {
-        name: 'docusaurus-plugin',
+        name: 'resizeSvg',
         injectHtmlTags() {
             return {
                 postBodyTags: [{ tagName: 'script', innerHTML: `(${script.toString()})()` }],

@@ -1,4 +1,4 @@
-const highlightBibLinks = () => {
+const injectCss = () => {
     const script = () => {
         (function() {
             const pushState = history.pushState;
@@ -21,14 +21,21 @@ const highlightBibLinks = () => {
             });
         })();
 
-        const transformLinks = () => {
-            const divs = document.getElementsByClassName("csl-right-inline");
-            for (let i = 0; i < divs.length; i++) {
-                const div = divs[i];
-                let text = div.innerHTML;
-                const regex = /(?<!href="|<a href=")(https?:\/\/[^\s]+)(?<!:)/g;
-                text = text.replace(regex, '<a href="$1" target="_blank">$1</a>');
-                div.innerHTML = text;
+        const injectCssClasses = () => {
+            const div = document.getElementsByClassName("theme-doc-markdown markdown");
+            let children = div[0].children;
+            if (
+                children[0].children[0].tagName === "H1" && 
+                children[0].children[0].innerHTML.toLowerCase().includes("glossary")
+            ) {
+                for (let i = 0; i < children.length; i++) {
+                    if (children[i].tagName === "P") {
+                        children[i].classList.add("glossary-term");
+                    }
+                    if (children[i].tagName === "UL") {
+                        children[i].classList.add("glossary-definition");
+                    }
+                }
             }
         };
 
@@ -39,16 +46,16 @@ const highlightBibLinks = () => {
             pageUrl = window.location.href.split("#")[0];
             if (pageUrl !== prevPageUrl) {
                 prevPageUrl = pageUrl;
-                setTimeout(transformLinks, 1000);
+                setTimeout(injectCssClasses, 500);
             }
         }
 
         window.addEventListener("load", runScript);
         window.addEventListener('locationchange', runScript);
     };
-  
+
     return {
-      name: 'highlightBibLinks',
+      name: 'injectCss',
       injectHtmlTags() {
         return {
           postBodyTags: [{ tagName: 'script', innerHTML: `(${script.toString()})()` }],
@@ -57,5 +64,5 @@ const highlightBibLinks = () => {
     };
   };
   
-  export = highlightBibLinks;
+  export = injectCss;
   

@@ -40,6 +40,12 @@ async function createConfig() {
     plugins: [
       path.resolve(__dirname, 'plugins', 'resizeSvg', 'index.js'),
       path.resolve(__dirname, 'plugins', 'highlightBibLinks', 'index.js'),
+      [ 
+        path.resolve(__dirname, 'plugins', 'injectCss', 'index.js'),
+        {
+          path: "/id-glossary",
+        }
+      ],
     ],
 
     presets: [

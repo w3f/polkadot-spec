@@ -86,6 +86,15 @@ div#refs > div.csl-entry > div.csl-left-margin {
   margin-right: 1rem;
 }
 
+.glossary-term {
+  margin-bottom: 0.5em !important;
+}
+
+.glossary-definition {
+  list-style: none !important;
+  padding-left: 1em !important;
+}
+
 /* ==========================================================================
    General components
    ========================================================================== */
