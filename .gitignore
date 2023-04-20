@@ -21,4 +21,5 @@ yarn-error.log*
 
 preBuild/*/*.js
 plugins/*/*.js
+plugins/*.js
 docs/*.md

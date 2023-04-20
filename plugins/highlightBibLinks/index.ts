@@ -1,61 +1,32 @@
+import safeEventListener from "../safeEventListener";
+
 const highlightBibLinks = () => {
-    const script = () => {
-        (function() {
-            const pushState = history.pushState;
-            const replaceState = history.replaceState;
-        
-            history.pushState = function() {
-                pushState.apply(history, arguments);
-                window.dispatchEvent(new Event('pushstate'));
-                window.dispatchEvent(new Event('locationchange'));
-            };
-        
-            history.replaceState = function() {
-                replaceState.apply(history, arguments);
-                window.dispatchEvent(new Event('replacestate'));
-                window.dispatchEvent(new Event('locationchange'));
-            };
-        
-            window.addEventListener('popstate', function() {
-                window.dispatchEvent(new Event('locationchange'))
-            });
-        })();
+	const timeoutMs = 500;
 
-        const transformLinks = () => {
-            const divs = document.getElementsByClassName("csl-right-inline");
-            for (let i = 0; i < divs.length; i++) {
-                const div = divs[i];
-                let text = div.innerHTML;
-                const regex = /(?<!href="|<a href=")(https?:\/\/[^\s]+)(?<!:)/g;
-                text = text.replace(regex, '<a href="$1" target="_blank">$1</a>');
-                div.innerHTML = text;
-            }
-        };
+	const transformLinks = () => {
+		const divs = document.getElementsByClassName("csl-right-inline");
+		for (let i = 0; i < divs.length; i++) {
+			const div = divs[i];
+			let text = div.innerHTML;
+			const regex = /(?<!href="|<a href=")(https?:\/\/[^\s]+)(?<!:)/g;
+			text = text.replace(regex, '<a href="$1" target="_blank">$1</a>');
+			div.innerHTML = text;
+		}
+	};
 
-        let prevPageUrl = "";
-        let pageUrl = "";
-        
-        const runScript = () => {
-            pageUrl = window.location.href.split("#")[0];
-            if (pageUrl !== prevPageUrl) {
-                prevPageUrl = pageUrl;
-                setTimeout(transformLinks, 500);
-            }
-        }
+	return {
+		name: 'highlightBibLinks',
+		injectHtmlTags() {
+			return {
+				postBodyTags: [{
+					tagName: 'script',
+					innerHTML: `
+            (${safeEventListener.toString()})(${transformLinks.toString()}, ${timeoutMs})
+          `
+				}],
+			};
+		},
+	};
+};
 
-        window.addEventListener("load", runScript);
-        window.addEventListener('locationchange', runScript);
-    };
-  
-    return {
-      name: 'highlightBibLinks',
-      injectHtmlTags() {
-        return {
-          postBodyTags: [{ tagName: 'script', innerHTML: `(${script.toString()})()` }],
-        };
-      },
-    };
-  };
-  
-  export = highlightBibLinks;
-  
+export = highlightBibLinks;
