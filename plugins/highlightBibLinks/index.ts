@@ -1,32 +1,32 @@
-import safeEventListener from "../safeEventListener";
+import safePluginExection from "../safePluginExection";
 
 const highlightBibLinks = () => {
-	const timeoutMs = 500;
+  const timeoutMs = 500;
 
-	const transformLinks = () => {
-		const divs = document.getElementsByClassName("csl-right-inline");
-		for (let i = 0; i < divs.length; i++) {
-			const div = divs[i];
-			let text = div.innerHTML;
-			const regex = /(?<!href="|<a href=")(https?:\/\/[^\s]+)(?<!:)/g;
-			text = text.replace(regex, '<a href="$1" target="_blank">$1</a>');
-			div.innerHTML = text;
-		}
-	};
+  const transformLinks = () => {
+    const divs = document.getElementsByClassName("csl-right-inline");
+    for (let i = 0; i < divs.length; i++) {
+      const div = divs[i];
+      let text = div.innerHTML;
+      const regex = /(?<!href="|<a href=")(https?:\/\/[^\s]+)(?<!:)/g;
+      text = text.replace(regex, '<a href="$1" target="_blank">$1</a>');
+      div.innerHTML = text;
+    }
+  };
 
-	return {
-		name: 'highlightBibLinks',
-		injectHtmlTags() {
-			return {
-				postBodyTags: [{
-					tagName: 'script',
-					innerHTML: `
-            (${safeEventListener.toString()})(${transformLinks.toString()}, ${timeoutMs})
+  return {
+    name: 'highlightBibLinks',
+    injectHtmlTags() {
+      return {
+        postBodyTags: [{
+          tagName: 'script',
+          innerHTML: `
+            (${safePluginExection.toString()})(${transformLinks.toString()}, ${timeoutMs})
           `
-				}],
-			};
-		},
-	};
+        }],
+      };
+    },
+  };
 };
 
 export = highlightBibLinks;

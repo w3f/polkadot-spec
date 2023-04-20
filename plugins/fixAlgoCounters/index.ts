@@ -1,4 +1,4 @@
-import safeEventListener from "../safeEventListener";
+import safePluginExection from "../safePluginExection";
 
 const fixAlgoCounters = () => {
   const timeoutMs = 500;
@@ -21,7 +21,7 @@ const fixAlgoCounters = () => {
         postBodyTags: [{
           tagName: 'script',
           innerHTML: `
-            (${safeEventListener.toString()})(${fixCounters.toString()}, ${timeoutMs})
+            (${safePluginExection.toString()})(${fixCounters.toString()}, ${timeoutMs})
           `
         }],
       };

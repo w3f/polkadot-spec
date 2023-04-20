@@ -1,4 +1,5 @@
-const safeEventListener = (callback: () => void, timeout_ms: number) => {
+const addLocationChangeEvent = () => {
+  const addEvent = () => {
     (function() {
         const pushState = history.pushState;
         const replaceState = history.replaceState;
@@ -19,21 +20,19 @@ const safeEventListener = (callback: () => void, timeout_ms: number) => {
             window.dispatchEvent(new Event('locationchange'))
         });
     })();
+  };
 
-    let prevPageUrl = "";
-    let pageUrl = "";
-    
-    const runScript = () => {
-        pageUrl = window.location.href.split("#")[0];
-        if (pageUrl !== prevPageUrl) {
-            prevPageUrl = pageUrl;
-            setTimeout(callback, timeout_ms);
-        }
-    }
-
-    window.addEventListener("load", runScript);
-    window.addEventListener('locationchange', runScript);
+  return {
+    name: 'addLocationChangeEvent',
+    injectHtmlTags() {
+      return {
+        postBodyTags: [{
+          tagName: 'script',
+          innerHTML: `(${addEvent.toString()})()`,
+        }],
+      };
+    },
+  };
 };
 
-export default safeEventListener;
-  
+export = addLocationChangeEvent;

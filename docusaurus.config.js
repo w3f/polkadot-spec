@@ -38,6 +38,7 @@ async function createConfig() {
     },
 
     plugins: [
+      path.resolve(__dirname, 'plugins', 'addLocationChangeEvent', 'index.js'),
       path.resolve(__dirname, 'plugins', 'resizeSvg', 'index.js'),
       path.resolve(__dirname, 'plugins', 'highlightBibLinks', 'index.js'),
       path.resolve(__dirname, 'plugins', 'injectGlossaryCss', 'index.js'),
