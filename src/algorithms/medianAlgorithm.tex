@@ -1,0 +1,12 @@
+\begin{algorithm}
+\caption{Median-Algorithm}
+\begin{algorithmic}
+    \require $\mathfrak{E}, s_{sync}$
+    \state $T_s \leftarrow \{ \}$
+    \for{$B ~\textbf{in}~ \mathfrak{E}_j$}
+        \state $t_{est}^{B} \leftarrow T_B + $\call{Slot-Offset}{$s_B, s_{sync}$}$ \times \mathcal{T}$
+        \state $T_s \leftarrow T_s \cup t_{est}^{B}$
+    \endfor
+    \return \call{Median}{$T_s$}
+\end{algorithmic}
+\end{algorithm}

@@ -40,12 +40,8 @@ async function createConfig() {
     plugins: [
       path.resolve(__dirname, 'plugins', 'resizeSvg', 'index.js'),
       path.resolve(__dirname, 'plugins', 'highlightBibLinks', 'index.js'),
-      [ 
-        path.resolve(__dirname, 'plugins', 'injectCss', 'index.js'),
-        {
-          path: "/id-glossary",
-        }
-      ],
+      path.resolve(__dirname, 'plugins', 'injectCss', 'index.js'),
+      path.resolve(__dirname, 'plugins', 'fixAlgoCounters', 'index.js'),
     ],
 
     presets: [
@@ -68,7 +64,7 @@ async function createConfig() {
             routeBasePath: '/', // Serve the docs at the site's root
             admonitions: {
               tag: ':::',
-              keywords: ['definition'],
+              keywords: ['definition', 'algorithm'],
               extendDefaults: true,
             },
           },

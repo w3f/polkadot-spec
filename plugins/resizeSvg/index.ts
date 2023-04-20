@@ -60,7 +60,7 @@ const resizeSvg = () => {
             pageUrl = window.location.href.split("#")[0];
             if (pageUrl !== prevPageUrl) {
                 prevPageUrl = pageUrl;
-                setTimeout(adjustSvg, 1000);
+                setTimeout(adjustSvg, 500);
             }
         }
 

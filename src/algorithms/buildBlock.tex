@@ -1,0 +1,24 @@
+\begin{algorithm}
+\caption{Build-Block}
+\begin{algorithmic}
+    \state $P_B \leftarrow $\call{Head}{$C_{Best}$}
+    \state $\text{Head}(B) \leftarrow \left(H_p \leftarrow H_h(P_B), H_i \leftarrow H_i(P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow \phi \right)$
+    \state \call{Call-Runtime-Entry}{$\texttt{Core\_initialize\_block}, \text{Head}(B)$}
+    \state \textsc{I-D}$ \leftarrow $\call{Call-Runtime-Entry}{$\texttt{BlockBuilder\_inherent\_extrinsics}, $\textsc{Inherent-Data}}
+    \for{$E~\textbf{in} $\textsc{I-D}}
+        \state \call{Call-Runtime-Entry}{$\texttt{BlockBuilder\_apply\_extrinsics}, E$}
+    \endfor
+    \while{\not \call{End-Of-Slot}{$s$}}
+        \state $E \leftarrow$ \call{Next-Ready-Extrinsic}{}
+        \state $R \leftarrow$ \call{Call-Runtime-Entry}{$\texttt{BlockBuilder\_apply\_extrinsics}, E$}
+        \if{\call{Block-Is-Full}{$R$}}
+            \break
+        \endif
+        \if{\call{Should-Drop}{$R$}}
+            \state \call{Drop}{$E$}
+        \endif
+        \state $\text{Head}(B) \leftarrow$ \call{Call-Runtime-Entry}{$\texttt{BlockBuilder\_finalize\_block}, B$}
+        \state $B \leftarrow$ \call{Add-Seal}{$B$}
+    \endwhile
+\end{algorithmic}
+\end{algorithm}

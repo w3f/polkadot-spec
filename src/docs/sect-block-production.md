@@ -2,6 +2,15 @@
 title: Block Production
 ---
 
+import Pseudocode from '@site/src/components/Pseudocode';
+import blockProductionLottery from '!!raw-loader!@site/src/algorithms/blockProductionLottery.tex';
+import slotTime from '!!raw-loader!@site/src/algorithms/slotTime.tex';
+import medianAlgorithm from '!!raw-loader!@site/src/algorithms/medianAlgorithm.tex';
+import invokeBlockAuthoring from '!!raw-loader!@site/src/algorithms/_invokeBlockAuthoring.tex';
+import verifyAuthorshipRight from '!!raw-loader!@site/src/algorithms/verifyAuthorshipRight.tex';
+import verifySlotWinner from '!!raw-loader!@site/src/algorithms/verifySlotWinner.tex';
+import buildBlock from '!!raw-loader!@site/src/algorithms/buildBlock.tex';
+
 ## -sec-num- Introduction {#id-introduction-3}
 
 The Polkadot Host uses BABE protocol for block production. It is designed based on Ouroboros praos . BABE execution happens in sequential non-overlapping phases known as an ***epoch***. Each epoch on its turn is divided into a predefined number of slots. All slots in each epoch are sequentially indexed starting from 0. At the beginning of each epoch, the BABE node needs to run [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) to find out in which slots it should produce a block and gossip to the other block producers. In turn, the block producer node should keep a copy of the block tree and grow it as it receives valid blocks from other block producers. A block producer prunes the tree in parallel by eliminating branches that do not include the most recent finalized blocks ([Definition -def-num-ref-](chap-state#defn-pruned-tree)).
@@ -113,9 +122,16 @@ The numbers should be treated as 64-bit rational numbers.
 
 A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should run the $\text{Block-Production-Lottery}$ algorithm to identify the slots it is awarded. These are the slots during which the block producer is allowed to build a block. The session secret key, ${s}{k}$, is the block producer lottery secret key and ${n}$ is the index of the epoch for whose slots the block producer is running the lottery.
 
-\require sk \state ${r}\leftarrow$ \call{Epoch-Randomness}{${n}$} \for{${i}\:={1}~\text{}{f}{\left\lbrace\to\right\rbrace}~{s}{c}_{{n}}$} \state ${\left(\pi,{d}\right)}\leftarrow$ \call{VRF}{${r},{i},{s}{k}$} \state ${A}{\left[{i}\right]}\leftarrow{\left({d},\pi\right)}$ \endfor \return{A}
+###### Algorithm -algo-num- Block Production Lottery {#algo-block-production-lottery}
+:::algorithm
+<Pseudocode
+    content={blockProductionLottery}
+    algID="blockProductionLottery"
+    options={{ "lineNumber": true }}
+/>
 
 where $\text{Epoch-Randomness}$ is defined in ([Definition -def-num-ref-](sect-block-production#defn-epoch-randomness)), ${s}{c}_{{n}}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-duration) , $\text{VRF}$ creates the BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)) and ${e}_{{i}}$ is the epoch index, retrieved from the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)). ${s}_{{k}}$ and ${p}_{{k}}$ is the secret key respectively the public key of the authority. For any slot ${s}$ in epoch ${n}$ where ${o}<{T}_{{{\mathcal{{E}}}_{{n}}}}$ ([Definition -def-num-ref-](sect-block-production#defn-winning-threshold)), the block producer is required to produce a block.
+:::
 
 :::info
 The secondary slots ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)) are running along side the primary block production lottery and mainly serve as a fallback to in case no authority was selected in the primary lottery.
@@ -198,7 +214,7 @@ Polkadot does this synchronization without relying on any external clock source 
 
 This estimation depends on the two fixed parameters ${k}$ ([Definition -def-num-ref-](sect-block-production#defn-prunned-best)) and ${s}_{{{c}{q}}}$ ([Definition -def-num-ref-](sect-block-production#defn-chain-quality)). These are chosen based on the results of a [formal security analysis](https://research.web3.foundation/en/latest/polkadot/block-production/Babe#-5.-security-analysis), currently assuming a ${1}{s}$ clock drift per day and targeting a probability lower than ${0.5}\%$ for an adversary to break BABE in 3 years with resistance against a network delay up to $\frac{{1}}{{3}}$ of the slot time and a Babe constant ([Definition -def-num-ref-](sect-block-production#defn-babe-constant)) of ${c}={0.38}$.
 
-All validators are then required to run [Median-Algorithm](sect-block-production#algo-slot-time) at the beginning of each sync period ([Definition -def-num-ref-](sect-block-production#defn-sync-period)) to update their synchronization using all block arrival times of the previous period. The algorithm should only be run once all the blocks in this period have been finalized, even if only probabilistically ([Definition -def-num-ref-](sect-block-production#defn-prunned-best)). The target slot to which to synchronize should be the first slot in the new sync period.
+All validators are then required to run [Median-Algorithm](sect-block-production#algo-median-algorithm) at the beginning of each sync period ([Definition -def-num-ref-](sect-block-production#defn-sync-period)) to update their synchronization using all block arrival times of the previous period. The algorithm should only be run once all the blocks in this period have been finalized, even if only probabilistically ([Definition -def-num-ref-](sect-block-production#defn-prunned-best)). The target slot to which to synchronize should be the first slot in the new sync period.
 
 ###### Definition -def-num- Slot Offset {#defn-slot-offset}
 :::definition
@@ -213,11 +229,25 @@ It is imperative for the security of the network that each block producer correc
 
 The **relative time synchronization** is a tuple of a slot number and a local clock timestamp ${\left({s}_{\text{sync}},{t}_{\text{sync}}\right)}$ describing the last point at which the slot numbers have been synchronized with the local clock.
 
-\require ${s}$ \return{${t}_{\text{sync}}+$\call{Slot-Offset}{${s}_{{{s}{y}{n}{c}}},{s}$}$\times{\mathcal{{{T}}}}$}
+:::
+###### Algorithm -algo-num- Slot Time {#algo-slot-time}
+:::algorithm
+<Pseudocode
+    content={slotTime}
+    algID="slotTime"
+    options={{ "lineNumber": true }}
+/>
 
 where ${s}$ is the slot number.
+:::
 
-\require ${\mathfrak{{{E}}}},{s}_{{{s}{y}{n}{c}}}$ \state ${T}_{{s}}\leftarrow$ \for{${B}~\text{}{f}{\left\lbrace\in\right\rbrace}~{\mathfrak{{{E}}}}_{{j}}$} \state ${{t}_{{{e}{s}{t}}}^{{{B}}}}\leftarrow{T}_{{B}}+$\call{Slot-Offset}{${s}_{{B}},{s}_{{{s}{y}{n}{c}}}$}$\times{\mathcal{{{T}}}}$ \state ${T}_{{s}}\leftarrow{T}_{{s}}\cup{{t}_{{{e}{s}{t}}}^{{{B}}}}$ \endfor \return \call{Median}{${T}_{{s}}$}
+###### Algorithm -algo-num- Median Algorithm {#algo-median-algorithm}
+:::algorithm
+<Pseudocode
+    content={medianAlgorithm}
+    algID="medianAlgorithm"
+    options={{ "lineNumber": true }}
+/>
 
 where  
 - ${\mathfrak{{{E}}}}$ is the sync period used for the estimate.
@@ -285,9 +315,17 @@ $$
 
 The Pre-Digest must be included as a digest item of Pre-Runtime type in the header digest ([Definition -def-num-ref-](chap-state#defn-digest)) ${H}_{{d}}{\left({B}\right)}$.
 :::
-\require ${s}{k},{p}{k},{n},{B}{T}$ \state ${A}\leftarrow$ \call{Block-production-lottery}{${s}{k},{n}$} \for{${s}\leftarrow{1}~\text{}{f}{\left\lbrace\to\right\rbrace}~{s}{c}_{{n}}$} \state \call{Wait-Until}{\call{Slot-Time}{${s}$}} \state ${\left({d},\pi\right)}\leftarrow{A}{\left[{s}\right]}$ \if{${d}<\tau$} \state ${C}_{{{B}{e}{s}{t}}}\leftarrow$ \call{Longest-Chain}{${B}{T}$} \state ${B}_{{s}}\leftarrow$ \call{Build-Block}{${C}_{{{B}{e}{s}{t}}}$} \state \call{Add-Digest-Item}{${B}_{{s}},\text{Pre-Runtime},{E}_{{{i}{d}}}{\left(\text{BABE}\right)},{H}_{\text{BABE}}{\left({B}_{{s}}\right)}$} \state \call{Add-Digest-Item}{${B}_{{s}},\text{Seal},{S}_{{B}}$} \state \call{Broadcast-Block}{${B}_{{s}}$} \endif \endfor
+
+###### Algorithm -algo-num- Invoke-Block-Authoring {#algo-block-production}
+:::algorithm
+<!-- <Pseudocode
+    content={invokeBlockAuthoring}
+    algID="invokeBlockAuthoring"
+    options={{ "lineNumber": true }}
+/> -->
 
 where $\text{BT}$ is the current block tree, $\text{Block-Production-Lottery}$ is defined in [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) and $\text{Add-Digest-Item}$ appends a digest item to the end of the header digest ${H}_{{d}}{\left({B}\right)}$ ([Definition -def-num-ref-](chap-state#defn-digest)).
+:::
 
 ###### Definition -def-num- Block Signature {#defn-block-signature}
 :::definition
@@ -321,7 +359,13 @@ For epoch ${\mathcal{{E}}}$, there is a 32-byte ${\mathcal{{R}}}_{{{\mathcal{{E}
 
 When a Polkadot node receives a produced block, it needs to verify if the block producer was entitled to produce the block in the given slot by running [Verify-Authorship-Right](sect-block-production#algo-verify-authorship-right). [Verify-Slot-Winner](sect-block-production#algo-verify-slot-winner) runs as part of the verification process, when a node is importing a block.
 
-\require $\text{Head}_{{{s}{\left({B}\right)}}}$ \state ${s}\leftarrow$ \call{Slot-Number-At-Given-Time}{${T}_{{B}}$} \state ${\mathcal{{{E}}}}_{{c}}\leftarrow$ \call{Current-Epoch}{} \state ${\left({D}_{{1}},\ldots,{D}_{{{\left|{H}_{{d}}{\left({B}\right)}\right|}}}\right)}\leftarrow{H}_{{d}}{\left({B}\right)}$ \state ${D}_{{s}}\leftarrow{D}_{{{\left|{H}_{{d}}{\left({B}\right)}\right|}}}$ \state ${H}_{{d}}{\left({B}\right)}\leftarrow\le{f}{t}{\left({D}_{{1}},\ldots,{D}_{{{\left|{H}_{{d}}{\left({B}\right)}\right|}-{1}}}{r}{i}{g}{h}{t}\right)}$ \comment{remove the seal from the digest} \state ${\left({i}{d},\text{Sig}_{{B}}\right)}\leftarrow\text{Dec}_{{{S}{C}}}{\left({D}_{{s}}\right)}$ \if{${i}{d}\ne{q}$ \textsc{Seal-Id}} \state \textbf{error} \`\`Seal missing'' \endif \state $\text{AuthorID}\leftarrow\text{AuthorityDirectory}^{{{\mathcal{{{E}}}}_{{c}}}}{\left[{H}_{{{B}{A}{B}{E}}}{\left({B}\right)}.\text{SingerIndex}\right]}$ \state \call{Verify-Signature}{$\text{AuthorID},{H}_{{h}}{\left({B}\right)},\text{Sig}_{{B}}$} \if{$\exists{B}'\in{B}{T}:{H}_{{h}}{\left({B}\right)}\ne{q}{H}_{{h}}{\left({B}\right)}$ \and ${s}_{{B}}={s}_{{B}}'$ \and $\text{SignerIndex}_{{B}}=\text{SignerIndex}_{{{B}'}}$} \state \textbf{error} \`\`Block producer is equivocating'' \endif \state \call{Verify-Slot-Winner}{${\left({d}_{{B}},\pi_{{B}}\right)},{s}_{{B}},\text{AuthorID}$}
+###### Algorithm -algo-num- Verify Authorship Right {#algo-verify-authorship-right}
+:::algorithm
+<Pseudocode
+    content={verifyAuthorshipRight}
+    algID="verifyAuthorshipRight"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - $\text{Head}_{{s}}{\left({B}\right)}$ is the header of the block that’s being verified.
@@ -341,8 +385,15 @@ When a Polkadot node receives a produced block, it needs to verify if the block 
 - $\text{BT}$ is the pruned block tree ([Definition -def-num-ref-](chap-state#defn-pruned-tree)).
 
 - $\text{Verify-Slot-Winner}$ is defined in [Verify-Slot-Winner](sect-block-production#algo-verify-slot-winner).
+:::
 
-\require ${B}$ \state ${\mathcal{{{E}}}}_{{c}}\leftarrow$ \textsc{Current-Epoch} \state $\rho\leftarrow$ \call{Epoch-Randomness}{${c}$} \state \call{Verify-VRF}{$\rho,{H}_{{{B}{A}{B}{E}}}{\left({B}\right)}.{\left({d}_{{B}},\pi_{{B}}\right)},{H}_{{{B}{A}{B}{E}}}{\left({B}\right)}.{s},{c}$} \if{${d}_{{B}}\geq{s}{l}{a}{n}{t}\tau$} \state \textbf{error} \`\`Block producer is not a winner of the slot'' \endif
+###### Algorithm -algo-num- Verify Slot Winner {#algo-verify-slot-winner}
+:::algorithm
+<Pseudocode
+    content={verifySlotWinner}
+    algID="verifySlotWinner"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 1.  $\text{Epoch-Randomness}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness).
@@ -354,12 +405,19 @@ When a Polkadot node receives a produced block, it needs to verify if the block 
 4.  $\text{Verify-VRF}$ is described in [Section -sec-num-ref-](id-cryptography-encoding#sect-vrf).
 
 5.  ${T}_{{{\mathcal{{E}}}_{{n}}}}$ is the winning threshold as defined in [Definition -def-num-ref-](sect-block-production#defn-winning-threshold).
+:::
 
 ## -sec-num- Block Building Process {#sect-block-building}
 
 The block building process is triggered by [Invoke-Block-Authoring](sect-block-production#algo-block-production) of the consensus engine which in turn runs [Build-Block](sect-block-production#algo-build-block).
 
-\state ${P}_{{B}}\leftarrow$\call{Head}{${C}_{{{B}{e}{s}{t}}}$} \state $\text{Head}{\left({B}\right)}\leftarrow\le{f}{t}{\left({H}_{{p}}\leftarrow{H}_{{h}}{\left({P}_{{B}}\right)},{H}_{{i}}\leftarrow{H}_{{i}}{\left({P}_{{B}}\right)}+{1},{H}_{{r}}\leftarrow\phi,{H}_{{e}}\leftarrow\phi,{H}_{{d}}\leftarrow\phi{r}{i}{g}{h}{t}\right)}$ \state \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{C}{\quad\text{or}\quad}{e}$\right.}initialize${b}{l}{o}{c}{k}{\rbrace},\text{Head}{\left({B}\right)}$} \state \textsc{I-D}$\leftarrow$\call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{B}{l}{o}{c}{k}{B}{u}{i}{l}{d}{e}{r}$\right.}inherent${e}{x}{t}{r}\in{s}{i}{c}{s}{\rbrace},$\textsc{Inherent-Data}} \for{${E}~\text{}{f}{\left\lbrace\in\right\rbrace}$\textsc{I-D}} \state \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{B}{l}{o}{c}{k}{B}{u}{i}{l}{d}{e}{r}$\right.}apply${e}{x}{t}{r}\in{s}{i}{c}{s}{\rbrace},{E}$} \endfor \while{\not \call{End-Of-Slot}{${s}$}} \state ${E}\leftarrow$ \call{Next-Ready-Extrinsic}{} \state ${R}\leftarrow$ \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{B}{l}{o}{c}{k}{B}{u}{i}{l}{d}{e}{r}$\right.}apply${e}{x}{t}{r}\in{s}{i}{c}{s}{\rbrace},{E}$} \if{\call{Block-Is-Full}{${R}$}} \break \endif \if{\call{Should-Drop}{${R}$}} \state \call{Drop}{${E}$} \endif \state $\text{Head}{\left({B}\right)}\leftarrow$ \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{B}{l}{o}{c}{k}{B}{u}{i}{l}{d}{e}{r}$\right.}finalize${b}{l}{o}{c}{k}{\rbrace},{B}$} \state ${B}\leftarrow$ \call{Add-Seal}{${B}$} \endwhile
+###### Algorithm -algo-num- Build Block {#algo-build-block}
+:::algorithm
+<Pseudocode
+    content={buildBlock}
+    algID="buildBlock"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - ${C}_{\text{Best}}$ is the chain head at which the block should be constructed ("parent").
@@ -372,7 +430,7 @@ The block building process is triggered by [Invoke-Block-Authoring](sect-block-p
 
 - $\text{Inherent-Data}$ is defined in [Definition -def-num-ref-](chap-state#defn-inherent-data).
 
-- $\text{End-Of-Slot}$ indicates the end of the BABE slot as defined [Median-Algorithm](sect-block-production#algo-slot-time) respectively [Definition -def-num-ref-](sect-block-production#defn-epoch-slot).
+- $\text{End-Of-Slot}$ indicates the end of the BABE slot as defined [Median-Algorithm](sect-block-production#algo-median-algorithm) respectively [Definition -def-num-ref-](sect-block-production#defn-epoch-slot).
 
 - $\text{Next-Ready-Extrinsic}$ indicates picking an extrinsic from the extrinsics queue ([Definition -def-num-ref-](chap-state#defn-transaction-queue)).
 
@@ -383,3 +441,4 @@ The block building process is triggered by [Invoke-Block-Authoring](sect-block-p
 - $\text{Drop}$ indicates removing the extrinsic from the extrinsic queue ([Definition -def-num-ref-](chap-state#defn-transaction-queue)).
 
 - $\text{Add-Seal}$ adds the seal to the block (<<\>\>) before sending it to peers. The seal is removed again before submitting it to the Runtime.
+:::

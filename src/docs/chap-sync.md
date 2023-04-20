@@ -2,6 +2,9 @@
 title: Synchronization
 ---
 
+import Pseudocode from '@site/src/components/Pseudocode';
+import importAndValidateBlock from '!!raw-loader!@site/src/algorithms/importAndValidateBlock.tex';
+
 Many applications that interact with the Polkadot network to some extent must be able to retrieve certain information about the network. Depending on the utility, this includes validators that interact with Polkadot’s consensus and need access to the full state, either from the past or just the most up-to-date state, or light clients that are only interest in the minimum information required in order to verify some claims about the state of the network, such as the balance of a specific account. To allow implemenations to quickly retrieve the required information, different types of synchronization protocols are available, respectivel Full, Fast and Warp sync suited for different needs.
 
 The associated network messages are specified in [Section -sec-num-ref-](chap-networking#sect-network-messages).
@@ -52,7 +55,13 @@ New blocks can be received by the Polkadot Host via other peers ([Section -sec-n
 
 The Polkadot Host implements [Import-and-Validate-Block](chap-sync#algo-import-and-validate-block) to assure the validity of the block.
 
-\require \$B, \text{Just}(B)\$ \state \call{Set-Storage-State-At}{\$P(B)\$} \if{\$\text{Just}(B) \neq \emptyset\$} \state \call{Verify-Block-Justification}{\$B, \text{Just}(B)\$} \if{\$B~\textbf{is}~\text{Finalized}~\textbf{and}~P(B)~\textbf{is not}~\text{Finalized}\$} \state \call{Mark-as-Final}{\$P(B)\$} \endif \endif \if{\$H_p(B) \notin PBT\$} \return \endif \state \call{Verify-Authorship-Right}{\$\text{Head}(B)\$} \state \$B \leftarrow\$ \call{Remove-Seal}{\$B\$} \state \$R \leftarrow\$ \call{Call-Runtime-Entry}{\$\texttt{Core\\execute\\block}, B\$} \state \$B \leftarrow\$ \call{Add-Seal}{\$B\$} \if{\$R =\$ \textsc{True}} \state \call{Persist-State}{} \endif
+###### Algorithm -algo-num- Import-and-Validate-Block {#algo-import-and-validate-block}
+:::algorithm
+<Pseudocode
+    content={importAndValidateBlock}
+    algID="importAndValidateBlock"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - $\text{Remove-Seal}$ removes the Seal digest from the block ([Definition -def-num-ref-](chap-state#defn-digest)) before submitting it to the Runtime.
@@ -66,3 +75,4 @@ The Polkadot Host implements [Import-and-Validate-Block](chap-sync#algo-import-a
 - $\text{Verify-Authorship-Right}$ is part of the block production consensus protocol and is described in [Verify-Authorship-Right](sect-block-production#algo-verify-authorship-right).
 
 - *Finalized block* and *finality* are defined in [Chapter -chap-num-ref-](sect-finality).
+:::

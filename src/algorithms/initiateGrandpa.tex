@@ -1,0 +1,12 @@
+\begin{algorithm}
+\caption{Initiate-Grandpa}
+\begin{algorithmic}
+    \input $r_{last}, B_{last}$
+    \state \textsc{Last-Finalized-Block} $\leftarrow B_{last}$
+    \state \textsc{Best-Final-Candidate}$(0) \leftarrow B_{last}$
+    \state \textsc{GRANDPA-GHOST}$(0) \leftarrow B_{last}$
+    \state \textsc{Last-Completed-Round}$ \leftarrow 0$
+    \state $r_n \leftarrow 1$
+    \state \call{Play-Grandpa-round}{$r_n$}
+\end{algorithmic}
+\end{algorithm}

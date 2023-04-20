@@ -1,0 +1,22 @@
+\begin{algorithm}
+\caption{Verify-Authorship-Right}
+\begin{algorithmic}
+    \require $\text{Head}_{s(B)}$
+    \state $s \leftarrow$ \call{Slot-Number-At-Given-Time}{$T_B$}
+    \state $\mathcal{E}_c \leftarrow$ \call{Current-Epoch}{}
+    \state $(D_1, \ldots, D_{|H_d(B)|}) \leftarrow H_d(B)$
+    \state $D_s \leftarrow D_{|H_d(B)|}$
+    \state $H_d(B) \leftarrow \left(D_1, \ldots, D_{|H_d(B)| - 1}\right)$
+        \comment{remove the seal from the digest}
+    \state $(id, \text{Sig}_B)\leftarrow \text{Dec}_{SC}(D_s)$
+    \if{$id \neq$ \textsc{Seal-Id}}
+        \state \textbf{error} ``Seal missing''
+    \endif
+    \state $\text{AuthorID} \leftarrow \text{AuthorityDirectory}^{\mathcal{E}_c}[H_{BABE}(B).\text{SingerIndex}]$
+    \state \call{Verify-Signature}{$\text{AuthorID}, H_h(B),\text{Sig}_B$}
+    \if{$\exists B' \in BT : H_h(B) \neq H_h (B)$ \and $s_B = s_B'$ \and $\text{SignerIndex}_B = \text{SignerIndex}_{B'}$}
+        \state \textbf{error} ``Block producer is equivocating''
+    \endif
+    \state \call{Verify-Slot-Winner}{$(d_B, \pi_B), s_B, \text{AuthorID}$}
+\end{algorithmic}
+\end{algorithm}

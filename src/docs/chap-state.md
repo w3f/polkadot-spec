@@ -7,7 +7,10 @@ import BlockHeader from '/static/img/kaitai_render/block_header.svg';
 import Digest from '/static/img/kaitai_render/digest.svg';
 
 import Pseudocode from '@site/src/components/Pseudocode';
-import qSort from '!!raw-loader!@site/src/algorithms/quicksort.tex';
+import validateTransactionsAndStore from '!!raw-loader!@site/src/algorithms/_validateTransactionsAndStore.tex';
+import maintainTransactionPool from '!!raw-loader!@site/src/algorithms/maintainTransactionPool.tex';
+import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
+import interactWithRuntime from '!!raw-loader!@site/src/algorithms/interactWithRuntime.tex';
 
 ## -sec-num- Introduction {#id-introduction}
 
@@ -236,13 +239,12 @@ The **Transaction Queue** of a block producer node, formally referred to as ${T}
 :::
 Furthermore [Validate-Transactions-and-Store](chap-state#algo-validate-transactions) updates the transaction pool and the transaction queue according to the received message:
 
-<Pseudocode
-    content={qSort}
-    algID="quicksort"
-    options={{ lineNumber: true, captionCount: 4 }}
-/>
-
-\state ${L}\leftarrow{D}{e}{c}_{{{S}{C}}}{\left({M}_{{T}}\right)}$ \forall{${T}\in{L}{m}{i}{d}{T}\notin{T}{Q}{m}{i}{d}{T}\notin{T}{P}$} \state ${B}_{{d}}\leftarrow$ \call{Head}{\call{Longest-Chain}{${B}{T}$}} \state ${N}\leftarrow{H}_{{n}}{\left({B}_{{d}}\right)}$ \state ${R}\leftarrow$ \call{Call-Runtime-Entry}{$\text{}{t}{\left\lbrace{T}{a}{g}\ge{d}{T}{r}{a}{n}{s}{a}{c}{t}{i}{o}{n}{Q}{u}{e}{u}{e}$\right.}validate${t}{r}{a}{n}{s}{a}{c}{t}{i}{o}{n}{\rbrace},{N},{T}$} \if{\call{Valid}{${R}$}} \if{\call{Requires}{${R}$}$\subset\bigcup_{{\forall{T}\in{\left({T}{Q}~\cup~{B}_{{i}}{m}{i}{d}\exists{i}<{d}\right)}}}$ \call{Provided-Tags}{${T}$}} \state \call{Insert-At}{${T}{Q},{T},$\call{Requires}{${R}$}$, $\call{Priority}{${R}$}} \else \state \call{Add-To}{${T}{P},{T}$} \endif \state \call{Maintain-Transaction-Pool}{} \if{\call{ShouldPropagate}{${R}$}} \state \call{Propagate}{${T}$} \endif \endif \endfor
+###### Algorithm -algo-num- Validate Transactions and Store {#algo-validate-transactions}
+:::algorithm
+<!-- <Pseudocode
+    content={validateTransactionsAndStore}
+    algID="validateTransactionsAndStore"
+/> -->
 
 **where**  
 - ${M}_{{T}}$ is the transaction message (offchain transactions?)
@@ -262,11 +264,19 @@ Furthermore [Validate-Transactions-and-Store](chap-state#algo-validate-transacti
 - $\text{ShouldPropagate}$ indictes whether the transaction should be propagated based on the `Propagate` field in the `ValidTransaction` type as defined in [Definition -def-num-ref-](chap-runtime-api#defn-valid-transaction), which is returned by ${\mathtt{\text{TaggedTransactionQueue\_validate\_transaction}}}$.
 
 - $\text{Propagate}{\left({T}\right)}$ sends ${T}$ to all connected peers of the Polkadot Host who are not already aware of ${T}$.
+:::
 
-\state Scan the pool for ready transactions \state Move them to the transaction queue \state Drop invalid transactions
+###### Algorithm -algo-num- Maintain Transaction Pool {#algo-maintain-transaction-pool}
+:::algorithm
+<Pseudocode
+    content={maintainTransactionPool}
+    algID="maintainTransactionPool"
+    options={{ "lineNumber": true }}
+/>
 
-:::info
+::::info
 This has not been defined yet.
+::::
 :::
 
 ### -sec-num- Inherents {#sect-inherents}
@@ -442,9 +452,17 @@ $$
 {k}_{{{N}_{{c}}}}={k}_{{N}}{\mid}{\left|{i}{\mid}\right|}\text{pk}_{{{N}_{{c}}}}
 $$
 :::
-\require{${P}_{{N}}{c}{o}{l}{o}\ne{q}{q}{\left($\right.}\textsc{TrieRoot}$={N}_{{1}},\dot{{s}},{N}_{{j}}={N}{)}$} \state ${p}{k}^{{{A}{g}{r}}}_{N}\leftarrow\phi$ \state ${i}\leftarrow{1}$ \forall{${N}_{{i}}\in{P}_{{N}}$} \state ${p}{k}^{{{A}{g}{r}}}_{N}\leftarrow{p}{k}^{{{A}{g}{r}}}_{N}{\mid}{\left|{p}{k}_{{{N}_{{i}}}}{\mid}\right|}\text{}{m}{\left\lbrace{I}{n}{d}{e}{x}\right\rbrace}_{{{N}_{{i}}}}{\left({N}_{{{i}+{1}}}\right)}$ \endfor \state ${p}{k}^{{{A}{g}{r}}}_{N}\leftarrow{p}{k}^{{{A}{g}{r}}}_{N}{\mid}{\mid}{p}{k}_{{{N}}}$ \return ${p}{k}^{{{A}{g}{r}}}_{N}$
+
+###### Algorithm -algo-num- Aggregate-Key {#algo-aggregate-key}
+:::algorithm
+<Pseudocode
+    content={aggregateKey}
+    algID="aggregateKey"
+    options={{ "lineNumber": true }}
+/>
 
 Assuming that ${P}_{{N}}$ is the path ([Definition -def-num-ref-](chap-state#defn-path-graph)) from the trie root to node ${N}$, [Aggregate-Key](chap-state#algo-aggregate-key) rigorously demonstrates how to build ${\text{pk}_{{N}}^{{\text{Agr}}}}$ while traversing ${P}_{{N}}$.
+:::
 
 ###### Definition -def-num- Node Value {#defn-node-value}
 :::definition
@@ -616,7 +634,13 @@ To make state replication feasible, Polkadot journals and batches series of its 
 
 The Runtime ([Definition -def-num-ref-](chap-state#defn-state-machine)) is the code implementing the logic of the chain. This code is decoupled from the Polkadot Host to make the the logic of the chain easily upgradable without the need to upgrade the Polkadot Host itself. The general procedure to interact with the Runtime is described by [Interact-With-Runtime](chap-state#algo-runtime-interaction).
 
-\require ${F},{H}_{{b}}{\left({B}\right)},{\left({A}_{{1}},\ldots,{A}_{{n}}\right)}$ \state ${\mathcal{{{S}}}}_{{B}}\leftarrow$ \call{Set-State-At}{${H}_{{b}}{\left({B}\right)}$} \state ${A}\leftarrow{E}{n}{c}_{{{S}{C}}}{\left(\begin{matrix}{A}_{{1}}&\ldots&{A}_{{n}}\end{matrix}\right)}$ \state \call{Call-Runtime-Entrypoint}{${R}_{{B}},{\mathcal{{{R}{E}}}}_{{B}},{F},{A},{A}_{{\le{n}}}$}
+###### Algorithm -algo-num- Interact With Runtime {#algo-runtime-interaction}
+:::algorithm
+<Pseudocode
+    content={interactWithRuntime}
+    algID="interactWithRuntime"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - ${F}$ is the runtime entrypoint call.
@@ -624,6 +648,7 @@ The Runtime ([Definition -def-num-ref-](chap-state#defn-state-machine)) is the c
 - ${H}_{{b}}{\left({B}\right)}$ is the block hash indicating the state at the end of ${B}$.
 
 - ${A}_{{1}},\ldots,{A}_{{n}}$ are arguments to be passed to the runtime entrypoint.
+:::
 
 In this section, we describe the details upon which the Polkadot Host is interacting with the Runtime. In particular, $\text{Set-State-At}$ and $\text{Call-Runtime-Entrypoint}$ procedures called by [Interact-With-Runtime](chap-state#algo-runtime-interaction) are explained in [Definition -def-num-ref-](chap-state#defn-call-into-runtime) and [Definition -def-num-ref-](chap-state#defn-set-state-at) respectively. ${R}_{{B}}$ is the Runtime code loaded from ${S}_{{B}}$, as described in [Definition -def-num-ref-](chap-state#defn-runtime-code-at-state), and ${R}{E}_{{B}}$ is the Polkadot Host API, as described in [Definition -def-num-ref-](chap-host-api#defn-host-api-at-state).
 

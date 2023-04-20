@@ -1,4 +1,4 @@
-const highlightBibLinks = () => {
+const fixAlgoCounters = () => {
     const script = () => {
         (function() {
             const pushState = history.pushState;
@@ -21,14 +21,14 @@ const highlightBibLinks = () => {
             });
         })();
 
-        const transformLinks = () => {
-            const divs = document.getElementsByClassName("csl-right-inline");
-            for (let i = 0; i < divs.length; i++) {
-                const div = divs[i];
-                let text = div.innerHTML;
-                const regex = /(?<!href="|<a href=")(https?:\/\/[^\s]+)(?<!:)/g;
-                text = text.replace(regex, '<a href="$1" target="_blank">$1</a>');
-                div.innerHTML = text;
+        const fixCounters = () => {
+            const spans = document.getElementsByClassName("ps-keyword");
+            for (let i = 0; i < spans.length; i++) {
+                const span = spans[i];
+                let text = span.innerHTML;
+                const regex = /(\d+)/g;
+                text = text.replace(regex, '');
+                span.innerHTML = text;
             }
         };
 
@@ -39,7 +39,7 @@ const highlightBibLinks = () => {
             pageUrl = window.location.href.split("#")[0];
             if (pageUrl !== prevPageUrl) {
                 prevPageUrl = pageUrl;
-                setTimeout(transformLinks, 500);
+                setTimeout(fixCounters, 500);
             }
         }
 
@@ -48,7 +48,7 @@ const highlightBibLinks = () => {
     };
   
     return {
-      name: 'highlightBibLinks',
+      name: 'fixAlgoCounters',
       injectHtmlTags() {
         return {
           postBodyTags: [{ tagName: 'script', innerHTML: `(${script.toString()})()` }],
@@ -57,5 +57,5 @@ const highlightBibLinks = () => {
     };
   };
   
-  export = highlightBibLinks;
+  export = fixAlgoCounters;
   

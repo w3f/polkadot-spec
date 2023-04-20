@@ -2,6 +2,9 @@
 title: Finality
 ---
 
+import Pseudocode from '@site/src/components/Pseudocode';
+import initiateGrandpa from '!!raw-loader!@site/src/algorithms/initiateGrandpa.tex';
+
 ## -sec-num- Introduction {#id-introduction-4}
 
 The Polkadot Host uses GRANDPA Finality protocol to finalize blocks. Finality is obtained by consecutive rounds of voting by the validator nodes. Validators execute GRANDPA finality process in parallel to Block Production as an independent service. In this section, we describe the different functions that GRANDPA service performs to successfully participate in the block-finalization process.
@@ -261,9 +264,16 @@ The GRANDPA round number reset to 0 for every authority set change.
 
 Voter set changes are signaled by Runtime via a consensus engine message ([Section -sec-num-ref-](chap-sync#sect-consensus-message-digest)). When Authorities process such messages they must not vote on any block with a higher number than the block at which the change is supposed to happen. The new authority set should reinitiate GRANDPA protocol by executing [Initiate-Grandpa](sect-finality#algo-initiate-grandpa).
 
-\input ${r}_{{{l}\ast}},{B}_{{{l}\ast}}$ \state \textsc{Last-Finalized-Block} $\leftarrow{B}_{{{l}\ast}}$ \state \textsc{Best-Final-Candidate}${\left({0}\right)}\leftarrow{B}_{{{l}\ast}}$ \state \textsc{GRANDPA-GHOST}${\left({0}\right)}\leftarrow{B}_{{{l}\ast}}$ \state \textsc{Last-Completed-Round}$\leftarrow{0}$ \state ${r}_{{n}}\leftarrow{1}$ \state \call{Play-Grandpa-round}{${r}_{{n}}$}
+###### Algorithm -algo-num- Initiate Grandpa {#algo-initiate-grandpa}
+:::algorithm
+<Pseudocode
+    content={initiateGrandpa}
+    algID="initiateGrandpa"
+    options={{ "lineNumber": true }}
+/>
 
 where ${B}_{{\text{last}}}$ is the last block which has been finalized on the chain ([Definition -def-num-ref-](sect-finality#defn-finalized-block)). ${r}_{{\text{last}}}$ is equal to the latest round the voter has observed that other voters are voting on. The voter obtains this information through various gossiped messages including those mentioned in [Definition -def-num-ref-](sect-finality#defn-finalized-block). ${r}_{{\text{last}}}$ is set to *0* if the GRANDPA node is initiating the GRANDPA voting process as a part of a new authority set. This is because the GRANDPA round number resets to *0* for every authority set change.
+:::
 
 ## -sec-num- Rejoining the Same Voter Set {#id-rejoining-the-same-voter-set}
 

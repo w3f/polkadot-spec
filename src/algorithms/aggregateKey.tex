@@ -1,0 +1,13 @@
+\begin{algorithm}
+\caption{Aggregate-Key}
+\begin{algorithmic}
+    \require{$P_N \coloneqq ($\textsc{TrieRoot}$ = N_1, \dots, N_j = N)$}
+    \state $pk^{Agr}_N \leftarrow \phi$
+    \state $i \leftarrow 1$
+    \forall{$N_i \in P_N$}
+    \state $pk^{Agr}_N \leftarrow pk^{Agr}_N || pk_{N_i} || \textrm{Index}_{N_i}(N_{i + 1})$
+    \endfor
+    \state $pk^{Agr}_N \leftarrow pk^{Agr}_N || pk_{N}$
+    \return $pk^{Agr}_N$
+\end{algorithmic}
+\end{algorithm}

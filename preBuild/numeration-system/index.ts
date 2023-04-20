@@ -10,6 +10,8 @@ export interface MdFile {
 
 const defNum = '-def-num-';
 const defNumRef = '-def-num-ref-';
+const algoNum = '-algo-num-';
+const algoNumRef = '-algo-num-ref-';
 const tabNum = '-tab-num-';
 const tabNumRef = '-tab-num-ref-';
 const secNum = '-sec-num-';
@@ -17,7 +19,7 @@ const secNumRef = '-sec-num-ref-';
 const imgNum = '-img-num-';
 const imgNumRef = '-img-num-ref-';
 const chapNumRef = '-chap-num-ref-';
-const toReplace = [defNum, defNumRef, tabNum, tabNumRef, secNum, secNumRef, chapNumRef];
+const toReplace = [defNum, defNumRef, algoNum, algoNumRef, tabNum, tabNumRef, secNum, secNumRef, chapNumRef];
 
 const replaceReferencePlaceholder = (
   mdFile: MdFile,
@@ -73,6 +75,8 @@ const numerationSystem = () => {
 
   let definitionsMap = [];
   let defCounter = 0;
+  let algoMap = [];
+  let algoCounter = 0;
   let tablesMap = [];
   let tablesCounter = 0;
   let sectionLevelCounter = {}; // level -> sectionNumber
@@ -119,6 +123,13 @@ const numerationSystem = () => {
           let newLine = line.replace(imgNum, imgCounter.toString()+".");
           lines[i] = newLine;
         }
+        if (line.includes(algoNum)) {
+          algoCounter++;
+          let id = getIdFromHeaderLine(line)
+          algoMap[id] = algoCounter;
+          let newLine = line.replace(algoNum, algoCounter.toString()+".");
+          lines[i] = newLine;
+        }
       } else if (line.includes('##')) {
         if (line.includes(secNum)) {
           // split the line by spaces and take last element, it will be like this: {#id-ext_storage_read}
@@ -155,6 +166,7 @@ const numerationSystem = () => {
         let href = link.split(']')[1].split('(')[1].split(')')[0];
         // replace references to definitions
         replaceReferencePlaceholder(mdFile, link, linkText, href, defNumRef, definitionsMap, defaultFindId);
+        replaceReferencePlaceholder(mdFile, link, linkText, href, algoNumRef, algoMap, defaultFindId);
         replaceReferencePlaceholder(mdFile, link, linkText, href, tabNumRef, tablesMap, defaultFindId);
         replaceReferencePlaceholder(mdFile, link, linkText, href, secNumRef, sectionsMap, defaultFindId);
         replaceReferencePlaceholder(mdFile, link, linkText, href, chapNumRef, chaptersMap, (href) => href);
