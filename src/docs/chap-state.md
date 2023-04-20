@@ -7,7 +7,7 @@ import BlockHeader from '/static/img/kaitai_render/block_header.svg';
 import Digest from '/static/img/kaitai_render/digest.svg';
 
 import Pseudocode from '@site/src/components/Pseudocode';
-import validateTransactionsAndStore from '!!raw-loader!@site/src/algorithms/_validateTransactionsAndStore.tex';
+import validateTransactionsAndStore from '!!raw-loader!@site/src/algorithms/validateTransactionsAndStore.tex';
 import maintainTransactionPool from '!!raw-loader!@site/src/algorithms/maintainTransactionPool.tex';
 import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
 import interactWithRuntime from '!!raw-loader!@site/src/algorithms/interactWithRuntime.tex';
@@ -241,10 +241,10 @@ Furthermore [Validate-Transactions-and-Store](chap-state#algo-validate-transacti
 
 ###### Algorithm -algo-num- Validate Transactions and Store {#algo-validate-transactions}
 :::algorithm
-<!-- <Pseudocode
+<Pseudocode
     content={validateTransactionsAndStore}
     algID="validateTransactionsAndStore"
-/> -->
+/>
 
 **where**  
 - ${M}_{{T}}$ is the transaction message (offchain transactions?)

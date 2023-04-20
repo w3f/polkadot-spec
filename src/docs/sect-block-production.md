@@ -6,7 +6,7 @@ import Pseudocode from '@site/src/components/Pseudocode';
 import blockProductionLottery from '!!raw-loader!@site/src/algorithms/blockProductionLottery.tex';
 import slotTime from '!!raw-loader!@site/src/algorithms/slotTime.tex';
 import medianAlgorithm from '!!raw-loader!@site/src/algorithms/medianAlgorithm.tex';
-import invokeBlockAuthoring from '!!raw-loader!@site/src/algorithms/_invokeBlockAuthoring.tex';
+import invokeBlockAuthoring from '!!raw-loader!@site/src/algorithms/invokeBlockAuthoring.tex';
 import verifyAuthorshipRight from '!!raw-loader!@site/src/algorithms/verifyAuthorshipRight.tex';
 import verifySlotWinner from '!!raw-loader!@site/src/algorithms/verifySlotWinner.tex';
 import buildBlock from '!!raw-loader!@site/src/algorithms/buildBlock.tex';
@@ -318,11 +318,11 @@ The Pre-Digest must be included as a digest item of Pre-Runtime type in the head
 
 ###### Algorithm -algo-num- Invoke-Block-Authoring {#algo-block-production}
 :::algorithm
-<!-- <Pseudocode
+<Pseudocode
     content={invokeBlockAuthoring}
     algID="invokeBlockAuthoring"
     options={{ "lineNumber": true }}
-/> -->
+/>
 
 where $\text{BT}$ is the current block tree, $\text{Block-Production-Lottery}$ is defined in [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) and $\text{Add-Digest-Item}$ appends a digest item to the end of the header digest ${H}_{{d}}{\left({B}\right)}$ ([Definition -def-num-ref-](chap-state#defn-digest)).
 :::

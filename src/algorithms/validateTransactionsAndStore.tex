@@ -1,0 +1,23 @@
+\begin{algorithm}
+\caption{Validate-Transactions-and-Store}
+\begin{algorithmic}
+    \state $L \leftarrow Dec_{SC}(M_T)$
+    \forall{$\{T \in L \mid T \notin TQ \mid T \notin TP\}$}
+        \state $B_d \leftarrow$ \call{Head}{\call{Longest-Chain}{$BT$}}
+        \state $N \leftarrow H_n(B_d)$
+        \state $R \leftarrow$ \call{Call-Runtime-Entry}{$\texttt{TaggedTransactionQueue\_validate\_transaction}, N, T$}
+        \if{\call{Valid}{$R$}}
+            \if{\call{Requires}{$R$}$ \subset \bigcup_{\forall T \in (TQ~\cup~B_i \mid \exists i_{\mid d > i})}$ \call{Provided-Tags}{$T$}}
+                \state \call{Insert-At}{$TQ, T, $\call{Requires}{$R$}$, $\call{Priority}{$R$}}
+            \else
+                \state \call{Add-To}{$TP,T$}
+            \endif
+            \state \call{Maintain-Transaction-Pool}{}
+            \if{\call{ShouldPropagate}{$R$}}
+                \state \call{Propagate}{$T$}
+            \endif
+        \endif
+    \endfor
+\end{algorithmic}
+\end{algorithm}
+    

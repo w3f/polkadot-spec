@@ -21,6 +21,19 @@ const imgNumRef = '-img-num-ref-';
 const chapNumRef = '-chap-num-ref-';
 const toReplace = [defNum, defNumRef, algoNum, algoNumRef, tabNum, tabNumRef, secNum, secNumRef, chapNumRef];
 
+const replaceH6Placeholder = (
+  line: string,
+  placeholder: string,
+  counter: number,
+  map: any,
+) => {
+  counter++;
+  let id = getIdFromHeaderLine(line)
+  map[id] = counter;
+  let newLine = line.replace(placeholder, counter.toString() + ".");
+  return [counter, map, newLine];
+}
+
 const replaceReferencePlaceholder = (
   mdFile: MdFile,
   oldLink: string,
@@ -73,16 +86,16 @@ const numerationSystem = () => {
     }
   }
 
-  let definitionsMap = [];
   let defCounter = 0;
-  let algoMap = [];
   let algoCounter = 0;
-  let tablesMap = [];
   let tablesCounter = 0;
+  let imgCounter = 0;
+  let definitionsMap = [];
+  let algoMap = [];
+  let tablesMap = [];
+  let imgMap = [];
   let sectionLevelCounter = {}; // level -> sectionNumber
   let sectionsMap = []; // subsectionId -> subsectionNumber
-  let imgMap = [];
-  let imgCounter = 0;
 
   // first we replace the numbersplaceholders in the headings
   // and we fill the mappings
@@ -103,32 +116,16 @@ const numerationSystem = () => {
       let line = lines[i];
       if (line.includes('######')) {
         if (line.includes(defNum)) {
-          defCounter++;
-          let id = getIdFromHeaderLine(line)
-          definitionsMap[id] = defCounter;
-          let newLine = line.replace(defNum, defCounter.toString()+".");
-          lines[i] = newLine;
-        }
-        if (line.includes(tabNum)) {
-          tablesCounter++;
-          let id = getIdFromHeaderLine(line)
-          tablesMap[id] = tablesCounter;
-          let newLine = line.replace(tabNum, tablesCounter.toString()+".");
-          lines[i] = newLine;
-        }
-        if (line.includes(imgNum)) {
-          imgCounter++;
-          let id = getIdFromHeaderLine(line)
-          imgMap[id] = imgCounter;
-          let newLine = line.replace(imgNum, imgCounter.toString()+".");
-          lines[i] = newLine;
-        }
+          [defCounter, definitionsMap, lines[i]] = replaceH6Placeholder(line, defNum, defCounter, definitionsMap);
+        } else
         if (line.includes(algoNum)) {
-          algoCounter++;
-          let id = getIdFromHeaderLine(line)
-          algoMap[id] = algoCounter;
-          let newLine = line.replace(algoNum, algoCounter.toString()+".");
-          lines[i] = newLine;
+          [algoCounter, algoMap, lines[i]] = replaceH6Placeholder(line, algoNum, algoCounter, algoMap);
+        } else
+        if (line.includes(tabNum)) {
+          [tablesCounter, tablesMap, lines[i]] = replaceH6Placeholder(line, tabNum, tablesCounter, tablesMap);
+        } else
+        if (line.includes(imgNum)) {
+          [imgCounter, imgMap, lines[i]] = replaceH6Placeholder(line, imgNum, imgCounter, imgMap);
         }
       } else if (line.includes('##')) {
         if (line.includes(secNum)) {
