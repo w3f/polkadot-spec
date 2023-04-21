@@ -18,9 +18,9 @@ This command starts a local development server and opens up a browser window. Mo
 
 ## Contributing
 
-You can find the markdown files inside the `src/docs` folder.
+You can find the markdown files inside the [`src/docs`](src/docs) folder.
 
-When building, the scripts inside `preBuild` will generate a `docs` folder, from which Docusaurus will render the website. Then, the rendered content will be modified by the `plugins` in the browser.
+When building, the scripts inside [`preBuild`](preBuild) will generate a `docs` folder, from which Docusaurus will render the website. Then, the rendered content will be modified by the [`plugins`](plugins) in the browser.
 
 ### LaTeX
 
@@ -37,7 +37,7 @@ $$
 
 ### Numeration System
 
-Inside `preBuild`, you can find the script `numerationSystem`. This will assign to several entities a number, and substitute the placeholders inside the markdown files. This is done to avoid having to manually update the numbers when adding new entities.
+Inside [`preBuild`](preBuild), you can find the script [`numerationSystem`](preBuild/numerationSystem/index.ts). This will assign to several entities a number, and substitute the placeholders inside the markdown files. This is done to avoid having to manually update the numbers when adding new entities.
 
 This is the structure of the spec:
 ```md
@@ -81,7 +81,7 @@ title: -chap-num- Chapter Title
 ---
 <!-- Chapter content here -->
 ```
-The placeholder `-chap-num-` will be replaced by the number assigned by `numerationSystem`.
+The placeholder `-chap-num-` will be replaced by the number assigned by [`numerationSystem`](preBuild/numerationSystem/index.ts).
 
 #### Sections
 To write a new section, use the following syntax:
@@ -89,7 +89,7 @@ To write a new section, use the following syntax:
 ## -sec-num- Section name {#id-section-name}
 ```
 - Use a markdown header from H2 to H5 included, so the maximum depth is `a.b.c.d.e` (H2 is `a.b`).
-- Put the placeholder `-sec-num-` in the header, which will be replaced by the number assigned by `numerationSystem`;
+- Put the placeholder `-sec-num-` in the header, which will be replaced;
 - Add an id to the header, which will be used to reference the section.
 
 #### Definitions
@@ -102,7 +102,7 @@ To write a definition:
 - Put the placeholder `-def-num-` in the header;
 - Add an id to the header.
 
-Then, you should include the definition content inside the custom admonition `:::definition` (you can find all the custom admonitions inside `src/theme/Admonition/Types.js`).
+Then, you should include the definition content inside the custom admonition `:::definition` (you can find all the custom admonitions inside [`src/theme/Admonition/Types.js`](src/theme/Admonition/Types.js)).
 
 So the final result will be the following:
 ```md
@@ -120,18 +120,18 @@ To define an algorithm, use the same syntax as for definitions, but with the pla
 ```md
 ###### Algorithm -algo-num- Aggregate-Key {#algo-aggregate-key}
 ```
-At the top of the page, you must include the `Pseudocode`component and the LaTeX algorithm you want to render:
+At the top of the page, you must include the [`Pseudocode`](src/components/Pseudocode.jsx) component and the LaTeX algorithm you want to render:
 ```md
 ---
-title: States and Transitions
+title: -chap-num- States and Transitions
 ---
 import Pseudocode from '@site/src/components/Pseudocode';
 import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
 ```
-After this, you can build the algorithm using the admonition `:::algorithm`, and using the `Pseudocode` component (refer to the file to know more about its `props`). This will be the final result:
+After this, you can build the algorithm using the admonition `:::algorithm`, and using the [`Pseudocode`](src/components/Pseudocode.jsx) component (refer to the file to know more about its `props`). This will be the final result:
 ```md
 ---
-title: States and Transitions
+title: -chap-num- States and Transitions
 ---
 import Pseudocode from '@site/src/components/Pseudocode';
 import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
@@ -152,7 +152,7 @@ import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
 
 #### Tables and Images
 
-To define a table or an image, use the same syntax as for definitions and algorithms, but with the placeholder `-tab-num-` or `-img-num-`:
+To define a table or an image, use the same syntax as for definitions and algorithms (always using a H6 header), but with the placeholder `-tab-num-` or `-img-num-`:
 ```md
 ###### Table -tab-num- Name {#tab-name}
 ```
@@ -174,8 +174,12 @@ To reference any of the entities from anywhere in the website, you have to use t
 
 ### Bibliography
 
-The cited works are defined inside `src/bibliography.bib`. To cite a work, use the following syntax:
+The cited works are defined inside [`src/bibliography.bib`](src/bibliography.bib). To cite a work, use the following syntax:
 ```md
 [@work-id]
 ```
 Automatically, the bibliography will be generated at the end of the page.
+
+## License
+
+Any code in this repository is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) and any documentation or specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
