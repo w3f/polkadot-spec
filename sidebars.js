@@ -35,42 +35,42 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          label: 'Overview',
+          label: '1. Overview',
           id: 'chap-overview',
         },
         {
           type: 'doc',
-          label: 'States and Transitions',
+          label: '2. States and Transitions',
           id: 'chap-state',
         },
         {
           type: 'doc',
-          label: 'Synchronization',
+          label: '3. Synchronization',
           id: 'chap-sync',
         },
         {
           type: 'doc',
-          label: 'Networking',
+          label: '4. Networking',
           id: 'chap-networking',
         },
         {
           type: 'doc',
-          label: 'Block Production',
+          label: '5. Block Production',
           id: 'sect-block-production',
         },
         {
           type: 'doc',
-          label: 'Finality',
+          label: '6. Finality',
           id: 'sect-finality',
         },
         {
           type: 'doc',
-          label: 'Light Clients',
+          label: '7. Light Clients',
           id: 'sect-lightclient',
         },
         {
           type: 'doc',
-          label: 'Availability & Validity',
+          label: '8. Availability & Validity',
           id: 'chapter-anv',
         },
       ]
@@ -82,22 +82,22 @@ const sidebars = {
       items: [
         {
           type: 'doc',
-          label: 'Extrinsics',
+          label: '9. Extrinsics',
           id: 'id-extrinsics',
         },
         {
           type: 'doc',
-          label: 'Weights',
+          label: '10. Weights',
           id: 'id-weights',
         },
         {
           type: 'doc',
-          label: 'Consensus',
+          label: '11. Consensus',
           id: 'id-consensus',
         },
         {
           type: 'doc',
-          label: 'Metadata',
+          label: '12. Metadata',
           id: 'sect-metadata',
         },
       ]

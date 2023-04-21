@@ -1,5 +1,5 @@
 ---
-title: Consensus
+title: -chap-num- Consensus
 ---
 
 import Pseudocode from '@site/src/components/Pseudocode';

@@ -1,5 +1,5 @@
 ---
-title: Weights
+title: -chap-num- Weights
 ---
 
 import Pseudocode from '@site/src/components/Pseudocode';

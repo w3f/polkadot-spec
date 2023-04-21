@@ -61,7 +61,7 @@ async function createConfig() {
             // Please change this to your repo.
             // Remove this to remove the "edit this page" links.
             editUrl:
-              'https://github.com/0xCaso/polkadot-spec/blob/main/src',
+              'https://github.com/w3f/polkadot-spec/blob/main/src',
             routeBasePath: '/', // Serve the docs at the site's root
             admonitions: {
               tag: ':::',

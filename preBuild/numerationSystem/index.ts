@@ -9,17 +9,22 @@ export interface MdFile {
 }
 
 const defNum = '-def-num-';
-const defNumRef = '-def-num-ref-';
 const algoNum = '-algo-num-';
-const algoNumRef = '-algo-num-ref-';
 const tabNum = '-tab-num-';
-const tabNumRef = '-tab-num-ref-';
 const secNum = '-sec-num-';
-const secNumRef = '-sec-num-ref-';
 const imgNum = '-img-num-';
+const chapNum = '-chap-num-';
+const defNumRef = '-def-num-ref-';
+const algoNumRef = '-algo-num-ref-';
+const tabNumRef = '-tab-num-ref-';
+const secNumRef = '-sec-num-ref-';
 const imgNumRef = '-img-num-ref-';
 const chapNumRef = '-chap-num-ref-';
-const toReplace = [defNum, defNumRef, algoNum, algoNumRef, tabNum, tabNumRef, secNum, secNumRef, chapNumRef];
+
+const toReplace = [
+  defNum, defNumRef, algoNum, algoNumRef, tabNum, 
+  tabNumRef, secNum, secNumRef, chapNum, chapNumRef
+];
 
 const replaceH6Placeholder = (
   line: string,
@@ -145,6 +150,9 @@ const numerationSystem = () => {
           lines[i] = newLine;
           prevLevel = level;
         }
+      } else if (line.startsWith(`title: ${chapNum}`)) {
+        let newLine = line.replace(chapNum, sectionNumber+".");
+        lines[i] = newLine;
       }
     }
     mdFile.md = lines.join('\n');

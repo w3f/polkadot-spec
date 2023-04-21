@@ -1,5 +1,5 @@
 ---
-title: States and Transitions
+title: -chap-num- States and Transitions
 ---
 import Block from '/static/img/kaitai_render/block.svg';
 import BlockBody from '/static/img/kaitai_render/block_body.svg';

@@ -1,5 +1,5 @@
 ---
-title: Finality
+title: -chap-num- Finality
 ---
 
 import Pseudocode from '@site/src/components/Pseudocode';

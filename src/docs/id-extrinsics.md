@@ -1,5 +1,5 @@
 ---
-title: Extrinsics
+title: -chap-num- Extrinsics
 ---
 
 import Pseudocode from '@site/src/components/Pseudocode';

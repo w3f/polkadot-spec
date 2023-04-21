@@ -1,5 +1,5 @@
 ---
-title: Light Clients
+title: -chap-num- Light Clients
 ---
 
 import Pseudocode from '@site/src/components/Pseudocode';

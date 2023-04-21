@@ -1,5 +1,5 @@
 ---
-title: Block Production
+title: -chap-num- Block Production
 ---
 
 import Pseudocode from '@site/src/components/Pseudocode';

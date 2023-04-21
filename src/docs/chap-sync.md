@@ -1,5 +1,5 @@
 ---
-title: Synchronization
+title: -chap-num- Synchronization
 ---
 
 import Pseudocode from '@site/src/components/Pseudocode';

@@ -1,5 +1,5 @@
 ---
-title: Metadata
+title: -chap-num- Metadata
 ---
 import Metadata from '/static/img/kaitai_render/metadata.svg';
 import MetadataType from '/static/img/kaitai_render/metadata_type.svg';
