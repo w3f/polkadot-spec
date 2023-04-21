@@ -1,0 +1,11 @@
+\begin{algorithm}
+\caption{Epoch-Randomness}
+\begin{algorithmic}
+    \Require $n > 2$
+    \State \textbf{init} $\rho \leftarrow \phi$
+    \For{$B$ in \call{SubChain}{$\mathcal{E}_{n-2}$}}
+        \State $\rho \leftarrow \rho || d_B$
+    \EndFor
+    \Return \call{Blake2b}{\call{Epoch-Randomness}{$n-1$}$||n||\rho$}
+\end{algorithmic}
+\end{algorithm}

@@ -2,6 +2,10 @@
 title: Extrinsics
 ---
 
+import Pseudocode from '@site/src/components/Pseudocode';
+import encodeMortality from '!!raw-loader!@site/src/algorithms/encodeMortality.tex';
+import decodeMortality from '!!raw-loader!@site/src/algorithms/decodeMortality.tex';
+
 ## -sec-num- Introduction {#id-introduction-5}
 
 An extrinsic is a SCALE encoded array consisting of a version number, signature, and varying data types indicating the resulting Runtime function to be called, including the parameters required for that function to be executed.
@@ -195,7 +199,20 @@ The SCALE encoded representation of mortality ${T}_{mor}$ deviates from most oth
 
 If the extrinsic is immortal, specify a single byte with the value equal to zero.
 
-\Require{${M}_{{{per}}},{M}_{{{pha}}}$} \Return ${0}{e}{n}{s}{p}{a}{c}{e}\text{}{f}{\left\lbrace{\quad\text{if}\quad}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}\text{}{t}{\left\lbrace{e}{x}{t}{r}\in{s}{i}{c}{i}{s}{i}{m}{mor}{t}{a}{l}\right\rbrace}$ \State \textbf{init} ${f}{a}{c}\to{r}=$\call{Limit}{${M}_{{{per}}}>>{12},{1},\phi$} \State \textbf{init} $\le{f}{t}=$\call{Limit}{\call{TZ}{${M}_{{{per}}}$}$-{1},{1},{15}$} \State \textbf{init} ${r}{i}{g}{h}{t}={\frac{{{M}_{{{pha}}}}}{{{f}{a}{c}\to{r}}}}<<{4}$ \Return $\le{f}{t}{\mid}{r}{i}{g}{h}{t}$ \Require{${T}_{mor}$} \Return $\text{}{t}{\left\lbrace{I}{m}{mor}{t}{a}{l}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}\text{}{f}{\left\lbrace{\quad\text{if}\quad}\right\rbrace}{e}{n}{s}{p}{a}{c}{e}{T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}={0}$ \State \textbf{init} ${e}{n}{c}={T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}+{\left({T}^{{{b}{1}}}_{\left\lbrace{mor}\right\rbrace}<<{8}\right)}$ \State \textbf{init} ${M}_{{{per}}}={2}<<{\left({e}{n}{c}$\right.} mod${\left({1}<<{4}\right)}{)}$ \State \textbf{init} ${f}{a}{c}\to{r}=$ \call{Limit}{${M}_{{{per}}}>>{12},{1},\phi$} \State \textbf{init} ${M}_{{{pha}}}={\left({e}{n}{c}>>{4}\right)}\cdot{f}{a}{c}\to{r}$ \Return ${\left({M}_{{{per}}},{M}_{{{pha}}}\right)}$
+:::algorithm
+###### Algorithm -algo-num- Encode Mortality {#algo-mortality-encode}
+<Pseudocode
+    content={encodeMortality}
+    algID="encodeMortality"
+    options={{ "lineNumber": true }}
+/>
+
+###### Algorithm -algo-num- Decode Mortality {#algo-mortality-decode}
+<Pseudocode
+    content={decodeMortality}
+    algID="decodeMortality"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - ${T}^{{{b}{0}}}_{\left\lbrace{mor}\right\rbrace}$: the first byte of ${T}_{mor}$.
@@ -206,8 +223,9 @@ If the extrinsic is immortal, specify a single byte with the value equal to zero
 
 - TZ(${num}$): returns the number of trailing zeros in the binary representation of ${num}$. For example, the binary representation of `40` is `0010 1000`, which has three trailing zeros.
 
-- $>>$: performs a binary right shift operation.
+- $\gg$: performs a binary right shift operation.
 
-- $<<$: performs a binary left shift operation.
+- $\ll$: performs a binary left shift operation.
 
 - ${\mid}$ : performs a bitwise OR operation.
+:::

@@ -1,0 +1,23 @@
+\begin{algorithm}
+\caption{"withdraw\_unbonded" Runtime function benchmark}
+\begin{algorithmic}
+    \Ensure $\mathcal{W}$
+    \Function{Main}{}
+        \State \textbf{init} $collection = \{\}$
+        \For{$balance \gets 1,100$}
+            \State $stash \leftarrow$ \call{Create-Account}{$stash, 1$}
+            \State $controller \leftarrow$ \call{Create-Account}{$controller, 1$}
+            \State \call{Set-Balance}{$stash, 100$}
+            \State \call{Set-Balance}{$controller, 1$}
+            \State \call{Bond}{$stash, controller, balance$}
+            \State \call{Pass-Era}{}
+            \State \call{UnBond}{$controller, balance$}
+            \State \call{Pass-Era}{}
+            \State $time \leftarrow$ \call{Timer}{\call{Withdraw-Unbonded}{$controller$}}
+            \State \call{Add-To}{$collection, time$}
+        \EndFor
+        \State $\mathcal{W} \leftarrow$ \call{Compute-Weight}{$collection$}
+        \Return $\mathcal{W}$
+    \EndFunction
+\end{algorithmic}
+\end{algorithm}

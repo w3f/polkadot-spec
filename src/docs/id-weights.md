@@ -2,6 +2,12 @@
 title: Weights
 ---
 
+import Pseudocode from '@site/src/components/Pseudocode';
+import requestJudgementRuntimeFunctionBenchmark from '!!raw-loader!@site/src/algorithms/requestJudgementRuntimeFunctionBenchmark.tex';
+import payoutStakersRuntimeFunctionBenchmark from '!!raw-loader!@site/src/algorithms/payoutStakersRuntimeFunctionBenchmark.tex';
+import transferRuntimeFunctionBenchmark from '!!raw-loader!@site/src/algorithms/transferRuntimeFunctionBenchmark.tex';
+import withdrawUnbondedRuntimeFunctionBenchmark from '!!raw-loader!@site/src/algorithms/withdrawUnbondedRuntimeFunctionBenchmark.tex';
+
 ## -sec-num- Motivation {#id-motivation}
 
 The Polkadot network, like any other permissionless system, needs to implement a mechanism to measure and to limit the usage in order to establish an economic incentive structure, to prevent the network overload, and to mitigate DoS vulnerabilities. In particular, Polkadot enforces a limited time-window for block producers to create a block, including limitations on block size, which can make the selection and execution of certain extrinsics too expensive and decelerate the network.
@@ -274,7 +280,13 @@ The Polkadot Runtime specifies the `MaxRegistrars` constant, which will prevent 
 
 The benchmarking implementation of for the function ${request}$ ${judgement}$ can be defined as follows:
 
-\Ensure ${\mathcal{{{W}}}}$ \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${a}{m}{o}{u}{n}{t}\leftarrow{1},{M}{a}{x}{R}{e}{g}{i}{s}{t}{r}{a}{r}{s}$} \State \call{Generate-Registrars}{${a}{m}{o}{u}{n}{t}${\rbrace}{S}{t}{a}{t}{e}${c}{a}{l}\le{r}\leftarrow$ \call{Create-Account}{${c}{a}{l}\le{r},{1}$} \State \call{Set-Balance}{${c}{a}{l}\le{r},{100}${\rbrace}{S}{t}{a}{t}{e}${t}{i}{m}{e}\leftarrow$ \call{Timer}{\call{Request-Judgement}{\call{Random}{${a}{m}{o}{u}{n}{t}${\rbrace}$,{100}$}} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}${\rbrace}{E}{n}{d}{F}{\quad\text{or}\quad}{S}{t}{a}{t}{e}${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$
+###### Algorithm -algo-num- `request_judgement` Runtime Function Benchmark {#algo-benchmark-request-judgement}
+:::algorithm
+<Pseudocode
+    content={requestJudgementRuntimeFunctionBenchmark}
+    algID="requestJudgementRuntimeFunctionBenchmark"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - Generate-Registrars(${amount}$)
@@ -308,6 +320,7 @@ The benchmarking implementation of for the function ${request}$ ${judgement}$ ca
 - Compute-Weight(${collection}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
+:::
 
 ### -sec-num- Practical Example \#2: `payout_stakers` {#sect-practical-example-payout-stakers}
 
@@ -403,7 +416,13 @@ M̱aximum Nominator Rewarded Per Validator indicated as `MaxNominatorRewardedPer
 
 The benchmarking implementation for the function ${payout}$ ${stakers}$ can be defined as follows:
 
-\Ensure ${\mathcal{{{W}}}}$ \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${a}{m}{o}{u}{n}{t}\leftarrow{1},{M}{a}{x}{N}{o}\min{a}\to{r}{R}{e}{w}{a}{r}{d}{e}{d}{P}{e}{r}{V}{a}{l}{i}{d}{a}\to{r}${\rbrace}{F}{\quad\text{or}\quad}{\left\lbrace$\right.}{e}{r}{a}$depth \leftarrow 1,HistoryDepth${\rbrace}{S}{t}{a}{t}{e}$validator \leftarrow${c}{a}{l}{l}{\left\lbrace{G}{e}\ne{r}{a}{t}{e}-{V}{a}{l}{i}{d}{a}\to{r}\right\rbrace}{\left\lbracenull\right\rbrace}{S}{t}{a}{t}{e}{c}{a}{l}{l}{\left\lbrace{V}{a}{l}{i}{d}{a}{t}{e}\right\rbrace}{\left\lbrace$\right.}validator$} \State $nominators \leftarrow${c}{a}{l}{l}{\left\lbrace{G}{e}\ne{r}{a}{t}{e}-{N}{o}\min{a}\to{r}{s}\right\rbrace}{\left\lbrace$\right.}amount$} \For{$nominator \in nominators${\rbrace}{S}{t}{a}{t}{e}{c}{a}{l}{l}{\left\lbrace{N}{o}\min{a}{t}{e}\right\rbrace}{\left\lbrace$\right.}validator, nominator$} \EndFor \State ${e}{r}{a}$\in{d}{e}{x}\leftarrow$ \call{Create-Rewards}{${v}{a}{l}{i}{d}{a}\to{r},{n}{o}\min{a}\to{r}{s},{e}{r}{a}$depth$} \State ${t}{i}{m}{e}\leftarrow${c}{a}{l}{l}{\left\lbrace{T}{i}{m}{e}{r}\right\rbrace}{\left\lbrace{c}{a}{l}{l}{\left\lbrace{P}{a}{y}{o}{u}{t}-{S}{t}{a}{k}{e}{r}{s}\right\rbrace}{\left\lbrace$\right.}\right.}validator$}$, era$\in{d}{e}{x}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$
+###### Algorithm -algo-num- `payout_stakers` Runtime Function Benchmark {#algo-benchmark-payout-stakers}
+:::algorithm
+<Pseudocode
+    content={payoutStakersRuntimeFunctionBenchmark}
+    algID="{payoutStakersRuntimeFunctionBenchmark"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - Generate-Validator()
@@ -437,6 +456,7 @@ The benchmarking implementation for the function ${payout}$ ${stakers}$ can be d
 - Compute-Weight(${collection}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
+:::
 
 ### -sec-num- Practical Example \#3: `transfer` {#id-practical-example-3-transfer}
 
@@ -498,7 +518,13 @@ The parameters itself do not influence or trigger the two worst conditions and m
 
 The benchmarking implementation for the Polkadot Runtime function ${transfer}$ is defined as follows (starting with the Main function):
 
-\Ensure{${c}{o}{l}\le{c}{t}{i}{o}{n}$: a collection of time measurements of all benchmark iterations} \Function{Main}{} \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \State \textbf{init} ${b}{a}{l}{a}{n}{c}{e}={1}'{000}$ \For{$\in{d}{e}{x}\ge{t}{s}{1},{1}'{000}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Run-Benchmark}{$\in{d}{e}{x},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State \textbf{init} $\in{d}{e}{x}={1}'{000}$ \For{${b}{a}{l}{a}{n}{c}{e}\ge{t}{s}{2},{1}'{000}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Run-Benchmark}{$\in{d}{e}{x},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$ \EndFunction \Function{Run-Benchmark}{$\in{d}{e}{x}$, ${b}{a}{l}{a}{n}{c}{e}$} \State ${s}{e}{n}{d}{e}{r}\leftarrow$ \call{Create-Account}{${c}{a}{l}\le{r},\in{d}{e}{x}$} \State ${r}{e}{c}{i}\pi{e}{n}{t}\leftarrow$ \call{Create-Accouny}{${r}{e}{c}{i}\pi{e}{n}{t},\in{d}{e}{x}$} \State \call{Set-Balance}{${s}{e}{n}{d}{e}{r},{b}{a}{l}{a}{n}{c}{e}$} \State ${t}{i}{m}{e}\leftarrow$ \call{Timer}{\call{Transfer}{${s}{e}{n}{d}{e}{r},{r}{e}{c}{i}\pi{e}{n}{t},{b}{a}{l}{a}{n}{c}{e}$}} \Return ${t}{i}{m}{e}$ \EndFunction
+###### Algorithm -algo-num- `transfer` Runtime Function Benchmark {#algo-benchmark-transfer}
+:::algorithm
+<Pseudocode
+    content={transferRuntimeFunctionBenchmark}
+    algID="{trasnferRuntimeFunctionBenchmark"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - Create-Account(${name}$, ${index}$)
@@ -524,6 +550,7 @@ The benchmarking implementation for the Polkadot Runtime function ${transfer}$ i
 - Compute-Weight(${collection}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
+:::
 
 ### -sec-num- Practical Example \#4: `withdraw_unbounded` {#id-practical-example-4-withdraw_unbounded}
 
@@ -615,7 +642,13 @@ Two important points in the `withdraw_unbonded` function must be considered. The
 
 The benchmarking implementation for the Polkadot Runtime function `withdraw_unbonded` is defined as follows:
 
-\Ensure ${\mathcal{{{W}}}}$ \Function{Main}{} \State \textbf{init} ${c}{o}{l}\le{c}{t}{i}{o}{n}=$ \For{${b}{a}{l}{a}{n}{c}{e}\ge{t}{s}{1},{100}$} \State ${s}{t}{a}{s}{h}\leftarrow$ \call{Create-Account}{${s}{t}{a}{s}{h},{1}$} \State ${c}{o}{n}{t}{r}{o}{l}\le{r}\leftarrow$ \call{Create-Account}{${c}{o}{n}{t}{r}{o}{l}\le{r},{1}$} \State \call{Set-Balance}{${s}{t}{a}{s}{h},{100}$} \State \call{Set-Balance}{${c}{o}{n}{t}{r}{o}{l}\le{r},{1}$} \State \call{Bond}{${s}{t}{a}{s}{h},{c}{o}{n}{t}{r}{o}{l}\le{r},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Pass-Era}{} \State \call{UnBond}{${c}{o}{n}{t}{r}{o}{l}\le{r},{b}{a}{l}{a}{n}{c}{e}$} \State \call{Pass-Era}{} \State $time \leftarrow$ \call{Timer}{\call{Withdraw-Unbonded}{${c}{o}{n}{t}{r}{o}{l}\le{r}$}} \State \call{Add-To}{${c}{o}{l}\le{c}{t}{i}{o}{n},{t}{i}{m}{e}$} \EndFor \State ${\mathcal{{{W}}}}\leftarrow$ \call{Compute-Weight}{${c}{o}{l}\le{c}{t}{i}{o}{n}$} \Return ${\mathcal{{{W}}}}$ \EndFunction
+###### Algorithm -algo-num- `withdraw_unbonded` Runtime Function Benchmark {#algo-benchmark-withdraw}
+:::algorithm
+<Pseudocode
+    content={withdrawUnbondedRuntimeFunctionBenchmark}
+    algID="{withdrawUnbondedRuntimeFunctionBenchmark"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - Create-Account(${name}$, $index$)
@@ -653,6 +686,7 @@ The benchmarking implementation for the Polkadot Runtime function `withdraw_unbo
 - Compute-Weight(${collection}$)
 
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
+:::
 
 ## -sec-num- Fees {#id-fees}
 

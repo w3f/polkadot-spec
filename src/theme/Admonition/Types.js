@@ -4,7 +4,16 @@ import DefaultAdmonitionTypes from '@theme-original/Admonition/Types';
 function DefinitionAdmonition(props) {
   return (
     <div className='alert alert--definition'>
-      <h5 style={{color: 'blue', fontSize: 30}}>{props.title}</h5>
+      <h5>{props.title}</h5>
+      <div>{props.children}</div>
+    </div>
+  );
+}
+
+function AlgorithmAdmonition(props) {
+  return (
+    <div className='alert alert--algorithm'>
+      <h5>{props.title}</h5>
       <div>{props.children}</div>
     </div>
   );
@@ -19,7 +28,7 @@ function IndexAdmonition(props) {
 const AdmonitionTypes = {
   ...DefaultAdmonitionTypes,
   'definition': DefinitionAdmonition,
-  'algorithm': DefinitionAdmonition,
+  'algorithm': AlgorithmAdmonition,
   'index': IndexAdmonition,
 };
 

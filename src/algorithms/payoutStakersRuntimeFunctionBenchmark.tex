@@ -1,0 +1,22 @@
+\begin{algorithm}
+\caption{"payout\_stakers"` Runtime function benchmark}
+\begin{algorithmic}
+    \Ensure $\mathcal{W}$
+    \State \textbf{init} $collection = \{\}$
+    \For{$amount \leftarrow 1,MaxNominatorRewardedPerValidator$}
+    \For{$era\_depth \leftarrow 1,HistoryDepth$}
+        \State $validator \leftarrow$ \call{Generate-Validator}{}
+        \State \call{Validate}{$validator$}
+        \State $nominators \leftarrow$ \call{Generate-Nominators}{$amount$}
+        \For{$nominator \in nominators$}
+        \State \call{Nominate}{$validator, nominator$}
+        \EndFor
+        \State $era\_index \leftarrow$ \call{Create-Rewards}{$validator, nominators, era\_depth$}
+        \State $time \leftarrow$ \call{Timer}{\call{Payout-Stakers}{$validator$}$, era\_index$}
+        \State \call{Add-To}{$collection, time$}
+    \EndFor
+    \EndFor
+    \State $\mathcal{W} \leftarrow$ \call{Compute-Weight}{$collection$}
+    \Return $\mathcal{W}$
+\end{algorithmic}
+\end{algorithm}

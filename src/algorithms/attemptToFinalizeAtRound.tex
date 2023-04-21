@@ -1,0 +1,15 @@
+\begin{algorithm}
+\caption{Attempt-To-Finalize-At-Round}
+\begin{algorithmic}
+    \REQUIRE($r$)
+    \STATE $L \leftarrow$ \textsc{Last-Finalized-Block}
+    \STATE $E \leftarrow$ \call{Best-Final-Candidate}{$r$}
+    \IF{$E \geqslant L$ \and ${V^{r, \textrm{pc}}_{\textrm{obs}(v)}}(E) > 2 / 3 |\mathbb{V}|$}
+    \STATE{\textsc{Last-Finalized-Block}$\leftarrow E$}
+    \IF{$M_v^{r, \textrm{Fin}} (E) \notin $\textsc{Received-Messages}}
+        \STATE \call{Broadcast}{$M_v^{r, \textrm{Fin}}(E)$}
+        \RETURN
+    \ENDIF
+    \ENDIF
+\end{algorithmic}
+\end{algorithm}

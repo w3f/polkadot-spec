@@ -1,0 +1,12 @@
+\begin{algorithm}
+\caption{Querying-State-Light-Clients}
+\begin{algorithmic}
+    \INPUT Query q, BlockHeight h, CommitmentRootHash $root$
+    \OUTPUT Maybe Result $res$
+    \STATE ($res$, $\pi$) $\leftarrow QueryFullNode (q, h)$
+    \IF{$validityCheck_{root}(res, \pi)$}
+        \STATE $return$ $SOME$ $res$
+    \ENDIF
+    \STATE {$throw$ $ERROR$}
+\end{algorithmic}
+\end{algorithm}

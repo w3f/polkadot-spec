@@ -1,0 +1,28 @@
+\begin{algorithm}
+\caption{"transfer" Runtime function benchmark}
+\begin{algorithmic}
+    \Ensure{$collection$: a collection of time measurements of all benchmark iterations}
+    \Function{Main}{}
+        \State \textbf{init} $collection = \{ \}$
+        \State \textbf{init} $balance = 1'000$
+        \For{$index \gets 1,1'000$}
+            \State $time \leftarrow$ \call{Run-Benchmark}{$index, balance$}
+            \State \call{Add-To}{$collection, time$}
+        \EndFor
+        \State \textbf{init} $index = 1'000$
+        \For{$balance \gets 2,1'000$}
+            \State $time \leftarrow$ \call{Run-Benchmark}{$index, balance$}
+            \State \call{Add-To}{$collection, time$}
+        \EndFor
+        \State $\mathcal{W} \leftarrow$ \call{Compute-Weight}{$collection$}
+        \Return $\mathcal{W}$
+    \EndFunction
+    \Function{Run-Benchmark}{$index$, $balance$}
+        \State $sender \leftarrow$ \call{Create-Account}{$caller, index$}
+        \State $recipient \leftarrow$ \call{Create-Accouny}{$recipient, index$}
+        \State \call{Set-Balance}{$sender, balance$}
+        \State $time \leftarrow$ \call{Timer}{\call{Transfer}{$sender, recipient, balance$}}
+        \Return $time$ 
+    \EndFunction
+\end{algorithmic}
+\end{algorithm}

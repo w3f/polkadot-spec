@@ -1,0 +1,11 @@
+\begin{algorithm}
+\caption{Encode Mortality}
+\begin{algorithmic}
+    \Require{$M_{per}, M_{pha}$}
+    \Return $0 \enspace \textbf{if} \enspace \textit{extrinsic is immortal}$
+    \State \textbf{init} $factor = $\call{Limit}{$M_{per} \gg 12, 1, \phi$}
+    \State \textbf{init} $left = $\call{Limit}{\call{TZ}{$M_{per}$}$ - 1, 1, 15$}
+    \State \textbf{init} $right = \frac{M_{pha}}{factor} \ll 4$
+    \Return $left|right$
+\end{algorithmic}
+\end{algorithm}

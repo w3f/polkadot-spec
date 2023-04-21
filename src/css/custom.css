@@ -72,10 +72,17 @@ svg > g.graph > g.node > text > a {
 }
 
 .alert--definition {
-  --ifm-alert-background-color: #e6007a0d;
+  --ifm-alert-background-color: #e6007a0a;
   --ifm-alert-background-color-highlight: #54c7ec26;
   --ifm-alert-foreground-color: var(--ifm-color-info-contrast-foreground);
   --ifm-alert-border-color: #e6007a;
+}
+
+.alert--algorithm {
+  --ifm-alert-background-color: #00000008;
+  --ifm-alert-background-color-highlight: #54c7ec26;
+  --ifm-alert-foreground-color: var(--ifm-color-info-contrast-foreground);
+  --ifm-alert-border-color: #282828;
 }
 
 div#refs > div.csl-entry {

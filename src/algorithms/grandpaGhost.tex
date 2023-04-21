@@ -1,0 +1,18 @@
+\begin{algorithm}
+\caption{GRANDPA-GHOST}
+\begin{algorithmic}
+    \input $r$
+    \if{$r = 0$}
+        \state $G \leftarrow B_{last}$
+    \else
+        \state $L \leftarrow$ \call{Best-Final-Candidate}{$r - 1$}
+        \state $\mathcal{G} = \{ \forall B > L | \#V_{\operatorname{obs}(v)}^{r, pv}(B) \geqslant \frac{2}{3} |\mathbb{V}| \}$
+        \if{$\mathcal{G} = \phi$}
+            \state $G \leftarrow L$
+        \else
+            \state $G \in \mathcal{G} | H_n(G) = \operatorname{max}\left( H_n (B) | \forall B \in \mathcal{G} \right)$
+        \endif
+    \endif
+    \return $G$
+\end{algorithmic}
+\end{algorithm}

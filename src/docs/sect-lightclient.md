@@ -2,6 +2,10 @@
 title: Light Clients
 ---
 
+import Pseudocode from '@site/src/components/Pseudocode';
+import warpSyncLightClients from '!!raw-loader!@site/src/algorithms/warpSyncLightClients.tex';
+import queryingStateLightClients from '!!raw-loader!@site/src/algorithms/queryingStateLightClients.tex';
+
 ## -sec-num- Requirements for Light Clients {#sect-requirements-lightclient}
 
 We list requirements of a Light Client categorized along the the three dimensions of Functionality, Efficiency, and Security.
@@ -68,7 +72,13 @@ Eventually, the light client verifies the finality of the block returned by a fu
 
 We outline the warp sync process, abstracting out details of verifying the finality and how the full node to sync with is selected.
 
-\INPUT BlockHeader startblock, the initial block to start the sync. May not be the Genesis Block. \OUTPUT CommitmentRootHash ${\sqrt[$]{}}, State Tries Root hash of the latest finalized Block. \STATE \textsc{fullnode} $\leftarrow$ SelectFullNode \STATE \textsc{latestBlockHeader, grandpaJustifications} $\leftarrow$ SyncWithNode(\textsc{fullnode}) \STATE \textsc{isVerified} $\leftarrow$ verifyAuthoritySetChange(\textsc{grandpaJustifications}) ${l}{\quad\text{and}\quad}$ verifyFinality(\textsc{latestBlockHeader}) \IF{\textsc{isVerified}} \STATE ${r}{e}{t}{u}{r}{n}$ ${S}{O}{M}{E}$ getCommitmentRootHash(\textsc{latestBlockHeader}) \ENDIF \STATE {${t}{h}{r}{o}{w}$ ${E}\mathbb{R}{O}{R}$}
+###### Algorithm -algo-num- Warp Sync Light Clients {#algo-warp-sync}
+:::algorithm
+<Pseudocode
+    content={warpSyncLightClients}
+    algID="warpSyncLightClients"
+    options={{ "lineNumber": true }}
+/>
 
 Abstraction of Warp Sync and verification of latest block’s finality.
 
@@ -79,16 +89,24 @@ ${SyncSithNode}$: Returns the header of latest finalized block and a list of Gra
 ${verifyAuthoritySetChange}$: Verification algorithm which checks the authenticity of the header only at the end of an era where the authority set changes iteratively until reaching the latest era.
 
 ${verifyFinalty}$: Verifies the finalty of the latest block using the Grandpa Justifications messages.
+:::
 
 The warp syncing process is closely coupled with the state querying procedure used the light client. We outline the process of querying the state by a light client and validating the response.
 
-\INPUT Query q, BlockHeight h, CommitmentRootHash ${\sqrt[$]{}} \OUTPUT Maybe Result ${r}{e}{s}$ \STATE (${r}{e}{s}$, $\pi$) $\leftarrow{Q}{u}{e}{r}{y}{F}\underline{{l}}{N}{o}{d}{e}{\left({q},{h}\right)}$ \IF{${v}{a}{l}{i}{d}{i}{t}{y}{C}{h}{e}{c}{k}_{{{\root}}}{\left({r}{e}{s},\pi\right)}$} \STATE ${r}{e}{t}{u}{r}{n}$ ${S}{O}{M}{E}$ ${r}{e}{s}$ \ENDIF \STATE {${t}{h}{r}{o}{w}$ ${E}\mathbb{R}{O}{R}$}
+###### Algorithm -algo-num- Querying State Light Clients {#algo-light-clients-query-state}
+:::algorithm
+<Pseudocode
+    content={queryingStateLightClients}
+    algID="queryingStateLightClients"
+    options={{ "lineNumber": true }}
+/>
 
 Querying State Algorithm.
 
 ${QueryFullNode}$: Returns the response to the query requested from the Full Node for the query ${q}$ at block height ${h}$.
 
 ${validityCheck}_{root}$: Predicate that checks the validity of response ${res}$ and associated merkle proof $\pi$ by matching it against the Commit Root Hash ${root}$ obtained as a result of warp sync.
+:::
 
 ## -sec-num- Runtime Environment for Light Clients {#sect-runtime-environment-lightclient}
 
@@ -202,4 +220,4 @@ The response is the same as for the *Remote Read Request* message, respectively 
 :::
 ## -sec-num- Storage for Light Clients {#sect-storage-lightclient}
 
-The light client requires a persistent storage for saving the state of the blockchain. In addition it requires efficient Serialization/ De-serialization methods to transform SCALE ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) encoded network traffic for storing and reading from the persistent storage.
+The light client requires a persistent storage for saving the state of the blockchain. In addition it requires efficient Serialization/De-serialization methods to transform SCALE ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) encoded network traffic for storing and reading from the persistent storage.

@@ -4,6 +4,15 @@ title: Finality
 
 import Pseudocode from '@site/src/components/Pseudocode';
 import initiateGrandpa from '!!raw-loader!@site/src/algorithms/initiateGrandpa.tex';
+import playGrandpaRound from '!!raw-loader!@site/src/algorithms/playGrandpaRound.tex';
+import derivePrimary from '!!raw-loader!@site/src/algorithms/derivePrimary.tex';
+import bestFinalCandidate from '!!raw-loader!@site/src/algorithms/bestFinalCandidate.tex';
+import grandpaGhost from '!!raw-loader!@site/src/algorithms/grandpaGhost.tex';
+import bestPrevoteCandidate from '!!raw-loader!@site/src/algorithms/bestPrevoteCandidate.tex';
+import attemptToFinalizeAtRound from '!!raw-loader!@site/src/algorithms/attemptToFinalizeAtRound.tex';
+import finalizable from '!!raw-loader!@site/src/algorithms/finalizable.tex';
+import processCatchupRequest from '!!raw-loader!@site/src/algorithms/processCatchupRequest.tex';
+import processCatchupResponse from '!!raw-loader!@site/src/algorithms/processCatchupResponse.tex';
 
 ## -sec-num- Introduction {#id-introduction-4}
 
@@ -283,7 +292,13 @@ When a voter node rejoins the network after a disconnect from the voter set and 
 
 For each round ${r}$, an honest voter ${v}$ must participate in the voting process by following [Play-Grandpa-Round](sect-finality#algo-grandpa-round).
 
-\REQUIRE(${r}$) \STATE ${t}_{{{r},{v}}}\leftarrow$ Current local time \STATE $\text{}{m}{\left\lbrace{p}{r}{i}{m}{a}{r}{y}\right\rbrace}\leftarrow$ \call{Derive-Primary}{${r}$} \IF{${v}=\text{}{m}{\left\lbrace{p}{r}{i}{m}{a}{r}{y}\right\rbrace}$} \STATE \call{Broadcast}{${{M}_{{{v}}}^{{{r}-{1},\text{}{m}{\left\lbrace{F}\in\right\rbrace}}}}{\left($\right.}\call{Best-Final-Candidate}{${r}-{1}$}${)}$} \IF{\call{Best-Final-Candidate}{${r}-{1}$} $\geq{s}{l}{a}{n}{t}$ \textsc{Last-Finalized-Block}} \STATE \call{Broadcast}{${{M}_{{{v}}}^{{{r}-{1},\text{}{m}{\left\lbrace{P}{r}{i}{m}\right\rbrace}}}}{\left($\right.}\call{Best-Final-Candidate}{${r}-{1}$}${)}$} \ENDIF \ENDIF \STATE \call{Receive-Messages}{\textbf{until} Time $\geq{s}{l}{a}{n}{t}{t}_{{{r}_{,}{v}}}+{2}\times{T}$ \or ${r}$ \textbf{is} completable} \STATE ${L}\leftarrow$ \call{Best-Final-Candidate}{${r}-{1}$} \STATE ${N}\leftarrow$ \call{Best-PreVote-Candidate}{${r}$} \STATE \call{Broadcast}{${{M}_{{v}}^{{{r},\text{}{m}{\left\lbrace{p}{v}\right\rbrace}}}}{\left({N}\right)}$} \STATE \call{Receive-Messages}{\textbf{until} ${B}^{{{r},\text{}{m}{\left\lbrace{p}{v}\right\rbrace}}}_{v}\geq{s}{l}{a}{n}{t}{L}$ \and ${\left($\right.} Time $\geq{s}{l}{a}{n}{t}{t}_{{{r}_{,}{v}}}+{4}\times{T}$ \or ${r}$ \textbf{is} completable ${)}$} \STATE \call{Broadcast}{${{M}_{{v}}^{{{r},\text{}{m}{\left\lbrace{p}{c}\right\rbrace}}}}{\left({{B}_{{v}}^{{{r},\text{}{m}{\left\lbrace{p}{v}\right\rbrace}}}}\right)}$} \REPEAT \STATE \call{Receive-Messages}{} \STATE \call{Attempt-To-Finalize-At-Round}{${r}$} \UNTIL{${r}$ \textbf{is} completable \and \call{Finalizable}{${r}$} \and \textsc{Last-Finalized-Block} $\geq{s}{l}{a}{n}{t}$ \call{Best-Final-Candidate}{${r}-{1}$}} \STATE \call{Play-Grandpa-round}{${r}+{1}$} \REPEAT \STATE \call{Receive-Messages}{} \STATE \call{Attempt-To-Finalize-At-Round}{${r}$} \UNTIL{\textsc{Last-Finalized-Block} $\geq{s}{l}{a}{n}{t}$ \call{Best-Final-Candidate}{${r}$}} \IF{\textsc{Last-Completed-Round} $<{r}$} \STATE \textsc{Last-Completed-Round} $\leftarrow{r}$ \ENDIF
+###### Algorithm -algo-num- Play Grandpa Round {#algo-grandpa-round}
+:::algorithm
+<Pseudocode
+    content={playGrandpaRound}
+    algID="playGrandpaRound"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - ${T}$ is sampled from a log-normal distribution whose mean and standard deviation are equal to the average network delay for a message to be sent and received from one validator to another.
@@ -297,29 +312,72 @@ For each round ${r}$, an honest voter ${v}$ must participate in the voting proce
 - $\text{Attempt-To-Finalize-At-Round}{\left({r}\right)}$ is described in [Attempt-To-Finalize-At-Round](sect-finality#algo-attempt-to–finalize).
 
 - $\text{Finalizable}$ is defined in [Finalizable](sect-finality#algo-finalizable).
+:::
 
-\input ${r}$ \return ${r}{b}\text{mod}{\left|{\mathbb{{{V}}}}\right|}$
+###### Algorithm -algo-num- Derive Primary {#algo-derive-primary}
+:::algorithm
+<Pseudocode
+    content={derivePrimary}
+    algID="derivePrimary"
+    options={{ "lineNumber": true }}
+/>
 
 where ${r}$ is the GRANDPA round whose primary is to be determined.
+:::
 
-\input ${r}$ \state ${{B}_{{v}}^{{{r},{p}{v}}}}\leftarrow$ \call{GRANDPA-GHOST}{${r}$} \if{${r}={0}$} \return ${{B}_{{v}}^{{{r},{p}{v}}}}$ \else \state ${\mathcal{{{C}}}}\leftarrow$ B' \| B' \leqslant B_v^{r,pv} \| ${V}^{{{r},{p}{c}}}_{\left\lbrace{o}{p}{e}{r}{a}\to{r}{n}{a}{m}{e}{\left\lbrace{o}{b}{v}\right\rbrace}{\left({v}\right)},{p}{o}{t}\right\rbrace}{\left({B}'\right)}>{\frac{{{2}}}{{{3}}}}{\left|{\mathbb{{{V}}}}\right|}$ \if{${\mathcal{{{C}}}}=\phi$} \return ${{B}_{{v}}^{{{r},{p}{v}}}}$ \else \return ${E}\in{\mathcal{{{C}}}}:{H}_{{n}}{\left({E}\right)}={o}{p}{e}{r}{a}\to{r}{n}{a}{m}{e}{\left\lbrace\max\right\rbrace}\le{f}{t}{\left({H}_{{n}}{\left({B}'\right)}{\mid}{B}'\in{\mathcal{{{C}}}}{r}{i}{g}{h}{t}\right)}$ \endif \endif
+###### Algorithm -algo-num- Best Final Candidate {#algo-grandpa-best-candidate}
+:::algorithm
+<Pseudocode
+    content={bestFinalCandidate}
+    algID="bestFinalCandidate"
+    options={{ "lineNumber": true }}
+/>
 
 where $\#{{V}_{{\text{obv}{\left({v}\right)},{p}{o}{t}}}^{{{r},{p}{c}}}}$ is defined in [Definition -def-num-ref-](sect-finality#defn-total-potential-votes).
+:::
 
-\input ${r}$ \if{${r}={0}$} \state ${G}\leftarrow{B}_{{{l}\ast}}$ \else \state ${L}\leftarrow$ \call{Best-Final-Candidate}{${r}-{1}$} \state ${\mathcal{{{G}}}}=$ \forall B \> L \| ${{V}_{{{o}{p}{e}{r}{a}\to{r}{n}{a}{m}{e}{\left\lbrace{o}{b}{s}\right\rbrace}{\left({v}\right)}}}^{{{r},{p}{v}}}}{\left({B}\right)}\geq{s}{l}{a}{n}{t}{\frac{{{2}}}{{{3}}}}{\left|{\mathbb{{{V}}}}\right|}$ \if{${\mathcal{{{G}}}}=\phi$} \state ${G}\leftarrow{L}$ \else \state ${G}\in{\mathcal{{{G}}}}{\mid}{H}_{{n}}{\left({G}\right)}={o}{p}{e}{r}{a}\to{r}{n}{a}{m}{e}{\left\lbrace\max\right\rbrace}\le{f}{t}{\left({H}_{{n}}{\left({B}\right)}{\mid}\forall{B}\in{\mathcal{{{G}}}}{r}{i}{g}{h}{t}\right)}$ \endif \endif \return ${G}$
+###### Algorithm -algo-num- GRANDPA GHOST {#algo-grandpa-ghost}
+:::algorithm
+<Pseudocode
+    content={grandpaGhost}
+    algID="grandpaGhost"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - ${B}_{{\text{last}}}$ is the last block which has been finalized on the chain ([Definition -def-num-ref-](sect-finality#defn-finalized-block)).
 
 - $\#{{V}_{{\text{obs}{\left({v}\right)}}}^{{{r},{p}{v}}}}{\left({B}\right)}$ is defined in [Definition -def-num-ref-](sect-finality#defn-observed-votes).
+:::
 
-\input ${r}$ \state ${B}^{{{r},{p}{v}}}_{v}\leftarrow$ \call{GRANDPA-GHOST}{${r}$} \if{\call{Received}{${{M}_{{{v}_{{{p}{r}{i}{m}{a}{r}{y}}}}}^{{{r},{p}{r}{i}{m}}}}{\left({B}\right)}{)}$ \and ${B}^{{{r},{p}{v}}}_{v}\geq{s}{l}{a}{n}{t}{B}>{L}$}} \state ${N}\leftarrow{B}$ \else \state ${N}\leftarrow{B}^{{{r},{p}{v}}}_{v}$ \endif
+###### Algorithm -algo-num- Best PreVote Candidate {#algo-best-prevote-candidate}
+:::algorithm
+<Pseudocode
+    content={bestPrevoteCandidate}
+    algID="bestPrevoteCandidate"
+    options={{ "lineNumber": true }}
+/>
+:::
 
-\REQUIRE(${r}$) \STATE ${L}\leftarrow$ \textsc{Last-Finalized-Block} \STATE ${E}\leftarrow$ \call{Best-Final-Candidate}{${r}$} \IF{${E}\geq{s}{l}{a}{n}{t}{L}$ \and ${\left\lbrace{V}^{{{r},\text{}{m}{\left\lbrace{p}{c}\right\rbrace}}}_{\left\lbrace\text{}{m}{\left\lbrace{o}{b}{s}\right\rbrace}{\left({v}\right)}\right\rbrace}\right\rbrace}{\left({E}\right)}>\frac{{2}}{{3}}{\left|{\mathbb{{{V}}}}\right|}$} \STATE{\textsc{Last-Finalized-Block}$\leftarrow{E}$} \IF{${{M}_{{v}}^{{{r},\text{}{m}{\left\lbrace{F}\in\right\rbrace}}}}{\left({E}\right)}\notin$\textsc{Received-Messages}} \STATE \call{Broadcast}{${{M}_{{v}}^{{{r},\text{}{m}{\left\lbrace{F}\in\right\rbrace}}}}{\left({E}\right)}$} \RETURN \ENDIF \ENDIF
+###### Algorithm -algo-num- Attempt To Finalize At Round {#algo-attempt-to–finalize}
+:::algorithm
+<Pseudocode
+    content={attemptToFinalizeAtRound}
+    algID="attemptToFinalizeAtRound"
+    options={{ "lineNumber": true }}
+/>
+:::
 
-\REQUIRE(${r}$) \IF{${r}$ \textbf{is not} Completable} \RETURN \textbf{False} \ENDIF \STATE ${G}\leftarrow$ \call{GRANDPA-GHOST}{${J}^{{{r},{p}{v}}}{\left({B}\right)}$} \IF{${G}=\phi$} \RETURN \textbf{False} \ENDIF \STATE ${E}_{{r}}\leftarrow$ \call{Best-Final-Candidate}{${r}$} \IF{${E}_{{r}}\ne{q}\phi$ \and \call{Best-Final-Candidate}{${r}-{1}$} $\leq{s}{l}{a}{n}{t}{E}_{{r}}\leq{s}{l}{a}{n}{t}{G}$} \RETURN \textbf{True} \ELSE \RETURN \textbf{False} \ENDIF
+###### Algorithm -algo-num- Finalizable {#algo-finalizable}
+:::algorithm
+<Pseudocode
+    content={finalizable}
+    algID="finalizable"
+    options={{ "lineNumber": true }}
+/>
 
 where the condition for *completability* is defined in [Definition -def-num-ref-](sect-finality#defn-grandpa-completable).
+:::
 
 Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although [Play-Grandpa-Round](sect-finality#algo-grandpa-round) prevents us from moving to the round ${r}+{1}$ before finalizing the best final candidate of round ${r}-{1}$) The example in [Definition -def-num-ref-](sect-finality#defn-unfinalized-candidate) serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
 
@@ -411,7 +469,13 @@ When a Polkadot voter node has the same authority list as a peer voter node who 
 
 Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute [Process-Catchup-Request](sect-finality#algo-process-catchup-request). Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which [Play-Grandpa-Round](sect-finality#algo-grandpa-round) is not concluded.
 
-\input ${{M}_{{{i},{v}}}^{\text{Cat-q}}}{\left(\text{id}_{{\mathbb{{{V}}}}},{r}\right)}$ \if{${{M}_{{{i},{v}}}^{\text{Cat-q}}}{\left(\text{id}_{{\mathbb{{{V}}}}},{r}\right)}.\text{id}_{{\mathbb{{{V}}}}}\ne{q}\text{id}_{{\mathbb{{{V}}}}}$} \state \textbf{error} \`\`Catching up on different set'' \endif \if{${i}\notin{\mathbb{{{P}}}}$} \state \textbf{error} \`\`Requesting catching up from a non-peer'' \endif \if{${r}>$ \textsc{Last-Completed-Round}} \state \textbf{error} \`\`Catching up on a round in the future'' \endif \state \call{Send}{${i},{{M}_{{{v},{i}}}^{\text{Cat-s}}}{\left(\text{id}_{{\mathbb{{{V}}}}},{r}\right)}$}
+###### Algorithm -algo-num- Process Catchup Request {#algo-process-catchup-request}
+:::algorithm
+<Pseudocode
+    content={processCatchupRequest}
+    algID="processCatchupRequest"
+    options={{ "lineNumber": true }}
+/>
 
 **where**  
 - ${{M}_{{{i},{v}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up message received from peer ${i}$ ([Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-request-msg)).
@@ -425,14 +489,22 @@ Only GRANDPA voter nodes are required to respond to the catch-up requests. Addit
 - ${\mathtt{\text{Last-Completed-Round}}}$ is initiated in [Initiate-Grandpa](sect-finality#algo-initiate-grandpa) and gets updated by [Play-Grandpa-Round](sect-finality#algo-grandpa-round).
 
 - ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response ([Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-response-msg)).
+:::
 
 #### -sec-num- Processing catch-up responses {#id-processing-catch-up-responses}
 
 A Catch-up response message contains critical information for the requester node to update their view on the active rounds which are being voted on by GRANDPA voters. As such, the requester node should verify the content of the catch-up response message and subsequently updates its view of the state of the finality of the Relay chain according to [Process-Catchup-Response](sect-finality#algo-process-catchup-response).
 
-\input ${{M}_{{{v},{i}}}^{\text{Cat-s}}}{\left(\text{id}_{{{\mathbb{{{V}}}}}},{r}\right)}$ \state ${{M}_{{{v},{i}}}^{\text{Cat-s}}}{\left(\text{id}_{{{\mathbb{{{V}}}}}},{r}\right)}.\text{id}_{{{\mathbb{{{V}}}}}},{r},{J}^{{{r},{p}{v}}}{\left({B}\right)},{J}^{{{r},{p}{c}}}{\left({B}\right)},{H}_{{h}}{\left({B}'\right)},{H}_{{i}}{\left({B}'\right)}\leftarrow\text{Dec}_{{{S}{C}}}{\left({{M}_{{{v},{i}}}^{{{C}{a}{t}-{s}}}}{\left(\text{id}_{{{\mathbb{{{V}}}}}},{r}\right)}$\right.} \if{${{M}_{{{v},{i}}}^{\text{Cat-s}}}{\left(\text{id}_{{{\mathbb{{{V}}}}}},{r}\right)}.\text{id}_{{{\mathbb{{{V}}}}}}\ne{q}\text{id}_{{{\mathbb{{{V}}}}}}$} \state \textbf{error} \`\`Catching up on different set'' \endif \if{${r}\leq{s}{l}{a}{n}{t}$ \textsc{Leading-Round}} \state \textbf{error} \`\`Catching up in to the past'' \endif \if{${J}^{{{r},{p}{v}}}{\left({B}\right)}$ \textbf{is not} valid} \state \textbf{error} \`\`Invalid pre-vote justification'' \endif \if{${J}^{{{r},{p}{c}}}{\left({B}\right)}$ \textbf{is not} valid} \state \textbf{error} \`\`Invalid pre-commit justification'' \endif \state ${G}\leftarrow$ \call{GRANDPA-GHOST}{${J}^{{{r},{p}{v}}}{\left({B}\right)}$} \if{${G}=\phi$} \state \textbf{error} \`\`GHOST-less Catch-up'' \endif \if{${r}$ \textbf{is not} completable} \state \textbf{error} \`\`Catch-up round is not completable'' \endif \if{${J}^{{{r},{p}{c}}}{\left({B}\right)}$ justifies ${B}'$ finalization} \state \textbf{error} \`\`Unjustified Catch-up target finalization'' \endif \state \textsc{Last-Completed-Round} $\leftarrow{r}$ \if{${i}\in{\mathbb{{{V}}}}$} \state \call{Play-Grandpa-round}{${r}+{1}$} \endif
+###### Algorithm -algo-num- Process Catchup Response {#algo-process-catchup-response}
+:::algorithm
+<Pseudocode
+    content={processCatchupResponse}
+    algID="processCatchupResponse"
+    options={{ "lineNumber": true }}
+/>
 
 where ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response received from node ${v}$ ([Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-response-msg)).
+:::
 
 ## -sec-num- Bridge design (BEEFY) {#sect-grandpa-beefy}
 

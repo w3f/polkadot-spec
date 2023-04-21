@@ -2,6 +2,9 @@
 title: Consensus
 ---
 
+import Pseudocode from '@site/src/components/Pseudocode';
+import epochRandomness from '!!raw-loader!@site/src/algorithms/epochRandomness.tex';
+
 ## -sec-num- BABE digest messages {#id-babe-digest-messages}
 
 The Runtime is required to provide the BABE authority list and randomness to the host via a consensus message in the header of the first block of each epoch.
@@ -10,6 +13,13 @@ The digest published in Epoch ${\mathcal{{{E}}}}_{{n}}$ is enacted in ${\mathcal
 
 The computation of the randomeness seed is described in [Epoch-Randomness](id-consensus#algo-epoch-randomness) which uses the concept of epoch subchain as described in host specification and the value ${d}_{{B}}$, which is the VRF output computed for slot ${s}_{{B}}$.
 
-\Require ${n}>{2}$ \State \textbf{init} $\rho\leftarrow\phi$ \For{${B}$ in \call{SubChain}{${\mathcal{{{E}}}}_{{{n}-{2}}}$}} \State $\rho\leftarrow\rho{\mid}{\mid}{d}_{{B}}$ \EndFor \Return \call{Blake2b}{\call{Epoch-Randomness}{${n}-{1}$}${\left|{\left|{n}\right|}\right|}\rho$}
+###### Algorithm -algo-num- Epoch Randomness {#algo-epoch-randomness}
+:::algorithm
+<Pseudocode
+    content={epochRandomness}
+    algID="epochRandomness"
+    options={{ "lineNumber": true }}
+/>
 
 where ${n}$ is the epoch index.
+:::
