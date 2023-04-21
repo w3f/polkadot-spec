@@ -83,6 +83,8 @@ title: -chap-num- Chapter Title
 ```
 The placeholder `-chap-num-` will be replaced by the number assigned by [`numerationSystem`](preBuild/numerationSystem/index.ts).
 
+If you add a chapter (or "Macro Chapter"), you have also to add it to the [`sidebars.js`](sidebars.js) file, and adjust the numbers of the other chapters.
+
 #### Sections
 To write a new section, use the following syntax:
 ```md
