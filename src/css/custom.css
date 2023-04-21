@@ -84,6 +84,7 @@ div#refs > div.csl-entry {
 
 div#refs > div.csl-entry > div.csl-left-margin {
   margin-right: 1rem;
+  font-weight: 700;
 }
 
 .glossary-term {
@@ -93,6 +94,20 @@ div#refs > div.csl-entry > div.csl-left-margin {
 .glossary-definition {
   list-style: none !important;
   padding-left: 1em !important;
+}
+.ps-root .ps-algorithm {
+  font-size: 1.1em;
+  margin-bottom: 1em;
+  background-color: white;
+  padding: 0.5em;
+}
+
+.ps-algorithm > .ps-line {
+  padding-bottom: 0.25em;
+}
+
+.ps-algorithmic > .ps-line {
+  padding-top: 0.25em;
 }
 
 /* ==========================================================================

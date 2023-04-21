@@ -244,6 +244,7 @@ Furthermore [Validate-Transactions-and-Store](chap-state#algo-validate-transacti
 <Pseudocode
     content={validateTransactionsAndStore}
     algID="validateTransactionsAndStore"
+    options={{ "lineNumber": true }}
 />
 
 **where**  

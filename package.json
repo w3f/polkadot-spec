@@ -6,7 +6,7 @@
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "build": "./scripts/kaitai_render.sh; ./scripts/tsc.sh; npm run preBuild; docusaurus build",
-    "preBuild": "node ./preBuild/graphviz-svg-fixer/index.js; node ./preBuild/numeration-system/index.js",
+    "preBuild": "node ./preBuild/graphvizSvgFixer/index.js; node ./preBuild/numerationSystem/index.js; node ./preBuild/addBibliographyTitle/index.js",
     "preBuild_no_kaitai": "node ./preBuild/numeration-system/index.js",
     "build_no_kaitai": "./scripts/tsc.sh; npm run preBuild_no_kaitai; docusaurus build",
     "swizzle": "docusaurus swizzle",

@@ -615,5 +615,3 @@ The Polkadot genesis header is a data structure conforming to block header forma
 :::info
 Erasure Encoding has not been documented yet.
 :::
-
-## Bibliography {#bibliography}
