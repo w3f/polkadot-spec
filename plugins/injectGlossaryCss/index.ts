@@ -1,4 +1,4 @@
-import safePluginExection from "../safePluginExection";
+import safePluginExecution from "../safePluginExecution";
 
 const injectCss = () => {
   const timeoutMs = 500;
@@ -28,7 +28,7 @@ const injectCss = () => {
         postBodyTags: [{
           tagName: 'script',
           innerHTML: `
-						(${safePluginExection.toString()})(${injectCssClasses.toString()}, ${timeoutMs})
+						(${safePluginExecution.toString()})(${injectCssClasses.toString()}, ${timeoutMs})
 					`
         }],
       };

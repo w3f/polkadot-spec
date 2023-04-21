@@ -65,7 +65,7 @@ async function createConfig() {
             routeBasePath: '/', // Serve the docs at the site's root
             admonitions: {
               tag: ':::',
-              keywords: ['definition', 'algorithm'],
+              keywords: ['definition', 'algorithm', 'index'],
               extendDefaults: true,
             },
           },

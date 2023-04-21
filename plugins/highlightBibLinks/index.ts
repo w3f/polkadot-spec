@@ -1,4 +1,4 @@
-import safePluginExection from "../safePluginExection";
+import safePluginExecution from "../safePluginExecution";
 
 const highlightBibLinks = () => {
   const timeoutMs = 500;
@@ -21,7 +21,7 @@ const highlightBibLinks = () => {
         postBodyTags: [{
           tagName: 'script',
           innerHTML: `
-            (${safePluginExection.toString()})(${transformLinks.toString()}, ${timeoutMs})
+            (${safePluginExecution.toString()})(${transformLinks.toString()}, ${timeoutMs})
           `
         }],
       };

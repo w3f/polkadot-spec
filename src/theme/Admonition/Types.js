@@ -10,13 +10,17 @@ function DefinitionAdmonition(props) {
   );
 }
 
+function IndexAdmonition(props) {
+  return (
+    <div className='index'>{props.children}</div>
+  );
+}
+
 const AdmonitionTypes = {
   ...DefaultAdmonitionTypes,
-
-  // Add all your custom admonition types here...
-  // You can also override the default ones if you want
   'definition': DefinitionAdmonition,
   'algorithm': DefinitionAdmonition,
+  'index': IndexAdmonition,
 };
 
 export default AdmonitionTypes;

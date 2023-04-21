@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-const mdPath = "src/docs"
+const mdPath = "docs";
 
 export interface HtmlFile {
   route: string;

@@ -1,4 +1,4 @@
-const safePluginExection = (callback: () => void, timeout_ms: number) => {
+const safePluginExecution = (callback: () => void, timeout_ms: number) => {
     let prevPageUrl = "";
     let pageUrl = "";
     
@@ -14,5 +14,5 @@ const safePluginExection = (callback: () => void, timeout_ms: number) => {
     window.addEventListener('locationchange', runScript);
 };
 
-export default safePluginExection;
+export default safePluginExecution;
   

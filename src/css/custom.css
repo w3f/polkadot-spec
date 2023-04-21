@@ -110,6 +110,12 @@ div#refs > div.csl-entry > div.csl-left-margin {
   padding-top: 0.25em;
 }
 
+.index > ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 1.2em;
+}
+
 /* ==========================================================================
    General components
    ========================================================================== */

@@ -1,4 +1,4 @@
-import safePluginExection from "../safePluginExection";
+import safePluginExecution from "../safePluginExecution";
 
 const resizeSvg = () => {
   const timeoutMs = 500;
@@ -42,7 +42,7 @@ const resizeSvg = () => {
         postBodyTags: [{
           tagName: 'script',
           innerHTML: `
-						(${safePluginExection.toString()})(${adjustSvg.toString()}, ${timeoutMs})
+						(${safePluginExecution.toString()})(${adjustSvg.toString()}, ${timeoutMs})
 					`
         }],
       };
