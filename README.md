@@ -10,7 +10,7 @@ This website is built using [Docusaurus 2](https://docusaurus.io/), a modern sta
 
 ```bash
 npm i
-npm run build_no_kaitai # or just build to also rebuild kaitai SVG files
+npm run build # or build_with_kaitai to also rebuild kaitai SVG files
 npm run serve
 ```
 
