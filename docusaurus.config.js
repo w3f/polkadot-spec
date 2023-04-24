@@ -12,7 +12,7 @@ async function createConfig() {
   const citation = (await import('rehype-citation')).default;
   return {
     title: 'Polkadot Protocol Specification',
-    tagline: 'The Polkadot Protocol Specification',
+    tagline: 'Enabling Implementers - Version 0.2.1',
     favicon: 'img/polkadot-logo.png',
 
     // Set the production url of your site here

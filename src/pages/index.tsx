@@ -20,13 +20,13 @@ function HomepageHeader() {
                     typeSpeed={120} >
           </Typed>
         </h1>
+        <p className="hero__subtitle">{siteConfig.tagline}</p>
         <div className={styles.buttons}>
           <Link
             className="button button--secondary button--lg"
             to="/polkadot-spec">
             Read the Spec
           </Link>
-          
         </div>
       </div>
     </header>

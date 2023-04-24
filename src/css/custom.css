@@ -247,10 +247,11 @@ button.menu__button {
    Home
    ========================================================================== */
 
-
 .hero--primary {
   background: white;
   color: #212529;
+  margin-top: 8vh;
+  margin-bottom: 8vh;
 }
 
 .homeContainer {
@@ -343,6 +344,13 @@ button.menu__button {
   }
 }
 
+.features_t9lD {
+  color: #fff;
+  background-color: #e6007a;
+  background-image: linear-gradient(217deg, rgba(196, 0, 97, 0.8), rgba(196, 0, 97, 0) 70%),
+    linear-gradient(127deg, rgba(230, 0, 122, 0.8), rgba(230, 0, 122, 0) 70%),
+    linear-gradient(336deg, rgba(103, 69, 210, 0.7), rgba(103, 69, 210, 0) 70%);
+}
 
 /* ==========================================================================
   Banner / Announcement bar
