@@ -7,7 +7,6 @@ export interface HtmlFile {
 }
 
 const addBibliographyTitle = () => {
-    // skip directories
     const mdFileNames = fs.readdirSync(mdPath).filter((fileName) => {
         return !fs.statSync(mdPath + "/" + fileName).isDirectory();
     });
