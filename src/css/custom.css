@@ -363,27 +363,8 @@ div[role=banner] .close:focus {
    Home Footer
    ========================================================================== */
 
-.homeFooterContainer {
-  padding: 6rem 0 4rem;
-  background-image: linear-gradient(217deg, rgba(196, 0, 97, 0.8), rgba(196, 0, 97, 0) 70%),
-    linear-gradient(127deg, rgba(230, 0, 122, 0.8), rgba(230, 0, 122, 0) 70%),
-    linear-gradient(336deg, rgba(103, 69, 210, 0.7), rgba(103, 69, 210, 0) 70%);
-  background-color: #e6007a;
-}
-
-.homeFooterContainer .col-lg-6 {
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: flex-start;
-  margin-bottom: 2rem;
-}
-
-.homeFooterContainer .col-lg-6 > *:first-child {
-  margin-bottom: 1.3rem;
-}
-
-.homeFooterContainer p {
-  margin-bottom: 2.5rem;
+.footer--dark {
+    --ifm-footer-background-color: #172026;
 }
 
 /* ==========================================================================

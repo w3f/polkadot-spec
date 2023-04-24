@@ -100,8 +100,6 @@ async function createConfig() {
     themeConfig:
       /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
       ({
-        // Replace with your project's social card
-        image: 'img/docusaurus-social-card.jpg',
         docs: {
           sidebar: {
             hideable: true,
@@ -122,10 +120,36 @@ async function createConfig() {
           ],
         },
         footer: {
+          style: 'dark',
+          links: [
+            {
+              title: 'More Info',
+              items: [
+                {
+                  label: 'GitHub',
+                  href: 'https://github.com/w3f/polkadot-spec',
+                },
+                {
+                  label: 'Website',
+                  href: 'https://web3.foundation/',
+                },
+                {
+                  label: 'Privacy Policy',
+                  to: 'docs/Support%20Docs/privacy_policy',
+                },
+              ],
+            }, 
+            {
+              title: 'Connect',
+              items: [
+                {
+                  label: 'Twitter',
+                  href: 'https://twitter.com/Web3foundation',
+                },
+              ],
+            },
+          ],
           copyright: `© ${new Date().getFullYear()} Web3 Foundation`,
-          logo: {
-            src: "img/Polkadot_Logo_Horizontal_White.svg",
-          },
         },
         prism: {
           theme: lightCodeTheme,
