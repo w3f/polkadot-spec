@@ -247,6 +247,12 @@ button.menu__button {
    Home
    ========================================================================== */
 
+
+.hero--primary {
+  background: white;
+  color: #212529;
+}
+
 .homeContainer {
   background: white;
   text-align: center;
@@ -357,14 +363,6 @@ div[role=banner] .close:hover,
 div[role=banner] .close:focus {
   color: #fff !important;
   opacity: 1;
-}
-
-/* ==========================================================================
-   Home Footer
-   ========================================================================== */
-
-.footer--dark {
-    --ifm-footer-background-color: #172026;
 }
 
 /* ==========================================================================
@@ -563,6 +561,10 @@ article iframe {
   font-size: 16px;
   line-height: 24px;
   position: relative;
+}
+
+.footer--dark {
+  --ifm-footer-background-color: #172026;
 }
 
 /*
