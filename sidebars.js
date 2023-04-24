@@ -19,17 +19,12 @@ const sidebars = {
   tutorialSidebar: [
     {
       type: 'doc',
-      label: 'Index',
-      id: 'start',
-    },
-    {
-      type: 'doc',
-      label: 'Polkadot Protocol',
+      label: 'Protocol',
       id: 'id-polkadot-protocol',
     },
     {
       type: 'category',
-      label: 'Polkadot Host',
+      label: 'Host',
       link: {type:'doc', id:'part-polkadot-host'},
       items: [
         {
@@ -76,7 +71,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Polkadot Runtime',
+      label: 'Runtime',
       link: {type:'doc', id:'part-polkadot-runtime'},
       items: [
         {
