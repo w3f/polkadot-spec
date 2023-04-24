@@ -184,6 +184,13 @@ const numerationSystem = () => {
     fs.mkdirSync(filePathOut);
   }
 
+  // delete all the md files in the output folder, skipping the folders if any
+  fs.readdirSync(filePathOut).forEach((file) => {
+    if (file.endsWith('.md')) {
+      fs.unlinkSync(`${filePathOut}/${file}`);
+    }
+  });
+
   // now we can write the files
   for (let mdFile of mdFilesToCompile) {
     fs.writeFileSync(`${filePathOut}/${mdFile.routeId}.md`, mdFile.md);
