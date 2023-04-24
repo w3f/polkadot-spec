@@ -254,6 +254,10 @@ button.menu__button {
   margin-bottom: 8vh;
 }
 
+.fillWhite {
+  fill: white;
+}
+
 .homeContainer {
   background: white;
   text-align: center;
