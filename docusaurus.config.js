@@ -135,7 +135,7 @@ async function createConfig() {
                 },
                 {
                   label: 'Privacy Policy',
-                  to: 'docs/Support%20Docs/privacy_policy',
+                  to: 'Support%20Docs/privacy_policy',
                 },
               ],
             }, 

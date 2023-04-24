@@ -7,7 +7,10 @@ export interface HtmlFile {
 }
 
 const addBibliographyTitle = () => {
-    let mdFileNames = fs.readdirSync(mdPath);
+    // skip directories
+    const mdFileNames = fs.readdirSync(mdPath).filter((fileName) => {
+        return !fs.statSync(mdPath + "/" + fileName).isDirectory();
+    });
     for (let mdFileName of mdFileNames) {
         let mdFile = fs.readFileSync(mdPath + "/" + mdFileName, "utf8");
         if (mdFile.includes("[@")) {
