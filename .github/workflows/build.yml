@@ -8,4 +8,4 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '16.x'
-      - run: npm i && npm run build_no_kaitai
+      - run: npm i && npm run build
