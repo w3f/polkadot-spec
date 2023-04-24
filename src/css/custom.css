@@ -254,6 +254,11 @@ button.menu__button {
   margin-bottom: 8vh;
 }
 
+.navbar__logo {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .fillWhite {
   fill: white;
 }

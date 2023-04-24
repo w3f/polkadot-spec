@@ -106,12 +106,23 @@ async function createConfig() {
           },
         },
         navbar: {
-          title: 'Polkadot Protocol Specification',
           logo: {
             alt: 'Polkadot Logo',
-            src: 'img/polkadot-logo.png',
+            src: 'img/Polkadot_Logo_Horizontal_Pink-Black.svg',
           },
           items: [
+            {
+              type: 'doc',
+              docId: 'part-polkadot-host',
+              position: 'right',
+              label: 'Host',
+            },
+            {
+              type: 'doc',
+              docId: 'part-polkadot-runtime',
+              position: 'right',
+              label: 'Runtime',
+            },
             {
               href: 'https://github.com/w3f/polkadot-spec',
               label: 'GitHub',
