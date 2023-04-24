@@ -6,6 +6,7 @@ type FeatureItem = {
   title: string;
   Svg: React.ComponentType<React.ComponentProps<'svg'>>;
   description: JSX.Element;
+  className?: string;
 };
 
 const FeatureList: FeatureItem[] = [
@@ -36,16 +37,17 @@ const FeatureList: FeatureItem[] = [
         See <code><a href="https://github.com/soramitsu/kagome">Kagome by Soramitsu</a></code>
       </>
     ),
+    className: styles.kagome,
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({title, Svg, description, className}: FeatureItem) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
       <div className='fillWhite'>
-        <Svg className={styles.featureSvg} role="img" />
-        </div>
+        <Svg className={styles.featureSvg + `${className ? " " + className : ""}`} role="img" />
+      </div>
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
