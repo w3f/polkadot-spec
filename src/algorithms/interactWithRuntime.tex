@@ -1,0 +1,9 @@
+\begin{algorithm}
+\caption{Interact-With-Runtime}
+\begin{algorithmic}
+    \require $F, H_b(B),(A_1,\ldots,A_n)$
+    \state $\mathcal{S}_B \leftarrow$ \call{Set-State-At}{$H_b(B)$}
+    \state $A \leftarrow Enc_{SC}((A_1, \ldots, A_n))$
+    \state \call{Call-Runtime-Entrypoint}{$R_B, \mathcal{RE}_B, F, A, A_{len}$}
+\end{algorithmic}
+\end{algorithm}

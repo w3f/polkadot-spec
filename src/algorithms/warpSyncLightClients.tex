@@ -1,0 +1,14 @@
+\begin{algorithm}
+\caption{Warp-Sync-Light-Clients}
+\begin{algorithmic}
+    \INPUT BlockHeader startblock, the initial block to start the sync. May not be the Genesis Block. 
+    \OUTPUT CommitmentRootHash $root$, State Tries Root hash of the latest finalized Block. 
+    \STATE \textsc{fullnode} $\leftarrow$ SelectFullNode  
+    \STATE \textsc{latestBlockHeader, grandpaJustifications} $\leftarrow$ SyncWithNode(\textsc{fullnode})
+    \STATE \textsc{isVerified} $\leftarrow$ verifyAuthoritySetChange(\textsc{grandpaJustifications}) $\land$ verifyFinality(\textsc{latestBlockHeader})
+    \IF{\textsc{isVerified}}
+        \STATE $return$ $SOME$ getCommitmentRootHash(\textsc{latestBlockHeader})
+    \ENDIF
+    \STATE {$throw$ $ERROR$}
+\end{algorithmic}
+\end{algorithm}

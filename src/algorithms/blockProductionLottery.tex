@@ -1,0 +1,12 @@
+\begin{algorithm}
+\caption{Block-Production-Lottery}
+\begin{algorithmic}
+    \require sk
+    \state $r \leftarrow$ \call{Epoch-Randomness}{$n$}
+    \for{$i := 1 ~\textbf{to}~ sc_n$}
+        \state $(\pi, d) \leftarrow$ \call{VRF}{$r, i, sk$}
+        \state $A[i] \leftarrow (d, \pi)$
+    \endfor
+    \return{A}
+\end{algorithmic}
+\end{algorithm}

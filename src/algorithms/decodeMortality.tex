@@ -1,0 +1,12 @@
+\begin{algorithm}
+\caption{Decode Mortality}
+\begin{algorithmic}
+    \Require{$T_{mor}$}
+    \Return $\textit{Immortal} \enspace \textbf{if} \enspace T^{b0}_{mor} = 0$
+    \State \textbf{init} $enc = T^{b0}_{mor} + (T^{b1}_{mor} \ll 8)$
+    \State \textbf{init} $M_{per} = 2 \ll (enc\ mod\ (1 \ll 4))$
+    \State \textbf{init} $factor =$ \call{Limit}{$M_{per} \gg 12, 1, \phi$}
+    \State \textbf{init} $M_{pha} = (enc \gg 4) * factor$
+    \Return $(M_{per}, M_{pha})$
+\end{algorithmic}
+\end{algorithm}

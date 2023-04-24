@@ -1,0 +1,33 @@
+\begin{algorithm}
+\caption{Process-Catchup-Response}
+\begin{algorithmic}
+    \input $M_{v,i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r)$
+    \state $M_{v,i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r).\text{id}_{\mathbb{V}}, r, J^{r, pv}(B), J^{r, pc}(B), H_h(B'), H_i(B') \leftarrow \text{Dec}_{SC}(M_{v, i}^{Cat-s}(\text{id}_{\mathbb{V}}, r)$
+    \if{$M_{v, i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r).\text{id}_{\mathbb{V}} \neq \text{id}_{\mathbb{V}}$}
+        \state \textbf{error} ``Catching up on different set''
+    \endif
+    \if{$r \leqslant$ \textsc{Leading-Round}}
+        \state \textbf{error} ``Catching up in to the past''
+    \endif
+    \if{$J^{r, pv}(B)$ \textbf{is not} valid}
+        \state \textbf{error} ``Invalid pre-vote justification''
+    \endif
+    \if{$J^{r, pc}(B)$ \textbf{is not} valid}
+        \state \textbf{error} ``Invalid pre-commit justification''
+    \endif
+    \state $G \leftarrow$ \call{GRANDPA-GHOST}{$J^{r, pv}(B)$}
+    \if{$G = \phi$}
+        \state \textbf{error} ``GHOST-less Catch-up''
+    \endif
+    \if{$r$ \textbf{is not} completable}
+        \state \textbf{error} ``Catch-up round is not completable''
+    \endif
+    \if{$J^{r, pc}(B)$ justifies $B'$ finalization}
+        \state \textbf{error} ``Unjustified Catch-up target finalization''
+    \endif
+    \state \textsc{Last-Completed-Round} $\leftarrow r$
+    \if{$i \in \mathbb{V}$}
+        \state \call{Play-Grandpa-round}{$r + 1$}
+    \endif
+\end{algorithmic}
+\end{algorithm}

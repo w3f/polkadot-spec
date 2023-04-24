@@ -1,0 +1,36 @@
+\begin{algorithm}
+\caption{Play-Grandpa-Round}
+\begin{algorithmic}
+    \REQUIRE($r$)
+    \STATE $t_{r, v} \leftarrow$ Current local time
+    \STATE $\textrm{primary} \leftarrow$ \call{Derive-Primary}{$r$}
+    \IF{$v = \textrm{primary}$}
+      \STATE \call{Broadcast}{$M_{v}^{r - 1, \textrm{Fin}}($\call{Best-Final-Candidate}{$r - 1$}$)$}
+      \IF{\call{Best-Final-Candidate}{$r - 1$} $\geqslant$ \textsc{Last-Finalized-Block}}
+        \STATE \call{Broadcast}{$M_{v}^{r - 1, \textrm{Prim}}($\call{Best-Final-Candidate}{$r - 1$}$)$}
+      \ENDIF
+    \ENDIF
+    \STATE \call{Receive-Messages}{\textbf{until} Time $\geqslant t_{r_,v} + 2 \times T$ \or $r$ \textbf{is} completable}
+    \STATE $L \leftarrow$ \call{Best-Final-Candidate}{$r - 1$}
+    \STATE $N \leftarrow$ \call{Best-PreVote-Candidate}{$r$}
+    \STATE \call{Broadcast}{$M_v^{r, \textrm{pv}} (N)$}
+    \STATE \call{Receive-Messages}{\textbf{until} $B^{r,\textrm{pv}}_v \geqslant L$ \and $($ Time $\geqslant t_{r_,v} + 4 \times T$ \or $r$ \textbf{is} completable $)$}
+    \STATE \call{Broadcast}{$M_v^{r, \textrm{pc}}(B_v^{r, \textrm{pv}})$}
+    
+    \REPEAT
+      \STATE \call{Receive-Messages}{}
+      \STATE \call{Attempt-To-Finalize-At-Round}{$r$}
+    \UNTIL{$r$ \textbf{is} completable \and \call{Finalizable}{$r$} \and \textsc{Last-Finalized-Block} $\geqslant$ \call{Best-Final-Candidate}{$r - 1$}}
+    
+    \STATE \call{Play-Grandpa-round}{$r + 1$}
+    
+    \REPEAT
+      \STATE \call{Receive-Messages}{}
+      \STATE \call{Attempt-To-Finalize-At-Round}{$r$}
+    \UNTIL{\textsc{Last-Finalized-Block} $\geqslant$ \call{Best-Final-Candidate}{$r$}}
+    
+    \IF{$r > $ \textsc{Last-Completed-Round}}
+      \STATE \textsc{Last-Completed-Round} $\leftarrow r$
+    \ENDIF
+\end{algorithmic}
+\end{algorithm}

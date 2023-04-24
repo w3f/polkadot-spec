@@ -1,0 +1,12 @@
+\begin{algorithm}
+\caption{Best-PreVote-Candidate}
+\begin{algorithmic}
+    \input $r$
+    \state $B^{r, pv}_v \leftarrow$ \call{GRANDPA-GHOST}{$r$}
+    \if{\call{Received}{$M_{v_{primary}}^{r, prim}(B))$ \and $B^{r, pv}_v \geqslant B > L$}}
+        \state $N \leftarrow B$
+    \else
+        \state $N \leftarrow B^{r, pv}_v$
+    \endif
+\end{algorithmic}
+\end{algorithm}

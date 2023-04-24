@@ -1,0 +1,16 @@
+\begin{algorithm}
+\caption{Process-Catchup-Request}
+\begin{algorithmic}
+    \input $M_{i, v}^\text{Cat-q}(\text{id}_\mathbb{V}, r)$
+    \if{$M_{i, v}^\text{Cat-q}(\text{id}_\mathbb{V}, r).\text{id}_\mathbb{V} \neq \text{id}_\mathbb{V}$}
+        \state \textbf{error} ``Catching up on different set''
+    \endif
+    \if{$i \notin \mathbb{P}$}
+        \state \textbf{error} ``Requesting catching up from a non-peer''
+    \endif
+    \if{$r >$ \textsc{Last-Completed-Round}}
+        \state \textbf{error} ``Catching up on a round in the future''
+    \endif
+    \state \call{Send}{$i, M_{v, i}^\text{Cat-s}(\text{id}_\mathbb{V}, r)$}
+\end{algorithmic}
+\end{algorithm}

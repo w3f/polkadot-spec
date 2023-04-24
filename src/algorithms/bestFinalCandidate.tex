@@ -1,0 +1,17 @@
+\begin{algorithm}
+\caption{Best-Final-Candidate}
+\begin{algorithmic}
+    \input $r$
+    \state $B_v^{r, pv} \leftarrow$ \call{GRANDPA-GHOST}{$r$}
+    \if{$r = 0$}
+        \return $B_v^{r, pv}$
+    \else
+        \state $\mathcal{C} \leftarrow \{ B' | B' \leqslant B_v^{r,pv} | \#V^{r, pc}_{\operatorname{obv}(v), pot}(B') > \frac{2}{3} |\mathbb{V}| \}$
+        \if{$\mathcal{C} = \phi$}
+            \return $B_v^{r, pv}$
+        \else
+            \return $E \in \mathcal{C} : H_n (E) = \operatorname{max}\left(H_n (B') | B' \in \mathcal{C}\right)$
+        \endif
+    \endif
+\end{algorithmic}
+\end{algorithm}

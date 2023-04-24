@@ -1,0 +1,12 @@
+\begin{algorithm}
+\caption{Verify-Slot-Winner}
+\begin{algorithmic}
+    \require $B$
+    \state $\mathcal{E}_c \leftarrow$ \textsc{Current-Epoch}
+    \state $\rho \leftarrow$ \call{Epoch-Randomness}{$c$}
+    \state \call{Verify-VRF}{$\rho, H_{BABE}(B).(d_B, \pi_B), H_{BABE}(B).s, c$}
+    \if{$d_B \geqslant \tau$}
+        \state \textbf{error} ``Block producer is not a winner of the slot''
+    \endif
+\end{algorithmic}
+\end{algorithm}

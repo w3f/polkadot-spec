@@ -1,0 +1,16 @@
+\begin{algorithm}
+\caption{"request\_judgement"` Runtime function benchmark}
+\begin{algorithmic}
+    \Ensure $\mathcal{W}$
+    \State \textbf{init} $collection = \{\}$
+    \For{$amount \leftarrow 1,MaxRegistrars$}
+        \State \call{Generate-Registrars}{$amount$}
+        \State $caller \leftarrow$ \call{Create-Account}{$caller, 1$}
+        \State \call{Set-Balance}{$caller, 100$}
+        \State $time \leftarrow$ \call{Timer}{\call{Request-Judgement}{\call{Random}{$amount$}$, 100$}}
+        \State \call{Add-To}{$collection, time$}
+    \EndFor
+    \State $\mathcal{W} \leftarrow$ \call{Compute-Weight}{$collection$}
+    \Return $\mathcal{W}$
+\end{algorithmic}
+\end{algorithm}

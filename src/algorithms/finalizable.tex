@@ -1,0 +1,19 @@
+\begin{algorithm}
+\caption{Finalizable}
+\begin{algorithmic}
+    \REQUIRE($r$)
+    \IF{$r$ \textbf{is not} Completable}
+        \RETURN \textbf{False}
+    \ENDIF
+    \STATE $G \leftarrow$ \call{GRANDPA-GHOST}{$J^{r, pv}(B)$}
+    \IF{$G = \phi$}
+        \RETURN \textbf{False}
+    \ENDIF
+    \STATE $E_r \leftarrow$ \call{Best-Final-Candidate}{$r$}
+    \IF{$E_r \neq \phi$ \and \call{Best-Final-Candidate}{$r - 1$} $\leqslant E_r \leqslant G$}
+        \RETURN \textbf{True}
+    \ELSE
+        \RETURN \textbf{False}
+    \ENDIF
+\end{algorithmic}
+\end{algorithm}

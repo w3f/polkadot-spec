@@ -1,67 +1,186 @@
 # Polkadot Protocol Specification
 
-[![License](https://img.shields.io/github/license/w3f/polkadot-spec.svg)](https://github.com/w3f/polkadot-spec/blob/main/LICENSE)
-[![Latest Release](https://img.shields.io/github/release/w3f/polkadot-spec.svg)](https://github.com/w3f/polkadot-spec/releases/latest)
-[![Specification Publication](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.deb.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.deb.yml)
-[![Cachix Cache](https://img.shields.io/badge/cachix-polkadot--spec-blue.svg)](https://polkadot-spec.cachix.org)
-[![Nix Integration](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.nix.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/asciidoctor.nix.yml)
-
 Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository contains the official specification for the Polkadot Protocol.
  
 The latest releases of the *Polkadot Protocol Specification* can be found on [spec.polkadot.network](https://spec.polkadot.network) or on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
 
-The Polkadot specification is written in [AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest) and currently compiled with [Asciidoctor](https://asciidoctor.org/).
+This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+
+## Local Development
+
+```bash
+npm i
+npm run build # or build_with_kaitai to also rebuild kaitai SVG files
+npm run serve
+```
+
+This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
 
 ## Contributing
 
-Contributions are always welcome. For a quick primer on the AsciiDoc format, we recommend the [AsciiDoc Writers Guide](https://asciidoctor.org/docs/asciidoc-writers-guide).
+You can find the markdown files inside the [`src/docs`](src/docs) folder.
 
-## Dependencies
+When building, the scripts inside [`preBuild`](preBuild) will generate a `docs` folder, from which Docusaurus will render the website. Then, the rendered content will be modified by the [`plugins`](plugins) in the browser.
 
-A handful of dependencies are required to successfully convert the spec into a publishable document. We provide a `Gemfile` that provides most dependecies. 
+### LaTeX
 
-You will have to install `bundler` to use the `Gemfile`. On a Debian based system, it can be installed with:
-
-```bash
-sudo apt-get install -y curl make cmake gcc g++ ruby-dev python3-pydot graphviz
-# Install Bundler
-gem install bundler
-# Install Kaitai
-curl -LO https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
-sudo apt-get install -y ./kaitai-struct-compiler_0.10_all.deb
+You can use LaTeX inside the markdown files using the following syntax:
+```md
+$ LaTeX here $
+```
+or
+```md
+$$
+LaTeX here 
+$$
 ```
 
-Furthermore you will also need to have `graphviz` and the `kaitai-struct-compiler` installed.
+### Numeration System
 
-Once `bundler` is available, you can install any missing dependencies for a html build via `bundle install`:
+Inside [`preBuild`](preBuild), you can find the script [`numerationSystem`](preBuild/numerationSystem/index.ts). This will assign to several entities a number, and substitute the placeholders inside the markdown files. This is done to avoid having to manually update the numbers when adding new entities.
 
-```bash
-bundle install
+This is the structure of the spec:
+```md
+- Macro Chapter X
+    1. Chapter A
+        - Section 1.1
+            ... subsections
+        - Section 1.2
+    2. Chapter B
+        - Section 2.1
+            ... subsections
+        - Section 2.2
+- Macro Chapter Y
+    etc.
+```
+Example:
+```md
+- Polkadot Host
+    1. Overview
+        1.1 Light Client
+        ...
+    2. State and Transitions
+        ...
 ```
 
-To also install the dependencies needed for a pdf build, add the `--with pdf` flag: 
+The entities involved are:
+- Chapters
+- Sections
+- Definitions
+- Algorithms
+- Tables
+- Images
 
-```bash
-bundle install --with pdf
+Those defined as "Macro Chapters" will not be numbered.
+
+#### Chapters
+To write a new chapter, use the following syntax:
+```md
+---
+title: -chap-num- Chapter Title
+---
+<!-- Chapter content here -->
+```
+The placeholder `-chap-num-` will be replaced by the number assigned by [`numerationSystem`](preBuild/numerationSystem/index.ts).
+
+If you add a chapter (or "Macro Chapter"), you have also to add it to the [`sidebars.js`](sidebars.js) file, and adjust the numbers of the other chapters.
+
+#### Sections
+To write a new section, use the following syntax:
+```md
+## -sec-num- Section name {#id-section-name}
+```
+- Use a markdown header from H2 to H5 included, so the maximum depth is `a.b.c.d.e` (H2 is `a.b`).
+- Put the placeholder `-sec-num-` in the header, which will be replaced;
+- Add an id to the header, which will be used to reference the section.
+
+#### Definitions
+
+To write a definition:
+```md
+###### Definition -def-num- Runtime Pointer {#defn-runtime-pointer}
+```
+- Use a markdown H6 header (######);
+- Put the placeholder `-def-num-` in the header;
+- Add an id to the header.
+
+Then, you should include the definition content inside the custom admonition `:::definition` (you can find all the custom admonitions inside [`src/theme/Admonition/Types.js`](src/theme/Admonition/Types.js)).
+
+So the final result will be the following:
+```md
+###### Definition -def-num- Runtime Pointer {#defn-runtime-pointer}
+:::definition <!-- Open admonition -->
+
+Definition content here
+
+::: <!-- Close admonition -->
 ```
 
-The pdf build requires various native dependencies to convert math to images with  `asciidoctor-mathematical`, please check the [official documentation](https://github.com/asciidoctor/asciidoctor-mathematical#installation=) for further details. Furthermore, the PDF is cleanup and compressed with `ghostscript`, so this will need to be installed as well.
+#### Algorithms
 
-## Build
+To define an algorithm, use the same syntax as for definitions, but with the placeholder `-algo-num-`:
+```md
+###### Algorithm -algo-num- Aggregate-Key {#algo-aggregate-key}
+```
+At the top of the page, you must include the [`Pseudocode`](src/components/Pseudocode.jsx) component and the LaTeX algorithm you want to render:
+```md
+---
+title: -chap-num- States and Transitions
+---
+import Pseudocode from '@site/src/components/Pseudocode';
+import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
+```
+After this, you can build the algorithm using the admonition `:::algorithm`, and using the [`Pseudocode`](src/components/Pseudocode.jsx) component (refer to the file to know more about its `props`). This will be the final result:
+```md
+---
+title: -chap-num- States and Transitions
+---
+import Pseudocode from '@site/src/components/Pseudocode';
+import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
 
-To build the html version of the spec, just run `bundle exec make html`. This create will create a `polkadot-spec.html` in the same folder.
+<!-- Page content here -->
 
-To build the pdf version of the spec, just run `bundle exec make pdf`, which will create a `polkadot-spec.pdf` in the same folder.
+###### Algorithm -algo-num- Aggregate-Key {#algo-aggregate-key}
+:::algorithm
+<Pseudocode
+    content={aggregateKey}
+    algID="aggregateKey"
+    options={{ "lineNumber": true }}
+/>
 
-To export the Kaitai Struct definitions contained in the spec, just run `bundle exec make kaitai`, which will create the `.ksy` file(s) in the same folder.
+<!-- Algorithm description here -->
+:::
+```
 
-We also provide full nix flake integration, e.g. you can run `nix build github:w3f/polkadot-spec` to build the latest html release.
+#### Tables and Images
 
-## Test
+To define a table or an image, use the same syntax as for definitions and algorithms (always using a H6 header), but with the placeholder `-tab-num-` or `-img-num-`:
+```md
+###### Table -tab-num- Name {#tab-name}
+```
+or
+```md
+###### Image -img-num- Name {#img-name}
+```
+For these two entities you won't need to use any component or admonition.
 
-To test some of the machine readable definition in the spec, just run `bundle exec make test`.
+#### References
 
-The test requires `curl`, `jq` and `xxd` to download required data via JSON RPC.
+To reference any of the entities from anywhere in the website, you have to use the following syntax:
+```md
+[Entity -xxx-num-ref-](entity-page#entity-id)
+```
+- Use a markdown link;
+- Put the placeholder `-xxx-num-ref-` in the text link, which will be replaced (`xxx` depends on the entity, for example `-def-num-ref-` for definitions);
+- The link should point to the header id of the definition, with the page name as a prefix (if entity-page.md is a page, ".md" must be omitted).
+
+### Bibliography
+
+The cited works are defined inside [`src/bibliography.bib`](src/bibliography.bib). To cite a work, use the following syntax:
+```md
+[@work-id]
+```
+Automatically, the bibliography will be generated at the end of the page.
 
 ## License
 

@@ -1,0 +1,23 @@
+\begin{algorithm}
+\caption{Import-and-Validate-Block}
+\begin{algorithmic}
+    \require $B, \text{Just}(B)$
+    \state \call{Set-Storage-State-At}{$P(B)$}
+    \if{$\text{Just}(B) \neq \emptyset$}
+        \state \call{Verify-Block-Justification}{$B, \text{Just}(B)$}
+        \if{$B~\textbf{is}~\text{Finalized}~\textbf{and}~P(B)~\textbf{is not}~\text{Finalized}$}
+            \state \call{Mark-as-Final}{$P(B)$}
+        \endif
+    \endif
+    \if{$H_p(B) \notin PBT$}
+        \return
+    \endif
+    \state \call{Verify-Authorship-Right}{$\text{Head}(B)$}
+    \state $B \leftarrow$ \call{Remove-Seal}{$B$}
+    \state $R \leftarrow$ \call{Call-Runtime-Entry}{$\texttt{Core\_execute\_block}, B$}
+    \state $B \leftarrow$ \call{Add-Seal}{$B$}
+    \if{$R =$ \textsc{True}}
+        \state \call{Persist-State}{}
+    \endif
+\end{algorithmic}
+\end{algorithm}
