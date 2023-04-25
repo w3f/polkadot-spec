@@ -14,24 +14,14 @@ async function createConfig() {
     title: 'Polkadot Protocol Specification',
     tagline: 'Enabling Implementers - Version 0.2.1',
     favicon: 'img/polkadot-logo.png',
-
-    // Set the production url of your site here
     url: 'https://spec.polkadot.network/',
-    // Set the /<baseUrl>/ pathname under which your site is served
-    // For GitHub pages deployment, it is often '/<projectName>/'
     baseUrl: '/',
-
-    // GitHub pages deployment config.
-    // If you aren't using GitHub pages, you don't need these.
     organizationName: 'w3f', // Usually your GitHub org/user name.
     projectName: 'polkadot-spec', // Usually your repo name.
-
     onBrokenLinks: 'throw',
     onBrokenMarkdownLinks: 'warn',
-
-    // Even if you don't use internalization, you can use this field to set useful
-    // metadata like html lang. For example, if your site is Chinese, you may want
-    // to replace "en" with "zh-Hans".
+    trailingSlash: false,
+    
     i18n: {
       defaultLocale: 'en',
       locales: ['en'],
@@ -171,6 +161,15 @@ async function createConfig() {
           defaultMode: 'light',
           disableSwitch: true,
           respectPrefersColorScheme: false,
+        },
+        algolia: {
+          appId: '59CYO0AR6V',
+          apiKey: 'a80fed5c31591c3da31935e6aabcbcc5',
+          indexName: 'spec-polkadot',
+          contextualSearch: true,
+          externalUrlRegex: 'https://spec.polkadot.network/',
+          searchParameters: {},
+          searchPagePath: 'search',
         },
       }),
   };
