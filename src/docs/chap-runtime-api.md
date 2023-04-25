@@ -323,6 +323,8 @@ It indicates if the submitted blob represents a valid extrinsics, the order in w
 
 - A byte array that contains the transaction.
 
+- The hash of the parent of the block that the transaction is included in. 
+
   ###### Definition -def-num- TransactionSource {#defn-transaction-source}
 :::definition
   **TransactionSource** is an enum describing the source of a transaction and can have one of the following values:
