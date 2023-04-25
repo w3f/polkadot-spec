@@ -15,7 +15,8 @@ const FeatureList: FeatureItem[] = [
     Svg: require('@site/static/img/rust-svgrepo-com.svg').default,
     description: (
       <>
-        See <code><a href="https://github.com/paritytech/polkadot">Node Implementation by Parity</a></code> and  
+        See <code><a href="https://github.com/paritytech/polkadot">Node Implementation by Parity</a></code>
+        &nbsp;and&nbsp;
         <code><a href="https://github.com/smol-dot/smoldot">smoldot</a></code>
       </>
     ),

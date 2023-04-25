@@ -19,17 +19,10 @@ function AlgorithmAdmonition(props) {
   );
 }
 
-function IndexAdmonition(props) {
-  return (
-    <div className='index'>{props.children}</div>
-  );
-}
-
 const AdmonitionTypes = {
   ...DefaultAdmonitionTypes,
   'definition': DefinitionAdmonition,
   'algorithm': AlgorithmAdmonition,
-  'index': IndexAdmonition,
 };
 
 export default AdmonitionTypes;

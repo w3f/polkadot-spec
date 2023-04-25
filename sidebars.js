@@ -25,6 +25,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Host',
+      collapsed: false,
       link: {type:'doc', id:'part-polkadot-host'},
       items: [
         {
@@ -72,6 +73,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'Runtime',
+      collapsed: false,
       link: {type:'doc', id:'part-polkadot-runtime'},
       items: [
         {

@@ -65,7 +65,7 @@ async function createConfig() {
             routeBasePath: '/', // Serve the docs at the site's root
             admonitions: {
               tag: ':::',
-              keywords: ['definition', 'algorithm', 'index'],
+              keywords: ['definition', 'algorithm'],
               extendDefaults: true,
             },
           },
@@ -101,9 +101,9 @@ async function createConfig() {
       /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
       ({
         docs: {
-          sidebar: {
-            hideable: true,
-          },
+          // sidebar: {
+          //   hideable: true,
+          // },
         },
         navbar: {
           logo: {
