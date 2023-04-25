@@ -28,7 +28,7 @@
   --silverColor: #b7b8bb;
   --nickelColor: #6d7278;
   --blackColor: black;
-  --ifm-navbar-height: 50px;
+  --ifm-navbar-height: 64px; /* check this value with the inspector in the browser */
   --sansFontFamily: "Inter", sans-serif !important;
   --headingFontFamily: "Unbounded", sans-serif !important;
   --docsearch-searchbox-background: white;
@@ -121,12 +121,6 @@ div#refs > div.csl-entry > div.csl-left-margin {
   list-style: none;
   padding-left: 0;
   font-size: 1.2em;
-}
-
-/* fix anchor scroll position */
-h1, h2, h3, h4, h5, h6 {
-  padding-top: 20px;
-  margin-top: -20px;
 }
 
 /* ==========================================================================
