@@ -123,6 +123,12 @@ div#refs > div.csl-entry > div.csl-left-margin {
   font-size: 1.2em;
 }
 
+/* fix anchor scroll position */
+h1, h2, h3, h4, h5, h6 {
+  padding-top: 20px;
+  margin-top: -20px;
+}
+
 /* ==========================================================================
    General components
    ========================================================================== */
