@@ -1,6 +1,7 @@
 name: Publish website
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - master
