@@ -164,10 +164,9 @@ async function createConfig() {
         },
         algolia: {
           appId: '59CYO0AR6V',
-          apiKey: 'a80fed5c31591c3da31935e6aabcbcc5',
+          apiKey: '5a0d80d51f05e37544a013903fa202a0',
           indexName: 'spec-polkadot',
-          contextualSearch: true,
-          externalUrlRegex: 'https://spec.polkadot.network/',
+          contextualSearch: false,
           searchParameters: {},
           searchPagePath: 'search',
         },
