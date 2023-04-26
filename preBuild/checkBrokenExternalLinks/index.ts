@@ -1,25 +1,24 @@
 const fs = require('fs');
 
-const files = fs.readdirSync('docs')
+const files: string[] = fs.readdirSync('docs')
     .map(file => `docs/${file}`)
     .concat(fs.readdirSync('docs/Support Docs')
         .map(file => `docs/Support Docs/${file}`))
     .filter(file => file.endsWith('.md'));
 
-const links = files.map(file => {
-    let mdContent = fs.readFileSync(file, 'utf8');
-    const regex = /https:\/\/[^\s\])>]+/g;
-    const matches = mdContent.match(regex);
+const links: string[] = files.map(file => {
+    let mdContent: string = fs.readFileSync(file, 'utf8');
+    const regex: RegExp = /https:\/\/[^\s\])>]+/g;
+    const matches: RegExpMatchArray | null = mdContent.match(regex);
     if (matches) {
         return matches;
     }
     return [];
 }).flat();
 
-
 (() => {
-    let brokenLinks = [];
-    let count = 0;
+    let brokenLinks: string[] = [];
+    let count: number = 0;
     links.forEach(link => {
         fetch(link)
             .then(res => {
@@ -38,6 +37,6 @@ const links = files.map(file => {
                     }
                     process.exit(0);
                 }
-            })
+            });
     });
 })();

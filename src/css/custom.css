@@ -37,6 +37,7 @@
   --ifm-table-background: #fff;
   --ifm-table-stripe-background: #f6f6f6;
   --ifm-table-head-background: #00000012;
+  --ifm-menu-link-padding-vertical: 0.2rem;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */

@@ -11,6 +11,7 @@ const safePluginExecution = (callback: () => void, timeout_ms: number) => {
     }
 
     window.addEventListener("load", runScript);
+    // this is a custom event created inside the addLocationChangeEvent plugin
     window.addEventListener('locationchange', runScript);
 };
 

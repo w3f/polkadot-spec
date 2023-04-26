@@ -188,7 +188,7 @@ During the `preBuild`, the external links in the markdown files will be checked.
 After the `build`, the internal links will be checked.<br/>
 If any link is broken, the console will show a warning.<br/>
 
-Refer to [`checkBrokenInternalLinks/index.ts`](plugins/checkBrokenInternalLinks/index.ts) and [`checkBrokenExternalLinks.js`](scripts/checkBrokenExternalLinks.js).
+Refer to [`checkBrokenInternalLinks/index.ts`](plugins/checkBrokenInternalLinks/index.ts) and [`checkBrokenExternalLinks/index.ts`](preBuild/checkBrokenExternalLinks/index.ts).
 
 ## License
 
