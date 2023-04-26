@@ -23,7 +23,12 @@ export default function Pseudocode({
 			pseudocodeScript.src = 'https://cdn.jsdelivr.net/npm/pseudocode@latest/build/pseudocode.min.js';
 			pseudocodeScript.addEventListener('load', () => {
 			  // Call pseudocode.renderElement() after both KaTeX and pseudocode libraries are loaded
+			  // also save the anchor element to scroll to it later, because pseudocode.renderElement() will change the page height
+			  var anchorElement = document.getElementById(window.location.hash.substring(1));
 			  pseudocode.renderElement(document.getElementById(`_ps_${algID}`), options);
+			  if (anchorElement) {
+				anchorElement.scrollIntoView();
+			  }
 			});
 			document.body.appendChild(pseudocodeScript);
 		  });
