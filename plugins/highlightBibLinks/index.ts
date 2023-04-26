@@ -3,7 +3,7 @@ import safePluginExecution from "../safePluginExecution";
 const highlightBibLinks = () => {
   const timeoutMs = 500;
 
-  const transformLinks = () => {
+  const script = () => {
     const divs = document.getElementsByClassName("csl-right-inline");
     for (let i = 0; i < divs.length; i++) {
       const div = divs[i];
@@ -21,7 +21,7 @@ const highlightBibLinks = () => {
         postBodyTags: [{
           tagName: 'script',
           innerHTML: `
-            (${safePluginExecution.toString()})(${transformLinks.toString()}, ${timeoutMs})
+            (${safePluginExecution.toString()})(${script.toString()}, ${timeoutMs})
           `
         }],
       };

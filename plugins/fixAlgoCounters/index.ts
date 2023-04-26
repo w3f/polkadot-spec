@@ -3,7 +3,7 @@ import safePluginExecution from "../safePluginExecution";
 const fixAlgoCounters = () => {
   const timeoutMs = 500;
 
-  const fixCounters = () => {
+  const script = () => {
     const spans = document.getElementsByClassName("ps-keyword");
     for (let i = 0; i < spans.length; i++) {
       const span = spans[i];
@@ -21,7 +21,7 @@ const fixAlgoCounters = () => {
         postBodyTags: [{
           tagName: 'script',
           innerHTML: `
-            (${safePluginExecution.toString()})(${fixCounters.toString()}, ${timeoutMs})
+            (${safePluginExecution.toString()})(${script.toString()}, ${timeoutMs})
           `
         }],
       };

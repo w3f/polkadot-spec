@@ -43,7 +43,7 @@ The authorities and their corresponding weights can be retrieved from the Runtim
 :::
 ### -sec-num- Runtime-to-Consensus Engine Message {#sect-consensus-message-digest}
 
-The authority list ([Definition -def-num-ref-](chap-sync##defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition -def-num-ref-](chap-state#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
+The authority list ([Definition -def-num-ref-](chap-sync#defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition -def-num-ref-](chap-state#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
 
 The Polkadot Host must inspect the digest header of each block and delegate consensus messages to their consensus engines. The BABE and GRANDPA consensus engine must react based on the type of consensus messages it receives. The active GRANDPA authorities can only vote for blocks that occurred after the finalized block in which they were selected. Any votes for blocks before the came into effect would get rejected.
 

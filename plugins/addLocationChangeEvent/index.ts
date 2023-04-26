@@ -1,5 +1,5 @@
 const addLocationChangeEvent = () => {
-  const addEvent = () => {
+  const script = () => {
     (function() {
         const pushState = history.pushState;
         const replaceState = history.replaceState;
@@ -28,7 +28,7 @@ const addLocationChangeEvent = () => {
       return {
         postBodyTags: [{
           tagName: 'script',
-          innerHTML: `(${addEvent.toString()})()`,
+          innerHTML: `(${script.toString()})()`,
         }],
       };
     },

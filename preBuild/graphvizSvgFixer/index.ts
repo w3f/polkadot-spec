@@ -3,11 +3,6 @@ import * as cheerio from 'cheerio';
 const svgPath = "static/img/kaitai_render"
 const mdPath = "src/docs"
 
-export interface HtmlFile {
-  route: string;
-  html: string;
-}
-
 const graphvizSvgFixer = () => {
   let svgNames = fs.readdirSync(svgPath);
   let mdFileNames = fs.readdirSync(mdPath);

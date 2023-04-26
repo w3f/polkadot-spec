@@ -3,7 +3,7 @@ import safePluginExecution from "../safePluginExecution";
 const injectCss = () => {
   const timeoutMs = 500;
 
-  const injectCssClasses = () => {
+  const script = () => {
     const div = document.getElementsByClassName("theme-doc-markdown markdown");
     let children = div[0].children;
     if (
@@ -28,7 +28,7 @@ const injectCss = () => {
         postBodyTags: [{
           tagName: 'script',
           innerHTML: `
-						(${safePluginExecution.toString()})(${injectCssClasses.toString()}, ${timeoutMs})
+						(${safePluginExecution.toString()})(${script.toString()}, ${timeoutMs})
 					`
         }],
       };

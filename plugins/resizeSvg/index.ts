@@ -3,7 +3,7 @@ import safePluginExecution from "../safePluginExecution";
 const resizeSvg = () => {
   const timeoutMs = 500;
 
-  const adjustSvg = () => {
+  const script = () => {
     const svgList = document.querySelectorAll('svg.graphviz');
     svgList.forEach(svg => {
       if (svg.classList.contains('fixed')) return;
@@ -42,7 +42,7 @@ const resizeSvg = () => {
         postBodyTags: [{
           tagName: 'script',
           innerHTML: `
-						(${safePluginExecution.toString()})(${adjustSvg.toString()}, ${timeoutMs})
+						(${safePluginExecution.toString()})(${script.toString()}, ${timeoutMs})
 					`
         }],
       };

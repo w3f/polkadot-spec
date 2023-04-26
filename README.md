@@ -182,6 +182,14 @@ The cited works are defined inside [`src/bibliography.bib`](src/bibliography.bib
 ```
 Automatically, the bibliography will be generated at the end of the page.
 
+### Broken Links
+
+During the `preBuild`, the external links in the markdown files will be checked.<br/>
+After the `build`, the internal links will be checked.<br/>
+If any link is broken, the console will show a warning.<br/>
+
+Refer to [`checkBrokenInternalLinks/index.ts`](plugins/checkBrokenInternalLinks/index.ts) and [`checkBrokenExternalLinks.js`](scripts/checkBrokenExternalLinks.js).
+
 ## License
 
 Any code in this repository is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) and any documentation or specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).

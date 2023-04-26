@@ -1,11 +1,6 @@
 import * as fs from 'fs';
 const mdPath = "docs";
 
-export interface HtmlFile {
-  route: string;
-  html: string;
-}
-
 const addBibliographyTitle = () => {
     const mdFileNames = fs.readdirSync(mdPath).filter((fileName) => {
         return !fs.statSync(mdPath + "/" + fileName).isDirectory();
