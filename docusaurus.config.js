@@ -34,6 +34,7 @@ async function createConfig() {
       path.resolve(__dirname, 'plugins', 'injectGlossaryCss', 'index.js'),
       path.resolve(__dirname, 'plugins', 'fixAlgoCounters', 'index.js'),
       path.resolve(__dirname, 'plugins', 'checkBrokenInternalLinks', 'index.js'),
+      path.resolve(__dirname, 'plugins', 'redirectOldLinks', 'index.js'),
     ],
 
     presets: [

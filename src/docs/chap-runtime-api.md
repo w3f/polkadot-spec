@@ -345,7 +345,7 @@ It indicates if the submitted blob represents a valid extrinsics, the order in w
 :::definition
   **ValidTransaction** is a tuple that contains information concerning a valid transaction.
 
-  ###### Table -tab-num- The tuple provided by in the case the transaction is judged to be valid.
+  ###### Table -tab-num- The tuple provided by in the case the transaction is judged to be valid. {#tabl-rte-valid-transaction}
 
   | Name | Description | Type |
   |------|-------------|------|

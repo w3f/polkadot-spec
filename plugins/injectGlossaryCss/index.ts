@@ -5,8 +5,9 @@ const injectCss = () => {
 
   const script = () => {
     const div = document.getElementsByClassName("theme-doc-markdown markdown");
-    let children = div[0].children;
+    let children = div[0]?.children;
     if (
+      children &&
       children[0].children[0].tagName === "H1" &&
       children[0].children[0].innerHTML.toLowerCase().includes("glossary")
     ) {
