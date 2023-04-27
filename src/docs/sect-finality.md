@@ -91,7 +91,7 @@ $$
 
 - ${r}$: is an unsigned 64-bit integer is the round number.
 
-- $\text{id}_{{{\mathbb{{V}}}}}$: is an unsigned 64-bit integer indicating the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+- $\text{id}_{{{\mathbb{{V}}}}}$: is an unsigned 64-bit integer indicating the authority set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
 :::
 ###### Definition -def-num- Justification {#defn-grandpa-justification}
@@ -480,7 +480,7 @@ Only GRANDPA voter nodes are required to respond to the catch-up requests. Addit
 **where**  
 - ${{M}_{{{i},{v}}}^{{\text{Cat}-{q}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up message received from peer ${i}$ ([Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-request-msg)).
 
-- $\text{id}_{{{\mathbb{{V}}}}}$ is the voter set id with which the serving node is operating
+- $\text{id}_{{{\mathbb{{V}}}}}$ ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)) is the voter set id with which the serving node is operating
 
 - ${r}$ is the round number for which the catch-up is requested for.
 

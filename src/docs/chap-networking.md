@@ -466,7 +466,7 @@ $$
 **where**  
 - ${r}$ is an unsigned 64-bit integer indicating the Grandpa round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
 - ${\text{Sig}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}$ is a 512-bit byte array containing the signature of the authority ([Definition -def-num-ref-](sect-finality#defn-sign-round-vote)).
 
@@ -508,7 +508,7 @@ $$
 **where**  
 - ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-- ${id}_{{{\mathbb{{V}}}}}$ is the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+- ${id}_{{{\mathbb{{V}}}}}$ is the authority set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
 - ${{V}_{{v}}^{{r}}}{\left({B}\right)}$ is a 256-bit array containing the GRANDPA vote for block ${B}$ ([Definition -def-num-ref-](sect-finality#defn-vote)).
 
@@ -535,7 +535,7 @@ $$
 
 - ${r}$ is an unsigned 64-bit integer indicating the round number ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
 
-- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+- $\text{id}_{{{\mathbb{{V}}}}}$ is an unsigned 64-bit integer indicating the authority Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
 - ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ is an unsigned 32-bit integer indicating the block number of the last finalized block ${B}_{{\text{last}}}$.
 
