@@ -401,7 +401,7 @@ Returns the validator set at the current state. The specified validators are res
 
 ### -sec-num- `ParachainHost_validator_groups` {#sect-rt-api-validator-groups}
 
-Returns the validator groups ([Definition -def-num-ref-](chapter-anv#defn-validator-groups)) used during the current session. The validators in the groups are referred to by the validator set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+Returns the validator groups ([Definition -def-num-ref-](chapter-anv#defn-validator-groups)) used during the current session. The validators in the groups are referred to by the validator set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
 **Arguments**  
 - None
@@ -420,7 +420,7 @@ Returns the validator groups ([Definition -def-num-ref-](chapter-anv#defn-valida
   $$
 
   **where**  
-  - ${I}$ is an array the validator set Ids ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+  - ${I}$ is an array of the validator set Ids ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
   - ${B}_{{s}}$ indicates the block number where the session started.
 
@@ -642,7 +642,7 @@ Get the session info of the given session, if available.
 
   - ${v}_{{n}}$ is public key of the authority.
 
-  - ${A}_{{n}}$ is the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+  - ${A}_{{n}}$ is the authority set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
   - ${c}$ is an unsigned 32-bit integer indicating the number of availability cores used by the protocol during the given session.
 

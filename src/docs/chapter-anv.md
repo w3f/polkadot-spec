@@ -655,7 +655,7 @@ $$
 
 - ${B}_{{h}}$ is the relay chain block hash where the candidate appears.
 
-- ${A}_{{i}}$ is the authority set Id ([Definition -def-num-ref-](chap-sync#defn-authority-list)) of the validator that created this message.
+- ${A}_{{i}}$ is the authority set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)) of the validator that created this message.
 
 - ${A}_{{s}}$ is the signature of the validator issuing this message.
 
