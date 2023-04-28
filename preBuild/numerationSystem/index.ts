@@ -2,7 +2,7 @@ import * as fs from 'fs';
 const sidebarRoutes = require('../sidebarRoutes');
 const filePathIn = 'src/docs'
 const filePathOut = 'docs'
-const h6EntitiesPathOut = 'static'
+const entitiesMapPathOut = 'static'
 
 export interface MdFile {
   routeId: string;
@@ -32,13 +32,11 @@ const replaceH6Placeholder = (
   placeholder: string,
   counter: number,
   map: any,
-  routeId: string,
 ) => {
   counter++;
   let id = getIdFromHeaderLine(line)
   map[id] = counter;
   let newLine = line.replace(placeholder, counter.toString() + ".");
-  h6EntitiesMap.set(id, routeId);
   return [counter, map, newLine];
 }
 
@@ -65,9 +63,10 @@ const getIdFromHeaderLine = (line: string) => {
   return id.substring(2, id.length - 1);
 }
 
-// maps every H6 entity id to its page (routeId)
+// maps every entity id to its page (routeId)
+// not counting chapters as they aren't needed for redirects
 // needed for the plugin redirectOldLinks
-let h6EntitiesMap: Map<string, string> = new Map();
+let entitiesMap: Map<string, string> = new Map();
 
 const numerationSystem = () => {
   // init md files array and sectionNumbers mapping
@@ -130,17 +129,18 @@ const numerationSystem = () => {
       let line = lines[i];
       if (line.includes('######')) {
         if (line.includes(defNum)) {
-          [defCounter, definitionsMap, lines[i]] = replaceH6Placeholder(line, defNum, defCounter, definitionsMap, mdFile.routeId);
+          [defCounter, definitionsMap, lines[i]] = replaceH6Placeholder(line, defNum, defCounter, definitionsMap);
         } else
         if (line.includes(algoNum)) {
-          [algoCounter, algoMap, lines[i]] = replaceH6Placeholder(line, algoNum, algoCounter, algoMap, mdFile.routeId);
+          [algoCounter, algoMap, lines[i]] = replaceH6Placeholder(line, algoNum, algoCounter, algoMap);
         } else
         if (line.includes(tabNum)) {
-          [tablesCounter, tablesMap, lines[i]] = replaceH6Placeholder(line, tabNum, tablesCounter, tablesMap, mdFile.routeId);
+          [tablesCounter, tablesMap, lines[i]] = replaceH6Placeholder(line, tabNum, tablesCounter, tablesMap);
         } else
         if (line.includes(imgNum)) {
-          [imgCounter, imgMap, lines[i]] = replaceH6Placeholder(line, imgNum, imgCounter, imgMap, mdFile.routeId);
+          [imgCounter, imgMap, lines[i]] = replaceH6Placeholder(line, imgNum, imgCounter, imgMap);
         }
+        entitiesMap.set(getIdFromHeaderLine(line), mdFile.routeId);
       } else if (line.includes('##')) {
         if (line.includes(secNum)) {
           // split the line by spaces and take last element, it will be like this: {#id-ext_storage_read}
@@ -158,6 +158,7 @@ const numerationSystem = () => {
           let newLine = line.replace(secNum, sectionNumber);
           lines[i] = newLine;
           prevLevel = level;
+          entitiesMap.set(subsectionId, mdFile.routeId);
         }
       } else if (line.startsWith(`title: ${chapNum}`)) {
         let newLine = line.replace(chapNum, sectionNumber+".");
@@ -200,10 +201,10 @@ const numerationSystem = () => {
     }
   });
 
-  // write the h6EntitiesMap to a file
+  // write the entitiesMap to a file
   // needed for the plugin redirectOldLinks
-  let json = JSON.stringify(Object.fromEntries(h6EntitiesMap), null, 2);
-  fs.writeFileSync(`${h6EntitiesPathOut}/h6EntitiesMap.json`, json);
+  let json = JSON.stringify(Object.fromEntries(entitiesMap), null, 2);
+  fs.writeFileSync(`${entitiesMapPathOut}/entitiesMap.json`, json);
 
   // now we can write the files
   for (let mdFile of mdFilesToCompile) {
