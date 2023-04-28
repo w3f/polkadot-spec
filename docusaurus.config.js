@@ -35,6 +35,7 @@ async function createConfig() {
       path.resolve(__dirname, 'plugins', 'fixAlgoCounters', 'index.js'),
       path.resolve(__dirname, 'plugins', 'checkBrokenInternalLinks', 'index.js'),
       path.resolve(__dirname, 'plugins', 'redirectOldLinks', 'index.js'),
+      path.resolve(__dirname, 'plugins', 'navbarActiveItem', 'index.js'),
     ],
 
     presets: [
@@ -170,7 +171,7 @@ async function createConfig() {
           indexName: 'spec-polkadot',
           contextualSearch: false,
           searchParameters: {},
-          searchPagePath: 'search',
+          searchPagePath: false,
         },
       }),
   };
