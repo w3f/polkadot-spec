@@ -4,13 +4,12 @@ meta:
   endian: le
   imports:
   - scale
-  - item
 seq:
-  - id: prefix
+  - id: name
     type: scale::string
-  - id: num_items
+  - id: type
     type: scale::compact_int
-  - id: items
-    type: item
-    repeat: expr
-    repeat-expr: num_items.value
+  - id: value
+    type: scale::bytes
+  - id: docs
+    type: scale::string_list
