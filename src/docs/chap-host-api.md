@@ -1368,6 +1368,37 @@ Reads a chunk of body response to the given buffer. Returns the number of bytes 
 
 - `result`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the SCALE encoded *Result* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-result-type)). On success it contains an i32 integer specifying the number of bytes written or a HTTP error type ([Definition -def-num-ref-](chap-host-api#defn-http-error)) on failure.
 
+## -sec-num- Offchain Index {#sect-offchainindex-api}
+
+Interface that provides functions to access the Offchain DB through offchain indexing. 
+
+### -sec-num- `Offchain_index_set` {#id-offchain_index_set}
+
+Write a key-value pair to the Offchain DB in a buffered fashion. 
+
+#### -sec-num- Version 1 - Prototype {#id-version-1-prototype-Offchain_index_set}
+
+    (func $ext_offchain_index_set_version_1
+        (param $key i64) (param $value i64))
+
+**Arguments**  
+- `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
+
+- `value`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the value.
+
+### -sec-num- `Offchain_index_clear` {#id-offchain_index_clear}
+
+Remove a key and its associated value from the Offchain DB.
+
+#### -sec-num- Version 1 - Prototype {#id-version-1-prototype-Offchain_index_clear}
+
+    (func $ext_offchain_index_set_version_1
+        (param $key i64))
+
+**Arguments**  
+- `key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the key.
+
+
 ## -sec-num- Trie {#sect-trie-api}
 
 Interface that provides trie related functionality.
@@ -1677,6 +1708,22 @@ Request to print a log message on the host. Note that this will be only displaye
 - `target`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the string which contains the path, module or location from where the log was executed.
 
 - `message`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the UTF-8 encoded log message.
+
+### -sec-num- `ext_logging_max_level` {#id-ext_logging_max_level}
+
+Returns the max logging level used by the host.
+
+#### -sec-num- Version 1 - Prototype {#id-version-1-prototype-max_level}
+
+    (func $ext_logging_max_level_version_1
+         (result i32))
+
+**Arguments**
+- *None*
+
+**Returns**  
+- `result`: the max log level ([Definition -def-num-ref-](chap-host-api#defn-logging-log-level)) used by the host.
+
 
 ## -sec-num- Abort Handler {#id-abort-handler}
 
