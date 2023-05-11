@@ -294,16 +294,6 @@ Checks whether the provided inherent is valid. This function can be used by the 
 
   - ${e}$ is a Inherents-Data structure as defined in [Definition -def-num-ref-](chap-state#defn-inherent-data) containing any errors created by this Runtime function.
 
-### -sec-num- `BlockBuilder_random_seed` {#id-blockbuilder_random_seed}
-
-Generates a random seed.
-
-**Arguments**  
-- None
-
-**Return**  
-- A 32-byte array containing the random seed.
-
 ## -sec-num- Module TaggedTransactionQueue {#sect-runtime-txqueue-module}
 
 :::danger
@@ -516,6 +506,18 @@ $$
 The persisted validation data is fetched via the Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-persisted-validation-data)).
 
 :::
+
+### -sec-num- `ParachainHost_assumed_validation_data` {#sect-rt-api-assumed-validation-data}
+
+Returns the persisted validation data for the given parachain Id along with the corresponding Validation Code Hash. Instead of accepting validation about para, matches the validation data hash against an expected one and yields `None` if they are unequal. 
+
+**Arguments**
+- The Parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
+- Expected Persistent Validation Data Hash ([Definition -def-num-ref-](chap-runtime-api#defn-persisted-validation-data)).
+
+**Return**
+- An _Option_ value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain the pair of persisted validation data ([Definition -def-num-ref-](chap-runtime-api#defn-persisted-validation-data)) and Validation Code Hash. The value is `None` if the parachain Id is not registered or the validation data hash does not match the expected one.
+
 ### -sec-num- `ParachainHost_check_validation_outputs` {#id-parachainhost_check_validation_outputs}
 
 Checks if the given validation outputs pass the acceptance criteria.
@@ -563,6 +565,17 @@ Returns the validation code (Runtime) of a parachain by its hash.
 
 **Return**  
 - An *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
+
+### -sec-num- `ParachainHost_validation_code_hash` {#sect-rt-api-validation-code-hash}
+
+Returns the validation code hash of a parachain.
+
+**Arguments**
+- The parachain Id ([Definition -def-num-ref-](chapter-anv#defn-para-id)).
+- An occupied core assumption ([Definition -def-num-ref-](chap-runtime-api#defn-occupied-core-assumption)).
+
+**Return**
+- An *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the hash value of the validation code. This value is empty if the parachain Id cannot be found or the assumption is wrong.
 
 ### -sec-num- `ParachainHost_candidate_pending_availability` {#id-parachainhost_candidate_pending_availability}
 
@@ -676,6 +689,75 @@ Returns the contents of all channels addressed to the given recipient. Channels 
 **Return**  
 - An array of inbound HRMP messages ([Definition -def-num-ref-](chapter-anv#defn-inbound-hrmp-message)).
 
+### -sec-num- `ParachainHost_on_chain_votes` {#sect-parachainhost-on-chain-votes}
+
+Returns disputes relevant from on-chain, backing votes, and resolved disputes. 
+
+**Arguments**
+- None
+
+**Return**
+- An *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) type which can contain the scraped on-chain votes data ([Definition -def-num-ref-](chap-runtime-api#defn-scraped-on-chain-vote)). 
+
+###### Definition -def-num- Scraped On Chain Vote {#defn-scraped-on-chain-vote}
+:::definition
+Contains the scraped runtime backing votes and resolved disputes.
+
+The scraped on-chain votes data, $SOCV$, is a datastructure of the following format:
+
+$$
+SOCV = (S_i,BV,d) \\
+BV = [C_r, [(i,a)]]
+$$
+
+**where**:
+- $S_i$ is the u32 integer representing the session index in which block was introduced.
+- $BV$ is the set of backing validators for each candidate, represented by its candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-candidate-receipt)). Each candidate $C_r$ has a list of $(i,a)$, the pair of validator index and validation attestations ([Definition -def-num-ref-](chapter-anv#defn-parachain-inherent-data)).
+- $d$ is a set of dispute statements ([Section -sec-num-ref-](chapter-anv#net-msg-dispute-request)). Note that the above $BV$ is are unrelated to the backers of the dispute candidates. 
+:::
+
+:::caution
+PVF Pre-Checker subsystem is still Work-in-Progress, hence the below APIs are subject to change.
+:::
+
+### -sec-num- `ParachainHost_pvfs_require_precheck` {#sect-rt-api-pvfs-require-precheck}
+
+This runtime API fetches all PVFs that require pre-checking voting. The PVFs are identified by their code hashes. As soon as the PVF gains required support, the runtime API will not return the PVF anymore.
+
+**Arguments**
+- None
+
+**Return**
+- A list of validation code hashes that require prechecking of votes by validator in the active set. 
+
+### -sec-num- `ParachainHost_submit_pvf_check_statement` {#sect-rt-api-submit-pvf-check-statement}
+
+This runtime API submits the judgement for a PVF, whether it is approved or not. The voting process uses unsigned transactions. The check is circulated through the network via gossip similar to a normal transaction. At some point the validator will include the statement in the block, where it will be processed by the runtime. If that was the last vote before gaining the super-majority, this PVF will not be returned by `pvfs_require_precheck` ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-pvfs-require-precheck)) anymore.
+
+**Arguments**
+- A PVF pre checking statement ([Definition -def-num-ref-](chap-runtime-api#defn-pvf-check-statement)) to be submitted into the transaction pool.
+- Validator Signature ([Definition -def-num-ref-](chapter-anv#defn-parachain-inherent-data)).
+
+**Return**
+- None
+
+###### Definition -def-num- PVF Check Statement {#defn-pvf-check-statement}
+:::definition
+This is a statement by the validator who ran the pre-checking process for a PVF. A PVF is identified by the _ValidationCodeHash_. The statement is valid only during a single session, specified in the `session_index`.
+
+The PVF Check Statement $S_{pvf}$, is a datastructure of the following format:
+
+$$
+S_{pvf} = (b,VC_H,S_i,V_i)
+$$
+
+**where**:
+* $b$ is a boolean denoting if the subject passed pre-checking.
+* $VC_H$ is the validation code hash.
+* $S_i$ is u32 integer representing the session index.
+* $V_i$ is the validator index ([Definition -def-num-ref-](chapter-anv#defn-parachain-inherent-data)). 
+:::
+
 ## -sec-num- Module GrandpaApi {#id-module-grandpaapi}
 
 :::danger
@@ -693,6 +775,16 @@ This entry fetches the list of GRANDPA authorities according to the genesis bloc
 
 **Return**  
 - An authority list as defined in [Definition -def-num-ref-](chap-sync#defn-authority-list).
+
+### -sec-num- `GrandpaApi_current_set_id` {#sect-grandpa-current-set-id}
+
+This entry fetches the list of GRANDPA authority set ID ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)). Any future authority changes get tracked via Runtime-to-consensus engine messages, as described in [Section -sec-num-ref-](chap-sync#sect-consensus-message-digest).
+
+**Arguments**
+- None.
+
+**Return**
+- An authority set ID as defined in [Definition -def-num-ref-](sect-finality#defn-authority-set-id).
 
 ### -sec-num- `GrandpaApi_submit_report_equivocation_unsigned_extrinsic` {#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic}
 
@@ -884,7 +976,7 @@ A function which helps to discover authorities.
 **Return**  
 - A byte array of varying size containing 256-bit pulic keys of the authorities.
 
-### -sec-num- Module SessionKeys {#sect-runtime-sessionkeys-module}
+## -sec-num- Module SessionKeys {#sect-runtime-sessionkeys-module}
 
 :::danger
 This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
@@ -892,7 +984,7 @@ This section describes **Version 1** of this API. Please check `Core_version` ([
 
 All calls in this module require `Core_initialize_block` ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-initialize-block)) to be called beforehand.
 
-#### -sec-num- `SessionKeys_generate_session_keys` {#id-sessionkeys_generate_session_keys}
+### -sec-num- `SessionKeys_generate_session_keys` {#id-sessionkeys_generate_session_keys}
 
 Generates a set of session keys with an optional seed. The keys should be stored within the keystore exposed by the Host Api. The seed needs to be valid and UTF-8 encoded.
 
@@ -902,7 +994,7 @@ Generates a set of session keys with an optional seed. The keys should be stored
 **Return**  
 - A byte array of varying size containing the encoded session keys.
 
-#### -sec-num- `SessionKeys_decode_session_keys` {#id-sessionkeys_decode_session_keys}
+### -sec-num- `SessionKeys_decode_session_keys` {#id-sessionkeys_decode_session_keys}
 
 Decodes the given public session keys. Returns a list of raw public keys including their key type.
 
@@ -936,15 +1028,15 @@ Get the current nonce of an account. This function can be used by the Polkadot H
 **Return**  
 - A 32-bit unsigned integer indicating the nonce of the account.
 
-### -sec-num- Module TransactionPaymentApi {#id-module-transactionpaymentapi}
+## -sec-num- Module TransactionPaymentApi {#sect-runtime-transactionpaymentapi-module}
 
 :::danger
-This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
+This section describes **Version 2** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
 All calls in this module require `Core_initialize_block` ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-initialize-block)) to be called beforehand.
 
-#### -sec-num- `TransactionPaymentApi_query_info` {#id-transactionpaymentapi_query_info}
+### -sec-num- `TransactionPaymentApi_query_info` {#sect-rte-transactionpaymentapi-query-info}
 
 Returns information of a given extrinsic. This function is not aware of the internals of an extrinsic, but only interprets the extrinsic as some encoded value and accounts for its weight and length, the Runtime’s extrinsic base weight and the current fee multiplier.
 
@@ -979,7 +1071,7 @@ This function can be used by the Polkadot Host implementation when it seems appr
 
   - ${f}$ is the inclusion fee of the extrinsic. This does not include a tip or anything else that depends on the signature.
 
-#### -sec-num- `TransactionPaymentApi_query_fee_details` {#id-transactionpaymentapi_query_fee_details}
+### -sec-num- `TransactionPaymentApi_query_fee_details` {#sect-rte-transactionpaymentapi-query-fee-details}
 
 Query the detailed fee of a given extrinsic. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in [Section -sec-num-ref-](chap-runtime-api#sect-json-rpc-api).
 
@@ -1010,3 +1102,77 @@ Query the detailed fee of a given extrinsic. This function can be used by the Po
     - ${f_a}$ is the “adjusted weight fee”, which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
 
   - ${t}$ is the tip for the block author.
+
+### -sec-num- `TransactionPaymentApi_query_call_info` {#sect-rte-transactionpaymentapi-query-call-info}
+
+Query information of a dispatch class, weight, and fee of a given encoded `Call`.
+
+**Arguments**
+- A byte array of varying sizes containing the `Call`.
+- The length of the Call. 
+
+**Return**
+- A data structure of the following format:
+
+  $$
+  (w, c, f)
+  $$
+
+  **where**:
+  - $w$ is the weight of the call.
+  - $c$ is the "class" of the call, where class is a  varying data ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) type defined as:
+
+    $$
+    c = \left\{\begin{array}{l}
+          0 \quad \textrm{Normal dispatch}\\
+          1 \quad \textrm{Operational dispatch}\\
+          2 \quad \textrm{Mandatory dispatch, which is always included regardless of their weight}
+        \end{array}\right.
+    $$
+  - $f$ is the partial-fee of the call. This does not include a tip or anything else that depends on the signature.
+
+### -sec-num- `TransactionPaymentApi_query_call_fee_details` {#sect-rte-transactionpaymentapi-query-call-fee-details}
+
+Query the fee details of a given encoded `Call` including tip. 
+
+**Arguments**
+- A byte array of varying sizes containing the `Call`.
+- The length of the `Call`.
+
+**Return**
+- A data structure of the following format:
+
+  $$
+  (f, t)
+  $$
+
+  **where**:
+  - $f$ is a SCALE encoded as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-option-type) containing the following data structure:
+
+    $$
+    f = (f_b, f_l, f_a)
+    $$
+
+    **where**:
+    - $f_b$ is the minimum required fee for the `Call`.
+    - $f_l$ is the length fee, the amount paid for the encoded length (in bytes) of the `Call`.
+    - $f_a$ is the "`adjusted weight fee`", which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
+  
+  - $t$ is the tip for the block author.
+
+## -sec-num- Module Nomination Pools {#id-module-nomination-pools}
+
+:::danger
+This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
+Currently supports only one RPC endpoint.
+:::
+
+### -sec-num- `NominationPoolsApi_pending_rewards` {#sect-nominationpoolsapi-pending-rewards}
+
+Runtime API for accessing information about the nomination pools. Returns the pending rewards for the member that the Account ID was given for.
+
+**Arguments**
+- The account ID as a SCALE encoded 32-byte address of the sender ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-address)).
+
+**Return**
+- The SCALE encoded balance of type `u128` representing the pending reward of the account ID. The default value is Zero incase of errors in fetching the rewards.
