@@ -41,13 +41,13 @@ See [Section -sec-num-ref-](chap-state#sect-code-executor) for more information 
 
 ## -sec-num- Module Core {#sect-runtime-core-module}
 
-:::danger
+:::note
 This section describes **Version 3** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
 ### -sec-num- `Core_version` {#defn-rt-core-version}
 
-:::danger
+:::note
 For newer Runtimes, the version identifiers can be read directly from the Wasm blob in form of custom sections ([Section -sec-num-ref-](chap-state#sect-runtime-version-custom-section)). That method of retrieving this data should be preferred since it involves significantly less overhead.
 :::
 
@@ -113,7 +113,7 @@ Sets up the environment required for building a new block as described in [Build
 
 ## -sec-num- Module Metadata {#sect-runtime-metadata-module}
 
-:::danger
+:::note
 This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -127,9 +127,29 @@ Returns native Runtime metadata in an opaque form. This function can be used by 
 **Return**  
 - The scale-encoded ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) runtime metadata as described in [Chapter -chap-num-ref-](sect-metadata).
 
+### -sec-num- `Metadata_metadata_at_version` {#sect-rte-metadata-metadata-at-version}
+
+Returns native Runtime metadata in an opaque form at a particular version.
+
+**Arguments**  
+- Metadata version of type `u32`.
+
+**Return**  
+- The scale-encoded ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) runtime metadata as described in [Chapter -chap-num-ref-](sect-metadata) at the particular version.
+
+### -sec-num- `Metadata_metadata_versions` {#sect-rte-metadata-metadata-versions}
+
+Returns supported metadata versions.
+
+**Arguments**  
+- None.
+
+**Return**  
+- A vector of supported metadata versions of type `vec<u32>`.
+
 ## -sec-num- Module BlockBuilder {#sect-runtime-blockbuilder-module}
 
-:::danger
+:::note
 This section describes **Version 4** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -296,7 +316,7 @@ Checks whether the provided inherent is valid. This function can be used by the 
 
 ## -sec-num- Module TaggedTransactionQueue {#sect-runtime-txqueue-module}
 
-:::danger
+:::note
 This section describes **Version 2** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -357,7 +377,7 @@ If this function gets called by the Polkadot Host in order to validate a transac
 
 ## -sec-num- Module OffchainWorkerApi {#sect-runtime-offchainapi-module}
 
-:::danger
+:::note
 This section describes **Version 2** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -375,7 +395,7 @@ Starts an off-chain worker and generates extrinsics. \[To do: when is this calle
 
 ## -sec-num- Module ParachainHost {#sect-anv-runtime-api}
 
-:::danger
+:::note
 This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -758,9 +778,30 @@ $$
 * $V_i$ is the validator index ([Definition -def-num-ref-](chapter-anv#defn-parachain-inherent-data)). 
 :::
 
+### -sec-num- `ParachainHost_disputes` {#sect-rt-api-disputes}
+
+This runtime API fetches all on-chain disputes. 
+
+**Arguments**
+- None
+
+**Return**
+- A list of (SessionIndex, CandidateHash, DisputeState). 
+
+### -sec-num- `ParachainHost_executor_params` {#sect-rt-api-executor_params}
+
+This runtime API returns execution prameters for the session.
+
+**Arguments**
+- Session Index
+
+**Return**
+- Option type of Executor Parameters. 
+
+
 ## -sec-num- Module GrandpaApi {#id-module-grandpaapi}
 
-:::danger
+:::note
 This section describes **Version 2** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -843,7 +884,7 @@ Generates proof of the membership of a key owner in the specified block state. T
 
 ## -sec-num- Module BabeApi {#id-module-babeapi}
 
-:::danger
+:::note
 This section describes **Version 2** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -958,15 +999,15 @@ If there are more than two blocks which cause an equivocation, the equivocation 
 **Return**  
 - A SCALE encoded *Option* as defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-option-type) containing an empty value on success.
 
-### -sec-num- Module AuthorityDiscoveryApi {#id-module-authoritydiscoveryapi}
+## -sec-num- Module AuthorityDiscoveryApi {#id-module-authoritydiscoveryapi}
 
-:::danger
+:::note
 This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
 All calls in this module require (Section [Section -sec-num-ref-](chap-runtime-api#sect-rte-core-initialize-block)) to be called beforehand.
 
-#### -sec-num- `AuthorityDiscoveryApi_authorities` {#id-authoritydiscoveryapi_authorities}
+### -sec-num- `AuthorityDiscoveryApi_authorities` {#id-authoritydiscoveryapi_authorities}
 
 A function which helps to discover authorities.
 
@@ -978,7 +1019,7 @@ A function which helps to discover authorities.
 
 ## -sec-num- Module SessionKeys {#sect-runtime-sessionkeys-module}
 
-:::danger
+:::note
 This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -1012,7 +1053,7 @@ Decodes the given public session keys. Returns a list of raw public keys includi
 
 ## -sec-num- Module AccountNonceApi {#id-module-accountnonceapi}
 
-:::danger
+:::note
 This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -1030,7 +1071,7 @@ Get the current nonce of an account. This function can be used by the Polkadot H
 
 ## -sec-num- Module TransactionPaymentApi {#sect-runtime-transactionpaymentapi-module}
 
-:::danger
+:::note
 This section describes **Version 2** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 :::
 
@@ -1103,6 +1144,10 @@ Query the detailed fee of a given extrinsic. This function can be used by the Po
 
   - ${t}$ is the tip for the block author.
 
+## -sec-num- Module TransactionPaymentCallApi {#sect-runtime-transactionpaymentcallapi-module}
+
+All calls in this module require `Core_initialize_block` ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-initialize-block)) to be called beforehand.
+
 ### -sec-num- `TransactionPaymentApi_query_call_info` {#sect-rte-transactionpaymentapi-query-call-info}
 
 Query information of a dispatch class, weight, and fee of a given encoded `Call`.
@@ -1162,7 +1207,7 @@ Query the fee details of a given encoded `Call` including tip.
 
 ## -sec-num- Module Nomination Pools {#id-module-nomination-pools}
 
-:::danger
+:::note
 This section describes **Version 1** of this API. Please check `Core_version` ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) to ensure compatibility.
 Currently supports only one RPC endpoint.
 :::
@@ -1176,3 +1221,26 @@ Runtime API for accessing information about the nomination pools. Returns the pe
 
 **Return**
 - The SCALE encoded balance of type `u128` representing the pending reward of the account ID. The default value is Zero incase of errors in fetching the rewards.
+
+### -sec-num- `NominationPoolsApi_points_to_balance` {#sect-nominationpoolsapi-points-to-balance}
+
+Runtime API to convert the number of points to balances given the current pool state, which is often used for unbonding. 
+
+**Arguments**
+- PoolID (`u32`)
+- Points (`u32`)
+
+**Return**
+- Balances (`u32`).
+
+### -sec-num- `NominationPoolsApi_balance_to_points` {#sect-nominationpoolsapi-balance-to-points}
+
+Runtime API to convert the given amount of balances to points for the current pool state, which is often used for bonding and issuing new funds in to the pool. 
+
+**Arguments**
+- PoolID (`u32`)
+- Balance (`u32`)
+
+**Return**
+- Points (`u32`).
+
