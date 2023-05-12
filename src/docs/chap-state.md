@@ -671,7 +671,7 @@ The initial Runtime code of the chain is provided as part of the genesis state (
 By ${R}_{{B}}$, we refer to the Runtime code stored in the state storage at the end of the execution of block ${B}$.
 :::
 
-The WASM blobs maybe compressed using [`zstd`](https://github.com/facebook/zstd). In such cases, there is a 8-byte magic indentifier at the head of the blob, indicating that it should be decompressed with `zstd` compression. The magic identifier prefix `ZSTD_PREFIX = [82, 188, 83, 118, 70, 219, 142, 5]` is different from the WASM [magic bytes](https://github.com/WebAssembly/design/blob/main/BinaryEncoding.md#high-level-structure). The decompression has to be applied on the blob excluding the `ZSTD-PREFIX` and has a Bomb Limit of `CODE_BLOB_BOMB_LIMIT = 50 * 1024 * 1024` to mitigate compression bomb attacks. 
+The WASM blobs maybe compressed using [*zstd*](https://github.com/facebook/zstd). In such cases, there is a 8-byte magic indentifier at the head of the blob, indicating that it should be decompressed with *zstd* compression. The magic identifier prefix `ZSTD_PREFIX = [82, 188, 83, 118, 70, 219, 142, 5]` is different from the WASM [magic bytes](https://github.com/WebAssembly/design/blob/main/BinaryEncoding.md#high-level-structure). The decompression has to be applied on the blob excluding the `ZSTD-PREFIX` and has a Bomb Limit of `CODE_BLOB_BOMB_LIMIT = 50 * 1024 * 1024` to mitigate compression bomb attacks. 
 
 :::note 
 Bomb Limit is set much higher than the expected maximum code size, but may be adjusted upwards in the future. When adjusting upwards, nodes should be updated before performing a runtime upgrade to a blob with larger compressed size.
