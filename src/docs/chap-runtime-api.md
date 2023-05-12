@@ -132,7 +132,7 @@ Returns native Runtime metadata in an opaque form. This function can be used by 
 Returns native Runtime metadata in an opaque form at a particular version.
 
 **Arguments**  
-- Metadata version of type `u32`.
+- Metadata version represented by unsigned 32-bit integer.
 
 **Return**  
 - The scale-encoded ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) runtime metadata as described in [Chapter -chap-num-ref-](sect-metadata) at the particular version.
@@ -1242,20 +1242,20 @@ Runtime API for accessing information about the nomination pools. Returns the pe
 Runtime API to convert the number of points to balances given the current pool state, which is often used for unbonding. 
 
 **Arguments**
-- PoolID (`u32`)
-- Points (`u32`)
+- An unsigned 32-bit integer representing Pool Identifier 
+- An unsigned 32-bit integer Points
 
 **Return**
-- Balances (`u32`).
+- An unsigned 32-bit integer Balance
 
 ### -sec-num- `NominationPoolsApi_balance_to_points` {#sect-nominationpoolsapi-balance-to-points}
 
 Runtime API to convert the given amount of balances to points for the current pool state, which is often used for bonding and issuing new funds in to the pool. 
 
 **Arguments**
-- PoolID (`u32`)
-- Balance (`u32`)
+- An unsigned 32-bit integer representing Pool Identifier 
+- An unsigned 32-bit integer Balance
 
 **Return**
-- Points (`u32`).
+- An unsigned 32-bit integer Points
 
