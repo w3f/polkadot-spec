@@ -788,6 +788,10 @@ This runtime API fetches all on-chain disputes.
 **Return**
 - A list of (SessionIndex, CandidateHash, DisputeState). 
 
+:::caution
+TODO clarify DisputeState
+:::
+
 ### -sec-num- `ParachainHost_executor_params` {#sect-rt-api-executor_params}
 
 This runtime API returns execution prameters for the session.
@@ -795,9 +799,16 @@ This runtime API returns execution prameters for the session.
 **Arguments**
 - Session Index
 
+:::caution
+TODO clarify session index
+:::
+
 **Return**
 - Option type of Executor Parameters. 
 
+:::caution
+TODO clarify Executor Parameters
+:::
 
 ## -sec-num- Module GrandpaApi {#id-module-grandpaapi}
 
@@ -1147,6 +1158,10 @@ Query the detailed fee of a given extrinsic. This function can be used by the Po
 ## -sec-num- Module TransactionPaymentCallApi {#sect-runtime-transactionpaymentcallapi-module}
 
 All calls in this module require `Core_initialize_block` ([Section -sec-num-ref-](chap-runtime-api#sect-rte-core-initialize-block)) to be called beforehand.
+
+:::caution
+TODO clarify differences between *RuntimeCall* and *Extrinsics*
+:::
 
 ### -sec-num- `TransactionPaymentApi_query_call_info` {#sect-rte-transactionpaymentapi-query-call-info}
 
