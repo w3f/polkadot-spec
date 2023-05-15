@@ -23,3 +23,4 @@ preBuild/*/*.js
 plugins/*/*.js
 plugins/*.js
 docs/*.md
+static/entitiesMap.json
