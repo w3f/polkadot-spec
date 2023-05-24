@@ -36,7 +36,7 @@ $$
 {\left({p}{k}_{{A}},{w}_{{A}}\right)}
 $$
 
-${p}{k}_{{A}}$ is the session public key ([Definition -def-num-ref-](id-cryptography-encoding#defn-session-key)) of authority ${A}$. And ${w}_{{A}}$ is an unsigned 64-bit integer indicating the authority weight. The value of $\text{Auth}_{{C}}{\left({B}\right)}$ is part of the Polkadot state. The value for $\text{Auth}_{{C}}{\left({B}_{{0}}\right)}$ is set in the genesis state ([Section -sec-num-ref-](id-cryptography-encoding#chapter-genesis)) and can be retrieved using a runtime entrypoint corresponding to consensus engine ${C}$.
+${p}{k}_{{A}}$ is the session public key ([Definition -def-num-ref-](id-cryptography-encoding#defn-session-key)) of authority ${A}$. And ${w}_{{A}}$ is an unsigned 64-bit integer indicating the authority weight. The value of $\text{Auth}_{{C}}{\left({B}\right)}$ is part of the Polkadot state. The value for $\text{Auth}_{{C}}{\left({B}_{{0}}\right)}$ is set in the genesis state ([Section -sec-num-ref-](id-cryptography-encoding#section-genesis)) and can be retrieved using a runtime entrypoint corresponding to consensus engine ${C}$.
 
 The authorities and their corresponding weights can be retrieved from the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-grandpa-auth)).
 

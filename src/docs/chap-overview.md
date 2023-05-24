@@ -14,7 +14,7 @@ While the full node is still a mostly passive participant of the protocol, they 
 
 - **Functional Requirements:**
 
-  1.  The node must populate the state storage with the official genesis state, elaborated further in [Section -sec-num-ref-](id-cryptography-encoding#chapter-genesis).
+  1.  The node must populate the state storage with the official genesis state, elaborated further in [Section -sec-num-ref-](id-cryptography-encoding#section-genesis).
 
   2.  The node should maintain a set of around 50 active peers at any time. New peers can be found using the discovery protocols ([Section -sec-num-ref-](chap-networking#sect-discovery-mechanism))
 

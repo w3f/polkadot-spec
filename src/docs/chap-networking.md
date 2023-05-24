@@ -78,7 +78,7 @@ $$
 
 The Polkadot Host uses various mechanisms to find peers within the network, to establish and maintain a list of peers and to share that list with other peers from the network as follows:
 
-- **Bootstrap nodes** are hard-coded node identities and addresses provided by the genesis state ([Section -sec-num-ref-](id-cryptography-encoding#chapter-genesis)).
+- **Bootstrap nodes** are hard-coded node identities and addresses provided by the genesis state ([Section -sec-num-ref-](id-cryptography-encoding#section-genesis)).
 
 - **mDNS** is a protocol that performs a broadcast to the local network. Nodes that might be listening can respond to the broadcast. [The libp2p mDNS specification](https://github.com/libp2p/specs/blob/master/discovery/mdns.md) defines this process in more detail. This protocol is an optional implementation detail for Polkadot Host implementers and is not required to participate in the Polkadot network.
 

@@ -589,17 +589,17 @@ $$
 :::
 ## -sec-num- Chain Specification {#chapter-chainspec}
 Chain Specification (chainspec) is a collection of information that describes the blockchain network. It includes information required for a host to connect and sync with the Polakdot network, for example, the initial nodes to communicate with, protocol identifier, initial state that the hosts agree, etc. There are a set of core fields required by the Host and a set of extensions which are used by optionally implemented features of the Host. The fields of chain specification are categorised in three parts:
-1. [Client Spec](#sec-num--client-spec-section-clientspec)
-2. [ChainSpec Extensions](#sec-num--client-spec-extensions-section-client-spec-extensions)
-3. [Genesis State](#sec-num--genesis-state-section-genesis)
+1. [ChainSpec](#sec-num--chain-spec-section-chainspec)
+2. [ChainSpec Extensions](#sec-num--chain-spec-extensions-section-chain-spec-extensions)
+3. [Genesis State](#sec-num--genesis-state-section-genesis) which is the only mandatory part of the chainspec. 
 
-### -sec-num- Client Spec {#section-clientspec}
-Client specification contains information used by the Host to communicate with network participants and optionally send data to telemetry endpoints. 
+### -sec-num- Chain Spec {#section-chainspec}
+Chain specification contains information used by the Host to communicate with network participants and optionally send data to telemetry endpoints. 
 Recommended structure for the client specification is detailed as a Polkadot Standards Proposals. 
 
 
 
-#### -sec-num- Client Spec Extensions {#section-client-spec-extensions}
+### -sec-num- Chain Spec Extensions {#section-chain-spec-extensions}
 ChainSpec Extensions are additional parameters customisable from the chainspec and correspond to optional features implemented in the Host. 
 
 :::definition
