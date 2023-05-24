@@ -587,7 +587,52 @@ $$
 $$
 
 :::
-## -sec-num- Genesis State {#chapter-genesis}
+## -sec-num- Chain Specification {#chapter-chainspec}
+Chain Specification (chainspec) is a collection of information that describes the blockchain network. It includes information required for a host to connect and sync with the Polakdot network, for example, the initial nodes to communicate with, protocol identifier, initial state that the hosts agree, etc. There are a set of core fields required by the Host and a set of extensions which are used by optionally implemented features of the Host. The fields of chain specification are categorised in three parts:
+1. [Client Spec](#sec-num--client-spec-section-clientspec)
+2. [ChainSpec Extensions](#sec-num--client-spec-extensions-section-client-spec-extensions)
+3. [Genesis State](#sec-num--genesis-state-section-genesis)
+
+### -sec-num- Client Spec {#section-clientspec}
+Client specification contains information used by the Host to communicate with network participants and optionally send data to telemetry endpoints. 
+Recommended structure for the client specification is detailed as a Polkadot Standards Proposals. 
+
+
+
+#### -sec-num- Client Spec Extensions {#section-client-spec-extensions}
+ChainSpec Extensions are additional parameters customisable from the chainspec and correspond to optional features implemented in the Host. 
+
+:::definition
+
+**BadBlocks** describes a list of block header hashes that are known apriori to be bad (not belonging to canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
+
+$$
+{badBlocks}={\left({b}_{{0}},\ldots{b}_{{n}}\right)}
+$$
+
+where ${b_i}$ is a known invalid [block header hash](#definition--def-num--block-header-hash).
+
+:::
+
+:::definition
+
+**ForkBlocks** describes a list of expected block header hashes at certain block heights. They are used to set trusted checkpoints, i.e., the host will refuse to import a block with a different hash at the given height. Forkblocks are useful mechanism to guide the Host to the right fork in instances where the chain is bricked (possibly due to issues in runtime upgrades).
+$$
+{forkBlocks}={\left(<{b}_{{0}},{H}_{{0}}>,\ldots<{b}_{{n}},{H}_{{n}} >\right)}
+$$
+
+where ${b_i}$ is an apriori known valid [block header hash](#definition--def-num--block-header-hash) at [block height](#definition--def-num--block-header) ${H_i}$. The host is expected to accept no other block except ${b_i}$ at height ${H_i}$. 
+
+:::
+
+:::info
+
+**lightSyncState** describes a checkpointing format for light clients. Its specification is currently Work-In-Progress. 
+
+:::
+
+
+### -sec-num- Genesis State {#section-genesis}
 
 The genesis state is a set of key-value pairs representing the initial state of the Polkadot state storage. It can be retrieved from [the Polkadot repository](https://github.com/paritytech/polkadot/tree/master/node/service/chain-specs). While each of those key-value pairs offers important identifiable information to the Runtime, to the Polkadot Host they are a transparent set of arbitrary chain- and network-dependent keys and values. The only exception to this are the `:code` ([Section -sec-num-ref-](chap-state#sect-loading-runtime-code)) and `:heappages` ([Section -sec-num-ref-](chap-state#sect-memory-management)) keys, which are used by the Polkadot Host to initialize the WASM environment and its Runtime. The other keys and values are unspecified and solely depend on the chain and respectively its corresponding Runtime. On initialization the data should be inserted into the state storage with the Host API ([Section -sec-num-ref-](chap-host-api#sect-storage-set)).
 
