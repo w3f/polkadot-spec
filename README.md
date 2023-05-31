@@ -37,7 +37,7 @@ $$
 
 ### Numeration System
 
-Inside [`preBuild`](preBuild), you can find the script [`numerationSystem`](preBuild/numerationSystem/index.ts). This will assign to several entities a number, and substitute the placeholders inside the markdown files. This is done to avoid having to manually update the numbers when adding new entities.
+Inside [`preBuild`](preBuild), you can find the script [`numerationSystem`](preBuild/numerationSystem/index.ts). This will assign to several entities a number and substitute the placeholders inside the markdown files. This is done to avoid having to manually update the numbers when adding new entities.
 
 This is the structure of the spec:
 ```md
@@ -83,7 +83,7 @@ title: -chap-num- Chapter Title
 ```
 The placeholder `-chap-num-` will be replaced by the number assigned by [`numerationSystem`](preBuild/numerationSystem/index.ts).
 
-If you add a chapter (or "Macro Chapter"), you have also to add it to the [`sidebars.js`](sidebars.js) file, and adjust the numbers of the other chapters.
+If you add a chapter (or "Macro Chapter"), you must also add it to the [`sidebars.js`](sidebars.js) file and adjust the numbers of the other chapters.
 
 #### Sections
 To write a new section, use the following syntax:
@@ -118,7 +118,7 @@ Definition content here
 
 #### Algorithms
 
-To define an algorithm, use the same syntax as for definitions, but with the placeholder `-algo-num-`:
+To define an algorithm, use the same syntax as for definitions but with the placeholder `-algo-num-`:
 ```md
 ###### Algorithm -algo-num- Aggregate-Key {#algo-aggregate-key}
 ```
@@ -154,7 +154,7 @@ import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
 
 #### Tables and Images
 
-To define a table or an image, use the same syntax as for definitions and algorithms (always using a H6 header), but with the placeholder `-tab-num-` or `-img-num-`:
+To define a table or an image, use the same syntax as for definitions and algorithms (always using an H6 header) but with the placeholder `-tab-num-` or `-img-num-`:
 ```md
 ###### Table -tab-num- Name {#tab-name}
 ```
@@ -192,4 +192,4 @@ Refer to [`checkBrokenInternalLinks/index.ts`](plugins/checkBrokenInternalLinks/
 
 ## License
 
-Any code in this repository is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html) and any documentation or specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
+Any code in this repository is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), and any documentation or specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
