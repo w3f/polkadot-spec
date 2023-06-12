@@ -572,7 +572,7 @@ $$
 {{k}_{{1}}^{{7}}}\ldots{{k}_{{1}}^{{3}}}{{k}_{{1}}^{{2}}}\:={m}-{4}
 $$
 
-Note that ${m}$ denotes the length of the original integer being encoded and does not include the extra-byte describing the length. The encoding can be used for integers upto $$2^{(63+4)8} -1 = 2^{536} -1$$.
+Note that ${m}$ denotes the length of the original integer being encoded and does not include the extra-byte describing the length. The encoding can be used for integers up to $$2^{(63+4)8} -1 = 2^{536} -1$$.
 
 
 :::
