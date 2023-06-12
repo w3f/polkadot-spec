@@ -542,7 +542,7 @@ $$
 {\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}:{\mathbb{{N}}}\rightarrow{\mathbb{{B}}}
 $$
 $$
-{n}\rightarrow{b}\:={\left\lbrace\begin{matrix}{l}_{{1}}&{0}\le{n}<{2}^{{6}}\\{i}_{{1}}{i}_{{2}}&{2}^{{6}}\le{n}<{2}^{{14}}\\{j}_{{1}}{j}_{{2}}{j}_{{3}}&{2}^{{14}}\le{n}<{2}^{{30}}\\{k}_{{1}}{k}_{{2}}\ldots{k}_{{m}}&{2}^{{30}}\le{n}\end{matrix}\right.}
+{n}\rightarrow{b}\:={\left\lbrace\begin{matrix}{l}_{{1}}&{0}\le{n}<{2}^{{6}}\\{i}_{{1}}{i}_{{2}}&{2}^{{6}}\le{n}<{2}^{{14}}\\{j}_{{1}}{j}_{{2}}{j}_{{3}}{j}_{{4}}&{2}^{{14}}\le{n}<{2}^{{30}}\\{k}_{{1}}{k}_{{2}}\ldots{k}_{{m}+{1}}&{2}^{{30}}\le{n}\end{matrix}\right.}
 $$
 
 in where the least significant bits of the first byte of byte array b are defined as follows:
@@ -563,7 +563,7 @@ $$
 and the rest of the bits of ${b}$ store the value of ${n}$ in little-endian format in base-2 as follows:
 
 $$
-{n}\:={\left\lbrace\begin{matrix}{{l}_{{1}}^{{7}}}\ldots{{l}_{{1}}^{{3}}}{{l}_{{1}}^{{2}}}&{n}<{2}^{{6}}\\{{i}_{{2}}^{{7}}}\ldots{{i}_{{2}}^{{0}}}{{i}_{{1}}^{{7}}}..{{i}_{{1}}^{{2}}}&{2}^{{6}}\le{n}<{2}^{{14}}\\{{j}_{{4}}^{{7}}}\ldots{{j}_{{4}}^{{0}}}{{j}_{{3}}^{{7}}}\ldots{{j}_{{1}}^{{7}}}\ldots{{j}_{{1}}^{{2}}}&{2}^{{14}}\le{n}<{2}^{{30}}\\{k}_{{2}}+{k}_{{3}}{2}^{{8}}+{k}_{{4}}{2}^{{{2}\times{8}}}+\ldots+{k}_{{m}}{2}^{{{\left({m}-{2}\right)}{8}}}&{2}^{{30}}\le{n}\end{matrix}\right.}
+{n}\:={\left\lbrace\begin{matrix}{{l}_{{1}}^{{7}}}\ldots{{l}_{{1}}^{{3}}}{{l}_{{1}}^{{2}}}&{n}<{2}^{{6}}\\{{i}_{{2}}^{{7}}}\ldots{{i}_{{2}}^{{0}}}{{i}_{{1}}^{{7}}}..{{i}_{{1}}^{{2}}}&{2}^{{6}}\le{n}<{2}^{{14}}\\{{j}_{{4}}^{{7}}}\ldots{{j}_{{4}}^{{0}}}{{j}_{{3}}^{{7}}}\ldots{{j}_{{1}}^{{7}}}\ldots{{j}_{{1}}^{{2}}}&{2}^{{14}}\le{n}<{2}^{{30}}\\{k}_{{2}}+{k}_{{3}}{2}^{{8}}+{k}_{{4}}{2}^{{{2}\times{8}}}+\ldots+{k}_{{m}+{1}}{2}^{{{\left({m}-{1}\right)}{8}}}&{2}^{{30}}\le{n}\end{matrix}\right.}
 $$
 
 such that:
@@ -571,6 +571,9 @@ such that:
 $$
 {{k}_{{1}}^{{7}}}\ldots{{k}_{{1}}^{{3}}}{{k}_{{1}}^{{2}}}\:={m}-{4}
 $$
+
+Note that ${m}$ denotes the length of the original integer being encoded and does not include the extra-byte describing the length. The encoding can be used for integers upto $$2^{(63+4)8} -1 = 2^{536} -1$$.
+
 
 :::
 ### -sec-num- Hex Encoding {#id-hex-encoding}
