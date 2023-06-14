@@ -594,9 +594,49 @@ Chain Specification (chainspec) is a collection of information that describes th
 3. [Genesis State](#sec-num--genesis-state-section-genesis) which is the only mandatory part of the chainspec. 
 
 ### -sec-num- Chain Spec {#section-chainspec}
-Chain specification contains information used by the Host to communicate with network participants and optionally send data to telemetry endpoints. 
-Recommended structure for the client specification is detailed as a Polkadot Standards Proposals. 
 
+Chain specification contains information used by the Host to communicate with network participants and optionally send data to telemetry endpoints. 
+
+:::definition
+
+The **client specification** contains the fields below. The values for Polkadot chain are specified:
+
+- _name_: The human readable name of the chain.
+  ```
+  "name": "Polkadot"
+  ```
+- _id_: The id of the chain.
+  ```
+  "id": "polkadot"
+  ```
+
+- _chainType_: Possible values are `Live`, `Development`, `Local`.
+  ```
+  "chainType": "Live"
+  ```
+
+- _bootNodes_: A list of [MultiAddress](https://github.com/libp2p/specs/blob/master/addressing/README.md#multiaddr-in-libp2p) that belong to boot nodes of the chain. 
+The list of boot nodes for Polkadot can be found [here](https://raw.githubusercontent.com/paritytech/polkadot/master/node/service/chain-specs/polkadot.json)
+
+- _telemetryEndpoints_: Optional list of "(_multiaddress_, _verbosity_)" pairs of telemetry endpoints. The verbosity goes from `0` to `9`. With `0` being the mode with the lowest verbosity. 
+
+- _forkId_: Optional fork id. Should most likely be left empty. Can be used to signal a fork on the network level when two chains have the same genesis hash. 
+
+```
+"forkId": {}
+```
+
+- _properties_: Optional additional properties of the chain as subfields like token symbol, token decimals and address formats.
+
+```
+  "properties": {
+    "ss58Format": 0,
+    "tokenDecimals": 10,
+    "tokenSymbol": "DOT"
+  }
+```
+
+:::
 
 
 ### -sec-num- Chain Spec Extensions {#section-chain-spec-extensions}
@@ -627,7 +667,7 @@ where ${b_i}$ is an apriori known valid [block header hash](#definition--def-num
 
 :::info
 
-**lightSyncState** describes a checkpointing format for light clients. Its specification is currently Work-In-Progress. 
+**lightSyncState** describes a check-pointing format for light clients. Its specification is currently Work-In-Progress. 
 
 :::
 
