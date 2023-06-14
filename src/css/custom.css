@@ -799,3 +799,15 @@ html[data-theme='dark'] .docusaurus-highlight-code-line {
     max-width: 1140px;
   }
 }
+
+@media (min-width: 2350px) {
+  #docusaurus_skipToContent_fallback.main-wrapper.mainWrapper_z2l0 {
+    position: relative;
+  }
+
+  #homepage_features {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+}
