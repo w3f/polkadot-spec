@@ -626,7 +626,7 @@ The list of boot nodes for Polkadot can be found [here](https://raw.githubuserco
 "forkId": {}
 ```
 
-- _properties_: Optional additional properties of the chain as subfields like token symbol, token decimals and address formats.
+- _properties_: Optional additional properties of the chain as subfields including token symbol, token decimals and address formats.
 
 ```
   "properties": {
