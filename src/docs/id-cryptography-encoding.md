@@ -642,6 +642,8 @@ The list of boot nodes for Polkadot can be found [here](https://raw.githubuserco
 ### -sec-num- Chain Spec Extensions {#section-chain-spec-extensions}
 ChainSpec Extensions are additional parameters customisable from the chainspec and correspond to optional features implemented in the Host. 
 
+###### Definition -def-num- Bad Blocks Header {#defn-bad-blocks}
+
 :::definition
 
 **BadBlocks** describes a list of block header hashes that are known apriori to be bad (not belonging to canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
@@ -653,6 +655,8 @@ $$
 where ${b_i}$ is a known invalid [block header hash](#definition--def-num--block-header-hash).
 
 :::
+
+###### Definition -def-num- Fork Blocks {#defn-fork-blocks}
 
 :::definition
 
@@ -693,6 +697,16 @@ The Polkadot genesis header is a data structure conforming to block header forma
 | `digest`           | *0*                                                                                                                                 |
 
 :::
+
+
+###### Definition -def-num- Code Substitutes {#defn-code-substitutes}
+
+:::definition
+
+**Code Substitutes** is a list of pairs of block number and `wasm_code`. The given WASM code will be used to substitute the on-chain wasm code starting with the given block number until the [`spec_version`](chap-runtime-api#defn-rt-core-version) on-chain changes. The substitute code should be as close as possible to the on-chain wasm code. A substitute should be used to fix a bug that can not be fixed with a runtime upgrade, if for example the runtime is constantly panicking. Introducing new runtime apis isn't supported, because the node will read the runtime version from the on-chain wasm code. Use this functionality only when there is no other way around and to only patch the problematic bug, the rest should be done with a on-chain runtime upgrade.
+
+:::
+
 ## -sec-num- Erasure Encoding {#chapter-erasure-encoding}
 
 ### -sec-num- Erasure Encoding {#sect-erasure-encoding}
