@@ -590,7 +590,96 @@ $$
 $$
 
 :::
-## -sec-num- Genesis State {#chapter-genesis}
+## -sec-num- Chain Specification {#chapter-chainspec}
+Chain Specification (chainspec) is a collection of information that describes the blockchain network. It includes information required for a host to connect and sync with the Polakdot network, for example, the initial nodes to communicate with, protocol identifier, initial state that the hosts agree, etc. There are a set of core fields required by the Host and a set of extensions which are used by optionally implemented features of the Host. The fields of chain specification are categorised in three parts:
+1. [ChainSpec](#sec-num--chain-spec-section-chainspec)
+2. [ChainSpec Extensions](#sec-num--chain-spec-extensions-section-chain-spec-extensions)
+3. [Genesis State](#sec-num--genesis-state-section-genesis) which is the only mandatory part of the chainspec. 
+
+### -sec-num- Chain Spec {#section-chainspec}
+
+Chain specification contains information used by the Host to communicate with network participants and optionally send data to telemetry endpoints. 
+
+:::definition
+
+The **client specification** contains the fields below. The values for Polkadot chain are specified:
+
+- _name_: The human readable name of the chain.
+  ```
+  "name": "Polkadot"
+  ```
+- _id_: The id of the chain.
+  ```
+  "id": "polkadot"
+  ```
+
+- _chainType_: Possible values are `Live`, `Development`, `Local`.
+  ```
+  "chainType": "Live"
+  ```
+
+- _bootNodes_: A list of [MultiAddress](https://github.com/libp2p/specs/blob/master/addressing/README.md#multiaddr-in-libp2p) that belong to boot nodes of the chain. 
+The list of boot nodes for Polkadot can be found [here](https://raw.githubusercontent.com/paritytech/polkadot/master/node/service/chain-specs/polkadot.json)
+
+- _telemetryEndpoints_: Optional list of "(_multiaddress_, _verbosity_)" pairs of telemetry endpoints. The verbosity goes from `0` to `9`. With `0` being the mode with the lowest verbosity. 
+
+- _forkId_: Optional fork id. Should most likely be left empty. Can be used to signal a fork on the network level when two chains have the same genesis hash. 
+
+```
+"forkId": {}
+```
+
+- _properties_: Optional additional properties of the chain as subfields including token symbol, token decimals and address formats.
+
+```
+  "properties": {
+    "ss58Format": 0,
+    "tokenDecimals": 10,
+    "tokenSymbol": "DOT"
+  }
+```
+
+:::
+
+
+### -sec-num- Chain Spec Extensions {#section-chain-spec-extensions}
+ChainSpec Extensions are additional parameters customisable from the chainspec and correspond to optional features implemented in the Host. 
+
+###### Definition -def-num- Bad Blocks Header {#defn-bad-blocks}
+
+:::definition
+
+**BadBlocks** describes a list of block header hashes that are known apriori to be bad (not belonging to canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
+
+$$
+{badBlocks}={\left({b}_{{0}},\ldots{b}_{{n}}\right)}
+$$
+
+where ${b_i}$ is a known invalid [block header hash](#definition--def-num--block-header-hash).
+
+:::
+
+###### Definition -def-num- Fork Blocks {#defn-fork-blocks}
+
+:::definition
+
+**ForkBlocks** describes a list of expected block header hashes at certain block heights. They are used to set trusted checkpoints, i.e., the host will refuse to import a block with a different hash at the given height. Forkblocks are useful mechanism to guide the Host to the right fork in instances where the chain is bricked (possibly due to issues in runtime upgrades).
+$$
+{forkBlocks}={\left(<{b}_{{0}},{H}_{{0}}>,\ldots<{b}_{{n}},{H}_{{n}} >\right)}
+$$
+
+where ${b_i}$ is an apriori known valid [block header hash](#definition--def-num--block-header-hash) at [block height](#definition--def-num--block-header) ${H_i}$. The host is expected to accept no other block except ${b_i}$ at height ${H_i}$. 
+
+:::
+
+:::info
+
+**lightSyncState** describes a check-pointing format for light clients. Its specification is currently Work-In-Progress. 
+
+:::
+
+
+### -sec-num- Genesis State {#section-genesis}
 
 The genesis state is a set of key-value pairs representing the initial state of the Polkadot state storage. It can be retrieved from [the Polkadot repository](https://github.com/paritytech/polkadot/tree/master/node/service/chain-specs). While each of those key-value pairs offers important identifiable information to the Runtime, to the Polkadot Host they are a transparent set of arbitrary chain- and network-dependent keys and values. The only exception to this are the `:code` ([Section -sec-num-ref-](chap-state#sect-loading-runtime-code)) and `:heappages` ([Section -sec-num-ref-](chap-state#sect-memory-management)) keys, which are used by the Polkadot Host to initialize the WASM environment and its Runtime. The other keys and values are unspecified and solely depend on the chain and respectively its corresponding Runtime. On initialization the data should be inserted into the state storage with the Host API ([Section -sec-num-ref-](chap-host-api#sect-storage-set)).
 
@@ -611,6 +700,16 @@ The Polkadot genesis header is a data structure conforming to block header forma
 | `digest`           | *0*                                                                                                                                 |
 
 :::
+
+
+###### Definition -def-num- Code Substitutes {#defn-code-substitutes}
+
+:::definition
+
+**Code Substitutes** is a list of pairs of block number and `wasm_code`. The given WASM code will be used to substitute the on-chain wasm code starting with the given block number until the [`spec_version`](chap-runtime-api#defn-rt-core-version) on-chain changes. The substitute code should be as close as possible to the on-chain wasm code. A substitute should be used to fix a bug that can not be fixed with a runtime upgrade, if for example the runtime is constantly panicking. Introducing new runtime apis isn't supported, because the node will read the runtime version from the on-chain wasm code. Use this functionality only when there is no other way around and to only patch the problematic bug, the rest should be done with a on-chain runtime upgrade.
+
+:::
+
 ## -sec-num- Erasure Encoding {#chapter-erasure-encoding}
 
 ### -sec-num- Erasure Encoding {#sect-erasure-encoding}

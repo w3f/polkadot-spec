@@ -132,7 +132,7 @@ ${H}_{{p}}$
 - The 32-byte Blake2b hash of the header of the parent of the block.
 
 ${H}_{{i}},{H}_{{i}}{\left({B}\right)}$  
-- Block number, the incremental interger index of the current block in the chain.
+- Block number, the incremental integer index of the current block in the chain.
 
 ${H}_{{r}}$  
 - The hash of the root of the Merkle trie of the state storage at a given block
