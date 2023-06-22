@@ -1163,7 +1163,7 @@ All calls in this module require `Core_initialize_block` ([Section -sec-num-ref-
 TODO clarify differences between *RuntimeCall* and *Extrinsics*
 :::
 
-### -sec-num- `TransactionPaymentApi_query_call_info` {#sect-rte-transactionpaymentapi-query-call-info}
+### -sec-num- `TransactionPaymentCallApi_query_call_info` {#sect-rte-transactionpaymentcallapi-query-call-info}
 
 Query information of a dispatch class, weight, and fee of a given encoded `Call`.
 
@@ -1191,7 +1191,7 @@ Query information of a dispatch class, weight, and fee of a given encoded `Call`
     $$
   - $f$ is the partial-fee of the call. This does not include a tip or anything else that depends on the signature.
 
-### -sec-num- `TransactionPaymentApi_query_call_fee_details` {#sect-rte-transactionpaymentapi-query-call-fee-details}
+### -sec-num- `TransactionPaymentCallApi_query_call_fee_details` {#sect-rte-transactionpaymentcallapi-query-call-fee-details}
 
 Query the fee details of a given encoded `Call` including tip. 
 
