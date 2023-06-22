@@ -9,6 +9,8 @@ This website is built using [Docusaurus 2](https://docusaurus.io/), a modern sta
 ## Local Development
 
 ```bash
+git clone --recurse-submodules https://github.com/w3f/polkadot-spec
+cd website
 npm i
 npm run build # or build_with_kaitai to also rebuild kaitai SVG files
 npm run serve
@@ -18,9 +20,9 @@ This command starts a local development server and opens up a browser window. Mo
 
 ## Contributing
 
-You can find the markdown files inside the [`src/docs`](src/docs) folder.
+You can find the markdown files inside the [`docs`](docs) folder.
 
-When building, the scripts inside [`preBuild`](preBuild) will generate a `docs` folder, from which Docusaurus will render the website. Then, the rendered content will be modified by the [`plugins`](plugins) in the browser.
+When building, the scripts inside [`preBuild`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild) will generate a `docs` folder, from which Docusaurus will render the website. Then, the rendered content will be modified by the [`plugins`](https://github.com/w3f/polkadot-spec-website/tree/main/plugins) in the browser.
 
 ### LaTeX
 
@@ -37,7 +39,7 @@ $$
 
 ### Numeration System
 
-Inside [`preBuild`](preBuild), you can find the script [`numerationSystem`](preBuild/numerationSystem/index.ts). This will assign to several entities a number and substitute the placeholders inside the markdown files. This is done to avoid having to manually update the numbers when adding new entities.
+Inside [`preBuild`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild), you can find the script [`numerationSystem`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild/numerationSystem/index.ts). This will assign to several entities a number and substitute the placeholders inside the markdown files. This is done to avoid having to manually update the numbers when adding new entities.
 
 This is the structure of the spec:
 ```md
@@ -81,9 +83,9 @@ title: -chap-num- Chapter Title
 ---
 <!-- Chapter content here -->
 ```
-The placeholder `-chap-num-` will be replaced by the number assigned by [`numerationSystem`](preBuild/numerationSystem/index.ts).
+The placeholder `-chap-num-` will be replaced by the number assigned by [`numerationSystem`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild/numerationSystem/index.ts).
 
-If you add a chapter (or "Macro Chapter"), you must also add it to the [`sidebars.js`](sidebars.js) file and adjust the numbers of the other chapters.
+If you add a chapter (or "Macro Chapter"), you must also add it to the [`sidebars.js`](https://github.com/w3f/polkadot-spec-website/tree/main/sidebars.js) file and adjust the numbers of the other chapters.
 
 #### Sections
 To write a new section, use the following syntax:
@@ -104,7 +106,7 @@ To write a definition:
 - Put the placeholder `-def-num-` in the header;
 - Add an id to the header.
 
-Then, you should include the definition content inside the custom admonition `:::definition` (you can find all the custom admonitions inside [`src/theme/Admonition/Types.js`](src/theme/Admonition/Types.js)).
+Then, you should include the definition content inside the custom admonition `:::definition` (you can find all the custom admonitions inside [`src/theme/Admonition/Types.js`](https://github.com/w3f/polkadot-spec-website/tree/main/src/theme/Admonition/Types.js)).
 
 So the final result will be the following:
 ```md
@@ -122,7 +124,7 @@ To define an algorithm, use the same syntax as for definitions but with the plac
 ```md
 ###### Algorithm -algo-num- Aggregate-Key {#algo-aggregate-key}
 ```
-At the top of the page, you must include the [`Pseudocode`](src/components/Pseudocode.jsx) component and the LaTeX algorithm you want to render:
+At the top of the page, you must include the [`Pseudocode`](https://github.com/w3f/polkadot-spec-website/tree/main/src/components/Pseudocode.jsx) component and the LaTeX algorithm you want to render:
 ```md
 ---
 title: -chap-num- States and Transitions
@@ -130,7 +132,7 @@ title: -chap-num- States and Transitions
 import Pseudocode from '@site/src/components/Pseudocode';
 import aggregateKey from '!!raw-loader!@site/src/algorithms/aggregateKey.tex';
 ```
-After this, you can build the algorithm using the admonition `:::algorithm`, and using the [`Pseudocode`](src/components/Pseudocode.jsx) component (refer to the file to know more about its `props`). This will be the final result:
+After this, you can build the algorithm using the admonition `:::algorithm`, and using the [`Pseudocode`](https://github.com/w3f/polkadot-spec-website/tree/main/src/components/Pseudocode.jsx) component (refer to the file to know more about its `props`). This will be the final result:
 ```md
 ---
 title: -chap-num- States and Transitions
@@ -176,7 +178,7 @@ To reference any of the entities from anywhere in the website, you have to use t
 
 ### Bibliography
 
-The cited works are defined inside [`src/bibliography.bib`](src/bibliography.bib). To cite a work, use the following syntax:
+The cited works are defined inside [`bibliography.bib`](bibliography.bib). To cite a work, use the following syntax:
 ```md
 [@work-id]
 ```
@@ -188,7 +190,7 @@ During the `preBuild`, the external links in the markdown files will be checked.
 After the `build`, the internal links will be checked.<br/>
 If any link is broken, the console will show a warning.<br/>
 
-Refer to [`checkBrokenInternalLinks/index.ts`](plugins/checkBrokenInternalLinks/index.ts) and [`checkBrokenExternalLinks/index.ts`](preBuild/checkBrokenExternalLinks/index.ts).
+Refer to [`checkBrokenInternalLinks/index.ts`](https://github.com/w3f/polkadot-spec-website/tree/main/plugins/checkBrokenInternalLinks/index.ts) and [`checkBrokenExternalLinks/index.ts`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild/checkBrokenExternalLinks/index.ts).
 
 ## License
 
