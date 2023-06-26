@@ -8,6 +8,8 @@ This website is built using [Docusaurus 2](https://docusaurus.io/), a modern sta
 
 ## Local Development
 
+To clone, build and serve the website locally, run the following commands:
+
 ```bash
 git clone --recurse-submodules https://github.com/w3f/polkadot-spec
 cd website
@@ -16,7 +18,17 @@ npm run build # or build_with_kaitai to also rebuild kaitai SVG files
 npm run serve
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+If you already have the repo cloned, remember to update it and the submodule before doing any changes:
+
+```bash
+git pull
+git submodule update --remote
+```
+
+Because of the "complex" build, unfortunately you can't see the changes in real time, if you directly edit the `docs` folder. There are two workarounds:
+- use a Markdown plugin or editor (e.g. the extension [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) for VSCode) to see the changes in real time. You won't be able to see the placeholders rendered and other elements, but you'll be able to render the markdown and latex;
+  
+- build the website a first time, then run `npm run start` instead of `npm run serve`, and edit the files inside the `website/docs` folder. This will allow you to see the changes in real time, but you have to remember to bring the changes inside the `src/docs` folder before committing. Also, in this way, you can't put the placeholders and other elements inside the markdown files of `website/docs` as they wouldn't be rendered.
 
 ## Contributing
 
