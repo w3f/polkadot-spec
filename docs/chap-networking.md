@@ -32,7 +32,7 @@ Complete specification of the Polkadot networking protocol relies on the followi
 
 Each Polkadot Host node maintains an ED25519 key pair which is used to identify the node. The public key is shared with the rest of the network allowing the nodes to establish secure communication channels.
 
-Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId* as defined in [Definition -def-num-ref-](chap-networking#defn-peer-id) is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section -sec-num-ref-](chap-networking#sect-discovery-mechanism).
+Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId* as defined in [Definition -def-num-ref-](chap-networking#defn-peer-id) is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap).
 
 ###### Definition -def-num- PeerId {#defn-peer-id}
 :::definition
@@ -74,7 +74,7 @@ $$
 - ${b}_{{4}}$, ${b}_{{5}}$ and ${b}_{{{6}.{.37}}}$ are a protobuf encoded field-value pair where ${b}_{{5}}$ indicates the length of the public key followed by the the raw ED25519 public key itself, which varies for each Polkadot Host and is always 32 bytes (field ${2}$ contains the public key, which has a field value length prefix).
 
 :::
-## -sec-num- Discovery mechanism {#sect-discovery-mechanism}
+## -sec-num- Network bootstrap and discovery {#sect-network-bootstrap}
 
 The Polkadot Host uses various mechanisms to find peers within the network, to establish and maintain a list of peers and to share that list with other peers from the network as follows:
 
@@ -213,6 +213,78 @@ The Polkadot Host must actively communicate with the network in order to partici
 :::info
   The Polkadot network originally only used SCALE encoding for all message formats. Meanwhile, Protobuf has been adopted for certain messages. The encoding of each listed message is always SCALE encoded unless Protobuf is explicitly mentioned. Encoding and message formats are subject to change.
 :::
+
+dskjfsldkfjgsldfjgs
+
+
+<!-- authority discovery -->
+
+### -sec-num- Discovering authorities {#sect-authority-discovery}
+
+<!-- what it is  -->
+The authority discovery mechanism enables Polkadot nodes to both publish their local addresses and learn about other nodes' local addresses by means of the undelayed Kademlia DHT. Note that, the authority discovery differs from the bootstrap mechanism, described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap), in that it restricts the discovery output to nodes that are currently holding the authority role (i.e., validators). The authority discovery mechanism consists of two components: the discovery `worker` and the discovery `service`. 
+
+
+<!-- when it sends it -->
+The discovery `worker` is in charge of publishing local nodes addresses and discovering other nodes addresses via Kademlia operations. The discovery `service` enables Polkadot nodes to interact with the `worker` by sending `ServicetoWorkerMsg` messages through the `NetworkDHTProvider`.
+
+<!-- what it contains  -->
+The `ServicetoWorkerMsg` message has two different implementations (or types): `GetAuthorityIdsByPeerId` and `GetAddressesByAuthorityId`.
+
+#### -sec-num- Requesting authority addresses {#sect-auth-discovery-addresses}
+By using authorityIds, Polkadot nodes can find the addresses of other authorities. To do so, a `ServicetoWorkerMsg` of type `GetAddressesByAuthorityId` must be sent to the worker.
+
+###### Definition -def-num- Authority Addresses Request {#defn-msg-authority-address-request}
+:::definition
+
+An **authority addresses request** is sent to the `worker` to request the addresses of an authority node with a given `AuthorityId`. An `AuthorityId` is the 256-bit identifier that is sent as a message's parameter. A `Multiaddr` data structure is returned if an entry is found, None otherwise.
+:::
+
+#### -sec-num- Requesting Authority Ids {#sect-auth-discovery-authorityId}
+By using the `PeerId` of authorities, Polkadot nodes can find their associated `AuthorityId`. To achieve that,  a `ServicetoWorkerMsg` of type `GetAuthorityIdsByPeerId` must be sent to the worker. 
+
+
+###### Definition -def-num- Authority Id Request {#defn-msg-authority-authid-request}
+:::definition
+
+An **authority id request** is sent to the `worker` to request the `AuthorityId` of an authority node for a given `PeerId`.
+An `PeerId` the node’s PeerId as defined in [Definition -def-num-ref-](chap-networking#defn-peer-id). An `AuthorityId` is returned if an entry is found, None otherwise.
+:::
+
+#### -sec-num- Worker requests {#sect-auth-discovery-worker}
+The `worker` component of the authority discovery has an internal data structure called `AddrCache` . This data structure is used to cache the addresses and authority identifiers found on Kademlia. `AddrCache` maps `AuthorityId` $\to$ `Multiaddr` and `PeerId` $\to$ `AuthorityId`. The `AddrCache` is used to handle the [Authority Addresses Request](chap-networking#defn-msg-authority-address-request) and [Authority Id Request](chap-networking#defn-msg-authority-authid-request) above.
+ 
+The `worker` periodically sends `put_value()` messages to the DHT to publish a `SignedAuthorityRecord` of authorities it knows about.
+
+
+###### Definition -def-num- Signed Authority Record {#defn-msg-signed-authority-record}
+:::definition
+
+The `SignedAuthorityRecord` is a Protobuf serialized structure representing the authority records and signature to send over the wire. It is defined in the following format:
+
+| Type               | Id  | Description                                           |
+|--------------------|-----|-------------------------------------------------------|
+| *AuthorityRecord*  | 1   | Serialized authority record                           |
+| `bytes`            | 2   | An Schnorrkel/Ristretto x25519 ("sr25519") signature  |
+| *PeerSignature*    | 3   | Serialized peer signature                             |
+**where**  
+
+**AuthorityRecord** is a Protobuf serialized structure indicating the addresses that will be signed.
+
+| Type              | Id  | Description                                                             |
+|-------------------|-----|-------------------------------------------------------------------------|
+| `repeated bytes` | 1   | Possibly multiple `MultiAddress`es through which a node can be connected | 
+
+
+**PeerSignature** is a Protobuf serialized structure indicating the authority record signature and public key used to verify the record.
+
+| Type     | Id  | Description                                       |
+|----------|-----|---------------------------------------------------|
+| `bytes` | 1   | An sr25519 signature                               | 
+| `bytes` | 1   | A sr25519 public key used to verify the signature  | 
+:::
+
+<!--  -->
 
 ### -sec-num- Announcing blocks {#sect-msg-block-announce}
 
