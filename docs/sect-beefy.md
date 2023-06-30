@@ -84,22 +84,18 @@ $$
 E(A,c,K) = \sum_{i=1}^{\infty}[((\frac{K-1}{K})^{i-1} \cdot \frac{1}{K}\cdot A) + ((\frac{K-1}{K})^{i} \cdot i \cdot \frac{s\cdot m}{2})] 
 $$
 
-Here, we assume that the slashed validators can re-participate in the next round. 
 Simplifying, this results in 
 
 $$
 E(A,c,K) = A + K(K-1)\cdot \frac{s\cdot log_2 K }{2}
 $$
  
-Assuming the adversary is rational, an attack is initiated only if $E(A,c,N) > 0$. This provides us a closed form relation between the parameters: Attack value, Slashing value, and the number of queries in the challenge. Here we are assuming that the slashed validators are able to participate in the upcoming rounds even after being slashed. We may have to model the delay before the adversary regains $1/3$ adversarial power. 
-
+Assuming the adversary is rational, an attack is initiated only if $E(A,c,N) > 0$. This provides us a closed form relation between the parameters: Attack value, Slashing value, and the number of queries in the challenge. Here we are assuming that the slashed validators are able to participate in the upcoming rounds even after being slashed. We may have to model the delay before the adversary regains one-third validators. 
 
 **Pending Tasks:**
 
-- Preliminary analysis of biasing RANDAO shows that the chances are extremely low even if the adversary controls $1/3$ of the stake in Ethereum. Basically, maintaining control over a tail of length $k$ (the last  k blocks in the 32-slot epoch) is negligible. Two independent analysis and simulations can be seen here:  
+- Preliminary analysis of biasing RANDAO shows that the chances are extremely low even if the adversary controls $1/3$ of the stake in Ethereum. Basically, maintaining control over a tail of length $k$ (the last  k blocks in the 32-slot epoch) is negligible. Two independent analysis and simulations can be found here: [Randao Biasability Simulations](https://eth2book.info/capella/part2/building_blocks/randomness/#biasability-analyses), [Statistical Model-Checking](https://core.ac.uk/download/pdf/161954228.pdf) of Randao Bias Resilience. 
 - Can the bias analysis of RANDAO be modularly be plugged-in to the above security analysis. I would guess so, the probability of successful attack changes from $1/2^m$ to $r/2^m$ where $r$ is the bias factor. 
-
-
 
 
 ### Independent Subsampling v/s Distinct Subsampling
