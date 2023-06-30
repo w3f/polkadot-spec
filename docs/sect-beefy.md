@@ -34,9 +34,7 @@ Security arguments flow from top to bottom:
 - Specify and prove soundness and completeness of BEEFY assuming guarantees from GRANDPA.
 - Define the behavior of relayer and assumptions on the latency/concurrency etc. 
 - Assume guarantees on BEEFY, prove the soundness, completeness, and succinctness of the random sampling light client. 
-- Derive the relevant Parameters like sub-sampling size, slashing penalty, etc. fixing a security budget. 
-
-
+- Derive the relevant Parameters like sub-sampling size, slashing penalty, etc. fixing a security budget. (Work in Progress, see below)
 
 
 Informal Specifications of some key formats:
@@ -63,4 +61,50 @@ Is a tuple consisting of
 
 
 
+## Parameter Analysis
+
+
+### Issues with Relayer going silent.
+
+It is not clear how the Light Client should behave when the Relayer does not respond to the challenge phase of the interactive protocol. This should be specified, or at least a slashing condition should be defined for the relayer to punish him for such behavior.  The relayer could initially share the commitment with bitfield, and if the queries made by the Light Client (using RANDAO randomness) is unfavorable, then relayer just does not respond to the challenge. He could repeat the process until the randomness is favorable (bitfield matches only the bad guys signature). In other words, the cost of attack is Zero and the relayer (in collusion with malicious Beefy validators) can wait until it hits the perfectly crafted challenge by LC.
+
+### Attacker's Incentive Analysis 
+
+We analyze the Expected incentive of initiating an attack. This assumes that the relayer follows through the interactive protocol and does not go silent in the second phase for unfavorable challenges. For this analysis, we assume that the randomness used by the light-client for subsampling (via RANDAO) is unbiased. 
+
+- Assume the adversary controls $N/3$ of the Polkadot validators and the relayer $R$.
+- Assume the value of successful attack is $A$ for the adversary.
+- Let $s$ be the validator's slashing penalty for signing a non-finalized BEEFY Block. Assuming $m$ random queries are made and $N/3$ of the $2N/3 +1$ signatures are malicious in the relayers claim, the expected number of malicious signatures queried is $m/2$. Hence, the expected slash for a failed attack is $s*m/2$.  
+- in the initial phase, $R$ claims to have $(2N/3)+1$ valid signatures of which $N/3$ are malicious and $(N/3)+1$ are honest. 
+- Assume the Light Client in the interactive setting asks $m$ randomly chosen signatures to verify the claim previously made by relayer. It just needs one of those $m$ to be from an honest validator to ensure it is not misled. The probability of it being misled are $<(1/2^m)$. Therefore, the expected number of times the Relayer participates to hit a favorable challenge is $K=2^m$. 
+
+We compute the expected incentive of the adversary if it relentlessly tries to mislead the light client as follows:
+
+$$
+E(A,c,K) = \sum_{i=1}^{\infty}[((\frac{K-1}{K})^{i-1} \cdot \frac{1}{K}\cdot A) + ((\frac{K-1}{K})^{i} \cdot i \cdot \frac{s\cdot m}{2})] 
+$$
+
+Here, we assume that the slashed validators can re-participate in the next round. 
+Simplifying, this results in 
+
+$$
+E(A,c,K) = A + K(K-1)\cdot \frac{s\cdot log_2 K }{2}
+$$
+ 
+Assuming the adversary is rational, an attack is initiated only if $E(A,c,N) > 0$. This provides us a closed form relation between the parameters: Attack value, Slashing value, and the number of queries in the challenge. Here we are assuming that the slashed validators are able to participate in the upcoming rounds even after being slashed. We may have to model the delay before the adversary regains $1/3$ adversarial power. 
+
+
+**Pending Tasks:**
+
+- Preliminary analysis of biasing RANDAO shows that the chances are extremely low even if the adversary controls $1/3$ of the stake in Ethereum. Basically, maintaining control over a tail of length $k$ (the last  k blocks in the 32-slot epoch) is negligible. Two independent analysis and simulations can be seen here:  
+- Can the bias analysis of RANDAO be modularly be plugged-in to the above security analysis. I would guess so, the probability of successful attack changes from $1/2^m$ to $r/2^m$ where $r$ is the bias factor. 
+
+
+
+
+### Independent Subsampling v/s Distinct Subsampling
+
+In the [doc](https://hackmd.io/UsPqx0IATX6yFSxcBLIhHQ?view), the verifier chooses to query $m$ signatures independently from the set k signatures that the prover claims to have. This results in a guarantee of  $1/2^m$ probability that he checks only signatures of malicious nodes. 
+However, it is better for the verifier to sample m distinct signatures from the set of $k$ signatures (note that choosing $m$ independently you could have duplicates). This improves the security guarantee, as the probability of verifier checking only malicious signatures in $f!/(f-m)! \times (k-m)!/k!$. For the concrete example parameters in the HackMD, Validator set $n =100$ (67 honest, 33 malicious), and $k=67$, and number of queries $m =10$, the security guarantee improves from 1/1000 to ~ 1/2679. The difference increases for larger values of $m$. TLDR; fewer queries required for the same security guarantee. 
+The code in snowbridge actually does this optimisation. It subsamples $m$ distinct signatures from the list of $k$ signatures that prover provides. The verifier side solidity code that subsamples is [here](https://github.com/Snowfork/snowbridge/blob/main/core/packages/contracts/src/utils/Bitfield.sol). It runs a loop until $m$ distinct signatures are randomly sampled. Technically, this is an unbounded loop, but the expected number of time this loop runs until it samples m unique elements is $k*(H_k- H_{k-m})$, where $H_n$ is the nth [Harmonic Number](https://en.wikipedia.org/wiki/Harmonic_number). For $k=67$ and $m=20$, the loop runs an expected ~24 times (20% more than ideal). It may be worth exploring algorithms that do the “m choose k” subsampling task in exactly m loops. Essentially, Floyd’s algorithm that selects a random combination of m items from a set of n items does the trick (with m accesses to randomness, same as now). 
 
