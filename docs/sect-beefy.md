@@ -81,16 +81,16 @@ We analyze the Expected incentive of initiating an attack. This assumes that the
 We compute the expected incentive of the adversary if it relentlessly tries to mislead the light client as follows:
 
 $$
-E(A,c,K) = \sum_{i=1}^{\infty}[((\frac{K-1}{K})^{i-1} \cdot \frac{1}{K}\cdot A) + ((\frac{K-1}{K})^{i} \cdot i \cdot \frac{s\cdot m}{2})] 
+E(A,s,K) = \sum_{i=1}^{\infty}[((\frac{K-1}{K})^{i-1} \cdot \frac{1}{K}\cdot A) + ((\frac{K-1}{K})^{i} \cdot i \cdot \frac{s\cdot m}{2})] 
 $$
 
 Simplifying, this results in 
 
 $$
-E(A,c,K) = A + K(K-1)\cdot \frac{s\cdot log_2 K }{2}
+E(A,s,K) = A + K(K-1)\cdot \frac{s\cdot log_2 K }{2}
 $$
  
-Assuming the adversary is rational, an attack is initiated only if $E(A,c,N) > 0$. This provides us a closed form relation between the parameters: Attack value, Slashing value, and the number of queries in the challenge. Here we are assuming that the slashed validators are able to participate in the upcoming rounds even after being slashed. We may have to model the delay before the adversary regains one-third validators. 
+Assuming the adversary is rational, an attack is initiated only if $E(A,s,N) > 0$. This provides us a closed form relation between the parameters: Attack value, Slashing value, and the number of queries in the challenge. Here we are assuming that the slashed validators are able to participate in the upcoming rounds even after being slashed. We may have to model the delay before the adversary regains one-third validators. 
 
 **Pending Tasks:**
 
