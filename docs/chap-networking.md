@@ -74,7 +74,7 @@ $$
 - ${b}_{{4}}$, ${b}_{{5}}$ and ${b}_{{{6}.{.37}}}$ are a protobuf encoded field-value pair where ${b}_{{5}}$ indicates the length of the public key followed by the the raw ED25519 public key itself, which varies for each Polkadot Host and is always 32 bytes (field ${2}$ contains the public key, which has a field value length prefix).
 
 :::
-## -sec-num- Network bootstrap and peer discovery {#sect-network-bootstrap}
+## -sec-num- Network bootstrap and discovery {#sect-network-bootstrap}
 
 The Polkadot Host uses various mechanisms to find peers within the network, to establish and maintain a list of peers and to share that list with other peers from the network as follows:
 
@@ -280,7 +280,9 @@ $$
 **where**
 - ${KademliaKey}_{i}$ is the $Sha256$ hash of the authorityID of node $i$. 
 
-- ${Sig}_{AR}$ is the [SignedAuthorityRecord](chap-networking#defn-msg-signed-authority-record) described above. 
+- ${Sig}_{AR}$ is the [SignedAuthorityRecord](chap-networking#defn-msg-signed-authority-record)
+([Definition -def-num-ref-](chap-networking#defn-msg-signed-authority-record))
+ described above. 
 
 :::
 
