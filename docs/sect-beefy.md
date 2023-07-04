@@ -5,10 +5,20 @@ title: -chap-num- BEEFY
 ## Structure of BEEFY Specifications
 
 - Overview
-    1. Motivation (aka why not just use GRANDPA)
-    2. Protocol overview 
+    1. A client could just follow GRANDPA using GRANDPA justifications, sets of signatures from validators. This is used for the substrate-substrate bridge and in light clients such as the Substrate connect browser extension. The main issue with this is that GRANDPA justifications are large and that they are expensive to verify on other chains like Ethereum that do not use the same cryptography. It is not easy to modify GRANDPA to make it better for this. Certain design decisions, like validators voting for different blocks in a justification make this hard. We also don't want to use slower cryptography in GRANDPA. Thus we are adding an extra protocol, BEEFY, that will allow lighter bridges and light clients of Polkadot.
+    2. Protocol overview: Since BEEFY runs on top of GRANDPA, similarly to how GRANDPA is lagging behind the best produced (non-finalized) block, BEEFY is going to lag behind the best GRANDPA (finalised) block. BEEFY validator set is the same as GRANDPA's, however they might be identified by different session keys. From a single validator perspective, BEEFY has at most one active voting round. Since GRANDPA validators are reaching finality, we assume they are online and well-connected and have a similar view of the state of the blockchain.
+
+BEEFY consists of two parts
+a. **Consensus Extension** on GRANDPA finalisation that is a voting round 
+
+The consensus extension serves to have smaller consensus justification than GRANDPA and alternative cryptography this helps the second part of BEEFY, the light client protocol described below. 
+
+b. **Light client** protocol for convincing the other chain/device efficiently about this vote.
+
+In the BEEFY light client, a prover, a full node or bridge relayer, wants to convince a verifier, a light client that may be on-chain, of the outcome of a BEEFY vote. The prover has access to all voting data from the BEEFY voting round. In the light client part, the prover may generate a proof and send it to the verifier or they may engage in an interactive protocol with several rounds of communication.
 
     (Can reuse texts from HackMD [here](https://hackmd.io/UsPqx0IATX6yFSxcBLIhHQ?view) )
+
 - Consensus layer for Node 
     1. Core Consensus for following Grandpa:
         - Initial sync/ bootstrap
