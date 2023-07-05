@@ -214,8 +214,6 @@ The Polkadot Host must actively communicate with the network in order to partici
   The Polkadot network originally only used SCALE encoding for all message formats. Meanwhile, Protobuf has been adopted for certain messages. The encoding of each listed message is always SCALE encoded unless Protobuf is explicitly mentioned. Encoding and message formats are subject to change.
 :::
 
-dskjfsldkfjgsldfjgs
-
 
 <!-- authority discovery -->
 
