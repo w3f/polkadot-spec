@@ -222,19 +222,83 @@ dskjfsldkfjgsldfjgs
 ### -sec-num- Discovering authorities {#sect-authority-discovery}
 
 <!-- what it is  -->
-A discovery mechanim enables Polkadot nodes to both publish their local addresses and learn about other nodes' local addresses by means of the undelayed Kademlia DHT.
-The Authority discovery mechanism differs from the bootstrap mechanism, described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap), in that it restricts the discovery output to nodes that are currently holding the authority role (i.e., validators). The authority discovery mechanism consists of two components: the discovery `worker` and the discovery `service`. 
+A discovery mechanism enables Polkadot nodes to both publish their local addresses and learn about other nodes identifiers and addresses by means of the undelayed Kademlia DHT.
+The Authority discovery mechanism differs from the bootstrap mechanism, described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap), in that it restricts the discovery output to nodes currently holding the authority role (e.g., validators).
+
+The authority discovery mechanism consists of two main components: discovery `service` and discovery `worker`. The `service` provides an interface to Polkadot nodes that exposes two functions that allow Polkadot nodes to request authority identifiers or authority addresses. The `worker` interacts with the Kademlia DHT in order to publish local node addresses and discover the addresses of other authority nodes.
+
+<!-- POLKADOT NODES interacting with AUTHORITY DISCOVERY -->
+#### -sec-num- Requesting authority identifier and addresses {#sect-auth-discovery-service-requests}
+<!-- `GetAuthorityIdsByPeerId` and `GetAddressesByAuthorityId` are the type of message sent from `service` to `worker` in order to receive the information requested by polkadot nodes. However, this is a implementation detail that can be transparent to developers. 
+ -->
+The following requests must be exposed by the discovery authority mechanism to Polkadot nodes.
+
+###### Definition -def-num- Authority addresses request {#defn-auth-discovery-address-request}
+:::definition
+
+An **authority addresses request** is a request that Polkadot nodes can send to the authority discovery mechanism in order to request the addresses of an authority node. The request has the following format:
+
+$$
+\texttt{get\_addresses\_by\_authority\_id}{\left(\texttt{authorityId}\right)}
+$$
+
+**where**
+- $\texttt{authorityId}$ is the `authorityId` 256-bit identifier representing the public key of the targeted authority node. 
 
 
-<!-- when it sends it -->
-The discovery `worker` is in charge of publishing local node addresses and looking up for the addresses of other authority nodes. The discovery `service` enables Polkadot nodes to interact with the `worker`, which in turn send and receive messages to the Kademlia DHT via `NetworkDHTProvider`.
+**expected response** 
 
-<!-- what it contains  -->
+The response to the previous query includes an enum with one of the following values:
+<!-- Option<HashSet<Multiaddr>> -->
 
+| Value                | Description                                            |
+|----------------------|--------------------------------------------------------|
+|  None                | A type representing `no value`                           | 
+|  HashSet[Multiaddr]  | An unordered collection of unique `Multiaddr` elements | 
+
+
+**with**
+- `Multiaddr` a [Multiaddr](https://github.com/libp2p/specs/blob/master/addressing/README.md#multiaddr-in-libp2p) data structure.
+  
+:::
+
+
+<!-- get_authority_ids_by_peer_id(PeerId) -->
+###### Definition -def-num- Authority identifier request {#defn-auth-discovery-auth-identifier-request}
+:::definition
+
+An **authority identifier request** is a request that polkadot nodes can send to the authority discovery mechanism in order to request the `AuthorityId` of an authority node. The request has the following format:
+
+$$
+\texttt{get\_authority\_ids\_by\_peer\_id}{\left(\texttt{PeerId}\right)}
+$$
+
+**where**
+- $\texttt{PeerId}$ is the Polkadot node’s PeerId ([Definition -def-num-ref-](chap-networking#defn-peer-id)). 
+
+
+**expected response** 
+<!-- Since we may store the mapping across several sessions, a single. `PeerId` might correspond to multiple `AuthorityId`s -->
+The response to the previous query includes an enum with one of the following values:
+<!-- Option<HashSet<AuthorityDiscoveryId> -->
+
+| Value                  | Description                                            |
+|------------------------|--------------------------------------------------------|
+|  None                  | A type representing `no value`                           | 
+|  HashSet[authorityId]  | An unordered collection of unique `authorityId` elements | 
+
+
+**with**
+- `authorityId` the 256-bit identifier representing the public key of the requested `PeerId`. 
+
+:::
+
+
+<!-- AUTHORITY DISCOVER interacting with KADEMLIA -->
 #### -sec-num- Publishing local addresses {#sect-auth-discovery-worker-publishing}
-<!-- worker: network.put_value( hash(authorityID) , SignedAuthorityRecord);  -->
+<!-- worker component: network.put_value( hash(authorityId) , SignedAuthorityRecord);  -->
 
-The `worker` periodically sends `put_value()` messages to the DHT in order to publish a `SignedAuthorityRecord` of addresses of authorities it knows from the current authority sets. The payload of the `put_value()` message to send to Kademlia DHT is created as follows.
+The authority discovery mechanism periodically sends `put_value` messages to the DHT in order to publish a `SignedAuthorityRecord` of the addresses of authorities it knows from its current authority sets. The `put_value` message to be sent to Kademlia DHT is created as follows.
 <!-- Retrieve authority identifiers of the current and next authority set.. -->
 
 ###### Definition -def-num- Signed Authority Record {#defn-msg-signed-authority-record}
@@ -253,9 +317,9 @@ It is defined in the following format:
 
 **AuthorityRecord** is a serialized Protobuf structure that lists the addresses of authority nodes that are currently part of the authority set. 
 
-| Type             | Id | Description                                                              |
-|------------------|----|--------------------------------------------------------------------------|
-| `repeated bytes` | 1  | Possibly multiple `MultiAddress`es through which a node can be connected | 
+| Type             | Id | Description                                                           |
+|------------------|----|-----------------------------------------------------------------------|
+| `repeated bytes` | 1  | Possibly multiple `MultiAddr`ess through which a node can be connected | 
 
 **PeerSignature** is a Protobuf serialized structure indicating the signature and public key used to sign and verify the `AuthorityRecord`.
 This is the protobuf structure used to exchange the signature with other nodes.
@@ -271,38 +335,38 @@ This is the protobuf structure used to exchange the signature with other nodes.
 ###### Definition -def-num- Publish authority addresses message {#defn-msg-auth-discovery-publish}
 :::definition
 
-For each authority node $i$ in the current authority set, the local node sends a `put_value()` message to the Kademlia DHT in the following format:
+For each authority node $i$ in the current authority set, the local node sends a `put_value` message to the Kademlia DHT in the following format:
 
 $$
-\text{PUT}_{\left({KademliaKey}_{i} , {Sig}_{AR}\right)}
+\texttt{put\_value}{\left(\texttt{KademliaKey}_{i} , \texttt{Sig}_{AR}\right)}
 $$
+
+
 
 **where**
-- ${KademliaKey}_{i}$ is the $Sha256$ hash of the authorityID of node $i$. 
-
-- ${Sig}_{AR}$ is the [SignedAuthorityRecord](chap-networking#defn-msg-signed-authority-record)
-([Definition -def-num-ref-](chap-networking#defn-msg-signed-authority-record))
- described above. 
-
+- $\texttt{KademliaKey}_{i}$ is the $Sha256$ hash of the authorityId of node $i$. 
+- $\texttt{Sig}_{AR}$ is the `SignedAuthorityRecord`
+ described above([Definition -def-num-ref-](chap-networking#defn-msg-signed-authority-record)). 
 :::
 
-#### -sec-num- Discovering authority addresses {#sect-auth-discovery-worker-discover}
 
-The `worker` periodically sends `get_value()` messages to the Kedemlia DHT in order to discover addresses of authority nodes it knows about.
+
+#### -sec-num- Discovering authority addresses {#sect-auth-discovery-worker-discover}
+<!-- worker component -->
+The authority discovery mechanism periodically sends `get_value` messages to the Kedemlia DHT in order to discover addresses of authority nodes it knows about.
 
 ###### Definition -def-num- Discover authority addresses message {#defn-msg-auth-discovery-lookup}
 :::definition
 
-At each cycle, nodes `worker` creates a bounded number of `get_value()` messages in the following format:
+At each cycle, nodes `worker` creates a bounded number of `get_value` messages to send in the following format:
 $$
-\text{GET}_{\left({KademliaKey}_{i}\right)}
+\texttt{get\_value}{\left(\texttt{KademliaKey}_{i}\right)}
 $$
 
 **where**
-- ${KademliaKey}_{i}$ is the $Sha256$ hash of the `authorityID` of node $i$ selected from the current authority set.
+- $\texttt{KademliaKey}_{i}$ is the $Sha256$ hash of the `authorityId` of node $i$ selected from the current authority set.
 ::: 
 
-<!--  -->
 
 ### -sec-num- Announcing blocks {#sect-msg-block-announce}
 
