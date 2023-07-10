@@ -574,7 +574,7 @@ TODO:
 - verify inclusion of leaf
 ::::
 
-###### Definition -def-num- Statement {#defn-beefy-payload}
+###### Definition -def-num- Payload {#defn-beefy-payload}
 :::definition
 
 **Payload:** is the Merkle root of the MMR generated where the leaf data contains the following fields for each block:
@@ -599,7 +599,7 @@ TODO:
 ###### Definition -def-num- Witness Data {#defn-beefy-witness-data}
 :::definition
 
-**Witness data** contains the statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)), an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves) and a Merkle root of the signatures. The indicators of which validator voted for the statement are just claims and provide no proofs. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
+**Signed Commitment Witnesses** contains the commitment and an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves). The indicators of which validator voted for the statement are just claims and provide no proofs. It also contains signature of one validator on the commitment, which is used inly by the subsampling based Light Clients. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
 
 :::
 ###### Definition -def-num- Light Client {#defn-beefy-light-client}
