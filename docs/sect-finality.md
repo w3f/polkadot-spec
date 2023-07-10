@@ -506,21 +506,58 @@ A Catch-up response message contains critical information for the requester node
 where ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{r}\right)}$ is the catch-up response received from node ${v}$ ([Definition -def-num-ref-](chap-networking#defn-grandpa-catchup-response-msg)).
 :::
 
+
+
+
 ## -sec-num- Bridge design (BEEFY) {#sect-grandpa-beefy}
 
 :::caution
-The BEEFY protocol is currently in early development and subject to change. The specification has not been completed yet.
+The BEEFY protocol is currently in early development and subject to change. The specification is Work-In-Progress.
 :::
 
 The BEEFY (Bridge Efficiency Enabling Finality Yielder) is a secondary protocol to GRANDPA to support efficient bridging between the Polkadot network (relay chain) and remote, segregated blockchains, such as Ethereum, which were not built with the Polkadot interchain operability in mind. BEEFY’s aim is to efficiently follow a chain that has GRANDPA finality, a finality gadget created for Substrate/Polkadot ecosystem. This is useful for bridges (e.g., Polkadot->Ethereum), where a chain can follow another chain and light clients suitable for low storage devices such as mobile phones.
 
 The protocol allows participants of the remote network to verify finality proofs created by the Polkadot relay chain validators. In other words: clients in the Ethereum network should able to verify that the Polkadot network is at a specific state.
 
-
-
 Storing all the information necessary to verify the state of the remote chain, such as the block headers, is too expensive. BEEFY stores the information in a space-efficient way and clients can request additional information over the protocol.
 
+### -sec-num- Motivation {#id-motivation-beefy-1}
+A client could just follow GRANDPA using GRANDPA justifications, sets of signatures from validators. This is used for the substrate-substrate bridge and in light clients such as the Substrate connect browser extension. The main issue with this is that GRANDPA justifications are large and that they are expensive to verify on other chains like Ethereum that do not use the same cryptography. It is not easy to modify GRANDPA to make it better for this. Certain design decisions, like validators voting for different blocks in a justification make this hard. We also don't want to use slower cryptography in GRANDPA. Thus we are adding an extra layer of finality, BEEFY, that will allow lighter bridges and light clients of Polkadot.
+
+To summarise, the goals of BEEFY are:
+- Allow customisation of crypto to adapt for different targets. 
+- Minimize the size of the "signed payload" and the finality proof.
+- Unify data types and use backward-compatible versioning so that the protocol can be extended (additional payload, different crypto) without breaking existing light clients.
+
+### -sec-num- Protocol Overview {#id-overview-beefy-1}
+Since BEEFY runs on top of GRANDPA, similarly to how GRANDPA is lagging behind the best produced (non-finalized) block, BEEFY finalised block lags behind the best GRANDPA (finalised) block. 
+- BEEFY validator set is the same as GRANDPA's, however they might be identified by different session keys. 
+- From a single validator perspective, BEEFY has at most one active voting round. 
+- Since GRANDPA validators are reaching finality, we assume they are online and well-connected and have a similar view of the state of the blockchain.
+
+BEEFY consists of two components:
+a. **Consensus Extension** on GRANDPA finalisation that is a voting round. 
+
+The consensus extension serves to have smaller consensus justification than GRANDPA and alternative cryptography which helps the second part of BEEFY, the light client protocol described below. 
+
+b. **Light client** protocol for convincing the other chain/device efficiently about this vote.
+
+In the BEEFY light client, a prover, a full node or bridge relayer, wants to convince a verifier, a light client that may be on-chain, of the outcome of a BEEFY vote. The prover has access to all voting data from the BEEFY voting round. In the light client part, the prover may generate a proof and send it to the verifier or they may engage in an interactive protocol with several rounds of communication.
+
+
 ### -sec-num- Preliminaries {#id-preliminaries-2}
+
+###### Definition -def-num- BEEFY Session Keys {#defn-beefy-key}
+Validators use an `ECDSA` key scheme for signing Beefy messages. This is different from schemes like `sr25519` and `ed25519` which are commonly used in Substrate for other components like BABE, Grandpa. The most noticeable difference is that an `ecdsa`
+public key is `33` bytes long, instead of `32` bytes for a `sr25519` based public key. As a consequence, the `AccountId` (32-bytes) matches the `PublicKey` for other session keys, but note that it's not the case for BEEFY.
+
+### -sec-num- Block Authoring Session Key Pair {#id-block-authoring-session-key-pair}
+
+:::definition
+
+**BEEFY session key pair** ${\left({s}{{k}_{{j}}^{B}},{p}{{k}_{{j}}^{B}}\right)}$ is a `secp256k1` key pair which the BEEFY authority node ${\mathcal{{P}}}_{{j}}$ uses to sign the BEEFY Justification messages.
+ 
+:::
 
 ###### Definition -def-num- Merkle Mountain Ranges {#defn-mmr}
 ::::definition
@@ -531,17 +568,38 @@ Merkle Mountain Ranges, **MMR**, are used as an efficient way to send block head
 MMRs have not been defined yet.
 :::
 
+TODO:
+- define the MMR datastructure: difference between leaves and internal nodes
+- append operation
+- verify inclusion of leaf
 ::::
-###### Definition -def-num- Statement {#defn-beefy-statement}
+
+###### Definition -def-num- Statement {#defn-beefy-payload}
 :::definition
 
-The **statement** is the same piece of information which every relay chain validator is voting on. Namely, the MMR root of all the block header hashes leading up to the latest, finalized block.
+**Payload:** is the Merkle root of the MMR generated where the leaf data contains the following fields for each block:
+- _LeafVersion_: a byte indicating the current version number of the Leaf Format. The first 3 bits are for major versions and the last 5 bits for minor versions. 
+- _BeefyNextAuthoritySetInfo_: Its a tuple consisting of:
+    - ValidatorSetID
+    - len (u32): length of the validator set
+    - Merkle Root of the list of Next Beefy Authority Set (ECDSA public keys). The exact format depends on the implementation.  
+- Parent Block number and Parent Block Hash.
+- Extra Leaf Data: Currently the Merkle root of the list of (ParaID, ParaHeads)
+:::
+
+
+###### Definition -def-num- Commitment {#defn-beefy-Commitment}
+:::definition
+
+**Signed Commitment:**
+`commitment` is a tuple of `(payload, Block Number, ValidatorSetID)`. A `signed commitment` is a tuple `(commitment, signatures)`, where `signatures` is a list of optional signatures of the validator set on the SCALE encoded `commitment`. Note that the number of signatures in `signatures` maybe less than the length of Validator Set. 
 
 :::
+
 ###### Definition -def-num- Witness Data {#defn-beefy-witness-data}
 :::definition
 
-**Witness data** contains the statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)), an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves) and a MMR root of the signatures. The indicators of which validator voted for the statement are just claims and provide no proofs. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
+**Witness data** contains the statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)), an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves) and a Merkle root of the signatures. The indicators of which validator voted for the statement are just claims and provide no proofs. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
 
 :::
 ###### Definition -def-num- Light Client {#defn-beefy-light-client}
@@ -566,8 +624,34 @@ The Polkadot Host signs a statement ([Definition -def-num-ref-](sect-finality#de
 
 The relayer ([Definition -def-num-ref-](sect-finality#defn-beefy-relayer)) participates in the Polkadot network by collecting the gossiped votes ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)). Those votes are converted into the witness data structure ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)). The relayer saves the data on the chain of the remote network. The occurrence of saving witnesses on remote networks is undefined.
 
+TODO: confirm if the merkle root of claimed signatures needed or not in the witness. 
+
 ### -sec-num- Requesting Signed Commitments {#id-requesting-signed-commitments}
 
 A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the witness data ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
 
 How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations. On Ethereum, for example, the light client can request the signed commitments in form of a transaction, which results in a response in form of a transaction.
+
+
+### Terminology
+
+A **round** is an attempt by BEEFY validators to produce a BEEFY Justification. **Round number**
+is simply defined as a block number the validators are voting for, or to be more precise, the
+Commitment for that block number. Round ends when the next round is started, which may happen
+when one of the events occur:
+1. Either the node collects `2/3rd + 1` valid votes for that round.
+2. Or the node receives a BEEFY Justification for a block greater than the current best BEEFY block.
+
+In both cases the node proceeds to determining the new round number using "Round Selection"
+procedure.
+
+Regular nodes are expected to:
+1. Receive & validate votes for the current round and broadcast them to their peers.
+1. Receive & validate BEEFY Justifications and broadcast them to their peers.
+1. Return BEEFY Justifications for **Mandatory Blocks** on demand.
+1. Optionally return BEEFY Justifications for non-mandatory blocks on demand.
+
+Validators are expected to additionally:
+1. Produce & broadcast vote for the current round.
+
+Both kinds of actors are expected to fully participate in the protocol ONLY IF they believe they are up-to-date with the rest of the network, i.e. they are fully synced. Before this happens, the node should continue processing imported BEEFY Justifications and votes without actively voting themselves.
