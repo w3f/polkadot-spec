@@ -17,7 +17,9 @@ jobs:
         with:
           node-version: "18.x"
       - name: Initialize submodules
-        run: git submodule update --remote
+        run: |
+          git submodule update --init --recursive
+          git submodule update --remote
       - name: Publish
         run: |
           git config --global user.email "grants-deployer@users.noreply.github.com"
