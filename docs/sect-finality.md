@@ -628,30 +628,67 @@ TODO: confirm if the merkle root of claimed signatures needed or not in the witn
 
 ### -sec-num- Requesting Signed Commitments {#id-requesting-signed-commitments}
 
-A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the witness data ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
+A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the Signed Commitment Witness ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
 
 How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations. On Ethereum, for example, the light client can request the signed commitments in form of a transaction, which results in a response in form of a transaction.
 
 
-### Terminology
+#### Consensus Mechanism
 
-A **round** is an attempt by BEEFY validators to produce a BEEFY Justification. **Round number**
-is simply defined as a block number the validators are voting for, or to be more precise, the
-Commitment for that block number. Round ends when the next round is started, which may happen
-when one of the events occur:
+Role of various Actors in BEEFY:
+- Regular nodes are expected to:
+    1. Receive & validate votes for the current round and broadcast them to their peers.
+    1. Receive & validate BEEFY Justifications and broadcast them to their peers.
+    1. Return BEEFY Justifications for **Mandatory Blocks** on demand.
+    1. Optionally return BEEFY Justifications for non-mandatory blocks on demand.
+
+- Validators are expected to additionally:
+    1. Produce & broadcast vote for the current round.
+
+
+A **round** is an attempt by BEEFY validators to produce a BEEFY Justification. **Round number** is simply defined as a block number the validators are voting for, or to be more precise, the Commitment for that block number. Round ends when the next round is started, which may happen when one of the events occur:
 1. Either the node collects `2/3rd + 1` valid votes for that round.
 2. Or the node receives a BEEFY Justification for a block greater than the current best BEEFY block.
 
 In both cases the node proceeds to determining the new round number using "Round Selection"
 procedure.
 
-Regular nodes are expected to:
-1. Receive & validate votes for the current round and broadcast them to their peers.
-1. Receive & validate BEEFY Justifications and broadcast them to their peers.
-1. Return BEEFY Justifications for **Mandatory Blocks** on demand.
-1. Optionally return BEEFY Justifications for non-mandatory blocks on demand.
-
-Validators are expected to additionally:
-1. Produce & broadcast vote for the current round.
 
 Both kinds of actors are expected to fully participate in the protocol ONLY IF they believe they are up-to-date with the rest of the network, i.e. they are fully synced. Before this happens, the node should continue processing imported BEEFY Justifications and votes without actively voting themselves.
+
+
+#### Subsampling Based Light Client Protocol
+
+It is an interactive protocol between the light-client (verifier) and the relayer (prover) to convince the Light Client with high probability that the payload sent by prover is signed by honest Polkadot validators. 
+A high-level overview of the multi-round interaction between the parties is described in this message sequencing chart. 
+
+
+```mermaid
+sequenceDiagram
+    participant R as Relayer
+    participant L as Light Client
+    participant S as Storage
+    R->>L: SubmitInitial(CommitHash, Bitfield)
+    Note right of L: Block No. = N
+    Note over L: Checks Bitfield.len() > 2/3 validatorSet.len() 
+    L->>S: Mutate Tickets
+    Note right of S: Tickets[h(sender,CommitHash)]= <br> {sender, n, vset.len(),0,h(Bitfield)}
+
+    R->>L: CommitPrevRandao(commitHash)
+    Note right of L: Block No. = N' 
+    Note over L: Check for Delay <br> N'-N between <br> [randomCommitDelay- randomCommitExpiration]
+    L->>S: Mutate Tickets
+    Note right of S: Tickets[h(sender,CommitHash)]= <br> {sender, n, vset.len(),N'.prevRandao,h(Bitfield)}
+    R->>L: CreateFinalBitfield(commitHash, Bitfield) 
+    L->>S: Fetches block.prevrandao 
+    activate S
+    S->>L: from Tickets[h(sender,commitHash)]
+    deactivate S
+    Note over L: Compute subsample with seed <br> as vlock.prevrandao
+    L->>R: SubSample Bitfield (_subsampbitfield)
+    Note over R: gathers proofs [p1,..pk] corresponding to <br> requested _subsambitfield validators
+    R->>L: SubmitFinal(Commitment,Bitfield, [p1,..,pk])
+    Note over L: Verify Commitment, Verify Proofs <br> of subsampled validators
+    L->S: Mutate LatestBeefyBlock, LatestMMRRoothash
+    Note right of S: LatestBeefyBlock = Commitment.BlockNumber <br> LatestMMRRootHash= Commitment.payload.mmrroothash <br> delete Tickets[h(sender,commitHash)]
+```
