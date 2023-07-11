@@ -12,6 +12,8 @@ To clone, build and serve the website locally, run the following commands:
 
 ```bash
 git clone --recurse-submodules https://github.com/w3f/polkadot-spec
+cd polkadot-spec
+git submodule update --remote
 cd website
 npm i
 npm run build # or build_with_kaitai to also rebuild kaitai SVG files
