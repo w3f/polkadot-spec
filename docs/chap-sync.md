@@ -41,6 +41,12 @@ ${p}{k}_{{A}}$ is the session public key ([Definition -def-num-ref-](id-cryptogr
 The authorities and their corresponding weights can be retrieved from the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-grandpa-auth)).
 
 :::
+
+:::info
+In Polkadot, the authorities are un-weighted, ie., the weights for all authorities are set to 1. The proportionality in terms of stakes is managed by the [NPOS](https://wiki.polkadot.network/docs/learn-phragmen) (Nominated Proof-of-Stake) algorithm in Polkadot. Once validators are elected for an era using the NPOS algorithm, they are considered equal in the BABE and GRANDPA consensus algorithms. 
+
+:::
+
 ### -sec-num- Runtime-to-Consensus Engine Message {#sect-consensus-message-digest}
 
 The authority list ([Definition -def-num-ref-](chap-sync#defn-authority-list)) is part of the Polkadot state and the Runtime has the authority to update this list in the course of any state transitions. The Runtime informs the corresponding consensus engine about the changes in the authority set by adding the appropriate consensus message in the form of a digest item ([Definition -def-num-ref-](chap-state#defn-digest)) to the block header of block ${B}$ which caused the transition in the authority set.
