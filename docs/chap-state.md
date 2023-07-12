@@ -40,7 +40,7 @@ $$
 ###### Definition -def-num- Path Graph {#defn-path-graph}
 :::definition
 
-A **path graph** or a **path** of ${n}$ nodes formally referred to as **${P}_{{n}}$**, is a tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex degree 2. Therefore, ${P}_{{n}}$ can be represented by sequences of ${\left({v}_{{1}},\ldots,{v}_{{n}}\right)}$ where ${e}_{{i}}={\left({v}_{{i}},{v}_{{{i}+{1}}}\right)}$ for ${1}\le{i}\le{n}-{1}$ is the edge which connect ${v}_{{i}}$ and ${v}_{{{i}+{1}}}$.
+A **path graph** or a **path** of ${n}$ nodes, formally referred to as **${P}_{{n}}$**, is a tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex degree 2. Therefore, ${P}_{{n}}$ can be represented by sequences of ${\left({v}_{{1}},\ldots,{v}_{{n}}\right)}$ where ${e}_{{i}}={\left({v}_{{i}},{v}_{{{i}+{1}}}\right)}$ for ${1}\le{i}\le{n}-{1}$ is the edge which connect ${v}_{{i}}$ and ${v}_{{{i}+{1}}}$.
 
 :::
 ###### Definition -def-num- Blockchain {#defn-blockchain}
@@ -52,7 +52,7 @@ $$
 B_2 := P(B_1)
 $$
 
-The parent refers to the child by its hash value ([Definition -def-num-ref-](chap-state#defn-block-header)), making the path graph tamper proof since any modifications to the child would result in its hash value being changed.
+The parent refers to the child by its hash value ([Definition -def-num-ref-](chap-state#defn-block-header)), making the path graph tamper-proof since any modifications to the child would result in its hash value being changed.
 
 :::info
 The term "blockchain" can also be used as a way to refer to the network or system that interacts or maintains the directed path graph.
@@ -74,7 +74,7 @@ When a block in the block tree gets finalized, there is an opportunity to prune 
 ###### Definition -def-num- Pruned Block Tree {#defn-pruned-tree}
 :::definition
 
-By **Pruned Block Tree**, denoted by $\text{PBT}$, we refer to a subtree of the block tree obtained by eliminating all branches which do not contain the most recent finalized blocks ([Definition -def-num-ref-](sect-finality#defn-finalized-block)). By **pruning**, we refer to the procedure of ${B}{T}\leftarrow\text{PBT}$. When there is no risk of ambiguity and is safe to prune BT, we use $\text{BT}$ to refer to $\text{PBT}$.
+By **Pruned Block Tree**, denoted by $\text{PBT}$, we refer to a subtree of the block tree obtained by eliminating all branches which do not contain the most recent finalized blocks ([Definition -def-num-ref-](sect-finality#defn-finalized-block)). By **pruning**, we refer to the procedure of ${B}{T}\leftarrow\text{PBT}$. When there is no risk of ambiguity and it is safe to prune BT, we use $\text{BT}$ to refer to $\text{PBT}$.
 :::
 
 [Definition -def-num-ref-](chap-state#defn-chain-subchain) gives the means to highlight various branches of the block tree.
@@ -113,11 +113,11 @@ We say ${B}$ is **descendant** of ${B}'$, formally noted as ${B}>{B}'$, if ${\le
 :::
 ## -sec-num- State Replication {#sect-state-replication}
 
-Polkadot nodes replicate each other’s state by syncing the history of the extrinsics. This, however, is only practical if a large set of transactions are batched and synced at the time. The structure in which the transactions are journaled and propagated is known as a block of extrinsics ([Section -sec-num-ref-](chap-state#sect-block-format)). Like any other replicated state machines, state inconsistency can occure between Polkadot replicas. [Section -sec-num-ref-](chap-state#sect-managing-multiple-states) gives an overview of how a Polkadot Host node manages multiple variants of the state.
+Polkadot nodes replicate each other’s state by syncing the history of the extrinsics. This, however, is only practical if a large set of transactions are batched and synced at the time. The structure in which the transactions are journaled and propagated is known as a block of extrinsics ([Section -sec-num-ref-](chap-state#sect-block-format)). Like any other replicated state machine, state inconsistency can occur between Polkadot replicas. [Section -sec-num-ref-](chap-state#sect-managing-multiple-states) gives an overview of how a Polkadot Host node manages multiple variants of the state.
 
 ### -sec-num- Block Format {#sect-block-format}
 
-A Polkadot block consists a *block header* ([Definition -def-num-ref-](chap-state#defn-block-header)) and a *block body* ([Definition -def-num-ref-](chap-state#defn-block-body)). The *block body* in turn is made up out of *extrinsics* , which represent the generalization of the concept of *transactions*. *Extrinsics* can contain any set of external data the underlying chain wishes to validate and track.
+A Polkadot block consists a *block header* ([Definition -def-num-ref-](chap-state#defn-block-header)) and a *block body* ([Definition -def-num-ref-](chap-state#defn-block-body)). The *block body*, in turn, is made up out of *extrinsics* , which represent the generalization of the concept of *transactions*. *Extrinsics* can contain any set of external data the underlying chain wishes to validate and track.
 
 ###### Image -img-num- Block {#img-block}
 
@@ -130,7 +130,7 @@ The **header of block B**, ${H}_{{h}}{\left({B}\right)}$, is a 5-tuple containin
 
 - **parent_hash:** formally indicated as ${H}_{{p}}$, is the 32-byte Blake2b hash ([Section -sec-num-ref-](id-cryptography-encoding#sect-blake2)) of the SCALE encoded parent block header ([Definition -def-num-ref-](chap-state#defn-block-header-hash)).
 
-- **number:** formally indicated as ${H}_{{i}}$, is an integer, which represents the index of the current block in the chain. It is equal to the number of the ancestor blocks. The genesis state has number 0.
+- **number:** formally indicated as ${H}_{{i}}$, is an integer, which represents the index of the current block in the chain. It is equal to the number of the ancestor blocks. The genesis state has the number 0.
 
 - **state_root:** formally indicated as ${H}_{{r}}$, is the root of the Merkle trie, whose leaves implement the storage for the system.
 
@@ -166,14 +166,14 @@ $$
 **where**  
 - $\text{id}$ is a 4-byte ASCII encoded consensus engine identifier
 
-- $\text{m}$ is a scale encoded byte array containing the message payload
+- $\text{m}$ is a SCALE-encoded byte array containing the message payload
 
 $t = 4$ **Consensus Message**, contains scale-encoded message $m$ from the Runtime to the consensus engine. The receiving engine is determined by the *id* identifier:
 - *id* = BABE: a message to BABE engine ([Definition -def-num-ref-](sect-block-production#defn-consensus-message-babe))
 - *id* = FRNK: a message to GRANDPA engine ([Definition -def-num-ref-](sect-finality#defn-consensus-message-grandpa))
 
 
-$t = 5$ **Seal**, is produced by the consensus engine and proves the authorship of the block producer. The engine used for this is provided through *id* (at the moment `BABE`), while $m$ contains the scale-encoded signature ([Definition -def-num-ref-](sect-block-production#defn-block-signature)) of the block producer. In particular, the Seal digest item must be the last item in the digest array and must be stripped off by the Polkadot Host before the block is submitted to any Runtime function including for validation. The Seal must be added back to the digest afterward.
+$t = 5$ **Seal**, is produced by the consensus engine and proves the authorship of the block producer. The engine used for this is provided through *id* (at the moment, `BABE`), while $m$ contains the scale-encoded signature ([Definition -def-num-ref-](sect-block-production#defn-block-signature)) of the block producer. In particular, the Seal digest item must be the last item in the digest array and must be stripped off by the Polkadot Host before the block is submitted to any Runtime function, including for validation. The Seal must be added back to the digest afterward.
 
 $t = 6$ **Pre-Runtime digest**, contains messages from the consensus engines to the runtime. Currently only used by BABE to pass the scale encoded BABE Header ([Definition -def-num-ref-](sect-block-production#defn-babe-header)) in $m$ with *id* = `BABE`.
 
@@ -197,7 +197,7 @@ $$
 ###### Definition -def-num- Block Body {#defn-block-body}
 :::definition
 
-The block body consists of an sequence of extrinsics, each encoded as a byte array. The content of an extrinsic is completely opaque to the Polkadot Host. As such, from the point of the Polkadot Host, and is simply a SCALE encoded array of byte arrays. The **body of Block** ${B}$ represented as $\text{Body}{\left({B}\right)}$ is defined to be:
+The block body consists of a sequence of extrinsics, each encoded as a byte array. The content of an extrinsic is completely opaque to the Polkadot Host. As such, from the point of the Polkadot Host, and is simply a SCALE encoded array of byte arrays. The **body of Block** ${B}$ represented as $\text{Body}{\left({B}\right)}$ is defined to be:
 
 $$
 \text{Body}(B) := \text{Enc}_{SC}(E_1,...,E_n)
@@ -218,7 +218,7 @@ The block body consists of an array of extrinsics. In a broad sense, extrinsics 
 
 The extrinsics are divided into two main categories defined as follows:
 
-**Transaction extrinsics** are extrinsics which are signed using either of the key types ([Section -sec-num-ref-](id-cryptography-encoding#sect-cryptographic-keys)) and broadcasted between the nodes. **Inherent extrinsics** are unsigned extrinsics which are generated by Polkadot Host and only included in the blocks produced by the node itself. They are broadcasted as part of the produced blocks rather than being gossiped as individual extrinsics.
+**Transaction extrinsics** are extrinsics which are signed using either of the key types ([Section -sec-num-ref-](id-cryptography-encoding#sect-cryptographic-keys)) and broadcasted between the nodes. **Inherent extrinsics** are unsigned extrinsics that are generated by Polkadot Host and only included in the blocks produced by the node itself. They are broadcasted as part of the produced blocks rather than being gossiped as individual extrinsics.
 
 The Polkadot Host does not specify or limit the internals of each extrinsics and those are defined and dealt with by the Runtime ([Definition -def-num-ref-](chap-state#defn-state-machine)). From the Polkadot Host point of view, each extrinsics is simply a SCALE-encoded blob ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)).
 
@@ -226,18 +226,18 @@ The Polkadot Host does not specify or limit the internals of each extrinsics and
 
 Transaction are submitted and exchanged through *Transactions* network messages ([Section -sec-num-ref-](chap-networking#sect-msg-transactions)). Upon receiving a Transactions message, the Polkadot Host decodes the SCALE-encoded blob and splits it into individually SCALE-encoded transactions.
 
-Alternative transaction can be submitted to the host by offchain worker through the Host API ([Section -sec-num-ref-](chap-host-api#sect-ext-offchain-submit-transaction)).
+Alternatively, transactions can be submitted to the host by off-chain worker through the Host API ([Section -sec-num-ref-](chap-host-api#sect-ext-offchain-submit-transaction)).
 
-Any new transaction should be submitted to the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-validate-transaction)). This will allow the Polkadot Host to check the validity of the received transaction against the current stat and if it should be gossiped to other peers. If it considers the submitted transaction as valid, the Polkadot Host should store it for inclusion in future blocks. The whole process of handling new transactions is described in more detail by [Validate-Transactions-and-Store](chap-state#algo-validate-transactions).
+Any new transaction should be submitted to the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-validate-transaction)). This will allow the Polkadot Host to check the validity of the received transaction against the current state and if it should be gossiped to other peers. If it considers the submitted transaction as valid, the Polkadot Host should store it for inclusion in future blocks. The whole process of handling new transactions is described in more detail by [Validate-Transactions-and-Store](chap-state#algo-validate-transactions).
 
-Additionally valid transactions that are supposed to be gossiped are propagated to connected peers of the Polkadot Host. While doing so the Polkadot Host should keep track of peers already aware of each transaction. This includes peers which have already gossiped the transaction to the node as well as those to whom the transaction has already been sent. This behavior is mandated to avoid resending duplicates and unnecessarily overloading the network. To that aim, the Polkadot Host should keep a *transaction pool* and a *transaction queue* defined as follows:
+Additionally, valid transactions that are supposed to be gossiped are propagated to connected peers of the Polkadot Host. While doing so the Polkadot Host should keep track of peers already aware of each transaction. This includes peers which have already gossiped the transaction to the node as well as those to whom the transaction has already been sent. This behavior is mandated to avoid resending duplicates and unnecessarily overloading the network. To that aim, the Polkadot Host should keep a *transaction pool* and a *transaction queue* defined as follows:
 
 ###### Definition -def-num- Transaction Queue {#defn-transaction-queue}
 :::definition
 
 The **Transaction Queue** of a block producer node, formally referred to as ${T}{Q}$ is a data structure which stores the transactions ready to be included in a block sorted according to their priorities ([Section -sec-num-ref-](chap-networking#sect-msg-transactions)). The **Transaction Pool**, formally referred to as ${T}{P}$, is a hash table in which the Polkadot Host keeps the list of all valid transactions not in the transaction queue.
 :::
-Furthermore [Validate-Transactions-and-Store](chap-state#algo-validate-transactions) updates the transaction pool and the transaction queue according to the received message:
+Furthermore, [Validate-Transactions-and-Store](chap-state#algo-validate-transactions) updates the transaction pool and the transaction queue according to the received message:
 
 ###### Algorithm -algo-num- Validate Transactions and Store {#algo-validate-transactions}
 :::algorithm
@@ -262,7 +262,7 @@ Furthermore [Validate-Transactions-and-Store](chap-state#algo-validate-transacti
 
 - $\text{Maintain-Transaction-Pool}$ is described in [Maintain-Transaction-Pool](chap-state#algo-maintain-transaction-pool).
 
-- $\text{ShouldPropagate}$ indictes whether the transaction should be propagated based on the `Propagate` field in the `ValidTransaction` type as defined in [Definition -def-num-ref-](chap-runtime-api#defn-valid-transaction), which is returned by ${\mathtt{\text{TaggedTransactionQueue\_validate\_transaction}}}$.
+- $\text{ShouldPropagate}$ indicates whether the transaction should be propagated based on the `Propagate` field in the `ValidTransaction` type as defined in [Definition -def-num-ref-](chap-runtime-api#defn-valid-transaction), which is returned by ${\mathtt{\text{TaggedTransactionQueue\_validate\_transaction}}}$.
 
 - $\text{Propagate}{\left({T}\right)}$ sends ${T}$ to all connected peers of the Polkadot Host who are not already aware of ${T}$.
 :::
@@ -282,7 +282,7 @@ This has not been defined yet.
 
 ### -sec-num- Inherents {#sect-inherents}
 
-Inherents are unsigned extrinsics inserted into a block by the block author and as a result are not stored in the transaction pool or gossiped across the network. Instead they are generated by the Polkadot Host by passing the required inherent data, as listed in [Table -tab-num-ref-](chap-state#tabl-inherent-data), to the Runtime method ${\mathtt{\text{BlockBuilder\_inherent\_extrinsics}}}$ ([Section -sec-num-ref-](chap-runtime-api#defn-rt-builder-inherent-extrinsics)). Then the returned extrinsics should be included in the current block as explained in [Build-Block](sect-block-production#algo-build-block).
+Inherents are unsigned extrinsics inserted into a block by the block author and as a result are not stored in the transaction pool or gossiped across the network. Instead, they are generated by the Polkadot Host by passing the required inherent data, as listed in [Table -tab-num-ref-](chap-state#tabl-inherent-data), to the Runtime method ${\mathtt{\text{BlockBuilder\_inherent\_extrinsics}}}$ ([Section -sec-num-ref-](chap-runtime-api#defn-rt-builder-inherent-extrinsics)). Then the returned extrinsics should be included in the current block as explained in [Build-Block](sect-block-production#algo-build-block).
 
 ###### Table -tab-num- Inherent Data {#tabl-inherent-data}
 
@@ -327,9 +327,9 @@ where ${\mathcal{{K}}}\subset{\mathbb{{B}}}$ and ${\mathcal{{V}}}\subset{\mathbb
 :::
 ### -sec-num- General Structure {#id-general-structure}
 
-In order to ensure the integrity of the state of the system, the stored data needs to be re-arranged and hashed in a *radix tree*, which hereafter we refer to as the ***State Trie*** or just ***Trie***. This rearrangment is necessary to be able to compute the Merkle hash of the whole or part of the state storage, consistently and efficiently at any given time.
+In order to ensure the integrity of the state of the system, the stored data needs to be re-arranged and hashed in a *radix tree*, which hereafter we refer to as the ***State Trie*** or just ***Trie***. This rearrangement is necessary to be able to compute the Merkle hash of the whole or part of the state storage, consistently and efficiently at any given time.
 
-The trie is used to compute the *merkle root* ([Section -sec-num-ref-](chap-state#sect-merkl-proof)) of the state, ${H}_{{r}}$ ([Definition -def-num-ref-](chap-state#defn-block-header)), whose purpose is to authenticate the validity of the state database. Thus, the Polkadot Host follows a rigorous encoding algorithm to compute the values stored in the trie nodes to ensure that the computed Merkle hash, ${H}_{{r}}$, matches across the Polkadot Host implementations.
+The trie is used to compute the *Merkle root* ([Section -sec-num-ref-](chap-state#sect-merkl-proof)) of the state, ${H}_{{r}}$ ([Definition -def-num-ref-](chap-state#defn-block-header)), whose purpose is to authenticate the validity of the state database. Thus, the Polkadot Host follows a rigorous encoding algorithm to compute the values stored in the trie nodes to ensure that the computed Merkle hash, ${H}_{{r}}$, matches across the Polkadot Host implementations.
 
 The trie is a *radix-16* tree ([Definition -def-num-ref-](chap-state#defn-radix-tree)). Each key value identifies a unique node in the tree. However, a node in a tree might or might not be associated with a key in the storage.
 
@@ -347,7 +347,7 @@ As a result, in a radix tree, any path whose interior vertices all have only one
 
 When traversing the trie to a specific node, its key can be reconstructed by concatenating the subsequences of the keys which are stored either explicitly in the nodes on the path or implicitly in their position as a child of their parent.
 
-To identify the node corresponding to a key value, ${k}$, first we need to encode ${k}$ in a way consistent with the trie structure. Because each node in the trie has at most 16 children, we represent the key as a sequence of 4-bit nibbles:
+To identify the node corresponding to a key value, ${k}$, first, we need to encode ${k}$ in a way consistent with the trie structure. Because each node in the trie has at most 16 children, we represent the key as a sequence of 4-bit nibbles:
 
 ###### Definition -def-num- Key Encode {#defn-trie-key-encode}
 :::definition
@@ -397,7 +397,7 @@ The state trie is a radix-16 tree ([Definition -def-num-ref-](chap-state#defn-ra
 
 - ${k}_{{N}}$ is the shared prefix of the key of all the descendants of ${N}$ in the trie.
 
-and, at least one of the following statements holds:
+and at least one of the following statements holds:
 
 - ${\left({k}_{{N}},{v}\right)}$ corresponds to an existing entry in the State Storage.
 
@@ -499,7 +499,7 @@ $$
 {v}={\left\lbrace\begin{matrix}{01}&\text{Leaf}&{p}_{{l}}={2}^{{6}}\\{10}&\text{Branch Node with }\ {k}_{{N}}\notin{\mathcal{{K}}}&{p}_{{l}}={2}^{{6}}\\{11}&\text{Branch Node with }\ {k}_{{N}}\in{\mathcal{{K}}}&{p}_{{l}}={2}^{{6}}\\{001}&\text{Leaf containing a hashed subvalue}&{p}_{{l}}={2}^{{5}}\\{0001}&\text{Branch containing a hashed subvalue}&{p}_{{l}}={2}^{{4}}\\{0000}{0000}&\text{Empty}&{p}_{{l}}={0}\\{0000}{0001}&\text{Reserved for compact encoding}&\end{matrix}\right.}
 $$
 
-If the value of ${p}_{{l}}$ is equal to the maximum possible value the bits can hold, such as 63 (${2}^{{6}}-{1}$) in case of the ${01}$ variant, then the value of the next 8 bits (${N}_{{2}}$) are added the the length. This process is repeated for every ${N}_{{n}}$ where ${N}_{{n}}={2}^{{8}}-{1}$. Any value smaller than the maximum possible value of ${N}_{{n}}$ implies that the next value of ${N}_{{{n}+{1}}}$ should not be added to the length. The hashed subvalue for variants ${001}$ and ${0001}$ is described in [Definition -def-num-ref-](chap-state#defn-hashed-subvalue).
+If the value of ${p}_{{l}}$ is equal to the maximum possible value the bits can hold, such as 63 (${2}^{{6}}-{1}$) in case of the ${01}$ variant, then the value of the next 8 bits (${N}_{{2}}$) are added the length. This process is repeated for every ${N}_{{n}}$ where ${N}_{{n}}={2}^{{8}}-{1}$. Any value smaller than the maximum possible value of ${N}_{{n}}$ implies that the next value of ${N}_{{{n}+{1}}}$ should not be added to the length. The hashed subvalue for variants ${001}$ and ${0001}$ is described in [Definition -def-num-ref-](chap-state#defn-hashed-subvalue).
 
 Formally, the length of the partial key, ${\text{pk}_{{N}}^{{l}}}$, is defined as:
 
@@ -514,9 +514,9 @@ as long as ${p}_{{l}}={m}$, ${N}_{{{n}+{x}}}={2}^{{8}}-{1}$ and ${N}_{{{n}+{x}+{
 
 To prove the consistency of the state storage across the network and its modifications both efficiently and effectively, the trie implements a Merkle tree structure. The hash value corresponding to each node needs to be computed rigorously to make the inter-implementation data integrity possible.
 
-The Merkle value of each node should depend on the Merkle value of all its children as well as on its corresponding data in the state storage. This recursive dependency is encompassed into the subvalue part of the node value which recursively depends on the Merkle value of its children. Additionally, as [Section -sec-num-ref-](chap-state#sect-child-trie-structure) clarifies, the Merkle proof of each **child trie** must be updated first before the final Polkadot state root can be calculated.
+The Merkle value of each node should depend on the Merkle value of all its children as well as on its corresponding data in the state storage. This recursive dependency is encompassed into the subvalue part of the node value, which recursively depends on the Merkle value of its children. Additionally, as [Section -sec-num-ref-](chap-state#sect-child-trie-structure) clarifies, the Merkle proof of each **child trie** must be updated first before the final Polkadot state root can be calculated.
 
-We use the auxiliary function introduced in [Definition -def-num-ref-](chap-state#defn-children-bitmap) to encode and decode information stored in a branch node.
+We use the auxiliary function introduced in [Definition -def-num-ref-](chap-state#defn-children-bitmap) to encode and decode the information stored in a branch node.
 
 ###### Definition -def-num- Children Bitmap {#defn-children-bitmap}
 :::definition
@@ -571,7 +571,7 @@ The trie deviates from a traditional Merkle tree in that the node value ([Defini
 ###### Definition -def-num- Hashed Subvalue {#defn-hashed-subvalue}
 :::definition
 
-To increase performance, a merkle proof can be generated by inserting the hash of a value into the trie rather than the value itself (which can be quite large). If merkle proof computation with node hashing is explicitly executed via the Host API ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-root-version-2)), then any value larger than 32 bytes is hashed, resulting in that hash being used as the subvalue ([Definition -def-num-ref-](chap-state#defn-node-subvalue)) under the corresponding key. The node header must specify the variant ${001}$ and ${0001}$ respectively for leaves containing a hash as their subvalue and for branches containing a hash as their subvalue ([Definition -def-num-ref-](chap-state#defn-node-header)).
+To increase performance, a Merkle proof can be generated by inserting the hash of a value into the trie rather than the value itself (which can be quite large). If Merkle proof computation with node hashing is explicitly executed via the Host API ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-root-version-2)), then any value larger than 32 bytes is hashed, resulting in that hash being used as the subvalue ([Definition -def-num-ref-](chap-state#defn-node-subvalue)) under the corresponding key. The node header must specify the variant ${001}$ and ${0001}$ respectively for leaves containing a hash as their subvalue and for branches containing a hash as their subvalue ([Definition -def-num-ref-](chap-state#defn-node-header)).
 
 :::
 ###### Definition -def-num- Merkle Value {#defn-merkle-value}
@@ -591,7 +591,7 @@ Where ${v}_{{N}}$ is the node value of ${N}$ ([Definition -def-num-ref-](chap-st
 :::
 ### -sec-num- Managing Multiple Variants of State {#sect-managing-multiple-states}
 
-Unless a node is committed to only update its state according to the finalized block ([Definition -def-num-ref-](sect-finality#defn-finalized-block)), it is inevitable for the node to store multiple variants of the state (one for each block). This is, for example, necessary for nodes participating in the block production and finalization.
+Unless a node is committed to only updating its state according to the finalized block ([Definition -def-num-ref-](sect-finality#defn-finalized-block)), it is inevitable for the node to store multiple variants of the state (one for each block). This is, for example, necessary for nodes participating in the block production and finalization.
 
 While the state trie structure ([Section -sec-num-ref-](chap-state#sect-state-storage-trie-structure)) facilitates and optimizes storing and switching between multiple variants of the state storage, the Polkadot Host does not specify how a node is required to accomplish this task. Instead, the Polkadot Host is required to implement $\text{Set-State-At}$ ([Definition -def-num-ref-](chap-state#defn-set-state-at)):
 
@@ -625,15 +625,15 @@ The Polkadot Host API ([Section -sec-num-ref-](chap-host-api#sect-child-storage-
 
 ## -sec-num- Runtime Interactions {#sect-runtime-interaction}
 
-Like any transaction-based transition system, Polkadot’s state is changed by executing an ordered set of instructions. These instructions are known as *extrinsics*. In Polkadot, the execution logic of the state transition function is encapsulated in a Runtime ([Definition -def-num-ref-](chap-state#defn-state-machine)). For easy upgradability this Runtime is presented as a Wasm blob. Nonetheless, the Polkadot Host needs to be in constant interaction with the Runtime ([Section -sec-num-ref-](chap-state#sect-entrypoints-into-runtime)).
+Like any transaction-based transition system, Polkadot’s state is changed by executing an ordered set of instructions. These instructions are known as *extrinsics*. In Polkadot, the execution logic of the state transition function is encapsulated in a Runtime ([Definition -def-num-ref-](chap-state#defn-state-machine)). For easy upgradability, this Runtime is presented as a Wasm blob. Nonetheless, the Polkadot Host needs to be in constant interaction with the Runtime ([Section -sec-num-ref-](chap-state#sect-entrypoints-into-runtime)).
 
-In [Section -sec-num-ref-](chap-state#sect-extrinsics), we specify the procedure of the process where the extrinsics are submitted, pre-processed and validated by Runtime and queued to be applied to the current state.
+In [Section -sec-num-ref-](chap-state#sect-extrinsics), we specify the procedure of the process where the extrinsics are submitted, pre-processed, and validated by Runtime and queued to be applied to the current state.
 
-To make state replication feasible, Polkadot journals and batches series of its extrinsics together into a structure known as a *block*, before propagating them to other nodes, similar to most other prominent distributed ledger systems. The specification of the Polkadot block as well as the process of verifying its validity are both explained in [Section -sec-num-ref-](chap-state#sect-state-replication).
+To make state replication feasible, Polkadot journals and batches a series of its extrinsics together into a structure known as a *block*, before propagating them to other nodes, similar to most other prominent distributed ledger systems. The specification of the Polkadot block as well as the process of verifying its validity, are both explained in [Section -sec-num-ref-](chap-state#sect-state-replication).
 
 ### -sec-num- Interacting with the Runtime {#sect-entrypoints-into-runtime}
 
-The Runtime ([Definition -def-num-ref-](chap-state#defn-state-machine)) is the code implementing the logic of the chain. This code is decoupled from the Polkadot Host to make the the logic of the chain easily upgradable without the need to upgrade the Polkadot Host itself. The general procedure to interact with the Runtime is described by [Interact-With-Runtime](chap-state#algo-runtime-interaction).
+The Runtime ([Definition -def-num-ref-](chap-state#defn-state-machine)) is the code implementing the logic of the chain. This code is decoupled from the Polkadot Host to make the logic of the chain easily upgradable without the need to upgrade the Polkadot Host itself. The general procedure to interact with the Runtime is described by [Interact-With-Runtime](chap-state#algo-runtime-interaction).
 
 ###### Algorithm -algo-num- Interact With Runtime {#algo-runtime-interaction}
 :::algorithm
@@ -644,7 +644,7 @@ The Runtime ([Definition -def-num-ref-](chap-state#defn-state-machine)) is the c
 />
 
 **where**  
-- ${F}$ is the runtime entrypoint call.
+- ${F}$ is the runtime entry point call.
 
 - ${H}_{{b}}{\left({B}\right)}$ is the block hash indicating the state at the end of ${B}$.
 
@@ -661,7 +661,7 @@ $$
 {b}\:=\text{3A,63,6F,64,65}
 $$
 
-which is the ASCII byte representation of the string `:code` ([Section -sec-num-ref-](id-cryptography-encoding#section-genesis)). As a result of storing the Runtime as part of the state, the Runtime code itself becomes state sensitive and calls to Runtime can change the Runtime code itself. Therefore the Polkadot Host needs to always make sure to provide the Runtime corresponding to the state in which the entrypoint has been called. Accordingly, we define ${R}_{{B}}$ ([Definition -def-num-ref-](chap-state#defn-runtime-code-at-state)).
+which is the ASCII byte representation of the string `:code` ([Section -sec-num-ref-](id-cryptography-encoding#section-genesis)). As a result of storing the Runtime as part of the state, the Runtime code itself becomes state sensitive and calls to Runtime can change the Runtime code itself. Therefore the Polkadot Host needs to always make sure to provide the Runtime corresponding to the state in which the entry point has been called. Accordingly, we define ${R}_{{B}}$ ([Definition -def-num-ref-](chap-state#defn-runtime-code-at-state)).
 
 The initial Runtime code of the chain is provided as part of the genesis state ([Section -sec-num-ref-](id-cryptography-encoding#section-genesis)) and subsequent calls to the Runtime have the ability to, in turn, upgrade the Runtime by replacing this Wasm blob with the help of the storage API ([Section -sec-num-ref-](chap-host-api#sect-storage-api)). Therefore, the executor **must always** load the latest Runtime from storage - or preferably detect Runtime upgrades ([Definition -def-num-ref-](chap-state#defn-digest)) - either based on the parent block when importing blocks or the best/highest block when creating new blocks.
 
@@ -671,7 +671,7 @@ The initial Runtime code of the chain is provided as part of the genesis state (
 By ${R}_{{B}}$, we refer to the Runtime code stored in the state storage at the end of the execution of block ${B}$.
 :::
 
-The WASM blobs maybe compressed using [*zstd*](https://github.com/facebook/zstd). In such cases, there is a 8-byte magic indentifier at the head of the blob, indicating that it should be decompressed with *zstd* compression. The magic identifier prefix `ZSTD_PREFIX = [82, 188, 83, 118, 70, 219, 142, 5]` is different from the WASM [magic bytes](https://github.com/WebAssembly/design/blob/main/BinaryEncoding.md#high-level-structure). The decompression has to be applied on the blob excluding the `ZSTD-PREFIX` and has a Bomb Limit of `CODE_BLOB_BOMB_LIMIT = 50 * 1024 * 1024` to mitigate compression bomb attacks. 
+The WASM blobs may be compressed using [*zstd*](https://github.com/facebook/zstd). In such cases, there is an 8-byte magic identifier at the head of the blob, indicating that it should be decompressed with *zstd* compression. The magic identifier prefix `ZSTD_PREFIX = [82, 188, 83, 118, 70, 219, 142, 5]` is different from the WASM [magic bytes](https://github.com/WebAssembly/design/blob/main/BinaryEncoding.md#high-level-structure). The decompression has to be applied on the blob excluding the `ZSTD-PREFIX` and has a Bomb Limit of `CODE_BLOB_BOMB_LIMIT = 50 * 1024 * 1024` to mitigate compression bomb attacks. 
 
 
 ### -sec-num- Code Executor {#sect-code-executor}
@@ -700,11 +700,11 @@ we refer to the task using the executor to invoke the while passing an ${A}_{{1}
 
 The Polkadot Host is responsible for managing the WASM heap memory starting at the exported symbol as a part of implementing the allocator Host API ([Section -sec-num-ref-](chap-host-api#sect-allocator-api)) and the same allocator should be used for any other heap allocation to be used by the Polkadot Runtime.
 
-The size of the provided WASM memory should be based on the value of the storage key (an unsigned 64-bit integer), where each page has the size of 64KB. This memory should be made available to the Polkadot Runtime for import under the symbol name `memory`.
+The size of the provided WASM memory should be based on the value of the storage key (an unsigned 64-bit integer), where each page has a size of 64KB. This memory should be made available to the Polkadot Runtime for import under the symbol name `memory`.
 
 #### -sec-num- Sending Data to a Runtime Entrypoint {#sect-runtime-send-args-to-runtime-enteries}
 
-In general, all data exchanged between the Polkadot Host and the Runtime is encoded using SCALE codec described in [Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec). Therefore all runtime entrypoints have the following identical Wasm function signatures:
+In general, all data exchanged between the Polkadot Host and the Runtime is encoded using the SCALE codec described in [Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec). Therefore all runtime entrypoints have the following identical Wasm function signatures:
 
 ```
 (func $runtime_entrypoint (param $data i32) (param $len i32) (result i64))
@@ -720,6 +720,6 @@ The value which is returned from the invocation is an integer, representing two 
 
 #### -sec-num- Runtime Version Custom Section {#sect-runtime-version-custom-section}
 
-For newer Runtimes, the Runtime version ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) can be read directly from the [Wasm custom section](https://webassembly.github.io/spec/core/appendix/custom) with the name `runtime_version`. The content is a SCALE encoded structure as described in [Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version).
+For newer Runtimes, the Runtime version ([Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version)) can be read directly from the [Wasm custom section](https://webassembly.github.io/spec/core/appendix/custom) with the name `runtime_version.` The content is a SCALE encoded structure as described in [Section -sec-num-ref-](chap-runtime-api#defn-rt-core-version).
 
 Retrieving the Runtime version this way is preferred over calling the `Core_version` entrypoint since it involves significantly less overhead.

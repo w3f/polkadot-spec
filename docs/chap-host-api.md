@@ -11,7 +11,7 @@ The Polkadot Host API is a set of functions that the Polkadot Host exposes to Ru
 ###### Definition -def-num- Exposed Host API {#defn-host-api-at-state}
 :::definition
 
-By $\text{RE}_{{B}}$ we refer to the API exposed by the Polkadot Host which interact, manipulate and response based on the state storage whose state is set at the end of the execution of block ${B}$.
+By $\text{RE}_{{B}}$ we refer to the API exposed by the Polkadot Host, which interacts, manipulates, and responds based on the state storage whose state is set at the end of the execution of block ${B}$.
 
 :::
 ###### Definition -def-num- Runtime Pointer {#defn-runtime-pointer}
@@ -23,7 +23,7 @@ The **Runtime pointer** type is an unsigned 32-bit integer representing a pointe
 ###### Definition -def-num- Runtime Pointer Size {#defn-runtime-pointer-size}
 :::definition
 
-The **Runtime pointer-size** type is an unsigned 64-bit integer, representing two consecutive integers. The least significant is **Runtime pointer** ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)). The most significant provides the size of the data in bytes. This representation is the primary way to exchange data of arbitrary/dynamic sizes between the Runtime and the Polkadot Host.
+The **Runtime pointer-size** type is an unsigned 64-bit integer representing two consecutive integers. The least significant is **Runtime pointer** ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer)). The most significant provides the size of the data in bytes. This representation is the primary way to exchange data of arbitrary/dynamic sizes between the Runtime and the Polkadot Host.
 
 :::
 ###### Definition -def-num- Lexicographic ordering {#defn-lexicographic-ordering}
@@ -49,13 +49,13 @@ As of now, the storage API should silently ignore any keys that start with the `
 ###### Definition -def-num- State Version {#defn-state-version}
 :::definition
 
-The state version, ${v}$, dictates how a merkle root should be constructed. The datastructure is a varying type of the following format:
+The state version, ${v}$, dictates how a Merkle root should be constructed. The data structure is a varying type of the following format:
 
 $$
 {v}={\left\lbrace\begin{matrix}{0}&\text{full values}\\{1}&\text{node hashes}\end{matrix}\right.}
 $$
 
-where ${0}$ indicates that the values of the keys should be inserted into the trie directly and ${1}$ makes use of "node hashes" when calculating the merkle proof ([Definition -def-num-ref-](chap-state#defn-hashed-subvalue)).
+where ${0}$ indicates that the values of the keys should be inserted into the trie directly, and ${1}$ makes use of "node hashes" when calculating the Merkle proof ([Definition -def-num-ref-](chap-state#defn-hashed-subvalue)).
 
 :::
 ### -sec-num- `ext_storage_set` {#sect-storage-set}
@@ -102,7 +102,7 @@ Gets the given key from storage, placing the value into a buffer and returning t
 
 - `offset`: an u32 integer (typed as i32 due to wasm types) containing the offset beyond the value should be read from.
 
-- `result`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) pointing to a SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer representing the number of bytes left at supplied `offset`. Returns *None* if the entry does not exists.
+- `result`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) pointing to a SCALE encoded *Option* value ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer representing the number of bytes left at supplied `offset`. Returns *None* if the entry does not exist.
 
 ### -sec-num- `ext_storage_clear` {#id-ext_storage_clear}
 
@@ -151,7 +151,7 @@ Clear the storage of each key/value pair where the key starts with the given pre
 **Arguments**  
 - `prefix`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) containing the prefix.
 
-- `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count towards the limit.
+- `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count toward the limit.
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the following variant, ${k}$:
 
@@ -163,12 +163,12 @@ Clear the storage of each key/value pair where the key starts with the given pre
 
 ### -sec-num- `ext_storage_append` {#id-ext_storage_append}
 
-Append the SCALE encoded value to a SCALE encoded sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) at the given key. This function assumes that the existing storage item is either empty or a SCALE encoded sequence and that the value to append is also SCALE encoded and of the same type as the items in the existing sequence.
+Append the SCALE encoded value to a SCALE encoded sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) at the given key. This function assumes that the existing storage item is either empty or a SCALE-encoded sequence and that the value to append is also SCALE encoded and of the same type as the items in the existing sequence.
 
 To improve performance, this function is allowed to skip decoding the entire SCALE encoded sequence and instead can just append the new item to the end of the existing data and increment the length prefix ${\text{Enc}_{{\text{SC}}}^{{\text{Len}}}}$.
 
 :::caution
-If the storage item does not exist or is not SCALE encoded, the storage item will be set to the specified value, represented as a SCALE encoded byte array.
+If the storage item does not exist or is not SCALE encoded, the storage item will be set to the specified value, represented as a SCALE-encoded byte array.
 :::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-7}
@@ -235,10 +235,10 @@ Get the next key in storage after the given one in lexicographic order ([Definit
 
 ### -sec-num- `ext_storage_start_transaction` {#sect-ext-storage-start-transaction}
 
-Start a new nested transaction. This allows to either commit or roll back all changes that are made after this call. For every transaction there must be a matching call to either `ext_storage_rollback_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-rollback-transaction)) or `ext_storage_commit_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-commit-transaction)). This is also effective for all values manipulated using the child storage API ([Section -sec-num-ref-](chap-host-api#sect-child-storage-api)). It’s legal to call this function multiple times in a row.
+Start a new nested transaction. This allows to either commit or roll back all changes that are made after this call. For every transaction, there must be a matching call to either `ext_storage_rollback_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-rollback-transaction)) or `ext_storage_commit_transaction` ([Section -sec-num-ref-](chap-host-api#sect-ext-storage-commit-transaction)). This is also effective for all values manipulated using the child storage API ([Section -sec-num-ref-](chap-host-api#sect-child-storage-api)). It’s legal to call this function multiple times in a row.
 
 :::caution
-This is a low level API that is potentially dangerous as it can easily result in unbalanced transactions. Runtimes should use high level storage abstractions.
+This is a low-level API that is potentially dangerous as it can easily result in unbalanced transactions. Runtimes should use high-level storage abstractions.
 :::
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-10}
@@ -285,7 +285,7 @@ Interface for accessing the child storage from within the runtime.
 ###### Definition -def-num- Child Storage {#defn-child-storage-type}
 :::definition
 
-**Child storage** key is a unprefixed location of the child trie in the main trie.
+**Child storage** key is an unprefixed location of the child trie in the main trie.
 
 :::
 ### -sec-num- `ext_default_child_storage_set` {#id-ext_default_child_storage_set}
@@ -376,7 +376,7 @@ Clears an entire child storage.
 **Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
-- `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count towards the limit.
+- `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count toward the limit.
 
 - `return`: a value equal to *1* if all the keys of the child storage have been deleted or a value equal to *0* if there are remaining keys.
 
@@ -389,7 +389,7 @@ Clears an entire child storage.
 **Arguments**  
 - `child_storage_key`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the child storage key ([Definition -def-num-ref-](chap-host-api#defn-child-storage-type)).
 
-- `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count towards the limit.
+- `limit`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing an unsigned 32-bit integer indicating the limit on how many keys should be deleted. No limit is applied if this is *None*. Any keys created during the current block execution do not count toward the limit.
 
 - `return`: a pointer-size ([Definition -def-num-ref-](chap-host-api#defn-runtime-pointer-size)) to the following variant, ${k}$:
 
@@ -518,7 +518,7 @@ Cryptographic keys are stored in separate key stores based on their intended use
 ###### Definition -def-num- ECDSA Verify Error {#defn-ecdsa-verify-error}
 :::definition
 
-**EcdsaVerifyError** is a varying data type ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) that specifies the error type when using ECDSA recovery functionality. Following values are possible:
+**EcdsaVerifyError** is a varying data type ([Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type)) that specifies the error type when using ECDSA recovery functionality. The following values are possible:
 
 ###### Table -tab-num- Table of error types in ECDSA recovery {#tabl-ecdsa-verify-error}
 
@@ -600,7 +600,7 @@ Verifies an *ed25519* signature.
 
 ### -sec-num- `ext_crypto_ed25519_batch_verify` {#sect-ext-crypto-ed25519-batch-verify}
 
-Registers a ed25519 signature for batch verification. Batch verification is enabled by calling `ext_crypto_start_batch_verify` ([Section -sec-num-ref-](chap-host-api#sect-ext-crypto-start-batch-verify)). The result of the verification is returned by `ext_crypto_finish_batch_verify` ([Section -sec-num-ref-](chap-host-api#sect-ext-crypto-finish-batch-verify)). If batch verification is not enabled, the signature is verified immediately.
+Registers an ed25519 signature for batch verification. Batch verification is enabled by calling `ext_crypto_start_batch_verify` ([Section -sec-num-ref-](chap-host-api#sect-ext-crypto-start-batch-verify)). The result of the verification is returned by `ext_crypto_finish_batch_verify` ([Section -sec-num-ref-](chap-host-api#sect-ext-crypto-finish-batch-verify)). If batch verification is not enabled, the signature is verified immediately.
 
 #### -sec-num- Version 1 {#id-version-1}
 
@@ -614,7 +614,7 @@ Registers a ed25519 signature for batch verification. Batch verification is enab
 
 - `key`: a pointer to the buffer containing the 256-bit public key.
 
-- `return`: a i32 integer value equal to *1* if the signature is valid or batched or a value equal *0* to if otherwise.
+- `return`: an i32 integer value equal to *1* if the signature is valid or batched or a value equal *0* to if otherwise.
 
 ### -sec-num- `ext_crypto_sr25519_public_keys` {#id-ext_crypto_sr25519_public_keys}
 
@@ -716,7 +716,7 @@ Registers a sr25519 signature for batch verification. Batch verification is enab
 
 - `key`: a pointer to the buffer containing the 256-bit public key.
 
-- `return`: a i32 integer value equal to *1* if the signature is valid or batched or a value equal *0* to if otherwise.
+- `return`: an i32 integer value equal to *1* if the signature is valid or batched or a value equal *0* to if otherwise.
 
 ### -sec-num- `ext_crypto_ecdsa_public_keys` {#id-ext_crypto_ecdsa_public_keys}
 
@@ -790,11 +790,11 @@ Signs the prehashed message with the *ecdsa* key that corresponds to the given p
 
 ### -sec-num- `ext_crypto_ecdsa_verify` {#sect-ext-crypto-ecdsa-verify}
 
-Verifies the hash of the given message against a ECDSA signature.
+Verifies the hash of the given message against an ECDSA signature.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-34}
 
-This function allows the verification of non-standard, overflowing ECDSA signatures, an implemenation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature#method.parse_overflowing) function.
+This function allows the verification of non-standard, overflowing ECDSA signatures, an implementation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature#method.parse_overflowing) function.
 
     (func $ext_crypto_ecdsa_verify_version_1
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
