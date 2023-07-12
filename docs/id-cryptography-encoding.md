@@ -274,6 +274,7 @@ The **Controller key** is a type of account key that acts on behalf of the Stash
 | BABE       | SR25519    |
 | I’m Online | SR25519    |
 | Parachain  | SR25519    |
+| BEEFY      | secp256k1  |
 
 Session keys must be accessible by certain Polkadot Host APIs defined in [Appendix -chap-num-ref-](chap-host-api). Session keys are *not* meant to control the majority of the users’ funds and should only be used for their intended purpose.
 :::
