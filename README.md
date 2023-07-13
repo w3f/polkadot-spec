@@ -33,7 +33,6 @@ The Spec Committee consists of Researchers, Researcher Engineers, and Implemente
 - [Pierre Krieger](https://github.com/tomaka) 
 - [Heverson B. Ribeiro](https://github.com/heversonbr)
 
-## Spec Committee 
 
 ## Local Development
 
