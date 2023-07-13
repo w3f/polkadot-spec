@@ -1,10 +1,8 @@
 # Polkadot Protocol Specification
 
-Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository contains the official specification for the Polkadot Protocol.
- 
-The latest releases of the *Polkadot Protocol Specification* can be found on [spec.polkadot.network](https://spec.polkadot.network) or on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
+## Intorduction 
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+This repository contains the official specification for the [Polkadot Protocol](https://polkadot.network/). The latest releases of the *Polkadot Protocol Specification* can be found on [spec.polkadot.network](https://spec.polkadot.network) or our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
 
 ## Local Development
 
