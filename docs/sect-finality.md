@@ -543,23 +543,26 @@ Merkle Mountain Ranges, **MMR**, are used as an efficient way to send block head
 MMR structure 
 
 A `MMR` structure can be seen as a list of perfectly balanced binary sub-trees in descending order of height. It is a strictly append-only structure where nodes are added from left to right, such that a parent node is added as soon as two children exist. The following representation shows a `MMR` with 11 elements, 7 leaf nodes and 4 non-leaf nodes, where the value of each node corresponds to the order in which it was inserted into the tree.
-        ```
-               7
-              / \
-             /   \
-            /     \
-           3       6        10
-          / \     / \       / \   
-         /   \   /   \     /   \   
-        1     2 4     5   8     9    11
-        ```
+
+```
+       7
+      / \
+     /   \
+    /     \
+   3       6        10
+  / \     / \       / \   
+ /   \   /   \     /   \   
+1     2 4     5   8     9    11
+```
 
 In contrast to conventional Merkle trees, a `MMR` does not have a single `root` by design. Every sub-tree has a separate sub-root, which we refer to as the `peak` of the sub-tree. In the example above we see 3 sub-trees and consequently 3 peaks: nodes 7, 10 and 11. 
 
 Once all peaks are identified, `bagging the peaks` consists of hashing all the peaks (i.e., sub-roots) together in order to compute the `MMR root`. 
-Therefore, given a MMR tree with n peaks at nodes `p1,..,pn` the `MMR root` of that tree is calculated as:
+Note that, it is important to previously define the order in which the peaks are hashed to ensure that a given sub-set of peaks will always derive a unique `MMR root`. Here we state that peaks are merged from right to left and bagged via `hash(right, left)`.
 
-            MMR root = hash ( p1_hash | p2_hash |.....| pn_hash )
+Therefore, given a MMR tree with n peaks ordered in decreasing order of height `p_1, p2,..,pn` the `MMR root` of that tree is calculated as follows.
+
+$\text{MMR root} = hash (p_1 + hash( p_2 + hash( p_3 +... + hash ( p_n-1 + p_n ))))$
 
 A distinguished feature of this process is that whenever new leaf nodes are added to the tree, the earlier hash computations of peaks are reused, making new leaf nodes less expensive to insert and to prove (i.e., to verify the integrity of leaf data). 
 
