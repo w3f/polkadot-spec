@@ -536,7 +536,7 @@ public key is `33` bytes long, instead of `32` bytes for a `sr25519` based publi
 :::
 
 ###### Definition -def-num- Merkle Mountain Ranges {#defn-mmr}
-::::definition
+:::definition
 
 Merkle Mountain Ranges, **MMR**, are used as an efficient way to send block headers and signatures to light clients. Merkle Mountain Ranges (`MMR`) is an improvement of the traditional Merkle tree data structure. Just like a Merkle tree, an `MMR` is a binary tree where each leaf node represents a data element and each non-leaf node is the hash of its child nodes. The key difference between a traditional Merkle tree and a MMR lies in the way nodes are organized. In traditional Merkle trees, whenever a leaf node is appended or removed, the tree must be rebuilt and the hashes of the non-leaf nodes must be recalculated. The overhead of recomputing the hashes up to the root makes traditional Merkle unsuitable for handling dynamic data. The `MMR` is designed to optimize the appending and removal of elements without requiring a complete rebuild of the tree, which makes it more efficient to handle growing lists of leaf nodes.
 
@@ -555,32 +555,44 @@ A `MMR` structure can be seen as a list of perfectly balanced binary sub-trees i
 1     2 4     5   8     9    11
 ```
 
-In contrast to conventional Merkle trees, a `MMR` does not have a single `root` by design. Every sub-tree has a separate sub-root, which we refer to as the `peak` of the sub-tree. In the example above we see 3 sub-trees and consequently 3 peaks: nodes 7, 10 and 11. 
+::::definition
+###### Definition -def-num- Merkle Mountain Ranges root (MMR-root) {#defn-mmr-root}
 
-Once all peaks are identified, `bagging the peaks` consists of hashing all the peaks (i.e., sub-roots) together in order to compute the `MMR root`. 
-Note that, it is important to previously define the order in which the peaks are hashed to ensure that a given sub-set of peaks will always derive a unique `MMR root`. Here we state that peaks are merged from right to left and bagged via `hash(right, left)`.
 
-Therefore, given a MMR tree with n peaks ordered in decreasing order of height `p_1, p2,..,pn` the `MMR root` of that tree is calculated as follows.
+A `MMR` does not have a single `root` by design, as a conventional Merkle tree. Every sub-tree has a separate sub-root, which we refer to as the `peak` of the sub-tree. 
+Bagging the peaks is the process used for hashing the peaks in order to compute the `MMR-root`. It is important to define the order in which the peaks are hashed to ensure that a given sub-set of peaks will always derive a unique `MMR-root`. Here we state that peaks are merged from right to left and bagged via $hash(right, left)$.
 
-$\text{MMR root} = hash (p_1 + hash( p_2 + hash( p_3 +... + hash ( p_n-1 + p_n ))))$
+Therefore, given a MMR tree with n peaks ordered in decreasing order of height the `MMR-root` of the tree is calculated as follows.
+
+$$
+\texttt{MMR root} = hash (p_1 + hash( p_2 + hash( p_3 +... + hash ( p_n-1 + p_n ))))
+$$
+
+**where**
+- $p_1, p_2,...,p_n$: represents the list of current peaks in decreasing order of heights.
+- $hash$: corresponds to the 256-bit [Keccak](chap-host-api#sect-finality#id-ext_hashing_keccak_256) hash function used to merge the peaks.
+::::
 
 A distinguished feature of this process is that whenever new leaf nodes are added to the tree, the earlier hash computations of peaks are reused, making new leaf nodes less expensive to insert and to prove (i.e., to verify the integrity of leaf data). 
 
 
-Interface
+###### Definition -def-num- MMR operations {#defn-mmr-operations}
+::::definition
+
+Here are the basic operations we should be able to perform on the MMR:
 
 - Append Leaf Node (appendData):
     - Signature: append(data: T) -> None
     - Description: appends a new leaf element with the provided data to the MMR.
-		  		  
-- Verify Node (verifyProof):
-    - Signature: verifyNode(nodeHash: str, requiredProofNodes: List[str], MMRroot: str) -> bool
-    - Description: verifies if the given node hash can be proved based on the list of required proof nodes and the MMR root hash.
-		  
+		  		  	  
 - Create MMR root (bagPeaks):
     - Signature: baggingPeaks(peaksIndexes: List[int]) -> str
     - Description: creates the single MMR root based on the list of peaks, returns the hash string of the  MMR root corresponding to the current state of the tree. 
 
+- Verify Node (verifyProof):
+    - Signature: verifyNode(nodeHash: str, requiredProofNodes: List[str], MMRroot: str) -> bool
+    - Description: verifies if the given node hash can be proved based on the list of required proof nodes and the MMR root hash.
+:::
 
 ###### Definition -def-num- Payload {#defn-beefy-payload}
 :::definition
