@@ -13,11 +13,11 @@ import buildBlock from '!!raw-loader!@site/src/algorithms/buildBlock.tex';
 
 ## -sec-num- Introduction {#id-introduction-3}
 
-The Polkadot Host uses BABE protocol for block production. It is designed based on Ouroboros praos . BABE execution happens in sequential non-overlapping phases known as an ***epoch***. Each epoch on its turn is divided into a predefined number of slots. All slots in each epoch are sequentially indexed starting from 0. At the beginning of each epoch, the BABE node needs to run [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) to find out in which slots it should produce a block and gossip to the other block producers. In turn, the block producer node should keep a copy of the block tree and grow it as it receives valid blocks from other block producers. A block producer prunes the tree in parallel by eliminating branches that do not include the most recent finalized blocks ([Definition -def-num-ref-](chap-state#defn-pruned-tree)).
+The Polkadot Host uses BABE protocol for block production. It is designed based on Ouroboros praos. BABE execution happens in sequential non-overlapping phases known as an ***epoch***. Each epoch is divided into a predefined number of slots. All slots in each epoch are sequentially indexed starting from 0. At the beginning of each epoch, the BABE node needs to run [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) to find out in which slots it should produce a block and gossip to the other block producers. In turn, the block producer node should keep a copy of the block tree and grow it as it receives valid blocks from other block producers. A block producer prunes the tree in parallel by eliminating branches that do not include the most recently finalized blocks ([Definition -def-num-ref-](chap-state#defn-pruned-tree)).
 
 ### -sec-num- Block Producer {#id-block-producer}
 
-A **block producer**, noted by ${\mathcal{{P}}}_{{j}}$, is a node running the Polkadot Host which is authorized to keep a transaction queue and which it gets a turn in producing blocks.
+A **block producer**, noted by ${\mathcal{{P}}}_{{j}}$, is a node running the Polkadot Host, which is authorized to keep a transaction queue and which it gets a turn in producing blocks.
 
 ### -sec-num- Block Authoring Session Key Pair {#id-block-authoring-session-key-pair}
 
@@ -29,7 +29,7 @@ A **block producer**, noted by ${\mathcal{{P}}}_{{j}}$, is a node running the Po
 A block production **epoch**, formally referred to as ${\mathcal{{E}}}$, is a period with a pre-known starting time and fixed-length during which the set of block producers stays constant. Epochs are indexed sequentially, and we refer to the ${n}^{{{t}{h}}}$ epoch since genesis by ${\mathcal{{E}}}_{{n}}$. Each epoch is divided into equal-length periods known as block production **slots**, sequentially indexed in each epoch. The index of each slot is called a **slot number**. The equal length duration of each slot is called the **slot duration** and indicated by ${\mathcal{{T}}}$. Each slot is awarded to a subset of block producers during which they are allowed to generate a block.
 
 :::info
-Substrate refers to an epoch as "session" in some places, however, epoch should be the preferred and official name for these periods. |
+Substrate refers to an epoch as a "session" in some places. However, epoch should be the preferred and official name for these periods. |
 :::
 
 ::::
@@ -50,7 +50,7 @@ By ${\text{SubChain}{\left({\mathcal{{E}}}_{{n}}\right)}}$ for epoch ${\mathcal{
 ###### Definition -def-num- Equivocation {#defn-producer-equivocation}
 :::definition
 
-A block producer **equivocates** if they produce more than one block at the same slot. The proof of equivocation are the given distinct headers that were signed by the validator and which include the slot number.
+A block producer **equivocates** if they produce more than one block at the same slot. The proof of equivocation is the given distinct headers that were signed by the validator and which include the slot number.
 
 The Polkadot Host must detect equivocations committed by other validators and submit those to the Runtime as described in [Section -sec-num-ref-](chap-runtime-api#sect-babeapi_submit_report_equivocation_unsigned_extrinsic).
 
@@ -69,7 +69,7 @@ $$
 |   |     |
 |---|-----|
 | **1** | implies *next epoch data*: The Runtime issues this message on every first block of an epoch. The supplied authority set [Definition -def-num-ref-](chap-sync#defn-authority-list), ${\text{Auth}_C}$, and randomness [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness), ${r}$, are used in the next epoch $\mathcal E_n + 1$. |
-| **2** | implies *on disabled*: A 32-bit integer, ${A_i}$, indicating the individual authority in the current authority list that should be immediately disabled until the next authority set changes. This message initial intension was to cause an immediate suspension of all authority functionality with the specified authority. |
+| **2** | implies *on disabled*: A 32-bit integer, ${A_i}$, indicating the individual authority in the current authority list that should be immediately disabled until the next authority set changes. This message's initial intention was to cause an immediate suspension of all authority functionality with the specified authority. |
 | **3** | implies *next epoch descriptor*: These messages are only issued on configuration change and in the first block of an epoch. The supplied configuration data are intended to be used from the next epoch onwards. |
   - $D$ is a varying datatype of the following format:
     $$
@@ -93,7 +93,7 @@ The babe constant ([Definition -def-num-ref-](sect-block-production#defn-babe-co
 
 A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should run \<algo-block-production-lottery\>\> to identify the slots it is awarded. These are the slots during which the block producer is allowed to build a block. The ${s}{k}$ is the block producer lottery secret key and ${n}$ is the index of the epoch for whose slots the block producer is running the lottery.
 
-In order to ensure consistent block production, BABE uses secondary slots in case no authority won the (primary) block production lottery. Unlike the lottery, secondary slot assignees are know upfront publically ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)). The Runtime provides information on how or if secondary slots are executed ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)), explained further in [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots).
+In order to ensure consistent block production, BABE uses secondary slots in case no authority wins the (primary) block production lottery. Unlike the lottery, secondary slot assignees are known upfront publically ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)). The Runtime provides information on how or if secondary slots are executed ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)), explained further in [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots).
 
 ###### Definition -def-num- BABE Constant {#defn-babe-constant}
 :::definition
@@ -120,7 +120,7 @@ The numbers should be treated as 64-bit rational numbers.
 :::
 ### -sec-num- Primary Block Production Lottery {#id-primary-block-production-lottery}
 
-A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should run the $\text{Block-Production-Lottery}$ algorithm to identify the slots it is awarded. These are the slots during which the block producer is allowed to build a block. The session secret key, ${s}{k}$, is the block producer lottery secret key and ${n}$ is the index of the epoch for whose slots the block producer is running the lottery.
+A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should run the $\text{Block-Production-Lottery}$ algorithm to identify the slots it is awarded. These are the slots during which the block producer is allowed to build a block. The session secret key, ${s}{k}$, is the block producer lottery secret key, and ${n}$ is the index of the epoch for whose slots the block producer is running the lottery.
 
 ###### Algorithm -algo-num- Block Production Lottery {#algo-block-production-lottery}
 :::algorithm
@@ -130,17 +130,17 @@ A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should
     options={{ "lineNumber": true }}
 />
 
-where $\text{Epoch-Randomness}$ is defined in ([Definition -def-num-ref-](sect-block-production#defn-epoch-randomness)), ${s}{c}_{{n}}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-duration) , $\text{VRF}$ creates the BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)) and ${e}_{{i}}$ is the epoch index, retrieved from the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)). ${s}_{{k}}$ and ${p}_{{k}}$ is the secret key respectively the public key of the authority. For any slot ${s}$ in epoch ${n}$ where ${o}<{T}_{{{\mathcal{{E}}}_{{n}}}}$ ([Definition -def-num-ref-](sect-block-production#defn-winning-threshold)), the block producer is required to produce a block.
+where $\text{Epoch-Randomness}$ is defined in ([Definition -def-num-ref-](sect-block-production#defn-epoch-randomness)), ${s}{c}_{{n}}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-duration) , $\text{VRF}$ creates the BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)) and ${e}_{{i}}$ is the epoch index, retrieved from the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)). ${s}_{{k}}$ and ${p}_{{k}}$ is the secret key, respectively, the public key of the authority. For any slot ${s}$ in epoch ${n}$ where ${o}<{T}_{{{\mathcal{{E}}}_{{n}}}}$ ([Definition -def-num-ref-](sect-block-production#defn-winning-threshold)), the block producer is required to produce a block.
 :::
 
 :::info
-The secondary slots ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)) are running along side the primary block production lottery and mainly serve as a fallback to in case no authority was selected in the primary lottery.
+The secondary slots ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)) are running alongside the primary block production lottery and mainly serve as a fallback to in case no authority was selected in the primary lottery.
 :::
 
 ###### Definition -def-num- Secondary Slots {#defn-babe-secondary-slots}
 :::definition
 
-**Secondary slots** work along side primary slot to ensure consistent block production, as described in [Section -sec-num-ref-](sect-block-production#sect-block-production-lottery). The secondary assignee of a block is determined by calculating a specific value, ${i}_{{d}}$, which indicates the index in the authority set ([Definition -def-num-ref-](chap-sync#defn-authority-list)). The corresponding authority in that set has the right to author a secondary block. This calculation is done for every slot in the epoch, ${s}\in{s}{c}_{{n}}$ ([Definition -def-num-ref-](sect-block-production#defn-epoch-duration)).
+**Secondary slots** work alongside primary slot to ensure consistent block production, as described in [Section -sec-num-ref-](sect-block-production#sect-block-production-lottery). The secondary assignee of a block is determined by calculating a specific value, ${i}_{{d}}$, which indicates the index in the authority set ([Definition -def-num-ref-](chap-sync#defn-authority-list)). The corresponding authority in that set has the right to author a secondary block. This calculation is done for every slot in the epoch, ${s}\in{s}{c}_{{n}}$ ([Definition -def-num-ref-](sect-block-production#defn-epoch-duration)).
 
 $$
 {p}\leftarrow{h}{\left(\text{Enc}_{\text{SC}}{\left({r},{s}\right)}\right)}
@@ -160,7 +160,7 @@ $$
 
 - ${A}_{{l}}$ is the lengths of the authority list ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
 
-If ${i}_{{d}}$ points to the authority, that authority must claim the secondary slot by creating a BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)). The resulting values ${o}$ and ${p}$ are then used in the Pre-Digest item ([Definition -def-num-ref-](sect-block-production#defn-babe-header)). In case of secondary slots with plain outputs, respectively the Pre-Digest being of value *2*, the transcript respectively the VRF is skipped.
+If ${i}_{{d}}$ points to the authority, that authority must claim the secondary slot by creating a BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)). The resulting values ${o}$ and ${p}$ are then used in the Pre-Digest item ([Definition -def-num-ref-](sect-block-production#defn-babe-header)). In the case of secondary slots with plain outputs, respectively the Pre-Digest being of value *2*, the transcript respectively the VRF is skipped.
 
 :::
 ###### Definition -def-num- BABE Slot VRF transcript {#defn-babe-vrf-transcript}
@@ -210,7 +210,7 @@ It is imperative for the security of the network that each block producer correc
 **The calculation described in this section is still to be implemented and deployed**: For now, each block producer is required to synchronize its local clock using NTP instead. The current slot ${s}$ is then calculated by ${s}={t}_{\text{unix}}{\mathcal{{T}}}$ where ${\mathcal{{T}}}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-slot) and ${t}_{\text{unix}}$ is defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time). That also entails that slot numbers are currently not reset at the beginning of each epoch.
 :::
 
-Polkadot does this synchronization without relying on any external clock source (e.g. through the or the ). To stay in synchronization, each producer is therefore required to periodically estimate its local clock offset in relation to the rest of the network.
+Polkadot does this synchronization without relying on any external clock source (e.g., through the or the ). To stay in synchronization, each producer is therefore required to periodically estimate its local clock offset in relation to the rest of the network.
 
 This estimation depends on the two fixed parameters ${k}$ ([Definition -def-num-ref-](sect-block-production#defn-prunned-best)) and ${s}_{{{c}{q}}}$ ([Definition -def-num-ref-](sect-block-production#defn-chain-quality)). These are chosen based on the results of a [formal security analysis](https://research.web3.foundation/en/latest/polkadot/block-production/Babe#-5.-security-analysis), currently assuming a ${1}{s}$ clock drift per day and targeting a probability lower than ${0.5}\%$ for an adversary to break BABE in 3 years with resistance against a network delay up to $\frac{{1}}{{3}}$ of the slot time and a Babe constant ([Definition -def-num-ref-](sect-block-production#defn-babe-constant)) of ${c}={0.38}$.
 
@@ -276,7 +276,7 @@ The prerequisite for such a calculation is that each producer stores the arrival
 ###### Definition -def-num- Block Arrival Time {#defn-block-time}
 :::definition
 
-The **block arrival time** of block ${B}$ for node ${j}$ formally represented by ${{T}_{{B}}^{{j}}}$ is the local time of node ${j}$ when node ${j}$ has received block ${B}$ for the first time. If the node ${j}$ itself is the producer of ${B}$, ${{T}_{{B}}^{{j}}}$ is set equal to the time that the block is produced. The index ${j}$ in ${{T}_{{B}}^{{j}}}$ notation may be dropped and B’s arrival time is referred to by ${T}_{{B}}$ when there is no ambiguity about the underlying node.
+The **block arrival time** of block ${B}$ for node ${j}$ formally represented by ${{T}_{{B}}^{{j}}}$ is the local time of node ${j}$ when node ${j}$ has received block ${B}$ for the first time. If the node ${j}$ itself is the producer of ${B}$, ${{T}_{{B}}^{{j}}}$ is set equal to the time that the block is produced. The index ${j}$ in ${{T}_{{B}}^{{j}}}$ notation may be dropped, and B’s arrival time is referred to by ${T}_{{B}}$ when there is no ambiguity about the underlying node.
 
 :::
 ###### Definition -def-num- Sync Period {#defn-sync-period}
