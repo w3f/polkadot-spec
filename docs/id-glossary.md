@@ -12,7 +12,7 @@ $𝔹_{{n}}$
 - A set of all byte arrays of length ${n}$
 
 ${I}={\left({B}_{{n}}…{B}_{{0}}\right)}_{{{256}}}$  
-- A non-negative interger in base 256
+- A non-negative integer in base 256
 
 ${B}={\left({b}_{{0}},{b}_{{1}},…,{b}_{{n}}\right)}$  
 - The little-endian representation of a non-negative interger ${I}={\left({B}_{{n}}…{B}_{{0}}\right)}_{{{256}}}$ such that ${b}_{{i}}≔{B}_{{i}}$
@@ -21,7 +21,7 @@ $\textrm{Enc}_{LE}$
 - The little-endian encoding function.
 
 ${C}$  
-- A blockchain defined as a directed path graph.
+- A blockchain is defined as a directed path graph.
 
 **Block** <br/>
 - A node of the directed path graph (blockchain) C
@@ -78,10 +78,10 @@ $\textrm{StoredValue}{\left({k}\right)}$
 - The function to retrieve the value stored under a specific key in the state storage.
 
 **State trie, trie** <br/>
-- The Merkle radix-16 Tree which stores hashes of storage enteries.
+- The Merkle radix-16 Tree, which stores hashes of storage entries.
 
 $\textrm{KeyEncode}{\left({k}\right)}$  
-- The function to encode keys for labeling branaches of the trie.
+- The function to encode keys for labeling branches of the trie.
 
 $𝒩$  
 - The set of all nodes in the Polkadot state trie.
@@ -102,7 +102,7 @@ ${pk}_{{N}}$
 - The (suffix) partial key of node N
 
 $\textrm{Index}_{{N}}$  
-- A function returning an integer in range of {0, . . . ,15} represeting the index of a child node of node ${N}$ among the children of ${N}$
+- A function returning an integer in range of {0, . . . ,15} representing the index of a child node of node ${N}$ among the children of ${N}$
 
 ${v}_{{N}}$  
 - Node value containing the header of node ${N}$, its partial key and the digest of its childern values
@@ -114,13 +114,13 @@ ${H}{\left({N}\right)}$
 - The Merkle value of node ${N}$.
 
 $\textrm{ChildrenBitmap}$  
-- The binary function indicating which child of a given node is present in the trie.
+- The binary function indicates which child of a given node is present in the trie.
 
 ${sv}_{{N}}$  
 - The subvalue of a trie node ${N}$.
 
 **Child storage** <br/>
-- A sub storage of the state storage which has the same structure although being stored separately
+- A sub storage of the state storage which has the same structure, although being stored separately
 
 **Child trie** <br/>
 - State trie of a child storage
@@ -138,7 +138,7 @@ ${H}_{{r}}$
 - The hash of the root of the Merkle trie of the state storage at a given block
 
 ${H}_{{e}}$  
-- An auxileray field in block header used by Runtime to validate the integrity of the extrinsics composing the block body.
+- An auxiliary field in the block header used by Runtime to validate the integrity of the extrinsics composing the block body.
 
 ${H}_{{d}}$, ${H}_{{d}}{\left({B}\right)}$  
 - A block header used to store any chain-specific auxiliary data.
@@ -156,7 +156,7 @@ ${M}_{{v}}^{{{r},{Fin}}}{\left({B}\right)}$
 - The commit message broadcasted by voter ${v}$ indicating that they have finalized bock ${B}$ in round ${r}$
 
 ${v}$  
-- GRANDPA voter node which casts vote in the finality protocol
+- GRANDPA voter node, which casts votes in the finality protocol
 
 ${{k}_{{v}}^{pr}}$  
 - The private key of voter ${v}$
@@ -168,7 +168,7 @@ $𝕍_{{B}},𝕍$
 - The set of all GRANDPA voters for at block ${B}$
 
 ${GS}$  
-- GRANDPA protocol state consisting of the set of voters, number of times voters set has changed and the current round number.
+- GRANDPA protocol state consisting of the set of voters, the number of times voters set has changed, and the current round number.
 
 ${r}$  
 - The voting round counter in the finality protocol
@@ -186,7 +186,7 @@ ${J}^{{{r},{stage}}}{\left({B}\right)}$
 - The justification for pre-committing or committing to block ${B}$ in round ${r}$ of finality protocol
 
 ${Sign}^{{{r},{stage}}}_{\left\lbrace{v}_{{i}}\right\rbrace}{\left({B}\right)}$  
-- The signature of voter ${v}$ on their voteto block B, broadcasted during the specified stage of finality round ${r}$
+- The signature of voter ${v}$ on their vote to block B, broadcasted during the specified stage of finality round ${r}$
 
 $ℰ^{{{r},{stage}}}$  
 - The set of all equivocator voters in sub-round ‘‘stage'' of round ${r}$
@@ -222,7 +222,7 @@ ${S}≔{A}_{{1}},…,{A}_{{n}}$
 - Sequence of values ${A}_{{i}}$ of the same type
 
 ${Enc}^{{{Len}}}_{\left\lbrace{S}{C}\right\rbrace}{\left({n}\right)}$  
-- SCALE length encoding aka. compact encoding of non-negative interger ${n}$ of arbitrary size.
+- SCALE length encoding, aka. compact encoding of non-negative interger ${n}$ of arbitrary size.
 
 ${Enc}_{{{HE}}}{\left({P}{K}\right)}$  
 - Hex encoding
