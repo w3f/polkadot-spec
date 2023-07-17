@@ -27,9 +27,9 @@ The value of ${T}_{{b}}$ varies for each version. The current version 4 is descr
 ###### Definition -def-num- Extrinsic Version {#defn-extrinsic-version}
 :::definition
 
-${T}_{{v}}$ is a 8-bit bitfield and defines the extrinsic version. The required format of an extrinsic body, ${T}_{{b}}$, is dictated by the Runtime. Older or unsupported version are rejected.
+${T}_{{v}}$ is a 8-bit bitfield and defines the extrinsic version. The required format of an extrinsic body, ${T}_{{b}}$, is dictated by the Runtime. Older or unsupported versions are rejected.
 
-The most significant bit of ${T}_{{v}}$ indicates whether the transaction is **signed** (${1}$) or **unsigned** (${0}$). The remaining 7-bits represent the version number. As an example, for extrinsic format version 4, an signed extrinsic represents ${T}_{{v}}$ as `132` while a unsigned extrinsic represents it as `4`.
+The most significant bit of ${T}_{{v}}$ indicates whether the transaction is **signed** (${1}$) or **unsigned** (${0}$). The remaining 7-bits represent the version number. As an example, for extrinsic format version 4, a signed extrinsic represents ${T}_{{v}}$ as `132` while an unsigned extrinsic represents it as `4`.
 
 :::
 ## -sec-num- Extrinsics Body {#id-extrinsics-body}
@@ -74,7 +74,7 @@ Sig :=
 $$
 
 
-Signature types vary in sizes, but each individual type is always fixed-size and therefore does not contain a length prefix. `Ed25519` and `Sr25519` signatures are 512-bit while `Ecdsa` is 520-bit, where the last 8 bits are the recovery ID.
+Signature types vary in size, but each individual type is always fixed-size and therefore does not contain a length prefix. `Ed25519` and `Sr25519` signatures are 512-bit while `Ecdsa` is 520-bit, where the last 8 bits are the recovery ID.
 
 The signature is created by signing payload ${P}$.
 
@@ -107,7 +107,7 @@ $$
 ###### Definition -def-num- Extra Data {#defn-extra-data}
 :::definition
 
-Extra data, ${E}$, is a tuple containing additional meta data about the extrinsic and the system it is meant to be executed in.
+Extra data, ${E}$, is a tuple containing additional metadata about the extrinsic and the system it is meant to be executed in.
 
 $$
 {E}\:={\left({T}_{mor},{N},{P}_{{t}}\right)}
@@ -116,7 +116,7 @@ $$
 **where**  
 - ${T}_{mor}$: contains the SCALE encoded mortality of the extrinsic ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-mortality)).
 
-- ${N}$: a compact integer containing the nonce of the sender. The nonce must be incremented by one for each extrinsic created, otherwise the Polkadot network will reject the extrinsic.
+- ${N}$: a compact integer containing the nonce of the sender. The nonce must be incremented by one for each extrinsic created, otherwise, the Polkadot network will reject the extrinsic.
 
 - ${P}_{{t}}$: a compact integer containing the transactor pay including tip.
 
@@ -148,7 +148,7 @@ $$
 {F}_{{i}}{\left({m}\right)}\:={\left({m}_{{i}},{p}{a}{r}{a}{m}{s}\right)}
 $$
 
-The value of ${m}_{{i}}$ varies for each Polkadot module, since every module offers different functions. As an example, the `Balances` module has the following functions:
+The value of ${m}_{{i}}$ varies for each Polkadot module since every module offers different functions. As an example, the `Balances` module has the following functions:
 
 $$
 Balances_i := \begin{cases}
@@ -172,7 +172,7 @@ The mortality mechanism works with two related values:
 
 - ${M}_{{{per}}}$: the period of validity in terms of block numbers from the block hash specified as ${H}_{{h}}{\left({B}\right)}$ in the payload ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-signature)). The requirement is ${M}_{{{per}}}\geq{4}$ and ${M}_{{{per}}}$ must be the power of two, such as `32`, `64`, `128`, etc.
 
-- ${M}_{{{pha}}}$: the phase in the period that this extrinsic’s lifetime begins. This value is calculated with a formula and validators can use this value in order to determine which block hash is included in the payload. The requirement is ${M}_{{{pha}}}<{M}_{{{per}}}$.
+- ${M}_{{{pha}}}$: the phase in the period that this extrinsic’s lifetime begins. This value is calculated with a formula, and validators can use this value in order to determine which block hash is included in the payload. The requirement is ${M}_{{{pha}}}<{M}_{{{per}}}$.
 
 In order to tie a transaction’s lifetime to a certain block (${H}_{{i}}{\left({B}\right)}$) after it was issued, without wasting precious space for block hashes, block numbers are divided into regular periods and the lifetime is instead expressed as a "phase" (${M}_{{{pha}}}$) from these regular boundaries:
 
@@ -189,7 +189,7 @@ The extrinsic author choses ${M}_{{{per}}}={256}$ at block `10'000`, resulting w
 
 #### -sec-num- Encoding {#sect-mortality-encoding}
 
-${T}_{mor}$ refers to the SCALE encoded form of type ${M}_{{{per}}}$ and ${M}_{{{pha}}}$. ${T}_{mor}$ is the size of two bytes if the extrinsic is considered mortal, or simply one bytes with the value equal to zero if the extrinsic is considered immortal.
+${T}_{mor}$ refers to the SCALE encoded form of type ${M}_{{{per}}}$ and ${M}_{{{pha}}}$. ${T}_{mor}$ is the size of two bytes if the extrinsic is considered mortal, or simply one bytes with a value equal to zero if the extrinsic is considered immortal.
 
 $$
 {T}_{mor}\:={E}{n}{c}_{{{S}{C}}}{\left({M}_{{{per}}},{M}_{{{pha}}}\right)}
@@ -197,7 +197,7 @@ $$
 
 The SCALE encoded representation of mortality ${T}_{mor}$ deviates from most other types, as it’s specialized to be the smallest possible value, as described in [Encode Mortality](id-extrinsics#algo-mortality-encode) and [Decode Mortality](id-extrinsics#algo-mortality-decode).
 
-If the extrinsic is immortal, specify a single byte with the value equal to zero.
+If the extrinsic is immortal, specify a single byte with a value equal to zero.
 
 :::algorithm
 ###### Algorithm -algo-num- Encode Mortality {#algo-mortality-encode}
