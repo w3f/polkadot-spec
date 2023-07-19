@@ -493,7 +493,7 @@ The BEEFY protocol is currently in early development and subject to change. The 
 
 The BEEFY (Bridge Efficiency Enabling Finality Yielder) is a secondary protocol to GRANDPA to support efficient bridging between the Polkadot network (relay chain) and remote, segregated blockchains, such as Ethereum, which were not built with the Polkadot interchain operability in mind. BEEFY’s aim is to efficiently follow a chain that has GRANDPA finality, a finality gadget created for Substrate/Polkadot ecosystem. This is useful for bridges (e.g., Polkadot->Ethereum), where a chain can follow another chain and light clients suitable for low storage devices such as mobile phones.
 
-The protocol allows participants of the remote network to verify finality proofs created by the Polkadot relay chain validators. In other words: clients in the Ethereum network should able to verify that the Polkadot network is at a specific state.
+The protocol allows participants of the remote network to verify finality proofs created by the Polkadot relay chain validators. In other words: clients in the target network (for e.g., Ethereum) can verify that the Polkadot network is at a specific state.
 
 Storing all the information necessary to verify the state of the remote chain, such as the block headers, is too expensive. BEEFY stores the information in a space-efficient way and clients can request additional information over the protocol.
 
@@ -512,6 +512,7 @@ Since BEEFY runs on top of GRANDPA, similarly to how GRANDPA is lagging behind t
 - Since GRANDPA validators are reaching finality, we assume they are online and well-connected and have a similar view of the state of the blockchain.
 
 BEEFY consists of two components:
+
 a. **Consensus Extension** on GRANDPA finalisation that is a voting round. 
 
 The consensus extension serves to have smaller consensus justification than GRANDPA and alternative cryptography which helps the second part of BEEFY, the light client protocol described below. 
@@ -619,7 +620,7 @@ Here are the basic operations we should be able to perform on the MMR:
 ###### Definition -def-num- Witness Data {#defn-beefy-witness-data}
 :::definition
 
-**Signed Commitment Witnesses** contains the commitment and an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves). The indicators of which validator voted for the statement are just claims and provide no proofs. It also contains signature of one validator on the commitment, which is used inly by the subsampling based Light Clients. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
+**Signed Commitment Witnesses** contains the commitment and an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves). The indicators of which validator voted for the statement are just claims and provide no proofs. It also contains signature of one validator on the commitment, which is used only by the subsampling based Light Clients. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
 
 :::
 ###### Definition -def-num- Light Client {#defn-beefy-light-client}
@@ -627,18 +628,16 @@ Here are the basic operations we should be able to perform on the MMR:
 
 A **light client** is an abstract entity in a remote network such as Ethereum. It can be a node or a smart contract with the intent of requesting finality proofs from the Polkadot network. A light client reads the witness data ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data) from the chain, then requests the signatures directly from the relayer in order to verify those.
 
-The light client is expected to know who the validators are and has access to their public keys.
-
 :::
 ###### Definition -def-num- Relayer {#defn-beefy-relayer}
 :::definition
 
-A **relayer** (or "prover") is an abstract entity which takes finality proofs from the Polkadot network and makes those available to the light clients. Inherently, the relayer tries to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates offchain and can for example be a node or a collection of nodes.
+A **relayer** (or "prover") is an abstract entity which takes finality proofs from the Polkadot network and makes those available to the light clients. Inherently, the relayer tries to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates off-chain and can for example be a node or a collection of nodes.
 
 :::
 ### -sec-num- Voting on Statements {#id-voting-on-statements}
 
-The Polkadot Host signs a statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)) and gossips it as part of a vote ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)) to its peers on every new, finalized block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum has better compatibility for it compared to SR25519 or ED25519.
+The Polkadot Host signs a statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)) and gossips it as part of a vote ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)) to its peers on every new finalized block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum has better compatibility for it compared to SR25519 or ED25519.
 
 ### -sec-num- Committing Witnesses {#sect-beefy-committing-witnesses}
 
@@ -656,14 +655,15 @@ How those signed commitments are requested by the light client and delivered by 
 #### Consensus Mechanism
 
 Role of various Actors in BEEFY:
-- Regular nodes are expected to:
+
+- Validators are expected to additionally:
+    1. Produce & broadcast vote for the current round.
+
+- Regular nodes perform the following tasks:
     1. Receive & validate votes for the current round and broadcast them to their peers.
     1. Receive & validate BEEFY Justifications and broadcast them to their peers.
     1. Return BEEFY Justifications for **Mandatory Blocks** on demand.
     1. Optionally return BEEFY Justifications for non-mandatory blocks on demand.
-
-- Validators are expected to additionally:
-    1. Produce & broadcast vote for the current round.
 
 
 A **round** is an attempt by BEEFY validators to produce a BEEFY Justification. **Round number** is simply defined as a block number the validators are voting for, or to be more precise, the Commitment for that block number. Round ends when the next round is started, which may happen when one of the events occur:
@@ -675,6 +675,67 @@ procedure.
 
 
 Both kinds of actors are expected to fully participate in the protocol ONLY IF they believe they are up-to-date with the rest of the network, i.e. they are fully synced. Before this happens, the node should continue processing imported BEEFY Justifications and votes without actively voting themselves.
+
+**Round Selection**
+
+Every node (both regular nodes and validators) need to determine locally what they believe
+current round number is. The choice is based on their knowledge of:
+
+1. Best GRANDPA finalized block number (`best_grandpa`).
+1. Best BEEFY finalized block number (`best_beefy`).
+1. Starting block of current session (`session_start`).
+
+**Session** means a period of time (or rather number of blocks) where validator set (keys) do not change.
+See `pallet_session` for implementation details in `FRAME` context. Since we piggy-back on
+GRANDPA, session boundaries for BEEFY are exactly the same as the ones for GRANDPA.
+
+We define two kinds of blocks from the perspective of BEEFY protocol:
+1. **Mandatory Blocks**
+2. **Non-mandatory Blocks**
+
+Mandatory blocks are the ones that MUST have BEEFY justification. That means that the validators
+will always start and conclude a round at mandatory blocks. For non-mandatory blocks, there may
+or may not be a justification and validators may never choose these blocks to start a round.
+
+Every **first block in** each **session** is considered a **mandatory block**. All other blocks
+in the session are non-mandatory, however validators are encouraged to finalize as many blocks as
+possible to enable lower latency for light clients and hence end users. Since GRANDPA is
+considering session boundary blocks as mandatory as well, `session_start` block will always have
+both GRANDPA and BEEFY Justification.
+
+Therefore, to determine current round number nodes use a formula:
+
+```
+round_number =
+      (1 - M) * session_start
+   +        M * Minimum(next_session_start, (best_beefy + NEXT_POWER_OF_TWO((best_grandpa - best_beefy + 1) / 2)))
+```
+
+where:
+
+- `M` is `1` if mandatory block in current session is already finalized and `0` otherwise.
+- `NEXT_POWER_OF_TWO(x)` returns the smallest number greater or equal to `x` that is a power of two.
+
+Intuitively, the next round number should be the oldest mandatory block without a justification,
+or the highest GRANDPA-finalized block, whose block number difference with `best_beefy` block is
+a power of two. The mental model for round selection is to first finalize the mandatory block and
+then to attempt to pick a block taking into account how fast BEEFY catches up with GRANDPA.
+In case GRANDPA makes progress, but BEEFY seems to be lagging behind, validators are changing
+rounds less often to increase the chance of concluding them.
+
+As mentioned earlier, every time the node picks a new `round_number` (and validator casts a vote)
+it ends the previous one, no matter if finality was reached (i.e. the round concluded) or not.
+Votes for an inactive round should not be propagated.
+
+Note that since BEEFY only votes for GRANDPA-finalized blocks, `session_start` here actually means:
+"the latest session for which the start of is GRANDPA-finalized", i.e. block production might
+have already progressed, but BEEFY needs to first finalize the mandatory block of the older
+session.
+
+While its useful to finalize non-mandatory block frequently, in good networking conditions BEEFY may end up finalizing each and every block GRANDPA finalized block. Practically, with short block times, it's going to be rare and might be excessive, so
+it's suggested for implementations to introduce a `min_delta` parameter which will limit the frequency with which new rounds are started. The affected component of the formula would be:
+`best_beefy + MAX(min_delta, NEXT_POWER_OF_TWO(...))`, so we start a new round only if the
+power-of-two component is greater than the min delta. Note that if `round_number > best_grandpa` the validators are not expected to start any round (TODO: is this precondition possible?).
 
 
 #### Subsampling Based Light Client Protocol
