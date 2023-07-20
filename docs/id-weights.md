@@ -10,19 +10,19 @@ import withdrawUnbondedRuntimeFunctionBenchmark from '!!raw-loader!@site/src/alg
 
 ## -sec-num- Motivation {#id-motivation}
 
-The Polkadot network, like any other permissionless system, needs to implement a mechanism to measure and to limit the usage in order to establish an economic incentive structure, to prevent the network overload, and to mitigate DoS vulnerabilities. In particular, Polkadot enforces a limited time-window for block producers to create a block, including limitations on block size, which can make the selection and execution of certain extrinsics too expensive and decelerate the network.
+The Polkadot network, like any other permissionless system, needs to implement a mechanism to measure and limit the usage in order to establish an economic incentive structure, prevent network overload, and mitigate DoS vulnerabilities. In particular, Polkadot enforces a limited time window for block producers to create a block, including limitations on block size, which can make the selection and execution of certain extrinsics too expensive and decelerate the network.
 
-In contrast to some other systems such as Ethereum which implement fine measurement for each executed low-level operation by smart contracts, known as gas metering, Polkadot takes a more relaxed approach by implementing a measuring system where the cost of the transactions (referred to as ’extrinsics’) are determined before execution and are known as the weight system.
+In contrast to some other systems, such as Ethereum, which implement fine measurement for each executed low-level operation by smart contracts, known as gas metering, Polkadot takes a more relaxed approach by implementing a measuring system where the cost of the transactions (referred to as ’extrinsics’) are determined before execution and are known as the weight system.
 
 The Polkadot weight system introduces a mechanism for block producers to measure the cost of running the extrinsics and determine how "heavy" it is in terms of execution time. Within this mechanism, block producers can select a set of extrinsics and saturate the block to its fullest potential without exceeding any limitations (as described in [Section -sec-num-ref-](id-weights#sect-limitations)). Moreover, the weight system can be used to calculate a fee for executing each extrinsics according to its weight (as described in [Section -sec-num-ref-](id-weights#sect-fee-calculation)).
 
-Additionally, Polkadot introduces a specified block ratio (as defined in [Section -sec-num-ref-](id-weights#sect-limitations)), ensuring that only a certain portion of the total block size gets used for regular extrinsics. The remaining space is reserved for critical, operational extrinsics required for the functionality by Polkadot itself.
+Additionally, Polkadot introduces a specified block ratio (as defined in [Section -sec-num-ref-](id-weights#sect-limitations)), ensuring that only a certain portion of the total block size gets used for regular extrinsics. The remaining space is reserved for critical, operational extrinsics required for the functionality of Polkadot itself.
 
 To begin, we introduce in [Section -sec-num-ref-](id-weights#sect-assumptions) the assumption upon which the Polkadot transaction weight system is designed. In [Section -sec-num-ref-](id-weights#sect-limitations), we discuss the limitation Polkadot needs to enforce on the block size. In [Section -sec-num-ref-](id-weights#sect-runtime-primitives), we describe in detail the procedure upon which the weight of any transaction should be calculated. In [Section -sec-num-ref-](id-weights#sect-practical-examples), we present how we apply this procedure to compute the weight of particular runtime functions.
 
 ## -sec-num- Assumptions {#sect-assumptions}
 
-In this section, we define the concept of weight and we discuss the considerations that need to be accounted for when assigning weight to transactions. These considerations are essential in order for the weight system to deliver its fundamental mission, i.e. the fair distribution of network resources and preventing a network overload. In this regard, weights serve as an indicator on whether a block is considered full and how much space is left for remaining, pending extrinsics. Extrinsics which require too many resources are discarded. More formally, the weight system should:
+In this section, we define the concept of weight, and we discuss the considerations that need to be accounted for when assigning weight to transactions. These considerations are essential in order for the weight system to deliver its fundamental mission, i.e. the fair distribution of network resources and preventing a network overload. In this regard, weights serve as an indicator on whether a block is considered full and how much space is left for remaining, pending extrinsics. Extrinsics that require too many resources are discarded. More formally, the weight system should:
 
 - prevent the block from being filled with too many extrinsics
 
@@ -39,7 +39,7 @@ For a block ${B}$ with ${H}{e}{a}{d}{\left({B}\right)}$ and ${B}{o}{\left.{d}{y}
 ###### Definition -def-num- Target Time per Block {#defn-target-time-per-block}
 :::definition
 
-Ṯargeted time per block denoted by ${T}{\left({B}\right)}$ implies the amount of seconds that a new block should be produced by a validator. The transaction weights must consider ${T}{\left({B}\right)}$ in order to set restrictions on time intensive transactions in order to saturate the block to its fullest potential until ${T}{\left({B}\right)}$ is reached.
+Ṯargeted time per block denoted by ${T}{\left({B}\right)}$ implies the amount of seconds that a new block should be produced by a validator. The transaction weights must consider ${T}{\left({B}\right)}$ in order to set restrictions on time-intensive transactions in order to saturate the block to its fullest potential until ${T}{\left({B}\right)}$ is reached.
 
 :::
 ###### Definition -def-num- Block Target Time {#defn-block-target-time}
@@ -51,7 +51,7 @@ Available block ration reserved for normal, noted by ${R}{\left({B}\right)}$, is
 ###### Definition -def-num- Block Limits {#defn-polkadot-block-limits}
 :::definition
 
-P̱olkadot block limits as defined here should be respected by each block producer for the produced block ${B}$ to be deemed valid:
+P̱olkadot block limits, as defined here, should be respected by each block producer for the produced block ${B}$ to be deemed valid:
 
 - ${L}{e}{n}{\left({B}\right)}\le{5}\times{1}'{024}\times{1}'{024}={5}'{242}'{880}$ Bytes
 
@@ -100,7 +100,7 @@ Nonetheless, ${\mathcal{{{W}}}}{\left({E}\right)}$ can be manipulated depending 
 :::
 ### -sec-num- Limitations {#sect-limitations}
 
-In this section we discuss how applying the limitation defined in [Definition -def-num-ref-](id-weights#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in [Definition -def-num-ref-](id-weights#defn-block-weight):
+In this section, we discuss how applying the limitation defined in [Definition -def-num-ref-](id-weights#defn-polkadot-block-limits) can be translated to limitation ${\mathcal{{{W}}}}$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that, we first define the block weight and then assume a maximum on its block length in [Definition -def-num-ref-](id-weights#defn-block-weight):
 
 ###### Definition -def-num- Block Weight {#defn-block-weight}
 :::definition
@@ -118,19 +118,19 @@ $$
 $$
 :::
 
-The weights must fulfill the requirements as noted by the fundamentals and limitations, and can be assigned as the author sees fit. As a simple example, consider a maximum block weight of 1’000’000’000, an available ratio of 75% and a targeted transaction throughput of 500 transactions, we could assign the (average) weight for each transaction at about 1’500’000. Block producers have economic incentive to include as many extrinsics as possible (without exceeding limitations) into a block before reaching the targeted block time. Weights give indicators to block producers on which extrinsics to include in order to reach the blocks fullest potential.
+The weights must fulfill the requirements as noted by the fundamentals and limitations and can be assigned as the author sees fit. As a simple example, consider a maximum block weight of 1’000’000’000, an available ratio of 75%, and a targeted transaction throughput of 500 transactions. We could assign the (average) weight for each transaction at about 1’500’000. Block producers have an economic incentive to include as many extrinsics as possible (without exceeding limitations) into a block before reaching the targeted block time. Weights give indicators to block producers on which extrinsics to include in order to reach the blocks fullest potential.
 
 ## -sec-num- Calculation of the weight function {#sect-runtime-primitives}
 
-In order to calculate weight of block ${B}$, ${\mathcal{{{W}}}}{\left({B}\right)}$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as loops, I/O operations, and data manipulation. Subsequently the performance and execution time of each part will be evaluated based on variety of input parameters. Based on those observations, weights are assigned Runtime functions or parameters which contribute to long execution times. These sub component of the code are discussed in [Section -sec-num-ref-](id-weights#sect-primitive-types).
+In order to calculate weight of block ${B}$, ${\mathcal{{{W}}}}{\left({B}\right)}$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution of certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as loops, I/O operations, and data manipulation. Subsequently, the performance and execution time of each part will be evaluated based on variety of input parameters. Based on those observations, weights are assigned Runtime functions or parameters which contribute to long execution times. These sub component of the code are discussed in [Section -sec-num-ref-](id-weights#sect-primitive-types).
 
 The general algorithm to calculate ${\mathcal{{{W}}}}{\left({E}\right)}$ is described in the [Section -sec-num-ref-](id-weights#sect-benchmarking).
 
 ## -sec-num- Benchmarking {#sect-benchmarking}
 
-Calculating the extrinsic weight solely based on theoretical complexity of the underlying implementation proves to be too complicated and unreliable at the same time. Certain decisions in the source code architecture, internal communication within the Runtime or other design choices could add enough overhead to make the asymptotic complexity practically meaningless.
+Calculating the extrinsic weight solely based on the theoretical complexity of the underlying implementation proves to be too complicated and unreliable at the same time. Certain decisions in the source code architecture, internal communication within the Runtime or other design choices could add enough overhead to make the asymptotic complexity practically meaningless.
 
-On the other hand, benchmarking an extrinsics in a black-box fashion could (using random parameters) most centainly results in missing corner cases and worst case scenarios. Instead, we benchmark all available Runtime functions which are invoked in the course of execution of extrinsics with a large collection of carefully selected input parameters and use the result of the benchmarking process to evaluate ${\mathcal{{{W}}}}{\left({E}\right)}$.
+On the other hand, benchmarking an extrinsics in a black-box fashion could (using random parameters) most certainly results in missing corner cases and worst case scenarios. Instead, we benchmark all available Runtime functions which are invoked in the course of execution of extrinsics with a large collection of carefully selected input parameters and use the result of the benchmarking process to evaluate ${\mathcal{{{W}}}}{\left({E}\right)}$.
 
 In order to select useful parameters, the Runtime functions have to be analyzed to fully understand which behaviors or conditions can result in expensive execution times, which is described closer in [Section -sec-num-ref-](id-weights#sect-primitive-types). Not every possible benchmarking outcome can be invoked by varying input parameters of the Runtime function. In some circumstances, preliminary work is required before a specific benchmark can be reliably measured, such as creating certain preexisting entries in the storage or other changes to the environment.
 
@@ -157,7 +157,7 @@ For storage, Polkadot uses three different types of storage types across its mod
 
 It depends on the functionality of the Runtime module (or its sub-processes, rather) which storage type to use. In some cases, only a single value is required. In others, multiple values need to be fetched or inserted from/into the database.
 
-Those lower level types get abstracted over in each individual Runtime module using the `decl_storage!` macro. Therefore, each module specifies its own types that are used as input and output values. The abstractions do give indicators on what operations must be closely observed and where potential performance penalties and attack vectors are possible.
+Those lower-level types get abstracted over in each individual Runtime module using the `decl_storage!` macro. Therefore, each module specifies its own types that are used as input and output values. The abstractions do give indicators on what operations must be closely observed and where potential performance penalties and attack vectors are possible.
 
 #### -sec-num- Considerations {#sect-primitive-types-considerations}
 
@@ -169,9 +169,9 @@ Indicators for performance penalties:
 
 - **Fixed iterations and datasets** - Fixed iterations and datasets can increase the overall cost of the Runtime functions, but the execution time does not vary depending on the input parameters or storage entries. A base Weight is appropriate in this case.
 
-- **Adjustable iterations and datasets** - If the amount of iterations or datasets depend on the input parameters of the caller or specific entries in storage, then a certain weight should be applied for each (additional) iteration or item. The Runtime defines the maximum value for such cases. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum value to the maximum value, as described in [Definition -def-num-ref-](id-weights#defn-max-value).
+- **Adjustable iterations and datasets** - If the amount of iterations or datasets depends on the input parameters of the caller or specific entries in storage, then a certain weight should be applied for each (additional) iteration or item. The Runtime defines the maximum value for such cases. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum value to the maximum value, as described in [Definition -def-num-ref-](id-weights#defn-max-value).
 
-- **Input parameters** - Input parameters that users pass on to the Runtime function can result in expensive operations. Depending on the data type, it can be appropriate to add additional weights based on certain properties, such as data size, assuming the data type allows varying sizes. The Runtime must define limits on those properties. If it doesn’t, it unconditionally has to and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the maximum value, as described in paragraph [Definition -def-num-ref-](id-weights#defn-max-value).
+- **Input parameters** - Input parameters that users pass on to the Runtime function can result in expensive operations. Depending on the data type, it can be appropriate to add additional weights based on certain properties, such as data size, assuming the data type allows varying sizes. The Runtime must define limits on those properties. If it doesn’t, it unconditionally has to, and the Runtime module must be adjusted. When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the maximum value, as described in paragraph [Definition -def-num-ref-](id-weights#defn-max-value).
 
 ###### Definition -def-num- Maximum Value {#defn-max-value}
 :::definition
@@ -181,15 +181,15 @@ What the maximum value should be really depends on the functionality that the Ru
 :::
 ### -sec-num- Parameters {#id-parameters}
 
-The inputs parameters highly vary depending on the Runtime function and must therefore be carefully selected. The benchmarks should use input parameters which will most likely be used in regular cases, as intended by the authors, but must also consider worst case scenarios and inputs which might decelerate or heavily impact performance of the function. The input parameters should be randomized in order to cause various effects in behaviors on certain values, such as memory relocations and other outcomes that can impact performance.
+The input parameters highly vary depending on the Runtime function and must therefore be carefully selected. The benchmarks should use input parameters which will most likely be used in regular cases, as intended by the authors, but must also consider worst-case scenarios and inputs that might decelerate or heavily impact the performance of the function. The input parameters should be randomized in order to cause various effects in behaviors on certain values, such as memory relocations and other outcomes that can impact performance.
 
-It’s not possible to benchmark every single value. However, one should select a range of inputs to benchmark, spanning from the minimum value to the maximum value which will most likely exceed the expected usage of that function. This is described in more detail in [Section -sec-num-ref-](id-weights#sect-primitive-types-considerations). The benchmarks should run individual executions/iterations within that range, where the chosen parameters should give insight on the execution time. Selecting imprecise parameters or too extreme ranges might indicate an inaccurate result of the function as it will be used in production. Therefore, when a range of input parameters gets benchmarked, the result of each individual parameter should be recorded and optionally visualized, then the necessary adjustment can be made. Generally, the worst case scenario should be assigned as the weight value for the corresponding runtime function.
+It’s not possible to benchmark every single value. However, one should select a range of inputs to benchmark, spanning from the minimum value to the maximum value, which will most likely exceed the expected usage of that function. This is described in more detail in [Section -sec-num-ref-](id-weights#sect-primitive-types-considerations). The benchmarks should run individual executions/iterations within that range, where the chosen parameters should give insight on the execution time. Selecting imprecise parameters or too extreme ranges might indicate an inaccurate result of the function as it will be used in production. Therefore, when a range of input parameters gets benchmarked, the result of each individual parameter should be recorded and optionally visualized, then the necessary adjustment can be made. Generally, the worst-case scenario should be assigned as the weight value for the corresponding runtime function.
 
-Additionally, given the distinction theoretical and practical usage, the author reserves the right to make adjustments to the input parameters and assigned weights according to the observed behavior of the actual, real-world network.
+Additionally, given the distinction between theoretical and practical usage, the author reserves the right to make adjustments to the input parameters and assign weights according to the observed behavior of the actual, real-world network.
 
 #### -sec-num- Weight Refunds {#id-weight-refunds}
 
-When assigning the final weight, the worst case scenario of each runtime function should be used. The runtime can then additional "refund" the amount of weights which were overestimated once the runtime function is actually executed.
+When assigning the final weight, the worst-case scenario of each runtime function should be used. The runtime can then additional "refund" the amount of weights which were overestimated once the runtime function is actually executed.
 
 The Polkadot runtime only returns weights if the difference between the assigned weight and the actual weight calculated during execution is greater than 20%.
 
@@ -199,7 +199,7 @@ It is advised to benchmark the raw I/O operations of the database and assign "ba
 
 ### -sec-num- Environment {#id-environment}
 
-The benchmarks should be executed on clean systems without interference of other processes or software. Additionally, the benchmarks should be executed on multiple machines with different system resources, such as CPU performance, CPU cores, RAM and storage speed.
+The benchmarks should be executed on clean systems without interference of other processes or software. Additionally, the benchmarks should be executed on multiple machines with different system resources, such as CPU performance, CPU cores, RAM, and storage speed.
 
 ## -sec-num- Practical examples {#sect-practical-examples}
 
@@ -209,11 +209,11 @@ In order for certain benchmarks to produce conditions where resource heavy compu
 
 ### -sec-num- Practical Example \#1: `request_judgement` {#id-practical-example-1-request_judgement}
 
-In Polkadot, accounts can save information about themselves on-chain, known as the "Identity Info". This includes information such as display name, legal name, email address and so on. Polkadot offers a set of trusted registrars, entities elected by a Polkadot public referendum, which can verify the specified contact addresses of the identities, such as Email, and vouch on whether the identity actually owns those accounts. This can be achieved, for example, by sending a challenge to the specified address and requesting a signature as a response. The verification is done off-chain, while the final judgement is saved onchain, directly in the corresponding Identity Info. It’s also note worthy that Identity Info can contain additional fields, set manually by the corresponding account holder.
+In Polkadot, accounts can save information about themselves on-chain, known as the "Identity Info". This includes information such as display name, legal name, email address and so on. Polkadot offers a set of trusted registrars, entities elected by a Polkadot public referendum, which can verify the specified contact addresses of the identities, such as Email, and vouch on whether the identity actually owns those accounts. This can be achieved, for example, by sending a challenge to the specified address and requesting a signature as a response. The verification is done off-chain, while the final judgement is saved on-chain, directly in the corresponding Identity Info. It’s also noteworthy that Identity Info can contain additional fields, set manually by the corresponding account holder.
 
 Information such as legal name must be verified by ID card or passport submission.
 
-The function `request_judgement` from the `identity` pallet allows users to request judgement from a specific registrar.
+The function `request_judgement` from the `identity` pallet allows users to request judgment from a specific registrar.
 
 ```
 (func $request_judgement (param $req_index int) (param $max_fee int))
@@ -221,7 +221,7 @@ The function `request_judgement` from the `identity` pallet allows users to requ
 
 - `req_index`: the index which is assigned to the registrar.
 
-- `max_fee`: the maximum fee the requester is willing to pay. The judgement fee varies for each registrar.
+- `max_fee`: the maximum fee the requester is willing to pay. The judgment fee varies for each registrar.
 
 Studying this function reveals multiple design choices that can impact performance, as it will be revealed by this analysis.
 
@@ -270,9 +270,9 @@ The following points must be considered:
 
 - Varying count of preexisting accounts in storage.
 
-- The specified registrar is searched for in the Identity Info. An identity can be judged by as many registrars as the identity owner issues requests for, therefore increase its footprint in the state storage. Additionally, if a new value gets inserted into the byte array, memory get reallocated. Depending on the size of the Identity Info, the execution time can vary.
+- The specified registrar is searched for in the Identity Info. An identity can be judged by as many registrars as the identity owner issues requests, therefore increasing its footprint in the state storage. Additionally, if a new value gets inserted into the byte array, memory gets reallocated. Depending on the size of the Identity Info, the execution time can vary.
 
-- The Identity Info can contain only a few fields or many. It is legitimate to introduce additional weights for changes the owner/sender has influence over, such as the additional fields in the Identity Info.
+- The Identity-Info can contain only a few fields or many. It is legitimate to introduce additional weights for changes the owner/sender has influence over, such as the additional fields in the Identity-Info.
 
 #### -sec-num- Benchmarking Framework {#id-benchmarking-framework}
 
@@ -291,19 +291,19 @@ The benchmarking implementation of for the function ${request}$ ${judgement}$ ca
 **where**  
 - Generate-Registrars(${amount}$)
 
-  Creates number of registrars and inserts those records into storage.
+  Creates a number of registrars and inserts those records into storage.
 
 - Create-Account(${name}$, ${index}$)
 
-  Creates a Blake2 hash of the concatenated input of name and index represent- ing the address of a account. This function only creates an address and does not conduct any I/O.
+  Creates a Blake2 hash of the concatenated input of name and index represent- ing the address of an account. This function only creates an address and does not conduct any I/O.
 
 - Set-Balance(${amount}$, ${balance}$)
 
-  Sets a initial balance for the specified account in the storage state.
+  Sets an initial balance for the specified account in the storage state.
 
 - Timer(${function}$)
 
-  Measures the time from the start of the specified f unction to its completion.
+  Measures the time from the start of the specified function to its completion.
 
 - Request-Judgement(${registrar}$ ${index}$, ${max}$ ${fee}$)
 
@@ -319,16 +319,16 @@ The benchmarking implementation of for the function ${request}$ ${judgement}$ ca
 
 - Compute-Weight(${collection}$)
 
-  Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
+  Computes the resulting weight based on the time measurements in the collection. The worst-case scenario should be chosen (the highest value).
 :::
 
 ### -sec-num- Practical Example \#2: `payout_stakers` {#sect-practical-example-payout-stakers}
 
 #### -sec-num- Analysis {#id-analysis-2}
 
-The function `payout_stakers` from the `staking` Pallet can be called by a single account in order to payout the reward for all nominators who back a particular validator. The reward also covers the validator’s share. This function is interesting because it iterates over a range of nominators, which varies, and does I/O operation for each of them.
+The function `payout_stakers` from the `staking` Pallet can be called by a single account in order to payout the reward for all nominators who back a particular validator. The reward also covers the validator’s share. This function is interesting because it iterates over a range of nominators, which varies, and does I/O operations for each of them.
 
-First, this function makes few basic checks to verify if the specified era is not higher then the current era (as it is not in the future) and is within the allowed range also known as "history depth", as specified by the Runtime. After that, it fetches the era payout from storage and additionally verifies whether the specified account is indeed a validator and receives the corresponding "Ledger". The Ledger keeps information about the stash key, controller key and other informatin such as actively bonded balance and a list of tracked rewards. The function only retains the entries of the history depth, and conducts a binary search for the specified era.
+First, this function makes a few basic checks to verify if the specified era is not higher then the current era (as it is not in the future) and is within the allowed range also known as "history depth", as specified by the Runtime. After that, it fetches the era payout from storage and additionally verifies whether the specified account is indeed a validator and receives the corresponding "Ledger". The Ledger keeps information about the stash key, controller key, and other information such as actively bonded balance and a list of tracked rewards. The function only retains the entries of the history depth and conducts a binary search for the specified era.
 
 ```rust
 let era_payout = <ErasValidatorReward<T>>::get(&era)
@@ -352,7 +352,7 @@ The retained claimed rewards are inserted back into storage.
 <Ledger<T>>::insert(&controller, &ledger);
 ```
 
-As an optimization, Runtime only fetches a list of the 64 highest staked nominators, although this might be changed in the future. Accordingly, any lower staked nominator gets no reward.
+As an optimization, Runtime only fetches a list of the 64 highest-staked nominators, although this might be changed in the future. Accordingly, any lower-staked nominator gets no reward.
 
 ```rust
 let exposure = <ErasStakersClipped<T>>::get(&era, &ledger.stash);
@@ -364,7 +364,7 @@ Next, the function gets the era reward points from storage.
 let era_reward_points = <ErasRewardPoints<T>>::get(&era);
 ```
 
-After that, the payout is split among the validator and its nominators. The validators receives the payment first, creating an insertion into storage and sending a deposit event to the scheduler.
+After that, the payout is split among the validator and its nominators. The validators receive the payment first, creating an insertion into storage and sending a deposit event to the scheduler.
 
 ```rust
 if let Some(imbalance) = Self::make_payout(
@@ -375,7 +375,7 @@ if let Some(imbalance) = Self::make_payout(
 }
 ```
 
-Then, the nominators receive their payout rewards. The functions loops over the nominator list, conducting an insertion into storage and a creation of a deposit event for each of the nominators.
+Then, the nominators receive their payout rewards. The functions loop over the nominator list, conducting an insertion into storage and a creation of a deposit event for each of the nominators.
 
 ```rust
 for nominator in exposure.others.iter() {
@@ -396,7 +396,7 @@ for nominator in exposure.others.iter() {
 
 The following points must be considered:
 
-- The Ledger contains a varying list of claimed rewards. Fetching, retaining and searching through it can affect execution time. The retained list is inserted back into storage.
+- The Ledger contains a varying list of claimed rewards. Fetching, retaining, and searching through it can affect execution time. The retained list is inserted back into storage.
 
 - Looping through a list of nominators and creating I/O operations for each increases execution time. The Runtime fetches up to 64 nominators.
 
@@ -427,7 +427,7 @@ The benchmarking implementation for the function ${payout}$ ${stakers}$ can be d
 **where**  
 - Generate-Validator()
 
-  Creates a validators with some unbonded balances.
+  Creates a validator with some unbonded balances.
 
 - Validate(${validator}$)
 
@@ -447,7 +447,7 @@ The benchmarking implementation for the function ${payout}$ ${stakers}$ can be d
 
 - Timer(${function}$)
 
-  Measures the time from the start of the specified f unction to its completion.
+  Measures the time from the start of the specified function to its completion.
 
 - Add-To(${collection}$, ${time}$)
 
@@ -455,7 +455,7 @@ The benchmarking implementation for the function ${payout}$ ${stakers}$ can be d
 
 - Compute-Weight(${collection}$)
 
-  Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
+  Computes the resulting weight based on the time measurements in the collection. The worst-case scenario should be chosen (the highest value).
 :::
 
 ### -sec-num- Practical Example \#3: `transfer` {#id-practical-example-3-transfer}
@@ -477,11 +477,11 @@ let dest = T::Lookup::lookup(dest)?;
 )?;
 ```
 
-However, one need to pay close attention to the property `AllowDeath` and to how the function treat existingand non-existing accounts differently. Two types of behaviors are to consider:
+However, one needs to pay close attention to the property `AllowDeath` and to how the function treats existings and non-existing accounts differently. Two types of behaviors are to consider:
 
-- If the transfer completely depletes the sender account balance to zero (or bellow the minimum "keep-alive" requirement), it removes the address and all associated data from storage.
+- If the transfer completely depletes the sender account balance to zero (or below the minimum "keep-alive" requirement), it removes the address and all associated data from storage.
 
-- If recipient account has no balance, the transfer also needs to create the recipient account.
+- If the recipient account has no balance, the transfer also needs to create the recipient account.
 
 #### -sec-num- Considerations {#considerations-2}
 
@@ -512,7 +512,7 @@ Executing a benchmark for each balance increment within the balance range for ea
 
 - …​
 
-The parameters itself do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The ${transfer}$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights#algo-benchmark-transfer).
+The parameters themselves do not influence or trigger the two worst conditions and must be handled by the implemented benchmarking tool. The ${transfer}$ benchmark is implemented as defined in ["transfer" Runtime function benchmark](id-weights#algo-benchmark-transfer).
 
 #### -sec-num- Benchmarking Framework {#id-benchmarking-framework-3}
 
