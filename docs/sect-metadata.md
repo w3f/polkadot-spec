@@ -12,13 +12,13 @@ import StorageDefinition from '/static/img/kaitai_render/storage_definition.svg'
 import PalletConstant from '/static/img/kaitai_render/pallet_constant.svg';
 import MetadataExtrinsic from '/static/img/kaitai_render/metadata_extrinsic.svg';
 
-The runtime metadata structure contains all the information necessary on how to interact with the Polkadot runtime. Considering that Polkadot runtimes are upgradable and therefore any interfaces are subject to change, the metadata allows developers to structure any extrinsics or storage entries accordingly.
+The runtime metadata structure contains all the information necessary on how to interact with the Polkadot runtime. Considering that Polkadot runtimes are upgradable and, therefore, any interfaces are subject to change, the metadata allows developers to structure any extrinsics or storage entries accordingly.
 
 The metadata of a runtime is provided by a call to `Metadata_metadata` ([Section -sec-num-ref-](chap-runtime-api#sect-rte-metadata-metadata)) and is returned as a scale encoded ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) binary blob. How to interpret and decode this data is described in this chapter.
 
 ## -sec-num- Structure {#sect-rtm-structure}
 
-The Runtime Metadata is a datastructure of the following format:
+The Runtime Metadata is a data structure of the following format:
 
 $$
 {\left({M},{v}_{{m}},{R},{P},{t}_{{e}},{v}_{{e}},{E},{t}_{{r}}\right)}
@@ -57,7 +57,7 @@ $$
 ###### Definition -def-num- Runtime Registry Type Entry {#defn-rtm-registry-entry}
 :::definition
 
-A registry entry contains information about a type in its portable form for serialization. The entry is a datastructure of the following format:
+A registry entry contains information about a type in its portable form for serialization. The entry is a data structure of the following format:
 
 $$
 {r}_{{i}}={\left(\text{id}_{{t}},{p},{T},{D},{c}\right)}
@@ -72,7 +72,7 @@ $$
 **where**  
 - $\text{id}_{{t}}$ is a compact integer indicating the identifier of the type.
 
-- ${p}$ is the path of the type, optional and based on source file location. Encoded as a sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of strings.
+- ${p}$ is the path of the type, optional and based on the source file location. Encoded as a sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of strings.
 
 - ${T}$ is a sequence ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)) of generic parameters (empty for non-generic types).
 
@@ -122,7 +122,7 @@ $$
 
   ${S}={\left({l},{y}\right)}$
 
-  - ${l}$ is a unsigned 32-bit integer indicating the length
+  - ${l}$ is an unsigned 32-bit integer indicating the length
 
   - ${y}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)).
 
@@ -136,7 +136,7 @@ $$
 
 - ${e}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)).
 
-- ${B}$ is a datastructure of the following format:
+- ${B}$ is a data structure of the following format:
 
   ${B}={\left({s},{o}\right)}$
 
@@ -152,7 +152,7 @@ $$
 ###### Definition -def-num- Field {#defn-rtm-field}
 :::definition
 
-A field of a datastructure of the following format:
+A field of a data structure of the following format:
 
 $$
 {{f}_{{i}}=}{\left({n},{y},{y}_{{n}},{C}\right)}
@@ -218,7 +218,7 @@ $$
 
 - ${e}$ is an *Option* type ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) containing the type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) of the pallet error.
 
-- ${i}$ is an unsigned 8-bit integers indicating the index of the pallet, which is used for encoding pallet events and calls.
+- ${i}$ is an unsigned 8-bit integer indicating the index of the pallet, which is used for encoding pallet events and calls.
 
 ###### Image -img-num- Metadata Pallet {#img-metadata-pallet}
 
@@ -227,7 +227,7 @@ $$
 ###### Definition -def-num- Pallet Storage Metadata {#defn-rtm-pallet-storage-metadata}
 :::definition
 
-The metadata about a pallets storage.
+The metadata about pallets storage.
 
 $$
 {S}={\left({p},{E}\right)}
@@ -240,7 +240,7 @@ $$
 
 - ${p}$ is the string representing the common prefix used by all storage entries.
 
-- ${E}$ is an array of varying length containing elements of storage entries ([Definition -def-num-ref-](sect-metadata#defn-rtm-storage-entry-metadata)).
+- ${E}$ is an array of varying lengths containing elements of storage entries ([Definition -def-num-ref-](sect-metadata#defn-rtm-storage-entry-metadata)).
 
 :::
 ###### Definition -def-num- Storage Entry Metadata {#defn-rtm-storage-entry-metadata}
@@ -263,9 +263,9 @@ $$
 
 - ${y}$ is the type of the value stored in the entry ([Definition -def-num-ref-](sect-metadata#defn-rtm-storage-entry-type)).
 
-- ${d}$ is an byte array containing the default value.
+- ${d}$ is a byte array containing the default value.
 
-- ${C}$ is an array of varying length of strings containing the documentation.
+- ${C}$ is an array of varying lengths of strings containing the documentation.
 
 ###### Image -img-num- Pallet Storage {#img-pallet-storage}
 
@@ -306,7 +306,7 @@ where ${t}$, ${k}$ (key) and ${v}$ (value) are all of type Ids ([Definition -def
 ###### Definition -def-num- Storage Hasher {#defn-rtm-storage-hasher}
 :::definition
 
-The hashing algorithm used by storage maps.
+The hashing algorithm is used by storage maps.
 
 $$
 {\left\lbrace\begin{matrix}{0}&\text{128-bit Blake2 hash}\\{1}&\text{256-bit Blake2 hash}\\{2}&\text{Multiple 128-bit Blake2 hashes concatenated}\\{3}&\text{128-bit XX hash}\\{4}&\text{256-bit XX hash}\\{5}&\text{Multiple 64-bit XX hashes concatenated}\\{6}&\text{Identity hashing}\end{matrix}\right.}
@@ -329,7 +329,7 @@ $$
 
 - ${v}$ is a byte array containing the value of the constant.
 
-- ${C}$ is an array of varying length containing string with the documentation.
+- ${C}$ is an array of varying lengths containing a string with the documentation.
 
 ###### Image -img-num- Pallet Constant {#img-pallet-constant}
 
