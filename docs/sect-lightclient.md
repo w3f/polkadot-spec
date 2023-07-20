@@ -8,7 +8,7 @@ import queryingStateLightClients from '!!raw-loader!@site/src/algorithms/queryin
 
 ## -sec-num- Requirements for Light Clients {#sect-requirements-lightclient}
 
-We list requirements of a Light Client categorized along the the three dimensions of Functionality, Efficiency, and Security.
+We list the requirements of a Light Client categorized along the three dimensions of Functionality, Efficiency, and Security.
 
 - **Functional Requirements:**
 
@@ -24,23 +24,23 @@ We list requirements of a Light Client categorized along the the three dimension
 
   1.  Efficient bootstrapping and syncing: initializations and update functions of the state have tractable computation and communication complexity and grows at most linearly with the chain size. Generally, the complexity is proportional to the GRANDPA validator set change.
 
-  2.  Querying operations happen by requesting athe key-value pair from a full node.
+  2.  Querying operations happen by requesting the key-value pair from a full node.
 
   3.  Further, verifying the validity of responses by the full node is logarithmic in the size of the state.
 
 - **Security Requirements:**
 
-  1.  Secure bootstrapping and Synchronizing: Probability that an adversarial full node convincing a light client of a forged blockchain state is negligible.
+  1.  Secure bootstrapping and Synchronizing: The probability that an adversarial full node convinces a light client of a forged blockchain state is negligible.
 
-  2.  Secure querying: Probability that an adversary convinces light client to accept a forged account state os negligible.
+  2.  Secure querying: The probability that an adversary convinces a light client to accept a forged account state is negligible.
 
-  3.  Assure that the submitted extrinsics are appended in a successor block or inform the user incase of failure.
+  3.  Assure that the submitted extrinsics are appended in a successor block or inform the user in case of failure.
 
 - **Polkadot Specific Requirements:**
 
   1.  The client MUST be able to connect to a relay chain using chain state.
 
-  2.  The client MUST be able to retrieve checkpoint state from a trusted source to speed up initialization.
+  2.  The client MUST be able to retrieve the checkpoint state from a trusted source to speed up initialization.
 
   3.  The client MUST be able to subscribe/unsubscribe to/from any polkadot-spec-conformant relay chain (Polkadot, Westend, Kusama)
 
@@ -56,9 +56,9 @@ Warp sync ([Section -sec-num-ref-](chap-networking#sect-msg-warp-sync)) only dow
 
 For light clients, it is too expensive to download the state (approx. 550MB) to respond to queries. Rather, the queries are submitted to the Full node and only the response of the full node is validated using the hash of the state root. Requests for warp sync are performed using the `/dot/sync/warp` *Request-Response* substream, the corresponding network messages are detailed in [Section -sec-num-ref-](chap-networking#sect-protocols-substreams).
 
-Light clients base their trust in provided snapshots and the ability to slash grandpa votes for equivocation for the period they are syncing via warp sync. Full nodes and above in contrast verify each block indvidually.
+Light clients base their trust in provided snapshots and the ability to slash grandpa votes for equivocation for the period they are syncing via warp sync. Full nodes and above, in contrast, verify each block individually.
 
-In theory, the `warp sync` process takes the Genesis Block as input and outputs the hash of the state trie root at the latest finalized block. This root hash acts as proof to further validate the responses to queries by the full node. The `warp sync` works by starting from a trusted specified block (for e.g. from a snapshot) and verifying the block headers only at the authority set changes.
+In theory, the `warp sync` process takes the Genesis Block as input and outputs the hash of the state trie root at the latest finalized block. This root hash acts as proof to further validate the responses to queries by the full node. The `warp sync` works by starting from a trusted specified block (e.g. from a snapshot) and verifying the block headers only at the authority set changes.
 
 Eventually, the light client verifies the finality of the block returned by a full node to ensure that the block is indeed the latest finalized block. This entails two things:
 
@@ -67,7 +67,7 @@ Eventually, the light client verifies the finality of the block returned by a fu
 2.  Check the timestamp of the last finalized block to ensure that no other blocks might have been finalized at a later timestamp.
 
 :::caution
-**Long-Range Attack Vulnerabilities**: Warp syncing is particularly vulnerable to what is called long-range attacks. The authorities allowed to finalize blocks can generate multiple proofs of finality for multiple different blocks of the same height, hence, they can finalize more than one chain at a time. It is possible for two-thirds of the validators that were active at a certain past block N to collude and decide to finalize a different block N', even when N has been finalized for the first time several weeks or months in the past. When a client then warp syncs, it can be tricked to consider this alternative block N' as the finalized one. However, in practice, to mitigate Long-Range Attacks, the starting point of the warp syncing is not too far in the past. How far exactly depends on the logic of the runtime of the chain. For example, in Polkadot, the starting block for the sync should be at max 28 days old, to be within the purview of the slashing period for misbehaving nodes. Hence, even though in theory warp sync can start from Genesis Block, it is not advised to implement the same in practice.
+**Long-Range Attack Vulnerabilities**: Warp syncing is particularly vulnerable to what is called long-range attacks. The authorities allowed to finalize blocks can generate multiple proofs of finality for multiple different blocks of the same height. Hence, they can finalize more than one chain at a time. It is possible for two-thirds of the validators that were active at a certain past block N to collude and decide to finalize a different block N', even when N has been finalized for the first time several weeks or months in the past. When a client then warp syncs, it can be tricked to consider this alternative block N' as the finalized one. However, in practice, to mitigate Long-Range Attacks, the starting point of the warp syncing is not too far in the past. How far exactly depends on the logic of the runtime of the chain. For example, in Polkadot, the starting block for the sync should be at max 28 days old to be within the purview of the slashing period for misbehaving nodes. Hence, even though, in theory, warp sync can start from Genesis Block, it is not advised to implement the same in practice.
 :::
 
 We outline the warp sync process, abstracting out details of verifying the finality and how the full node to sync with is selected.
@@ -80,18 +80,18 @@ We outline the warp sync process, abstracting out details of verifying the final
     options={{ "lineNumber": true }}
 />
 
-Abstraction of Warp Sync and verification of latest block’s finality.
+Abstraction of Warp Sync and verification of the latest block’s finality.
 
 ${SelectFullNode}$: Determines the full node that the light client syncs with.
 
-${SyncSithNode}$: Returns the header of latest finalized block and a list of Grandpa Justifications by the full node.
+${SyncSithNode}$: Returns the header of the latest finalized block and a list of Grandpa Justifications by the full node.
 
 ${verifyAuthoritySetChange}$: Verification algorithm which checks the authenticity of the header only at the end of an era where the authority set changes iteratively until reaching the latest era.
 
-${verifyFinalty}$: Verifies the finalty of the latest block using the Grandpa Justifications messages.
+${verifyFinalty}$: Verifies the finality of the latest block using the Grandpa Justifications messages.
 :::
 
-The warp syncing process is closely coupled with the state querying procedure used the light client. We outline the process of querying the state by a light client and validating the response.
+The warp syncing process is closely coupled with the state querying procedure used by the light client. We outline the process of querying the state by a light client and validating the response.
 
 ###### Algorithm -algo-num- Querying State Light Clients {#algo-light-clients-query-state}
 :::algorithm
@@ -110,7 +110,7 @@ ${validityCheck}_{root}$: Predicate that checks the validity of response ${res}$
 
 ## -sec-num- Runtime Environment for Light Clients {#sect-runtime-environment-lightclient}
 
-Technically, though a runtime execution environment is not necessary to build a light client, most clients require interacting with the Runtime and the state of the blockchain for integrity checks at the minimum. One can imagine an application scenarios like an on-chain light client which only listens to the latest state without ever adding extrinsics. Current implementations of Light Nodes (for e.g. Smoldot) uses the wasmtime as its runtime environment to drastically simplify the code. The performance of wasmtime is satisfying enough to not require a native runtime. The details of runtime API that the environment needs to suppport can be found in ([Appendix -chap-num-ref-](chap-runtime-api)).
+Technically, though a runtime execution environment is not necessary to build a light client, most clients require interacting with the Runtime and the state of the blockchain for integrity checks at the minimum. One can imagine an application scenario like an on-chain light client which only listens to the latest state without ever adding extrinsics. Current implementations of Light Nodes (for e.g., Smoldot) use the wasmtime as its runtime environment to drastically simplify the code. The performance of wasmtime is satisfying enough not to require a native runtime. The details of the runtime API that the environment needs to support can be found in ([Appendix -chap-num-ref-](chap-runtime-api)).
 
 ## -sec-num- Light Client Messages {#sect-light-msg}
 
@@ -120,7 +120,7 @@ All light client messages are protobuf encoded and are sent over the `/dot/light
 
 ### -sec-num- Request {#id-request}
 
-A message with all possible request messages. All message are sent as part of this message.
+A message with all possible request messages. All messages are sent as part of this message.
 
 | Type                | Id  | Description      |
 |---------------------|-----|------------------|
@@ -136,7 +136,7 @@ Where the `request` can be one of the following fields:
 
 ### -sec-num- Response {#id-response}
 
-A message with all possible response messages. All message are sent as part of this message.
+A message with all possible response messages. All messages are sent as part of this message.
 
 | Type                 | Id  | Description       |
 |----------------------|-----|-------------------|
@@ -220,4 +220,4 @@ The response is the same as for the *Remote Read Request* message, respectively 
 :::
 ## -sec-num- Storage for Light Clients {#sect-storage-lightclient}
 
-The light client requires a persistent storage for saving the state of the blockchain. In addition it requires efficient Serialization/De-serialization methods to transform SCALE ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) encoded network traffic for storing and reading from the persistent storage.
+The light client requires a persistent storage for saving the state of the blockchain. In addition, it requires efficient Serialization/De-serialization methods to transform SCALE ([Section -sec-num-ref-](id-cryptography-encoding#sect-scale-codec)) encoded network traffic for storing and reading from the persistent storage.
