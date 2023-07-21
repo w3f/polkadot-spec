@@ -876,7 +876,7 @@ A parachain block or a Proof-of-Validity block (PoV block) contains the necessar
 ###### Definition -def-num- Head Data {#defn-head-data}
 :::definition
 
-The head data contains information about a parachain block ([Definition -def-num-ref-](chapter-anv#defn-para-block)). The head data is returned by executing the parachain Runtime, and relay chain validators are not concerned with its inner structure and treat it as a byte arrays.
+The head data contains information about a parachain block ([Definition -def-num-ref-](chapter-anv#defn-para-block)). The head data is returned by executing the parachain Runtime, and relay chain validators are not concerned with its inner structure and treat it as a byte array.
 
 :::
 ###### Definition -def-num- Parachain Id {#defn-para-id}
@@ -888,7 +888,7 @@ The Parachain Id is a unique, unsigned 32-bit integer which serves as an identif
 ###### Definition -def-num- Availability Core {#defn-availability-core}
 :::definition
 
-Availability cores are slots used to process parachains. The Runtime assigns each parachain to a availability core and validators can fetch information about the cores, such as parachain block candidates, by calling the appropriate Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-availability-cores)). Validators are not concerned with the internal workings from the Runtimes perspective.
+Availability cores are slots used to process parachains. The Runtime assigns each parachain to an availability core, and validators can fetch information about the cores, such as parachain block candidates, by calling the appropriate Runtime API ([Section -sec-num-ref-](chap-runtime-api#sect-rt-api-availability-cores)). Validators are not concerned with the internal workings from the Runtimes perspective.
 
 :::
 ###### Definition -def-num- Validator Groups {#defn-validator-groups}
@@ -936,4 +936,4 @@ where ${N}$ is the unsigned 32-bit integer indicating the relay chain block numb
 ###### Definition -def-num- Bitfield Array {#defn-bitfield-array}
 :::definition
 
-A bitfield array contains single-bit values which indicates whether a candidate is available. The number of items is equal to the number of availability cores ([Definition -def-num-ref-](chapter-anv#defn-availability-core)), and each bit represents a vote on the corresponding core in the given order. Respectively, if the single bit equals 1, then the Polkadot validator claims that the availability core is occupied, there exists a committed candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-committed-candidate-receipt)) and that the validator has a stored chunk of the parachain block ([Definition -def-num-ref-](chapter-anv#defn-para-block)).
+A bitfield array contains single-bit values, which indicates whether a candidate is available. The number of items is equal to the number of availability cores ([Definition -def-num-ref-](chapter-anv#defn-availability-core)), and each bit represents a vote on the corresponding core in the given order. Respectively, if the single bit equals 1, then the Polkadot validator claims that the availability core is occupied, there exists a committed candidate receipt ([Definition -def-num-ref-](chapter-anv#defn-committed-candidate-receipt)) and that the validator has a stored chunk of the parachain block ([Definition -def-num-ref-](chapter-anv#defn-para-block)).
