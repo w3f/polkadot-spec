@@ -26,13 +26,18 @@ Everyone, but specifically implementers and members of the [Technical Fellowship
 
 ### Spec Committee
 
-The Spec Committee consists of Researchers, Researcher Engineers, and Implementers of the Polkadot Protocol that actively contribute (= opening/contributing to PRs or issues regarding the spec) to the specification. For now and compared to the [Technical Fellowship](https://github.com/polkadot-fellows/manifesto) itself, the responsibility of the Spec Committee is clearly defined as maintaining the specification of the protocol. In case of inactivity for three months, members will be removed again. 
+The Spec Committee consists of Researchers, Researcher Engineers, and Implementers of the Polkadot Protocol that actively contribute (= opening/contributing to PRs or issues regarding the spec) to the specification. For now and compared to the [Technical Fellowship](https://github.com/polkadot-fellows/manifesto), the Spec Committee's responsibility is clearly defined as maintaining the specification of the protocol. In case of inactivity for three months, members will be removed again. 
 
+Web3 Foundation
 - [Bhargav Bhatt](https://github.com/bhargavbh)
 - [Seyed Lavasani](https://github.com/drskalman)
-- [Pierre Krieger](https://github.com/tomaka) 
 - [Heverson B. Ribeiro](https://github.com/heversonbr)
 
+Smoldot
+- [Pierre Krieger](https://github.com/tomaka)
+
+Parity 
+- [Fateme Shirazi](https://github.com/FatemeShirazi)
 
 ## Local Development
 
