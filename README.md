@@ -33,7 +33,7 @@ Web3 Foundation
 - [Seyed Lavasani](https://github.com/drskalman)
 - [Heverson B. Ribeiro](https://github.com/heversonbr)
 
-Soramitsu
+Quadrivium
 - [Kamil Salakhiev](https://github.com/kamilsa)
 
 Smoldot
