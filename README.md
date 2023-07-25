@@ -33,6 +33,9 @@ Web3 Foundation
 - [Seyed Lavasani](https://github.com/drskalman)
 - [Heverson B. Ribeiro](https://github.com/heversonbr)
 
+Soramitsu
+- [Kamil Salakhiev](https://github.com/kamilsa)
+
 Smoldot
 - [Pierre Krieger](https://github.com/tomaka)
 
