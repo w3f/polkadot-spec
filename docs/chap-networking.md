@@ -215,34 +215,15 @@ The Polkadot Host must actively communicate with the network in order to partici
 :::
 
 
-<!-- authority discovery -->
+
 ### -sec-num- Discovering authorities {#sect-authority-discovery}
 
-<!-- what it is  -->
-A discovery mechanism enables Polkadot nodes to both publish their local addresses and learn about other nodes identifiers and addresses.
+The discovery mechanism enables Polkadot nodes to both publish their local addresses and learn about other nodes identifiers and addresses.
 The Authority discovery mechanism differs from the bootstrap mechanism, described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap), in that it restricts the discovery output to nodes currently holding the authority role (e.g., validators).
 
-The authority discovery mechanism consists of two main interfaces. A `service` interface that exposes two functions that allow Polkadot nodes to request  `identifiers` or  `addresses` of current authority nodes. A `worker` interface that provides means of interacting with the Kademlia DHT in order to publish local node addresses and discover the addresses of other authority nodes.
-
-```
-       -------
-      |  Node |
-       -------
-          |
- ---------------------
-| Discovery Authority |
- ---------------------
-          |
-       -------
-      |  DHT  |
-       -------        
-```
-
-<!-- POLKADOT NODES interacting with AUTHORITY DISCOVERY -->
 #### -sec-num- Requesting authority identifier and addresses {#sect-auth-discovery-service-requests}
-<!-- `GetAuthorityIdsByPeerId` and `GetAddressesByAuthorityId` are the type of message sent from `service` to `worker` in order to receive the information requested by polkadot nodes. However, this is a implementation detail that can be transparent to developers. 
- -->
-The following requests are exposed by the discovery authority mechanism to Polkadot nodes.
+
+The following requests are exposed by the discovery authority to Polkadot nodes.
 
 ###### Definition -def-num- Authority addresses request {#defn-auth-discovery-address-request}
 :::definition
@@ -256,25 +237,19 @@ $$
 **where**
 - $\texttt{authorityId}$ is the `authorityId` 256-bit identifier representing the public key of the targeted authority node. 
 
-
 **expected response** 
 
 The response to the previous query includes an enum with one of the following values:
-<!-- Option<HashSet<Multiaddr>> -->
 
 | Value                | Description                                            |
 |----------------------|--------------------------------------------------------|
 |  None                | A type representing `no value`                           | 
 |  HashSet[Multiaddr]  | An unordered collection of unique `Multiaddr` elements | 
 
-
 **with**
 - `Multiaddr` a [Multiaddr](https://github.com/libp2p/specs/blob/master/addressing/README.md#multiaddr-in-libp2p) data structure.
-  
 :::
 
-
-<!-- get_authority_ids_by_peer_id(PeerId) -->
 ###### Definition -def-num- Authority identifier request {#defn-auth-discovery-auth-identifier-request}
 :::definition
 
@@ -289,9 +264,7 @@ $$
 
 
 **expected response** 
-<!-- Since we may store the mapping across several sessions, a single. `PeerId` might correspond to multiple `AuthorityId`s -->
 The response to the previous query includes an enum with one of the following values:
-<!-- Option<HashSet<AuthorityDiscoveryId> -->
 
 | Value                  | Description                                            |
 |------------------------|--------------------------------------------------------|
@@ -304,15 +277,10 @@ The response to the previous query includes an enum with one of the following va
 
 :::
 
+#### -sec-num- Publishing and discovering addresses {#sect-auth-discovery-publishing}
 
-<!-- AUTHORITY DISCOVER interacting with KADEMLIA -->
-#### -sec-num- Publishing addresses {#sect-auth-discovery-worker-publishing}
-
-
-The authority discovery mechanism ensures up-to-date addresses for authority nodes by periodically publishing and discovering addresses into the DHT.
-
-In order to publish on the DHT, the authority discovery mechanism periodically triggers a `put_value` operation that stores a `SignedAuthorityRecord` of the addresses of authorities it knows from its current and next authority sets into the DHT. The `put_value` operation is created as follows.
-
+<!-- ##### -sec-num- Publishing addresses {#sect-auth-discovery-publishing} -->
+The authority discovery mechanism triggers operations to publish a `SignedAuthorityRecord` of the addresses of authorities it knows from its current and next authority sets into the DHT. The `SignedAuthorityRecord` and the publish operation are created as follows:
 
 ###### Definition -def-num- Signed Authority Record {#defn-signed-authority-record}
 :::definition
@@ -345,10 +313,10 @@ This is the protobuf structure used to exchange the signature with other nodes.
 :::
 
 
-###### Definition -def-num- Publish addresses operation {#defn-auth-discovery-publish}
+###### Definition -def-num- Publishing addresses {#defn-auth-discovery-publish}
 :::definition
 
-For each authority node $i$ in the current authority set, the local node invokes a `put_value` operation that triggers a store operation into the DHT with the following format:
+For each authority node $i$ in the current authority set, the local node invokes a `put_value` operation that triggers the publishing operation into the DHT with the following format:
 
 $$
 \texttt{put\_value}{\left(\texttt{KademliaKey}_{i} , \texttt{Sig}_{AR}\right)}
@@ -361,14 +329,14 @@ $$
 :::
 
 
-#### -sec-num- Discovering authority addresses {#sect-auth-discovery-worker-discover}
-<!-- worker component -->
-The authority discovery mechanism periodically invokes `get_value` operation on the DHT in order to discover the addresses of authority nodes it knows about.
+<!-- ##### -sec-num- Discovering addresses {#sect-auth-discovery-discovering} -->
 
-###### Definition -def-num- Discover addresses operation {#defn-msg-auth-discovery-lookup}
+The authority discovery mechanism also invokes operations on the DHT to discover the addresses of authority nodes, as follows:
+
+###### Definition -def-num- Discovering addresses {#defn-msg-auth-discovery-lookup}
 :::definition
 
-Periodically, the authority discover performs a bounded number of `get_value` operations in the following format:
+Periodically, the authority discovery performs a number of `get_value` operations in the following format:
 $$
 \texttt{get\_value}{\left(\texttt{KademliaKey}_{i}\right)}
 $$
