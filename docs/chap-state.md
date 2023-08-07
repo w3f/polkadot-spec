@@ -113,7 +113,7 @@ We say ${B}$ is **descendant** of ${B}'$, formally noted as ${B}>{B}'$, if ${\le
 :::
 ## -sec-num- State Replication {#sect-state-replication}
 
-Polkadot nodes replicate each other’s state by syncing the history of the extrinsics. This, however, is only practical if a large set of transactions are batched and synced at the time. The structure in which the transactions are journaled and propagated is known as a block of extrinsics ([Section -sec-num-ref-](chap-state#sect-block-format)). Like any other replicated state machine, state inconsistency can occur between Polkadot replicas. [Section -sec-num-ref-](chap-state#sect-managing-multiple-states) gives an overview of how a Polkadot Host node manages multiple variants of the state.
+Polkadot nodes replicate each other’s states by syncing the histories of the extrinsics. This, however, is only practical if a large set of transactions are batched and synced at the same time. The structure in which the transactions are journaled and propagated is known as a block of extrinsics ([Section -sec-num-ref-](chap-state#sect-block-format)). Like any other replicated state machine, state inconsistencies can occur between Polkadot replicas. [Section -sec-num-ref-](chap-state#sect-managing-multiple-states) gives an overview of how a Polkadot Host node manages multiple variants of the state.
 
 ### -sec-num- Block Format {#sect-block-format}
 
