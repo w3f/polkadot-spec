@@ -68,7 +68,7 @@ $$
 
 |   |     |
 |---|-----|
-| **1** | implies *next epoch data*: The Runtime issues this message on every first block of an epoch. The supplied authority set [Definition -def-num-ref-](chap-sync#defn-authority-list), ${\text{Auth}_C}$, and randomness [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness), ${r}$, are used in the next epoch $\mathcal E_n + 1$. |
+| **1** | implies *next epoch data*: The Runtime issues this message on every first block of an epoch. The supplied authority set [Definition -def-num-ref-](chap-sync#defn-authority-list), ${\text{Auth}_C}$, and randomness [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness), ${r}$, are used in the next epoch $\mathcal E_n + 1$. In case the epochs $\mathcal E_n + 1$ to $\mathcal E_n + k$ are skipped (i.e., BABE does not produce blocks), then the epoch data ${\left(\text{Auth}_{{C}},{r}\right)}$ is used by the epoch $\mathcal E_n + k + 1$.|
 | **2** | implies *on disabled*: A 32-bit integer, ${A_i}$, indicating the individual authority in the current authority list that should be immediately disabled until the next authority set changes. This message's initial intention was to cause an immediate suspension of all authority functionality with the specified authority. |
 | **3** | implies *next epoch descriptor*: These messages are only issued on configuration change and in the first block of an epoch. The supplied configuration data are intended to be used from the next epoch onwards. |
   - $D$ is a varying datatype of the following format:
