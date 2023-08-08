@@ -68,7 +68,7 @@ $$
 
 |   |     |
 |---|-----|
-| **1** | implies *next epoch data*: The Runtime issues this message on every first block of an epoch. The supplied authority set [Definition -def-num-ref-](chap-sync#defn-authority-list), ${\text{Auth}_C}$, and randomness [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness), ${r}$, are used in the next epoch $\mathcal E_n + 1$. |
+| **1** | implies *next epoch data*: The Runtime issues this message on every first block of an epoch. The supplied authority set [Definition -def-num-ref-](chap-sync#defn-authority-list), ${\text{Auth}_C}$, and randomness [Definition -def-num-ref-](sect-block-production#defn-epoch-randomness), ${r}$, are used in the next epoch $\mathcal E_n + 1$. In case the epochs $\mathcal E_n + 1$ to $\mathcal E_n + k$ are skipped (i.e., BABE does not produce blocks), then the epoch data ${\left(\text{Auth}_{{C}},{r}\right)}$ is used by the epoch $\mathcal E_n + k + 1$.|
 | **2** | implies *on disabled*: A 32-bit integer, ${A_i}$, indicating the individual authority in the current authority list that should be immediately disabled until the next authority set changes. This message's initial intention was to cause an immediate suspension of all authority functionality with the specified authority. |
 | **3** | implies *next epoch descriptor*: These messages are only issued on configuration change and in the first block of an epoch. The supplied configuration data are intended to be used from the next epoch onwards. |
   - $D$ is a varying datatype of the following format:
@@ -207,7 +207,7 @@ The operators are defined in [Definition -def-num-ref-](id-cryptography-encoding
 It is imperative for the security of the network that each block producer correctly determines the current slot numbers at a given time by regularly estimating the local clock offset in relation to the network ([Definition -def-num-ref-](sect-block-production#defn-relative-synchronization)).
 
 :::danger
-**The calculation described in this section is still to be implemented and deployed**: For now, each block producer is required to synchronize its local clock using NTP instead. The current slot ${s}$ is then calculated by ${s}={t}_{\text{unix}}{\mathcal{{T}}}$ where ${\mathcal{{T}}}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-slot) and ${t}_{\text{unix}}$ is defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time). That also entails that slot numbers are currently not reset at the beginning of each epoch.
+**The calculation described in this section is still to be implemented and deployed**: For now, each block producer is required to synchronize its local clock using NTP instead. The current slot ${s}$ is then calculated by ${s}={t}_{\text{unix}}/{\mathcal{{T}}}$ where ${\mathcal{{T}}}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-slot) and ${t}_{\text{unix}}$ is defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-unix-time). That also entails that slot numbers are currently not reset at the beginning of each epoch.
 :::
 
 Polkadot does this synchronization without relying on any external clock source (e.g., through the or the ). To stay in synchronization, each producer is therefore required to periodically estimate its local clock offset in relation to the rest of the network.
