@@ -140,9 +140,9 @@ $$
 
   ${B}={\left({s},{o}\right)}$
 
-  - ${s}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) representing the bit store order ([external reference](https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore))
+  - ${s}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) representing the bit store order ([external reference](https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore.html))
 
-  - ${o}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) the bit order type ([external reference](https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder)).
+  - ${o}$ is a type Id ([Definition -def-num-ref-](sect-metadata#defn-rtm-type-id)) the bit order type ([external reference](https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder.html)).
 
 ###### Image -img-num- Metadata Type Definition {#img-metadata-type-definition}
 
