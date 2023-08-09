@@ -210,7 +210,7 @@ The Polkadot Host must actively communicate with the network in order to partici
 
 ### -sec-num- Discovering authorities {#sect-authority-discovery}
 
-The discovery mechanism enables Polkadot nodes to both publish their local addresses and learn about other nodes identifiers and addresses.
+The discovery mechanism enables Polkadot nodes to both publish their local addresses and learn about other nodes' identifiers and addresses.
 The Authority discovery mechanism differs from the bootstrap mechanism, described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap), in that it restricts the discovery output to nodes currently holding the authority role (e.g., validators).
 
 #### -sec-num- Requesting authority identifier and addresses {#sect-auth-discovery-service-requests}
@@ -265,7 +265,7 @@ The response to the previous query includes an enum with one of the following va
 
 
 **with**
-- `authorityId` the 256-bit identifier representing the public key of the requested `PeerId`. 
+- `authorityId` is the 256-bit identifier representing the public key of the requested `PeerId`. 
 
 :::
 
@@ -431,7 +431,7 @@ The `BlockRequest` message is a Protobuf serialized structure of the following f
   | 0   | Enumerate in ascending order (from child to parent)            |
   | 1   | Enumerate in descending order (from parent to canonical child) |
 
-- ${B}_{{m}}$ is the number of blocks to be returned. An implementation defined maximum is used when unspecified.
+- ${B}_{{m}}$ is the number of blocks to be returned. An implementation-defined maximum is used when unspecified.
 
 :::
 ###### Definition -def-num- Block Response {#defn-msg-block-response}
@@ -453,7 +453,7 @@ where *BlockData* is a Protobuf structure containing the requested blocks. Do no
 | `bytes`          | 4   | Block receipt (optional)                                              |                                                                |
 | `bytes`          | 5   | Block message queue (optional)                                        |                                                                |
 | `bytes`          | 6   | Justification (optional)                                              | [Definition -def-num-ref-](sect-finality#defn-grandpa-justification) |
-| `bool`           | 7   | Indicates whether the justification is empty (i.e. should be ignored) |                                                                |
+| `bool`           | 7   | Indicates whether the justification is empty (i.e., should be ignored) |                                                                |
 
 :::
 ### -sec-num- Requesting States {#sect-msg-state-request}
@@ -507,7 +507,7 @@ See the synchronization chapter for more information ([Chapter -chap-num-ref-](c
 ###### Definition -def-num- Warp Sync Proof {#defn-warp-sync-proof}
 :::definition
 
-The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition -def-num-ref-](chap-networking#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section -sec-num-ref-](chap-sync#sect-consensus-message-digest)). It’s a datastructure of the following format:
+The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition -def-num-ref-](chap-networking#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section -sec-num-ref-](chap-sync#sect-consensus-message-digest)). It’s a data structure of the following format:
 
 $$
 {P}={\left({{f}_{{x}}\ldots}{{f}_{{y}},}{c}\right)}
