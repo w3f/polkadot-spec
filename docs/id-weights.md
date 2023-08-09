@@ -750,4 +750,4 @@ next\ weight &=& weight \times (1 + (v \times diff) + (v \times diff)^2 / 2)
 \end{aligned}
 $$
 
-Polkadot defines the `target_weight` as 0.25 (25%). More information about this algorithm is described in the [Web3 Foundation research paper](https://research.web3.foundation/en/latest/polkadot/overview/2-token-economics#relay-chain-transaction-fees-and-per-block-transaction-limits).
+Polkadot defines the `target_weight` as 0.25 (25%). More information about this algorithm is described in the [Web3 Foundation research paper](https://research.web3.foundation/Polkadot/overview/token-economics#relay-chain-transaction-fees-and-per-block-transaction-limits).
