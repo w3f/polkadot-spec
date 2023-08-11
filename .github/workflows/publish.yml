@@ -23,7 +23,7 @@ jobs:
           git submodule update --remote
       - name: Build PDF
         run: |
-          cd website && npm i && npm run build_pdf && cd ..
+          cd website && npm i && npm run build && npm run serve &; ./scripts/build_pdf.sh; cd ..
       - name: Publish
         run: |
           git config --global user.email "grants-deployer@users.noreply.github.com"
