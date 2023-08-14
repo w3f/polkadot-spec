@@ -113,7 +113,7 @@ We say ${B}$ is **descendant** of ${B}'$, formally noted as ${B}>{B}'$, if ${\le
 :::
 ## -sec-num- State Replication {#sect-state-replication}
 
-Polkadot nodes replicate each other’s state by syncing the history of the extrinsics. This, however, is only practical if a large set of transactions are batched and synced at the time. The structure in which the transactions are journaled and propagated is known as a block of extrinsics ([Section -sec-num-ref-](chap-state#sect-block-format)). Like any other replicated state machine, state inconsistency can occur between Polkadot replicas. [Section -sec-num-ref-](chap-state#sect-managing-multiple-states) gives an overview of how a Polkadot Host node manages multiple variants of the state.
+Polkadot nodes replicate each other’s states by syncing the histories of the extrinsics. This, however, is only practical if a large set of transactions are batched and synced at the same time. The structure in which the transactions are journaled and propagated is known as a block of extrinsics ([Section -sec-num-ref-](chap-state#sect-block-format)). Like any other replicated state machine, state inconsistencies can occur between Polkadot replicas. [Section -sec-num-ref-](chap-state#sect-managing-multiple-states) gives an overview of how a Polkadot Host node manages multiple variants of the state.
 
 ### -sec-num- Block Format {#sect-block-format}
 
@@ -300,7 +300,7 @@ Inherents are unsigned extrinsics inserted into a block by the block author and 
 :::
 ## -sec-num- State Storage Trie {#sect-state-storage}
 
-For storing the state of the system, Polkadot Host implements a hash table storage where the keys are used to access each data entry. There is no assumption either on the size of the key nor on the size of the data stored under them, besides the fact that they are byte arrays with specific upper limits on their length. The limit is imposed by the encoding algorithms to store the key and the value in the storage trie ([Section -sec-num-ref-](id-cryptography-encoding#sect-sc-length-and-compact-encoding)).
+For storing the state of the system, Polkadot Host implements a hash table storage where the keys are used to access each data entry. There is no assumption on the size of the key or on the size of the data stored under them, besides the fact that they are byte arrays with specific upper limits on their length. The limit is imposed by the encoding algorithms to store the key and the value in the storage trie ([Section -sec-num-ref-](id-cryptography-encoding#sect-sc-length-and-compact-encoding)).
 
 ### -sec-num- Accessing System Storage {#id-accessing-system-storage}
 

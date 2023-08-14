@@ -794,7 +794,7 @@ Verifies the hash of the given message against an ECDSA signature.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-34}
 
-This function allows the verification of non-standard, overflowing ECDSA signatures, an implementation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature#method.parse_overflowing) function.
+This function allows the verification of non-standard, overflowing ECDSA signatures, an implementation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing) function.
 
     (func $ext_crypto_ecdsa_verify_version_1
         (param $sig i32) (param $msg i64) (param $key i32) (return i32))
@@ -866,7 +866,7 @@ Verify and recover a *secp256k1* ECDSA signature.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-36}
 
-This function can handle non-standard, overflowing ECDSA signatures, an implemenation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature#method.parse_overflowing) function.
+This function can handle non-standard, overflowing ECDSA signatures, an implemenation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing) function.
 
     (func $ext_crypto_secp256k1_ecdsa_recover_version_1
         (param $sig i32) (param $msg i32) (return i64))
@@ -898,7 +898,7 @@ Verify and recover a *secp256k1* ECDSA signature.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-37}
 
-This function can handle non-standard, overflowing ECDSA signatures, an implemenation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature#method.parse_overflowing) function.
+This function can handle non-standard, overflowing ECDSA signatures, an implemenation specific mechanism of the Rust [`libsecp256k1` library](https://github.com/paritytech/libsecp256k1), specifically the [`parse_overflowing`](https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing) function.
 
     (func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_1
         (param $sig i32) (param $msg i32) (return i64))
