@@ -3,12 +3,12 @@ title: -chap-num- Networking
 ---
 
 :::info
-This chapter in its current form is incomplete and considered work in progress. Authors appreciate receiving request for clarification or any reports regarding deviation from the current Polkadot network protocol. This can be done through filing an issue in [Polkadot Specification repository](https://github.com/w3f/polkadot-spec).
+This chapter, in its current form, is incomplete and considered work in progress. Authors appreciate receiving requests for clarification or any reports regarding deviation from the current Polkadot network protocol. This can be done by filing an issue in [Polkadot Specification repository](https://github.com/w3f/polkadot-spec).
 :::
 
 ## -sec-num- Introduction {#id-introduction-2}
 
-The Polkadot network is decentralized and does not rely on any central authority or entity for achieving its fullest potential of provided functionality. The networking protocol is based on a family of open protocols, including protocol implemented *libp2p* e.g. the distributed Kademlia hash table which is used for peer discovery.
+The Polkadot network is decentralized and does not rely on any central authority or entity to achieve its fullest potential of provided functionality. The networking protocol is based on a family of open protocols, including protocol implemented *libp2p*, e.g., the distributed Kademlia hash table, which is used for peer discovery.
 
 This chapter walks through the behavior of the networking implementation of the Polkadot Host and defines the network messages. The implementation details of the *libp2p* protocols used are specified in external sources as described in [Section -sec-num-ref-](chap-networking#sect-networking-external-docs)
 
@@ -16,7 +16,7 @@ This chapter walks through the behavior of the networking implementation of the 
 
 Complete specification of the Polkadot networking protocol relies on the following external protocols:
 
-- [libp2p](https://github.com/libp2p/specs) - *libp2p* is a modular peer-to-peer networking stack composed of many modules and different parts. includes the multiplexing protocols and .
+- [libp2p](https://github.com/libp2p/specs) - *libp2p* is a modular peer-to-peer networking stack composed of many modules and different parts. includes the multiplexing protocols and
 
 - [libp2p addressing](https://docs.libp2p.io/concepts/addressing/) - The Polkadot Host uses the *libp2p* addressing system to identify and connect to peers.
 
@@ -32,7 +32,7 @@ Complete specification of the Polkadot networking protocol relies on the followi
 
 Each Polkadot Host node maintains an ED25519 key pair which is used to identify the node. The public key is shared with the rest of the network allowing the nodes to establish secure communication channels.
 
-Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId* as defined in [Definition -def-num-ref-](chap-networking#defn-peer-id) is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section -sec-num-ref-](chap-networking#sect-discovery-mechanism).
+Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId*, as defined in [Definition -def-num-ref-](chap-networking#defn-peer-id), is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap).
 
 ###### Definition -def-num- PeerId {#defn-peer-id}
 :::definition
@@ -71,12 +71,12 @@ $$
 
 - ${b}_{{2}}$ and ${b}_{{3}}$ are a protobuf encoded field-value pair [indicating the used key type](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys) (field ${1}$ of value ${1}$ implies *ED25519*).
 
-- ${b}_{{4}}$, ${b}_{{5}}$ and ${b}_{{{6}.{.37}}}$ are a protobuf encoded field-value pair where ${b}_{{5}}$ indicates the length of the public key followed by the the raw ED25519 public key itself, which varies for each Polkadot Host and is always 32 bytes (field ${2}$ contains the public key, which has a field value length prefix).
+- ${b}_{{4}}$, ${b}_{{5}}$ and ${b}_{{{6}.{.37}}}$ are a protobuf encoded field-value pair where ${b}_{{5}}$ indicates the length of the public key followed by the raw ED25519 public key itself, which varies for each Polkadot Host and is always 32 bytes (field ${2}$ contains the public key, which has a field value length prefix).
 
 :::
-## -sec-num- Discovery mechanism {#sect-discovery-mechanism}
+## -sec-num- Network bootstrap and discovery {#sect-network-bootstrap}
 
-The Polkadot Host uses various mechanisms to find peers within the network, to establish and maintain a list of peers and to share that list with other peers from the network as follows:
+The Polkadot Host uses various mechanisms to find peers within the network, to establish and maintain a list of peers, and to share that list with other peers from the network as follows:
 
 - **Bootstrap nodes** are hard-coded node identities and addresses provided by the genesis state ([Section -sec-num-ref-](id-cryptography-encoding#section-genesis)).
 
@@ -108,7 +108,7 @@ The Polkadot Host can establish a connection with any peer of which it knows the
 
 - **TCP/IP** with addresses in the form of `/ip4/1.2.3.4/tcp/30333` to establish a TCP connection and negotiate encryption and a multiplexing layer.
 
-- **WebSocket** with addresses in the form of `/ip4/1.2.3.4/tcp/30333/ws` to establish a TCP connection and negotiate the WebSocket protocol within the connection. Additionally, encryption and multiplexing layer is negotiated within the WebSocket connection.
+- **WebSocket** with addresses in the form of `/ip4/1.2.3.4/tcp/30333/ws` to establish a TCP connection and negotiate the WebSocket protocol within the connection. Additionally, the encryption and multiplexing layer are negotiated within the WebSocket connection.
 
 - **DNS** addresses in form of `/dns/example.com/tcp/30333` and `/dns/example.com/tcp/30333/ws`.
 
@@ -120,11 +120,11 @@ Polkadot protocol uses the *libp2p* Noise framework to build an encryption proto
 
 Polkadot nodes use the [XX handshake pattern](https://noiseexplorer.com/patterns/XX/) to establish a connection between peers. The three following steps are required to complete the handshake process:
 
-1.  The initiator generates a keypair and sends the public key to the responder. The [Noise specification](https://github.com/libp2p/specs/tree/master/noise) and the [libp2p PeerId specification](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md) describe keypairs in more detail.
+1.  The initiator generates a key pair and sends the public key to the responder. The [Noise specification](https://github.com/libp2p/specs/tree/master/noise) and the [libp2p PeerId specification](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md) describe keypairs in more detail.
 
-2.  The responder generates its own key pair and sends its public key back to the initiator. After that, the responder derives a shared secret and uses it to encrypt all further communication. The responder now sends its static Noise public key (which may change anytime and does not need to be persisted on disk), its *libp2p* public key and a signature of the static Noise public key signed with the *libp2p* public key.
+2.  The responder generates its own key pair and sends its public key back to the initiator. After that, the responder derives a shared secret and uses it to encrypt all further communication. The responder now sends its static Noise public key (which may change anytime and does not need to be persisted on disk), its *libp2p* public key, and a signature of the static Noise public key signed with the *libp2p* public key.
 
-3.  The initiator derives a shared secret and uses it to encrypt all further communication. It also sends its static Noise public key, *libp2p* public key and signature to the responder.
+3.  The initiator derives a shared secret and uses it to encrypt all further communication. It also sends its static Noise public key, *libp2p* public key, and signature to the responder.
 
 After these three steps, both the initiator and responder derive a new shared secret using the static and session-defined Noise keys, which are used to encrypt all further communication.
 
@@ -140,11 +140,11 @@ The prefixes on those substreams are known as protocol identifiers and are used 
 
 - `/ipfs/ping/1.0.0` - Open a standardized substream *libp2p* to a peer and initialize a ping to verify if a connection is still alive. If the peer does not respond, the connection is dropped. This is a *Request-Response substream*.
 
-  Further specification and reference implementation are available in the [libp2p documentation](https://docs.libp2p.io/concepts/protocols/#ping).
+  Further specification and reference implementations are available in the [libp2p documentation](https://docs.libp2p.io/concepts/protocols/#ping).
 
 - `/ipfs/id/1.0.0` - Open a standardized *libp2p* substream to a peer to ask for information about that peer. This is a *Request-Response substream*, but the initiator does **not** send any message to the responder and only waits for the response.
 
-  Further specification and reference implementation are available in the [libp2p documentation](https://docs.libp2p.io/concepts/protocols/#identify).
+  Further specification and reference implementations are available in the [libp2p documentation](https://docs.libp2p.io/concepts/protocols/#identify).
 
 - `/dot/kad` - Open a standardized substream for Kademlia `FIND_NODE` requests. This is a *Request-Response substream*, as defined by the *libp2p* standard.
 
@@ -155,7 +155,7 @@ The prefixes on those substreams are known as protocol identifiers and are used 
   The messages are specified in [Section -sec-num-ref-](sect-lightclient#sect-light-msg).
 
 :::info
-  For backwards compatibility reasons, `/dot/light/2` is also a valid substream for those messages.
+  For backward compatibility reasons, `/dot/light/2` is also a valid substream for those messages.
 :::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/block-announces/1` - a substream/notification protocol which sends blocks to connected peers. This is a *Notification substream*.
@@ -163,7 +163,7 @@ The prefixes on those substreams are known as protocol identifiers and are used 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-block-announce).
 
 :::info
-  For backwards compatibility reasons, `/dot/block-announces/1` is also a valid substream for those messages.
+  For backward compatibility reasons, `/dot/block-announces/1` is also a valid substream for those messages.
 :::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/sync/2` - a request and response protocol that allows the Polkadot Host to request information about blocks. This is a *Request-Response substream*.
@@ -171,7 +171,7 @@ The prefixes on those substreams are known as protocol identifiers and are used 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-block-request).
 
 :::info
-  For backwards compatibility reasons, `/dot/sync/2` is also a valid substream for those messages.
+  For backward compatibility reasons, `/dot/sync/2` is also a valid substream for those messages.
 :::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/sync/warp` - a request and response protocol that allows the Polkadot Host to perform a warp sync request. This is a *Request-Response substream*.
@@ -179,7 +179,7 @@ The prefixes on those substreams are known as protocol identifiers and are used 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-warp-sync).
 
 :::info
-  For backwards compatibility reasons, `/dot/sync/warp` is also a valid substream for those messages.
+  For backward compatibility reasons, `/dot/sync/warp` is also a valid substream for those messages.
 :::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/transactions/1` - a substream/notification protocol which sends transactions to connected peers. This is a *Notification substream*.
@@ -187,7 +187,7 @@ The prefixes on those substreams are known as protocol identifiers and are used 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-transactions).
 
 :::info
-  For backwards compatibility reasons, `/dot/transactions/1` is also a valid substream for those messages.
+  For backward compatibility reasons, `/dot/transactions/1` is also a valid substream for those messages.
 :::
 
 - `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/grandpa/1` - a substream/notification protocol that sends GRANDPA votes to connected peers. This is a *Notification substream*.
@@ -195,7 +195,7 @@ The prefixes on those substreams are known as protocol identifiers and are used 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-grandpa).
 
 :::info
-  For backwards compatibility reasons, `/paritytech/grandpa/1` is also a valid substream for those messages.
+  For backward compatibility reasons, `/paritytech/grandpa/1` is also a valid substream for those messages.
 :::
 
 
@@ -207,11 +207,142 @@ The Polkadot Host must actively communicate with the network in order to partici
   The Polkadot network originally only used SCALE encoding for all message formats. Meanwhile, Protobuf has been adopted for certain messages. The encoding of each listed message is always SCALE encoded unless Protobuf is explicitly mentioned. Encoding and message formats are subject to change.
 :::
 
+
+### -sec-num- Discovering authorities {#sect-authority-discovery}
+
+The discovery mechanism enables Polkadot nodes to both publish their local addresses and learn about other nodes' identifiers and addresses.
+The Authority discovery mechanism differs from the bootstrap mechanism, described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap), in that it restricts the discovery output to nodes currently holding the authority role (e.g., validators).
+
+#### -sec-num- Requesting authority identifier and addresses {#sect-auth-discovery-service-requests}
+
+The following requests are exposed by the discovery authority to Polkadot nodes.
+
+###### Definition -def-num- Authority addresses request {#defn-auth-discovery-address-request}
+:::definition
+
+An **authority addresses request** is a request that Polkadot nodes can send to the authority discovery mechanism in order to request the addresses of an authority node. The request has the following format:
+
+$$
+\texttt{get\_addresses\_by\_authority\_id}{\left(\texttt{authorityId}\right)}
+$$
+
+**where**
+- $\texttt{authorityId}$ is the `authorityId` 256-bit identifier representing the public key of the targeted authority node. 
+
+**expected response** 
+
+The response to the previous query includes an enum with one of the following values:
+
+| Value                | Description                                            |
+|----------------------|--------------------------------------------------------|
+|  None                | A type representing `no value`                           | 
+|  HashSet[Multiaddr]  | An unordered collection of unique `Multiaddr` elements | 
+
+**with**
+- `Multiaddr` a [Multiaddr](https://github.com/libp2p/specs/blob/master/addressing/README.md#multiaddr-in-libp2p) data structure.
+:::
+
+###### Definition -def-num- Authority identifier request {#defn-auth-discovery-auth-identifier-request}
+:::definition
+
+An **authority identifier request** is a request that Polkadot nodes can send to the authority discovery mechanism in order to request the `AuthorityId` of an authority node. The request has the following format:
+
+$$
+\texttt{get\_authority\_ids\_by\_peer\_id}{\left(\texttt{PeerId}\right)}
+$$
+
+**where**
+- $\texttt{PeerId}$ is the Polkadot node’s PeerId ([Definition -def-num-ref-](chap-networking#defn-peer-id)). 
+
+
+**expected response** 
+The response to the previous query includes an enum with one of the following values:
+
+| Value                  | Description                                            |
+|------------------------|--------------------------------------------------------|
+|  None                  | A type representing `no value`                           | 
+|  HashSet[authorityId]  | An unordered collection of unique `authorityId` elements | 
+
+
+**with**
+- `authorityId` is the 256-bit identifier representing the public key of the requested `PeerId`. 
+
+:::
+
+#### -sec-num- Publishing and discovering addresses {#sect-auth-discovery-publishing}
+
+<!-- ##### -sec-num- Publishing addresses {#sect-auth-discovery-publishing} -->
+The authority discovery mechanism triggers operations to publish a `SignedAuthorityRecord` of the addresses of authorities it knows from its current and next authority sets into the DHT. The `SignedAuthorityRecord` and the publish operation are created as follows:
+
+###### Definition -def-num- Signed Authority Record {#defn-signed-authority-record}
+:::definition
+
+The `SignedAuthorityRecord` is a Protobuf serialized structure representing the authority records and signature to send over the wire.
+It is defined in the following format:
+
+| Type               | Id  | Description                                           |
+|--------------------|-----|-------------------------------------------------------|
+| *AuthorityRecord*  | 1   | Serialized authority record                           |
+| `bytes`            | 2   | An Schnorrkel/Ristretto x25519 ("sr25519") signature  |
+| *PeerSignature*    | 3   | Serialized peer signature                             |
+
+**where**  
+
+**AuthorityRecord** is a serialized Protobuf structure that lists the addresses of authority nodes that are currently part of the authority set. 
+
+| Type             | Id | Description                                                           |
+|------------------|----|-----------------------------------------------------------------------|
+| `repeated bytes` | 1  | Binary representation of zero or more multiaddresses through which a node is reachable  | 
+
+**PeerSignature** is a Protobuf serialized structure indicating the signature and public key used to sign and verify the `AuthorityRecord`.
+This is the protobuf structure used to exchange the signature with other nodes.
+
+| Type    | Id  | Description                                       |
+|---------|-----|---------------------------------------------------|
+| `bytes` | 1   | An sr25519 signature                              | 
+| `bytes` | 2   | A sr25519 public key used to verify the signature | 
+
+:::
+
+
+###### Definition -def-num- Publishing addresses {#defn-auth-discovery-publish}
+:::definition
+
+For each authority node $i$ in the current authority set, the local node invokes a `put_value` operation that triggers the publishing operation into the DHT with the following format:
+
+$$
+\texttt{put\_value}{\left(\texttt{KademliaKey}_{i} , \texttt{Sig}_{AR}\right)}
+$$
+
+**where**
+- $\texttt{KademliaKey}_{i}$ is the $Sha256$ hash of the authorityId of node $i$. 
+- $\texttt{Sig}_{AR}$ is the `SignedAuthorityRecord`
+ described above([Definition -def-num-ref-](chap-networking#defn-signed-authority-record)). 
+:::
+
+
+<!-- ##### -sec-num- Discovering addresses {#sect-auth-discovery-discovering} -->
+
+The authority discovery mechanism also invokes operations on the DHT to discover the addresses of authority nodes, as follows:
+
+###### Definition -def-num- Discovering addresses {#defn-msg-auth-discovery-lookup}
+:::definition
+
+Periodically, the authority discovery performs a number of `get_value` operations in the following format:
+$$
+\texttt{get\_value}{\left(\texttt{KademliaKey}_{i}\right)}
+$$
+
+**where**
+- $\texttt{KademliaKey}_{i}$ is the $Sha256$ hash of the `authorityId` of node $i$ selected from the current authority set.
+::: 
+
+
 ### -sec-num- Announcing blocks {#sect-msg-block-announce}
 
 When the node creates or receives a new block, it must be announced to the network. Other nodes within the network will track this announcement and can request information about this block. The mechanism for tracking announcements and requesting the required data is implementation-specific.
 
-Block announcements, requests and responses are sent over the substream as described in [Definition -def-num-ref-](chap-networking#defn-block-announce-handshake).
+Block announcements, requests, and responses are sent over the substream as described in [Definition -def-num-ref-](chap-networking#defn-block-announce-handshake).
 
 ###### Definition -def-num- Block Announce Handshake {#defn-block-announce-handshake}
 :::definition
@@ -245,7 +376,7 @@ $$
 
 The `BlockAnnounce` message is sent to the specified substream and indicates to remote peers that the node has either created or received a new block.
 
-The message is a structure of the following format:
+The message is structured in the following format:
 
 $$
 {B}{A}=\text{Enc}_{{\text{SC}}}{\left(\text{Head}{\left({B}\right)},{b}\right)}
@@ -300,7 +431,7 @@ The `BlockRequest` message is a Protobuf serialized structure of the following f
   | 0   | Enumerate in ascending order (from child to parent)            |
   | 1   | Enumerate in descending order (from parent to canonical child) |
 
-- ${B}_{{m}}$ is the number of blocks to be returned. An implementation defined maximum is used when unspecified.
+- ${B}_{{m}}$ is the number of blocks to be returned. An implementation-defined maximum is used when unspecified.
 
 :::
 ###### Definition -def-num- Block Response {#defn-msg-block-response}
@@ -322,23 +453,23 @@ where *BlockData* is a Protobuf structure containing the requested blocks. Do no
 | `bytes`          | 4   | Block receipt (optional)                                              |                                                                |
 | `bytes`          | 5   | Block message queue (optional)                                        |                                                                |
 | `bytes`          | 6   | Justification (optional)                                              | [Definition -def-num-ref-](sect-finality#defn-grandpa-justification) |
-| `bool`           | 7   | Indicates whether the justification is empty (i.e. should be ignored) |                                                                |
+| `bool`           | 7   | Indicates whether the justification is empty (i.e., should be ignored) |                                                                |
 
 :::
 ### -sec-num- Requesting States {#sect-msg-state-request}
 
-The Polkadot Host can request the state in form of a key/value list at a specified block.
+The Polkadot Host can request the state in the form of a key/value list at a specified block.
 
-When receiving state entries from the state response messages ([Definition -def-num-ref-](chap-networking#defn-msg-state-response)), the node can verify the entries with the entry proof (id *1* in *KeyValueStorage*) against the merkle root in the block header (of the block specified in [Definition -def-num-ref-](chap-networking#defn-msg-state-request)). Once the state response message claims that all entries have been sent (id *3* in *KeyValueStorage*), the node can use all collected entry proofs and validate it against the merkle root to confirm that claim.
+When receiving state entries from the state response messages ([Definition -def-num-ref-](chap-networking#defn-msg-state-response)), the node can verify the entries with the entry proof (id *1* in *KeyValueStorage*) against the Merkle root in the block header (of the block specified in [Definition -def-num-ref-](chap-networking#defn-msg-state-request)). Once the state response message claims that all entries have been sent (id *3* in *KeyValueStorage*), the node can use all collected entry proofs and validate them against the Merkle root to confirm that claim.
 
-See the the synchronization chapter for more information ([Chapter -chap-num-ref-](chap-sync)).
+See the synchronization chapter for more information ([Chapter -chap-num-ref-](chap-sync)).
 
 ###### Definition -def-num- State Request {#defn-msg-state-request}
 :::definition
 
 A **state request** is sent to a peer to request the state at a specified block. The message is a single 32-byte Blake2 hash which indicates the block from which the sync should start.
 
-Depending on what substream is used, he remote peer either sends back a state response ([Definition -def-num-ref-](chap-networking#defn-msg-state-response)) on the `/dot/sync/2` substream or a warp sync proof ([Definition -def-num-ref-](chap-networking#defn-warp-sync-proof)) on the `/dot/sync/warp`.
+Depending on what substream is used, the remote peer either sends back a state response ([Definition -def-num-ref-](chap-networking#defn-msg-state-response)) on the `/dot/sync/2` substream or a warp sync proof ([Definition -def-num-ref-](chap-networking#defn-warp-sync-proof)) on the `/dot/sync/warp`.
 
 :::
 ###### Definition -def-num- State Response {#defn-msg-state-response}
@@ -355,7 +486,7 @@ where *KeyValueStateEntry* is of the following format:
 
 | Type                  | Id  | Description                                       |
 |-----------------------|-----|---------------------------------------------------|
-| `bytes`               | 1   | Root of the entry, empty if top level             |
+| `bytes`               | 1   | Root of the entry, empty if top-level             |
 | `repeated StateEntry` | 2   | Collection of key/values                          |
 | `bool`                | 3   | Equal 'true' if there are no more keys to return. |
 
@@ -369,14 +500,14 @@ and *StateEntry*:
 :::
 ### -sec-num- Warp Sync {#sect-msg-warp-sync}
 
-The warp sync protocols allows nodes to retrieve blocks from remote peers where authority set changes occurred. This can be used to speed up synchronization to the latest state.
+The warp sync protocols allow nodes to retrieve blocks from remote peers where authority set changes occurred. This can be used to speed up synchronization to the latest state.
 
-See the the synchronization chapter for more information ([Chapter -chap-num-ref-](chap-sync)).
+See the synchronization chapter for more information ([Chapter -chap-num-ref-](chap-sync)).
 
 ###### Definition -def-num- Warp Sync Proof {#defn-warp-sync-proof}
 :::definition
 
-The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition -def-num-ref-](chap-networking#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section -sec-num-ref-](chap-sync#sect-consensus-message-digest)). It’s a datastructure of the following format:
+The **warp sync proof** message, ${P}$, is sent to the peer that initialized the state request ([Definition -def-num-ref-](chap-networking#defn-msg-state-request)) on the `/dot/sync/warp` substream and contains accumulated proof of multiple authority set changes ([Section -sec-num-ref-](chap-sync#sect-consensus-message-digest)). It’s a data structure of the following format:
 
 $$
 {P}={\left({{f}_{{x}}\ldots}{{f}_{{y}},}{c}\right)}
@@ -418,7 +549,7 @@ Transactions are sent over the `/dot/transactions/1` substream.
 :::
 ### -sec-num- GRANDPA Messages {#sect-msg-grandpa}
 
-The exchange of GRANDPA messages is conducted on the substream. The process for the creation and distributing these messages is described in [Chapter -chap-num-ref-](sect-finality). The underlying messages are specified in this section.
+The exchange of GRANDPA messages is conducted on the substream. The process for the creation and distribution of these messages is described in [Chapter -chap-num-ref-](sect-finality). The underlying messages are specified in this section.
 
 ###### Definition -def-num- Grandpa Gossip Message {#defn-gossip-message}
 :::definition
@@ -512,7 +643,7 @@ This message is the sub-component of the GRANDPA gossip message ([Definition -de
 :::
 #### -sec-num- GRANDPA Neighbor Messages {#sect-grandpa-neighbor-msg}
 
-Neighbor messages are sent to all connected peers but they are not repropagated on reception. A message should be send whenever the messages values change and at least every 5 minutes. The sender should take the recipients state into account and avoid sending messages to peers that are using a different voter sets or are in a different round. Messages received from a future voter set or round can be dropped and ignored.
+Neighbor messages are sent to all connected peers but they are not repropagated on reception. A message should be sent whenever the values of the message change and at least every 5 minutes. The sender should take the recipient's state into account and avoid sending messages to peers that are using different voter sets or are in a different round. Messages received from a future voter set or round can be dropped and ignored.
 
 ###### Definition -def-num- GRANDPA Neighbor Message {#defn-grandpa-neighbor-msg}
 :::definition
@@ -565,5 +696,6 @@ $$
 Where ${B}$ is the highest block which ${v}$ believes to be finalized in round ${r}$ ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)). ${B}'$ is the highest ancestor of all blocks voted on in the arrays of justifications ${{J}_{{{0},\ldots{n}}}^{{{r},\text{pv}}}}{\left({B}\right)}$ and ${{J}_{{{0},\ldots{m}}}^{{{r},\text{pc}}}}{\left({B}\right)}$ ([Definition -def-num-ref-](sect-finality#defn-grandpa-justification)) with the exception of the equivocatory votes.
 
 This message is the sub-component of the GRANDPA Gossip message ([Definition -def-num-ref-](chap-networking#defn-gossip-message)) of type Id *4*.
+
 
 :::

@@ -6,17 +6,17 @@ The Polkadot Protocol differentiates between different classes of Polkadot Hosts
 
 ## -sec-num- Light Client {#sect-client-light}
 
-The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource-constrained environments like browsers, mobile devices, or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on the recent state of the blockchain, and add extrinsics (transactions). It does not maintain the full state, but rather queries the full node on the latest finalized state and verifies the authenticity of the responses trustlessly. Details of specifications focused on Light Clients can be found in [Chapter -chap-num-ref-](sect-lightclient).
+The light client is a mostly passive participant in the protocol. Light clients are designed to work in resource-constrained environments like browsers, mobile devices, or even on-chain. Its main objective is to follow the chain, make queries to the full node on specific information on the recent state of the blockchain, and add extrinsics (transactions). It does not maintain the full state but rather queries the full node on the latest finalized state and verifies the authenticity of the responses trustlessly. Details of specifications focused on Light Clients can be found in [Chapter -chap-num-ref-](sect-lightclient).
 
 ## -sec-num- Full Node {#sect-node-full}
 
-While the full node is still a mostly passive participant of the protocol, they follow the chain by receiving and verifying every block in the chain. It maintains a full state of the blockchain by executing the extrinsics in blocks. Their role in the consesus mechanism is limited to following the chain and not producing the blocks.
+While the full node is still a mostly passive participant of the protocol, they follow the chain by receiving and verifying every block in the chain. It maintains a full state of the blockchain by executing the extrinsics in blocks. Their role in the consensus mechanism is limited to following the chain and not producing the blocks.
 
 - **Functional Requirements:**
 
   1.  The node must populate the state storage with the official genesis state, elaborated further in [Section -sec-num-ref-](id-cryptography-encoding#section-genesis).
 
-  2.  The node should maintain a set of around 50 active peers at any time. New peers can be found using the discovery protocols ([Section -sec-num-ref-](chap-networking#sect-discovery-mechanism))
+  2.  The node should maintain a set of around 50 active peers at any time. New peers can be found using the discovery protocols ([Section -sec-num-ref-](chap-networking#sect-network-bootstrap))
 
   3.  The node should open and maintain the various required streams ([Section -sec-num-ref-](chap-networking#sect-protocols-substreams)) with each of its active peers.
 
