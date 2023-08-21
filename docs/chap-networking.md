@@ -30,14 +30,13 @@ Complete specification of the Polkadot networking protocol relies on the followi
 
 ## -sec-num- Node Identities {#id-node-identities}
 
-Each Polkadot Host node maintains an ED25519 key pair which is used to identify the node. The public key is shared with the rest of the network allowing the nodes to establish secure communication channels.
+Like any other distributed system, each Polkadot Host node has a unique global identifier. This identifier, called `PeerId`, serves as a singular reference to a particular node within the overall network.
+In Polkadot each node is required to maintain its own pair of ED25519 cryptographic keys from which the `PeerId` [is derived](https://curriculum.pl-launchpad.io/curriculum/libp2p/connections/#peer-identity).  
 
-Each node must have its own unique ED25519 key pair. If two or more nodes use the same key, the network will interpret those nodes as a single node, which will result in unspecified behavior. Furthermore, the node’s *PeerId*, as defined in [Definition -def-num-ref-](chap-networking#defn-peer-id), is derived from its public key. *PeerId* is used to identify each node when they are discovered in the course of the discovery mechanism described in [Section -sec-num-ref-](chap-networking#sect-network-bootstrap).
+The Polkadot node’s `PeerId` is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/) but does not fully conform to the specification. In particular, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519. The `PeerId` is built by hashing the [encoded public key](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys) with [multihash](https://github.com/multiformats/multihash) and represented as follows:
 
 ###### Definition -def-num- PeerId {#defn-peer-id}
 :::definition
-
-The Polkadot node’s PeerId, formally referred to as ${P}_{{{i}{d}}}$, is derived from the ED25519 public key and is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/), but does not fully conform to the specification. Specifically, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519.
 
 The byte representation of the PeerId is always of the following bytes in this exact order:
 
