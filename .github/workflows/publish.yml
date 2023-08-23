@@ -21,12 +21,12 @@ jobs:
         run: |
           git submodule update --init --recursive
           git submodule update --remote
-      - name: Build PDF
+      - name: Build
         run: |
-          cd website && npm i && npm run build && npm run serve &; ./scripts/build_pdf.sh; cd ..
+          cd website && npm i && npm run build && npm run build_pdf && cd ..
       - name: Publish
         run: |
           git config --global user.email "grants-deployer@users.noreply.github.com"
           git config --global user.name "grants-deployer"
           echo "machine github.com login grants-deployer password ${{ secrets.ACCESS_KEY }}" > ~/.netrc
-          cd website && npm run build && GIT_USER=grants-deployer PUBLISHING=true npm run deploy
+          cd website && GIT_USER=grants-deployer PUBLISHING=true npm run deploy
