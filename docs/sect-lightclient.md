@@ -12,7 +12,7 @@ We list the requirements of a Light Client categorized along the three dimension
 
 - **Functional Requirements:**
 
-  1.  Update state ([Section -sec-num-ref-](chap-state#sect-state-storage)) to reflect the latest view of the blockchain via synchronization with full nodes.
+  1.  Synchronize with full nodes to obtain the latest finalized Block Header [Definition -def-num-ref-](chap-state#defn-block-header), and in turn, the state trie root.
 
   2.  (Optional) Verify validity of runtime transitions ([Section -sec-num-ref-](chap-state#sect-runtime-interaction)).
 
