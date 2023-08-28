@@ -649,7 +649,7 @@ ChainSpec Extensions are additional parameters customisable from the chainspec a
 
 :::definition
 
-**BadBlocks** describes a list of block header hashes that are known apriori to be bad (not belonging to canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
+**BadBlocks** describes a list of block header hashes that are known a priori to be bad (not belonging to canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
 
 $$
 {badBlocks}={\left({b}_{{0}},\ldots{b}_{{n}}\right)}
