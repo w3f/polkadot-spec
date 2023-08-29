@@ -206,9 +206,10 @@ If any link is broken, the console will show a warning.<br/>
 
 Refer to [`checkBrokenInternalLinks/index.ts`](https://github.com/w3f/polkadot-spec-website/tree/main/plugins/checkBrokenInternalLinks/index.ts) and [`checkBrokenExternalLinks/index.ts`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild/checkBrokenExternalLinks/index.ts).
 
-### Resources
+## Resources
 
 Docusaurus docs: https://docusaurus.io/docs/category/guides
+
 Kaitai docs: https://doc.kaitai.io/user_guide.html
 
 ## License
