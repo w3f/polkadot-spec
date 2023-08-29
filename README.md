@@ -6,6 +6,14 @@ The latest releases of the *Polkadot Protocol Specification* can be found on [sp
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
+## Submodules
+
+This is the main repository for the Polkadot Protocol Spec. Here you can find other two submodules:
+- `polkadot-spec-website`, in the `/website` path, that links to https://github.com/w3f/polkadot-spec-website, the repository that contains everything needed to build the website (Docusaurus structure);
+- `Implementation-Guide`, in the `/docs/implementation-guide` path, that links to https://github.com/w3f/Implementation-Guide, where are located all the markdown files for the Implementation Guide.
+
+Refer to the `.gitmodules` file in this repo.
+
 ## Local Development
 
 To clone, build and serve the website locally, run the following commands:
@@ -17,6 +25,7 @@ git submodule update --remote
 cd website
 npm i
 npm run build # or build_with_kaitai to also rebuild kaitai SVG files
+npm run build_pdf # if you want to see the new PDFs version (if you edited the docs)
 npm run serve
 ```
 
