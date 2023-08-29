@@ -206,6 +206,11 @@ If any link is broken, the console will show a warning.<br/>
 
 Refer to [`checkBrokenInternalLinks/index.ts`](https://github.com/w3f/polkadot-spec-website/tree/main/plugins/checkBrokenInternalLinks/index.ts) and [`checkBrokenExternalLinks/index.ts`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild/checkBrokenExternalLinks/index.ts).
 
+### Resources
+
+Docusaurus docs: https://docusaurus.io/docs/category/guides
+Kaitai docs: https://doc.kaitai.io/user_guide.html
+
 ## License
 
 Any code in this repository is licensed under the [GPL 3.0](https://www.gnu.org/licenses/gpl-3.0.en.html), and any documentation or specification is licensed under the [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/).
