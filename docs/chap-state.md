@@ -583,7 +583,7 @@ $$
 {H}:{\mathbb{{B}}}\rightarrow{{U}_{{{i}\rightarrow{0}}}^{{{32}}}}{\mathbb{{B}}}_{{32}}
 $$
 $$
-{H}{\left({N}\right)}:{\left\lbrace\begin{matrix}{v}_{{N}}&{\left|{\left|{v}_{{N}}\right|}\right|}<{32}\ \text{ and }\ {N}\ne{R}\\\text{Blake2b}{\left({v}_{{n}}\right)}&{\left|{\left|{v}_{{N}}\right|}\right|}\ge{32}\ \text{ or }\ {N}={R}\end{matrix}\right.}
+{H}{\left({N}\right)}:{\left\lbrace\begin{matrix}{v}_{{N}}&{\left|{\left|{v}_{{N}}\right|}\right|}\le{32}\ \text{ and }\ {N}\ne{R}\\\text{Blake2b}{\left({v}_{{n}}\right)}&{\left|{\left|{v}_{{N}}\right|}\right|}>{32}\ \text{ or }\ {N}={R}\end{matrix}\right.}
 $$
 
 Where ${v}_{{N}}$ is the node value of ${N}$ ([Definition -def-num-ref-](chap-state#defn-node-value)) and ${R}$ is the root of the trie. The **Merkle hash** of the trie is defined to be ${H}{\left({R}\right)}$.
