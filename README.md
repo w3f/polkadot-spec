@@ -1,10 +1,47 @@
 # Polkadot Protocol Specification
 
-Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository contains the official specification for the Polkadot Protocol.
- 
-The latest releases of the *Polkadot Protocol Specification* can be found on [spec.polkadot.network](https://spec.polkadot.network) or on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
+- [Introduction](#intorduction)
+- [Process](#process)
+- [Local Development](#local-development)
+- [Formatting](#formatting)
+  - [LaTeX](#latex)
+  - [Numeration System](#numeration-system)
+  - [Chapters](#chapters)
+  - [Sections](#sections)
+  - [Definitions](#definitions)
+  - [Algorithms](#algorithms)
+  - [Tables and Images](#tables-and-images)
+  - [References](#references) 
+  - [Bibliography](#bibliography)
+  - [Broken Links](#broken-links)
+- [License](#license) 
 
-This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
+## Intorduction 
+
+This repository contains the official specification for the [Polkadot Protocol](https://polkadot.network/). The latest releases of the *Polkadot Protocol Specification* can be found on [spec.polkadot.network](https://spec.polkadot.network) or our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
+
+## Process
+
+Everyone, but specifically implementers and members of the [Technical Fellowship](https://wiki.polkadot.network/docs/learn-polkadot-opengov#the-technical-fellowship), are welcome to open PRs to this repo and contribute to the specification. A PR is merged as soon as two members of the Spec Committee accept the PR.  
+
+### Spec Committee
+
+The Spec Committee consists of Researchers, Researcher Engineers, and Implementers of the Polkadot Protocol that actively contribute (= opening/contributing to PRs or issues regarding the spec) to the specification. For now and compared to the [Technical Fellowship](https://github.com/polkadot-fellows/manifesto), the Spec Committee's responsibility is clearly defined as maintaining the specification of the protocol. In case of inactivity for three months, members will be removed again. 
+
+Web3 Foundation
+- [Bhargav Bhatt](https://github.com/bhargavbh)
+- [David Hawig](https://github.com/Noc2)
+- [Seyed Lavasani](https://github.com/drskalman)
+- [Heverson B. Ribeiro](https://github.com/heversonbr)
+
+Quadrivium
+- [Kamil Salakhiev](https://github.com/kamilsa)
+
+Smoldot
+- [Pierre Krieger](https://github.com/tomaka)
+
+Parity 
+- [Fateme Shirazi](https://github.com/FatemeShirazi)
 
 ## Local Development
 
@@ -20,23 +57,23 @@ npm run build # or build_with_kaitai to also rebuild kaitai SVG files
 npm run serve
 ```
 
-If you already have the repo cloned, remember to update it and the submodule before doing any changes:
+If you already have the repo cloned, remember to update it and the submodule before making any changes:
 
 ```bash
 git pull
 git submodule update --remote
 ```
 
-Because of the "complex" build, unfortunately you can't see the changes in real time, if you directly edit the `docs` folder. There are two workarounds:
-- use a Markdown plugin or editor (e.g. the extension [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) for VSCode) to see the changes in real time. You won't be able to see the placeholders rendered and other elements, but you'll be able to render the markdown and latex;
+Because of the "complex" build, you can't see the changes in real time if you directly edit the `docs` folder. There are two workarounds:
+- use a Markdown plugin or editor (e.g., the extension [Markdown All in One](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one) for VSCode) to see the changes in real time. You won't be able to see the placeholders rendered and other elements, but you'll be able to render the markdown and latex;
   
-- build the website a first time, then run `npm run start` instead of `npm run serve`, and edit the files inside the `website/docs` folder. This will allow you to see the changes in real time, but you have to remember to bring the changes inside the `docs` folder before committing. Also, in this way, you can't put the placeholders and other elements inside the markdown files of `website/docs` as they wouldn't be rendered.
-
-## Contributing
+- build the website the first time, then run `npm run start` instead of `npm run serve,` and edit the files inside the `website/docs` folder. This will allow you to see the changes in real time, but you have to remember to bring the changes inside the `docs` folder before committing. Also, in this way, you can't put the placeholders and other elements inside the markdown files of `website/docs` as they wouldn't be rendered.
 
 You can find the markdown files inside the [`docs`](docs) folder.
 
 When building, the scripts inside [`preBuild`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild) will generate a `docs` folder, from which Docusaurus will render the website. Then, the rendered content will be modified by the [`plugins`](https://github.com/w3f/polkadot-spec-website/tree/main/plugins) in the browser.
+
+## Formatting 
 
 ### LaTeX
 
@@ -178,7 +215,7 @@ or
 ```md
 ###### Image -img-num- Name {#img-name}
 ```
-For these two entities you won't need to use any component or admonition.
+For these two entities, you won't need to use any component or admonition.
 
 #### References
 
@@ -200,8 +237,8 @@ Automatically, the bibliography will be generated at the end of the page.
 
 ### Broken Links
 
-During the `preBuild`, the external links in the markdown files will be checked.<br/>
-After the `build`, the internal links will be checked.<br/>
+During the `preBuild,` the external links in the markdown files will be checked.<br/>
+After the `build,` the internal links will be checked.<br/>
 If any link is broken, the console will show a warning.<br/>
 
 Refer to [`checkBrokenInternalLinks/index.ts`](https://github.com/w3f/polkadot-spec-website/tree/main/plugins/checkBrokenInternalLinks/index.ts) and [`checkBrokenExternalLinks/index.ts`](https://github.com/w3f/polkadot-spec-website/tree/main/preBuild/checkBrokenExternalLinks/index.ts).
