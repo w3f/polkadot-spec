@@ -246,15 +246,22 @@ Various types of keys are used in Polkadot to prove the identity of the actors i
 | ed25519    | The ed25519 signature complies with [@josefsson_edwards-curve_2017] except for the verification process which adhere to Ed25519 Zebra variant specified in [@devalence_ed25519zebra_2020]. In short, the signature point is not assumed to be in the prime-ordered subgroup group. As such, the verifier must explicitly clear the cofactor during the course of verifying the signature equation. |
 | secp256k1  | Only for outgoing transfer transactions. |
 
-An account key can be used to sign transactions among other accounts and balance-related functions. There are two prominent subcategories of account keys, namely "stash keys" and "controller keys", each being used for a different function. Keys defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-account-key), [Definition -def-num-ref-](id-cryptography-encoding#defn-stash-key) and [Definition -def-num-ref-](id-cryptography-encoding#defn-controller-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction, as defined in [Section -sec-num-ref-](id-cryptography-encoding#sect-creating-controller-key) and [Section -sec-num-ref-](id-cryptography-encoding#sect-certifying-keys) respectively.
+An account key can be used to sign transactions among other accounts and balance-related functions. Keys defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-account-key) and [Definition -def-num-ref-](id-cryptography-encoding#defn-stash-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction, as defined in [Section -sec-num-ref-](id-cryptography-encoding#sect-certifying-keys).
 :::
 
 ###### Definition -def-num- Stash Key {#defn-stash-key}
 :::definition
 
-The **Stash key** is a type of account key that holds funds bonded for staking (described in [Section -sec-num-ref-](id-cryptography-encoding#sect-staking-funds)) to a particular controller key (defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-controller-key)). As a result, one may actively participate with a stash key, keeping the stash key offline in a secure location. It can also be used to designate a Proxy account to vote in governance proposals, as described in [Section -sec-num-ref-](id-cryptography-encoding#sect-creating-controller-key). The Stash key holds the majority of the users’ funds and should neither be shared with anyone, saved on an online device, nor used to submit extrinsics.
-
+The **Stash key** is a type of account that is intended to hold a large amount of funds. As a result, one may actively participate with a stash key, keeping the stash key offline in a secure location. It can also be used to designate a Proxy account to vote in governance proposals. The Stash key holds the majority of the users’ funds and should neither be shared with anyone, saved on an online device, nor used to submit extrinsics.
 :::
+
+:::info Controller accounts are deprecated
+Controller accounts and controller keys are no longer supported. 
+For more information, see
+[this discussion](https://forum.polkadot.network/t/staking-controller-deprecation-plan-staking-ui-leads-comms/2748).
+The following definition will be remove soon.
+:::
+
 ###### Definition -def-num- Controller Key {#defn-controller-key}
 :::definition
 
@@ -284,27 +291,15 @@ Session keys must be accessible by certain Polkadot Host APIs defined in [Append
 TBH
 :::
 
-#### -sec-num- Creating a Controller key {#sect-creating-controller-key}
-
-:::info
-TBH
-:::
-
 #### -sec-num- Designating a proxy for voting {#sect-designating-proxy}
 
 :::info
 TBH
 :::
 
-#### -sec-num- Controller settings {#sect-controller-settings}
 
-:::info
-TBH
-:::
 
-#### -sec-num- Certifying keys {#sect-certifying-keys}
 
-Due to security considerations and Runtime upgrades, the session keys are supposed to be changed regularly. As such, the new session keys need to be certified by a controller key before putting them into use. The controller only needs to create a certificate by signing a session public key and broadcasting this certificate via an extrinsic. \[TODO: spec the detail of the data structure of the certificate etc.\]
 
 ## -sec-num- Auxiliary Encodings {#chapter-encoding}
 
