@@ -238,7 +238,7 @@ Various types of keys are used in Polkadot to prove the identity of the actors i
 
 **Account key ${\left({s}{k}^{{a}},{p}{k}^{{a}}\right)}$** is a key pair of type of either of the schemes in the following table:
 
-###### Table -tab-num- List of the public key scheme which can be used for an account key {#tabl-account-key-scheme}
+###### Table -tab-num- List of the public key scheme that can be used for an account key {#tabl-account-key-scheme}
 
 | Key Scheme | Description |
 |------------|-------------|
@@ -252,14 +252,14 @@ An account key can be used to sign transactions among other accounts and balance
 ###### Definition -def-num- Stash Key {#defn-stash-key}
 :::definition
 
-The **Stash key** is a type of account that is intended to hold a large amount of funds. As a result, one may actively participate with a stash key, keeping the stash key offline in a secure location. It can also be used to designate a Proxy account to vote in governance proposals. The Stash key holds the majority of the users’ funds and should neither be shared with anyone, saved on an online device, nor used to submit extrinsics.
+The **Stash key** is a type of account that is intended to hold a large amount of funds. As a result, one may actively participate with a stash key, keeping the stash key offline in a secure location. It can also be used to designate a Proxy account to vote in governance proposals. 
 :::
 
 :::info Controller accounts are deprecated
 Controller accounts and controller keys are no longer supported. 
 For more information, see [Polkadot wiki](https://wiki.polkadot.network/docs/learn-controller) or a more  detailed discussion
 [ here](https://forum.polkadot.network/t/staking-controller-deprecation-plan-staking-ui-leads-comms/2748).
-The following definition will be remove soon.
+The following definition will be removed soon.
 :::
 
 ###### Definition -def-num- Controller Key {#defn-controller-key}
