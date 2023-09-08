@@ -257,8 +257,9 @@ The **Stash key** is a type of account that is intended to hold a large amount o
 
 :::info Controller accounts are deprecated
 Controller accounts and controller keys are no longer supported. 
-For more information, see [Polkadot wiki](https://wiki.polkadot.network/docs/learn-controller) or a more  detailed discussion
-[ here](https://forum.polkadot.network/t/staking-controller-deprecation-plan-staking-ui-leads-comms/2748).
+For more information about the deprecation, see the [Polkadot wiki](https://wiki.polkadot.network/docs/learn-controller) or a more detailed discussion in the
+[Polkadot forum](https://forum.polkadot.network/t/staking-controller-deprecation-plan-staking-ui-leads-comms/2748).
+If you want to know how to set up Stash and Staking Proxy Keys, you can also check the[Polkadot wiki](https://wiki.polkadot.network/docs/maintain-guides-how-to-nominate-kusama#setting-up-stash-and-staking-proxy-keys)
 The following definition will be removed soon.
 :::
 
