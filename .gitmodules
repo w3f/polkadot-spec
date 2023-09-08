@@ -1,8 +1,8 @@
 [submodule "website"]
 	path = website
 	url = https://github.com/w3f/polkadot-spec-website
-	branch = split
+	branch = spec-guide-split
 [submodule "implementation-guide"]
 	path = docs/implementation-guide
 	url = https://github.com/w3f/Implementation-Guide
-	branch = dev
+	branch = spec-guide-split
