@@ -14,7 +14,7 @@ This section describes all Runtime API functions alongside their arguments and t
 
 ### -sec-num- JSON-RPC API for external services {#sect-json-rpc-api}
 
-Polkadot Host implementers are encouraged to implement an API in order for external, third-party services to interact with the node. The [JSON-RPC Interface for Polkadot Nodes](https://github.com/w3f/PSPs/blob/master/PSPs/drafts/psp-6.md) (PSP6) is a Polkadot Standard Proposal for such an API and makes it easier to integrate the node with existing tools available in the Polkadot ecosystem, such as [polkadot.js.org](https://polkadot.js.org/). The Runtime API has a few modules designed specifically for use in the official RPC API.
+Polkadot Host implementers are encouraged to implement an API in order for external, third-party services to interact with the node. The [JSON-RPC Interface for Polkadot Nodes](https://github.com/w3f/PCPs/blob/master/PCPs/drafts/pcp-6.md) (PCP6) is a Polkadot Standard Proposal for such an API and makes it easier to integrate the node with existing tools available in the Polkadot ecosystem, such as [polkadot.js.org](https://polkadot.js.org/). The Runtime API has a few modules designed specifically for use in the official RPC API.
 
 ## -sec-num- Runtime Constants {#id-runtime-constants}
 
