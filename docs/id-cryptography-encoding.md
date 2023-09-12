@@ -692,7 +692,7 @@ The Polkadot genesis header is a data structure conforming to block header forma
 | `parent_hash`      | *0*                                                                                                                                 |
 | `number`           | *0*                                                                                                                                 |
 | `state_root`       | Merkle hash of the state storage trie ([Definition -def-num-ref-](chap-state#defn-merkle-value)) after inserting the genesis state in it. |
-| `extrinsics_root`  | *0*                                                                                                                                 |
+| `extrinsics_root`  | Merkle hash of an empty trie: $\text{Blake2b}{\left(0_{\mathbb{B}_1}\right)}$                                                       |
 | `digest`           | *0*                                                                                                                                 |
 
 :::
