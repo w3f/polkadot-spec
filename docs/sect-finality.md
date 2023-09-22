@@ -488,26 +488,27 @@ where ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{
 ## -sec-num- Bridge design (BEEFY) {#sect-grandpa-beefy}
 
 :::caution
-The BEEFY protocol is currently in early development and subject to change. The specification is Work-In-Progress.
+The BEEFY protocol specifications are Work-In-Progress. It is currently being tested on test-nets like Rococco and has not yet been deployed on Polkadot. 
+
 :::
 
-The BEEFY (Bridge Efficiency Enabling Finality Yielder) is a secondary protocol to GRANDPA to support efficient bridging between the Polkadot network (relay chain) and remote, segregated blockchains, such as Ethereum, which were not built with the Polkadot interchain operability in mind. BEEFY’s aim is to efficiently follow a chain that has GRANDPA finality, a finality gadget created for Substrate/Polkadot ecosystem. This is useful for bridges (e.g., Polkadot->Ethereum), where a chain can follow another chain and light clients suitable for low storage devices such as mobile phones.
+The BEEFY (Bridge Efficiency Enabling Finality Yielder) is a secondary protocol to GRANDPA to support efficient bridging between the Polkadot network (relay chain) and remote, segregated blockchains, such as Ethereum, which were not built with the Polkadot interchain operability in mind. BEEFY’s aim is to enable clients to efficiently follow a chain that has GRANDPA finality, a finality gadget created for Substrate/Polkadot ecosystem. This is useful for bridges (e.g., Polkadot->Ethereum), where a chain can follow another chain and light clients suitable for low storage devices such as mobile phones.
 
 The protocol allows participants of the remote network to verify finality proofs created by the Polkadot relay chain validators. In other words: clients in the target network (for e.g., Ethereum) can verify that the Polkadot network is at a specific state.
 
 Storing all the information necessary to verify the state of the remote chain, such as the block headers, is too expensive. BEEFY stores the information in a space-efficient way and clients can request additional information over the protocol.
 
 ### -sec-num- Motivation {#id-motivation-beefy-1}
-A client could just follow GRANDPA using GRANDPA justifications, sets of signatures from validators. This is used for the substrate-substrate bridge and in light clients such as the Substrate connect browser extension. The main issue with this is that GRANDPA justifications are large and that they are expensive to verify on other chains like Ethereum that do not use the same cryptography. It is not easy to modify GRANDPA to make it better for this. Certain design decisions, like validators voting for different blocks in a justification make this hard. We also don't want to use slower cryptography in GRANDPA. Thus we are adding an extra layer of finality, BEEFY, that will allow lighter bridges and light clients of Polkadot.
+A client could just follow GRANDPA using GRANDPA justifications, sets of signatures from validators. This is used for some substrate-substrate bridge and in light clients such as the Substrate connect browser extension. GRANDPA was designed for fast and secure finality. Certain design decisions, like validators voting for different blocks in a justification adn using ED25519 signatures allow fast finality. However, GRANDPA justifications are large and are expensive to verify on other chains like Ethereum that do not support some cryptographic signature schemes. Thus, BEEFY adds an extra layer of finality that allows lighter bridges and clients for Polkadot.
 
 To summarise, the goals of BEEFY are:
-- Allow customisation of crypto to adapt for different targets. 
-- Minimize the size of the "signed payload" and the finality proof.
-- Unify data types and use backward-compatible versioning so that the protocol can be extended (additional payload, different crypto) without breaking existing light clients.
+- Allow customisation of signature schemes to adapt for different target chains. 
+- Minimize the size of the finality proof, and effort required by light client to follow finality. 
+- Unify data types and use backward-compatible versioning so that the protocol can be extended (additional payload, different signature schemes) without breaking existing light clients.
 
 ### -sec-num- Protocol Overview {#id-overview-beefy-1}
 Since BEEFY runs on top of GRANDPA, similarly to how GRANDPA is lagging behind the best produced (non-finalized) block, BEEFY finalised block lags behind the best GRANDPA (finalised) block. 
-- BEEFY validator set is the same as GRANDPA's, however they might be identified by different session keys. 
+- BEEFY validator set is the same as GRANDPA's, however they might be using different type of session key to sign BEEFY messages. 
 - From a single validator perspective, BEEFY has at most one active voting round. 
 - Since GRANDPA validators are reaching finality, we assume they are online and well-connected and have a similar view of the state of the blockchain.
 
@@ -515,11 +516,11 @@ BEEFY consists of two components:
 
 a. **Consensus Extension** on GRANDPA finalisation that is a voting round. 
 
-The consensus extension serves to have smaller consensus justification than GRANDPA and alternative cryptography which helps the second part of BEEFY, the light client protocol described below. 
+The consensus extension serves to have smaller consensus justification than GRANDPA and alternative cryptography which helps the light client side of BEEFY protocol described below. 
 
-b. **Light client** protocol for convincing the other chain/device efficiently about this vote.
+b. **Light client** protocol for convincing the other chain/device efficiently about the finality vote.
 
-In the BEEFY light client, a prover, a full node or bridge relayer, wants to convince a verifier, a light client that may be on-chain, of the outcome of a BEEFY vote. The prover has access to all voting data from the BEEFY voting round. In the light client part, the prover may generate a proof and send it to the verifier or they may engage in an interactive protocol with several rounds of communication.
+In the BEEFY light client, a prover, a full node or bridge relayer, wants to convince a verifier, a light client that may be a bridge implementation on the target chain, of the outcome of a BEEFY vote. The prover has access to all voting data from the BEEFY voting round. In the light client part, the prover may generate a proof and send it to the verifier or they may engage in an interactive protocol with several rounds of communication.
 
 
 ### -sec-num- Preliminaries {#id-preliminaries-2}
