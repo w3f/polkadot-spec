@@ -750,12 +750,11 @@ sequenceDiagram
     participant R as Relayer
     participant L as Light Client
     participant S as Storage
-    R->>L: SubmitInitial(CommitHash, Bitfield)
-    Note right of L: Block No. = N
-    Note over L: Checks Bitfield.len() > 2/3 validatorSet.len() 
+    R->>L: SubmitInitial(Commitment, Bitfield, ValidatorProof)
+    Note right of L: Block No. is N
+    Note over L: Check 1s set in Bitfield > 2/3 validatorSet.len() 
     L->>S: Mutate Tickets
-    Note right of S: Tickets[h(sender,CommitHash)]= <br> {sender, n, vset.len(),0,h(Bitfield)}
-
+    Note right of S: Tickets[h(sender,hash(Commitment))]= <br> {sender, n, vset.len(),0,h(Bitfield)}
     R->>L: CommitPrevRandao(commitHash)
     Note right of L: Block No. = N' 
     Note over L: Check for Delay <br> N'-N between <br> [randomCommitDelay- randomCommitExpiration]
