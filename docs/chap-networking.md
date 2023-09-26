@@ -31,7 +31,7 @@ Complete specification of the Polkadot networking protocol relies on the followi
 ## -sec-num- Node Identities {#id-node-identities}
 
 Like any other distributed system, each Polkadot Host node has a unique global identifier. This identifier, called `PeerId`, serves as a singular reference to a particular node within the overall network.
-In Polkadot each node is required to maintain its own pair of ED25519 cryptographic keys from which the `PeerId` [is derived](https://curriculum.pl-launchpad.io/curriculum/libp2p/connections/#peer-identity).  
+In Polkadot each node is required to maintain its own pair of ED25519 cryptographic keys from which the `PeerId` [is derived](https://pl-launchpad.io/curriculum/libp2p/connections/#peer-identity).  
 
 The Polkadot node’s `PeerId` is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/) but does not fully conform to the specification. In particular, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519. The `PeerId` is built by hashing the [encoded public key](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys) with [multihash](https://github.com/multiformats/multihash) and represented as follows:
 
