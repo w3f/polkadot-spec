@@ -246,7 +246,7 @@ Various types of keys are used in Polkadot to prove the identity of the actors i
 | ed25519    | The ed25519 signature complies with [@josefsson_edwards-curve_2017] except for the verification process which adhere to Ed25519 Zebra variant specified in [@devalence_ed25519zebra_2020]. In short, the signature point is not assumed to be in the prime-ordered subgroup group. As such, the verifier must explicitly clear the cofactor during the course of verifying the signature equation. |
 | secp256k1  | Only for outgoing transfer transactions. |
 
-An account key can be used to sign transactions among other accounts and balance-related functions. Keys defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-account-key) and [Definition -def-num-ref-](id-cryptography-encoding#defn-stash-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction, as defined in [Section -sec-num-ref-](id-cryptography-encoding#sect-certifying-keys).
+An account key can be used to sign transactions among other accounts and balance-related functions. Keys defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-account-key) and [Definition -def-num-ref-](id-cryptography-encoding#defn-stash-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction.
 :::
 
 ###### Definition -def-num- Stash Key {#defn-stash-key}
@@ -266,7 +266,7 @@ The following definition will be removed soon.
 ###### Definition -def-num- Controller Key {#defn-controller-key}
 :::definition
 
-The **Controller key** is a type of account key that acts on behalf of the Stash account. It signs transactions that make decisions regarding the nomination and the validation of the other keys. It is a key that will be in direct control of a user and should mostly be kept offline, used to submit manual extrinsics. It sets preferences like payout account and commission, as described in [Section -sec-num-ref-](id-cryptography-encoding#sect-controller-settings). If used for a validator, it certifies the session keys, as described in [Section -sec-num-ref-](id-cryptography-encoding#sect-certifying-keys). It only needs the required funds to pay transaction fees \[TODO: key needing fund needs to be defined\].
+The **Controller key** is a type of account key that acts on behalf of the Stash account. It signs transactions that make decisions regarding the nomination and the validation of the other keys. It is a key that will be in direct control of a user and should mostly be kept offline, used to submit manual extrinsics. It sets preferences like payout account and commission. If used for a validator, it certifies the session keys. It only needs the required funds to pay transaction fees \[TODO: key needing fund needs to be defined\].
 
 :::
 ###### Definition -def-num- Session Keys {#defn-session-key}
