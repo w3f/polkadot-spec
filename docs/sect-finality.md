@@ -740,11 +740,14 @@ it's suggested for implementations to introduce a `min_delta` parameter which wi
 `best_beefy + MAX(min_delta, NEXT_POWER_OF_TWO(...))`, so we start a new round only if the
 power-of-two component is greater than the min delta. Note that if `round_number > best_grandpa` the validators are not expected to start any round (TODO: is this precondition possible?).
 
+#### BEEFY Light Client
+
+A light client following BEEFY could request $N/3 +1$ signatures to be checked, where $N$ is the number of validators on Polkadot. Assuming a maximum of $N/3$ malicious validators, the light client can be certain of the payloads finality if all the signatures it requested are valid. 
 
 #### Subsampling Based Light Client Protocol
 
 It is an interactive protocol between the light-client (verifier) and the relayer (prover) to convince the Light Client with high probability that the payload sent by prover is signed by honest Polkadot validators. 
-A high-level overview of the multi-round interaction between the parties is described in this message sequencing chart. 
+An instantiation of the random sampling protocol as a Bridge between Ethereum and Polkadot, where the light client is a smart contract running on Ethereum is described below as a message sequencing chart. It uses the RANDAO randomness beacon of Ethereum to randomly query signatures and convinces itself with high probability that the payload received is authentic.  
 
 
 ```mermaid
@@ -755,21 +758,22 @@ sequenceDiagram
     R->>L: SubmitInitial(Commitment, Bitfield, ValidatorProof)
     Note right of L: Block No. is N
     Note over L: Check 1s set in Bitfield > 2/3 validatorSet.len() 
+    Note over L: Check validatorProof signature matches <br> Sender's Publick Key on hash(commitment)
     L->>S: Mutate Tickets
-    Note right of S: Tickets[h(sender,hash(Commitment))]= <br> {sender, n, vset.len(),0,h(Bitfield)}
+    Note right of S: Tickets[h(sender,hash(Commitment))]= <br> {sender, N, vset.len(),0,h(Bitfield)}
     R->>L: CommitPrevRandao(commitHash)
     Note right of L: Block No. = N' 
-    Note over L: Check for Delay <br> N'-N between <br> [randomCommitDelay- randomCommitExpiration]
+    Note over L: Check for Delay: <br> randaoCommitDelay < N'-N  <br> <= randaoCommitDelay + randaoCommitExpiration
     L->>S: Mutate Tickets
     Note right of S: Tickets[h(sender,CommitHash)]= <br> {sender, n, vset.len(),N'.prevRandao,h(Bitfield)}
     R->>L: CreateFinalBitfield(commitHash, Bitfield) 
-    L->>S: Fetches block.prevrandao 
+    L->>S: Fetches N'.prevrandao 
     activate S
     S->>L: from Tickets[h(sender,commitHash)]
     deactivate S
-    Note over L: Compute subsample with seed <br> as vlock.prevrandao
+    Note over L: Compute _subsampBitfield with seed <br> as N'.prevRandao
     L->>R: SubSample Bitfield (_subsampbitfield)
-    Note over R: gathers proofs [p1,..pk] corresponding to <br> requested _subsambitfield validators
+    Note over R: gathers proofs [p1,..pk] corresponding to <br> requested _subsamplebitfield validators
     R->>L: SubmitFinal(Commitment,Bitfield, [p1,..,pk])
     Note over L: Verify Commitment, Verify Proofs <br> of subsampled validators
     L->S: Mutate LatestBeefyBlock, LatestMMRRoothash
