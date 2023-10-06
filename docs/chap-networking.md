@@ -8,9 +8,7 @@ This chapter, in its current form, is incomplete and considered work in progress
 
 ## -sec-num- Introduction {#id-introduction-2}
 
-The Polkadot network is decentralized and does not rely on any central authority or entity to achieve its fullest potential of provided functionality. The networking protocol is based on a family of open protocols, including protocol implemented *libp2p*, e.g., the distributed Kademlia hash table, which is used for peer discovery.
-
-This chapter walks through the behavior of the networking implementation of the Polkadot Host and defines the network messages. The implementation details of the *libp2p* protocols used are specified in external sources as described in [Section -sec-num-ref-](chap-networking#sect-networking-external-docs)
+The Polkadot network is a decentralized network based on a family of open libraries and protocols, including: libp2p[@libp2p], Kademlia[@kademlia], Noise[@noise], Protocol Buffers[@protobuf]. This chapter walks through the behavior of the networking implementation of the Polkadot Host and defines the network messages. The implementation details of the libp2p[@libp2p] protocols can be found on the  [libp2p specification](https://github.com/libp2p/specs) website.
 
 ## -sec-num- External Documentation {#sect-networking-external-docs}
 
