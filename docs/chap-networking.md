@@ -10,22 +10,6 @@ This chapter, in its current form, is incomplete and considered work in progress
 
 The Polkadot network is a decentralized network based on a family of open libraries and protocols, including: libp2p[@libp2p], Kademlia[@kademlia], Noise[@noise], Protocol Buffers[@protobuf]. This chapter walks through the behavior of the networking implementation of the Polkadot Host and defines the network messages. The implementation details of the libp2p[@libp2p] protocols can be found on the  [libp2p specification](https://github.com/libp2p/specs) website.
 
-## -sec-num- External Documentation {#sect-networking-external-docs}
-
-Complete specification of the Polkadot networking protocol relies on the following external protocols:
-
-- [libp2p](https://github.com/libp2p/specs) - *libp2p* is a modular peer-to-peer networking stack composed of many modules and different parts. includes the multiplexing protocols and
-
-- [libp2p addressing](https://docs.libp2p.io/concepts/addressing/) - The Polkadot Host uses the *libp2p* addressing system to identify and connect to peers.
-
-- [Kademlia](https://en.wikipedia.org/wiki/Kademlia) - *Kademlia* is a distributed hash table for decentralized peer-to-peer networks. The Polkadot Host uses Kademlia for peer discovery.
-
-- [Noise](https://noiseprotocol.org/) - The *Noise* protocol is a framework for building cryptographic protocols. The Polkadot Host uses Noise to establish the encryption layer to remote peers.
-
-- [yamux](https://docs.libp2p.io/concepts/stream-multiplexing/#yamux) - *yamux* is a multiplexing protocol developed by HashiCorp. It is the de-facto standard for the Polkadot Host. [Section -sec-num-ref-](chap-networking#sect-protocols-substreams) describes the subprotocol in more detail.
-
-- [Protocol Buffers](https://developers.google.com/protocol-buffers/docs/reference/proto3-spec) - Protocol Buffers is a language-neutral, platform-neutral mechanism for serializing structured data and is developed by Google. The Polkadot Host uses Protocol Buffers to serialize specific messages, as clarified in [Section -sec-num-ref-](chap-networking#sect-network-messages).
-
 ## -sec-num- Node Identities {#id-node-identities}
 
 Like any other distributed system, each Polkadot Host node has a unique global identifier. This identifier, called `PeerId`, serves as a singular reference to a particular node within the overall network.
