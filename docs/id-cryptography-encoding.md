@@ -238,7 +238,7 @@ Various types of keys are used in Polkadot to prove the identity of the actors i
 
 **Account key ${\left({s}{k}^{{a}},{p}{k}^{{a}}\right)}$** is a key pair of type of either of the schemes in the following table:
 
-###### Table -tab-num- List of the public key scheme which can be used for an account key {#tabl-account-key-scheme}
+###### Table -tab-num- List of the public key scheme that can be used for an account key {#tabl-account-key-scheme}
 
 | Key Scheme | Description |
 |------------|-------------|
@@ -246,19 +246,27 @@ Various types of keys are used in Polkadot to prove the identity of the actors i
 | ed25519    | The ed25519 signature complies with [@josefsson_edwards-curve_2017] except for the verification process which adhere to Ed25519 Zebra variant specified in [@devalence_ed25519zebra_2020]. In short, the signature point is not assumed to be in the prime-ordered subgroup group. As such, the verifier must explicitly clear the cofactor during the course of verifying the signature equation. |
 | secp256k1  | Only for outgoing transfer transactions. |
 
-An account key can be used to sign transactions among other accounts and balance-related functions. There are two prominent subcategories of account keys, namely "stash keys" and "controller keys", each being used for a different function. Keys defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-account-key), [Definition -def-num-ref-](id-cryptography-encoding#defn-stash-key) and [Definition -def-num-ref-](id-cryptography-encoding#defn-controller-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction, as defined in [Section -sec-num-ref-](id-cryptography-encoding#sect-creating-controller-key) and [Section -sec-num-ref-](id-cryptography-encoding#sect-certifying-keys) respectively.
+An account key can be used to sign transactions among other accounts and balance-related functions. Keys defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-account-key) and [Definition -def-num-ref-](id-cryptography-encoding#defn-stash-key) are created and managed by the user independent of the Polkadot implementation. The user notifies the network about the used keys by submitting a transaction.
 :::
 
 ###### Definition -def-num- Stash Key {#defn-stash-key}
 :::definition
 
-The **Stash key** is a type of account key that holds funds bonded for staking (described in [Section -sec-num-ref-](id-cryptography-encoding#sect-staking-funds)) to a particular controller key (defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-controller-key)). As a result, one may actively participate with a stash key, keeping the stash key offline in a secure location. It can also be used to designate a Proxy account to vote in governance proposals, as described in [Section -sec-num-ref-](id-cryptography-encoding#sect-creating-controller-key). The Stash key holds the majority of the users’ funds and should neither be shared with anyone, saved on an online device, nor used to submit extrinsics.
-
+The **Stash key** is a type of account that is intended to hold a large amount of funds. As a result, one may actively participate with a stash key, keeping the stash key offline in a secure location. It can also be used to designate a Proxy account to vote in governance proposals. 
 :::
+
+:::info Controller accounts are deprecated
+Controller accounts and controller keys are no longer supported. 
+For more information about the deprecation, see the [Polkadot wiki](https://wiki.polkadot.network/docs/learn-controller) or a more detailed discussion in the
+[Polkadot forum](https://forum.polkadot.network/t/staking-controller-deprecation-plan-staking-ui-leads-comms/2748).
+If you want to know how to set up Stash and Staking Proxy Keys, you can also check the[Polkadot wiki](https://wiki.polkadot.network/docs/maintain-guides-how-to-nominate-kusama#setting-up-stash-and-staking-proxy-keys)
+The following definition will be removed soon.
+:::
+
 ###### Definition -def-num- Controller Key {#defn-controller-key}
 :::definition
 
-The **Controller key** is a type of account key that acts on behalf of the Stash account. It signs transactions that make decisions regarding the nomination and the validation of the other keys. It is a key that will be in direct control of a user and should mostly be kept offline, used to submit manual extrinsics. It sets preferences like payout account and commission, as described in [Section -sec-num-ref-](id-cryptography-encoding#sect-controller-settings). If used for a validator, it certifies the session keys, as described in [Section -sec-num-ref-](id-cryptography-encoding#sect-certifying-keys). It only needs the required funds to pay transaction fees \[TODO: key needing fund needs to be defined\].
+The **Controller key** is a type of account key that acts on behalf of the Stash account. It signs transactions that make decisions regarding the nomination and the validation of the other keys. It is a key that will be in direct control of a user and should mostly be kept offline, used to submit manual extrinsics. It sets preferences like payout account and commission. If used for a validator, it certifies the session keys. It only needs the required funds to pay transaction fees \[TODO: key needing fund needs to be defined\].
 
 :::
 ###### Definition -def-num- Session Keys {#defn-session-key}
@@ -285,27 +293,13 @@ Session keys must be accessible by certain Polkadot Host APIs defined in [Append
 TBH
 :::
 
-#### -sec-num- Creating a Controller key {#sect-creating-controller-key}
-
-:::info
-TBH
-:::
-
 #### -sec-num- Designating a proxy for voting {#sect-designating-proxy}
 
 :::info
 TBH
 :::
 
-#### -sec-num- Controller settings {#sect-controller-settings}
 
-:::info
-TBH
-:::
-
-#### -sec-num- Certifying keys {#sect-certifying-keys}
-
-Due to security considerations and Runtime upgrades, the session keys are supposed to be changed regularly. As such, the new session keys need to be certified by a controller key before putting them into use. The controller only needs to create a certificate by signing a session public key and broadcasting this certificate via an extrinsic. \[TODO: spec the detail of the data structure of the certificate etc.\]
 
 ## -sec-num- Auxiliary Encodings {#chapter-encoding}
 
@@ -426,7 +420,7 @@ $$
 {\mathcal{{T}}}={\left\lbrace{T}_{{1}},\ldots,{T}_{{n}}\right\rbrace}
 $$
 
-A value ${A}$ of varying date type is a pair ${\left({A}_{{\text{Type}}},{A}_{{\text{Value}}}\right)}$ where ${A}_{{\text{Type}}}={T}_{{i}}$ for some ${T}_{{i}}\in{\mathcal{{T}}}$ and ${A}_{{\text{Value}}}$ is its value of type ${T}_{{i}}$, which can be empty. We define $\text{idx}{\left({T}_{{i}}\right)}={i}-{1}$, unless it is explicitly defined as another value in the definition of a particular varying data type.
+A value ${A}$ of varying data type is a pair ${\left({A}_{{\text{Type}}},{A}_{{\text{Value}}}\right)}$ where ${A}_{{\text{Type}}}={T}_{{i}}$ for some ${T}_{{i}}\in{\mathcal{{T}}}$ and ${A}_{{\text{Value}}}$ is its value of type ${T}_{{i}}$, which can be empty. We define $\text{idx}{\left({T}_{{i}}\right)}={i}-{1}$, unless it is explicitly defined as another value in the definition of a particular varying data type.
 
 In particular, we define two specific varying data which are frequently used in various part of Polkadot protocol: *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) and *Result* ([Definition -def-num-ref-](id-cryptography-encoding#defn-result-type)).
 
@@ -650,7 +644,7 @@ ChainSpec Extensions are additional parameters customisable from the chainspec a
 
 :::definition
 
-**BadBlocks** describes a list of block header hashes that are known apriori to be bad (not belonging to canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
+**BadBlocks** describes a list of block header hashes that are known a priori to be bad (not belonging to canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
 
 $$
 {badBlocks}={\left({b}_{{0}},\ldots{b}_{{n}}\right)}
@@ -694,11 +688,11 @@ The Polkadot genesis header is a data structure conforming to block header forma
 ###### Table -tab-num- Table of Genesis Header Values {#tab-genesis-header-values}
 | Block header field | Genesis Header Value                                                                                                                |
 |--------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `parent_hash`      | *0*                                                                                                                                 |
-| `number`           | *0*                                                                                                                                 |
+| `parent_hash`      | $0_{\mathbb{B}_{32}}$                                                                                                               |
+| `number`           | $0$                                                                                                                                 |
 | `state_root`       | Merkle hash of the state storage trie ([Definition -def-num-ref-](chap-state#defn-merkle-value)) after inserting the genesis state in it. |
-| `extrinsics_root`  | *0*                                                                                                                                 |
-| `digest`           | *0*                                                                                                                                 |
+| `extrinsics_root`  | Merkle hash of an empty trie: $\text{Blake2b}{\left(0_{\mathbb{B}_1}\right)}$                                                       |
+| `digest`           | $0$                                                                                                                                 |
 
 :::
 

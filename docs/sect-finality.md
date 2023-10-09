@@ -70,7 +70,7 @@ where ${H}_{{h}}{\left({B}\right)}$ and ${H}_{{i}}{\left({B}\right)}$ are the bl
 ###### Definition -def-num- Voting Rounds {#defn-voting-rounds}
 :::definition
 
-Voters engage in a maximum of two sub-rounds of voting for each round ${r}$. The first sub-round is called **pre-vote** and the second sub-round is called **pre-commit**.
+Voters engage in a maximum of two sub-rounds of voting for each round ${r}$. The first sub-round is called **pre-vote** and the second sub-round is called **pre-commit**. 
 
 By ${{V}_{{v}}^{{{r},\text{pv}}}}$ and ${{V}_{{v}}^{{{r},\text{pc}}}}$ we refer to the vote cast by voter ${v}$ in round ${r}$ (for block ${B}$) during the pre-vote and the pre-commit sub-round respectively.
 
@@ -93,6 +93,8 @@ $$
 
 - $\text{id}_{{{\mathbb{{V}}}}}$: is an unsigned 64-bit integer indicating the authority set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
 
+- $\text{stage}$: is either the **pre-vote** (${stage = pv}$) or the **pre-commit** (${stage = pc}$) sub-round of voting ${r}$, as defined in ([Definition -def-num-ref-](sect-finality#defn-voting-rounds)).
+
 :::
 ###### Definition -def-num- Justification {#defn-grandpa-justification}
 :::definition
@@ -109,7 +111,7 @@ ${B}'\ge{B}$
 
 or ${{V}_{{{v}_{{i}}}}^{{{r},\text{pc}}}}{\left({B}'\right)}$ is an equivocatory vote.
 
-In all cases, ${\text{Sign}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}{\left({B}'\right)}$ is the signature ([Definition -def-num-ref-](sect-finality#defn-sign-round-vote)) of voter ${v}_{{\text{id}}}\in{\mathbb{{V}}}_{{B}}$ broadcasted during either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round r. A **valid justification** must only contain up-to-one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
+In all cases, ${\text{Sign}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}{\left({B}'\right)}$ is the signature ([Definition -def-num-ref-](sect-finality#defn-sign-round-vote)) of voter ${v}_{{\text{id}}}\in{\mathbb{{V}}}_{{B}}$ broadcasted during a specific ${stage}$ (i.e., sub-round)([Definition -def-num-ref-](sect-finality#defn-voting-rounds)) of round r. A **valid justification** must only contain up-to-one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
 
 :::
 ###### Definition -def-num- Finalizing Justification {#defn-finalizing-justification}
