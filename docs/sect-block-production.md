@@ -29,7 +29,6 @@ A **block producer**, noted by ${\mathcal{{P}}}_{{j}}$, is a node running the Po
 A block production **epoch**, formally referred to as ${\mathcal{{E}}}$, is a period with a pre-known starting time and fixed-length during which the set of block producers stays constant. Epochs are indexed sequentially, and we refer to the ${n}^{{{t}{h}}}$ epoch since genesis by ${\mathcal{{E}}}_{{n}}$. Each epoch is divided into equal-length periods known as block production **slots**, sequentially indexed in each epoch. The index of each slot is called a **slot number**. The equal length duration of each slot is called the **slot duration** and indicated by ${\mathcal{{T}}}$. Each slot is awarded to a subset of block producers during which they are allowed to generate a block.
 
 :::info
-
 Substrate refers to an epoch as a "session" in some places. However, epoch should be the preferred and official name for these periods.
 :::
 
