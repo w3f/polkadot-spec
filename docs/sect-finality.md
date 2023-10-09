@@ -745,35 +745,8 @@ A light client following BEEFY could request $N/3 +1$ signatures to be checked, 
 ### -sec-num- Subsampling Light Client {#id-subsampling-light-client-beefy-1}
 
 It is an interactive protocol between the light-client (verifier) and the relayer (prover) to convince the Light Client with high probability that the payload sent by prover is signed by honest Polkadot validators. The protocol prioritizes efficiency, and tries to minimize the number ($<< N/3$) of signature checks (computationally expensive operations) on the light client side. 
-An instantiation of the random sampling protocol as a Bridge between Ethereum and Polkadot, where the light client is a smart contract running on Ethereum is described below as a message sequencing chart. It uses the RANDAO randomness beacon of Ethereum to randomly query signatures and convinces itself with high probability that the payload received is authentic.  
 
+### -sec-num- APK Proof based Light Clients {#id-APK-light-client-beefy-1}
 
-```mermaid
-sequenceDiagram
-    participant R as Relayer
-    participant L as Light Client
-    participant S as Storage
-    R->>L: SubmitInitial(Commitment, Bitfield, ValidatorProof)
-    Note right of L: Block No. is N
-    Note over L: Check 1s set in Bitfield > 2/3 validatorSet.len() 
-    Note over L: Check validatorProof signature matches <br> Sender's Public Key on hash(commitment)
-    L->>S: Mutate Tickets
-    Note right of S: Tickets[h(sender,hash(Commitment))]= <br> {sender, N, vset.len(),0,h(Bitfield)}
-    R->>L: CommitPrevRandao(commitHash)
-    Note right of L: Block No. = N' 
-    Note over L: Check for Delay: <br> randaoCommitDelay < N'-N  <br> <= randaoCommitDelay + randaoCommitExpiration
-    L->>S: Mutate Tickets
-    Note right of S: Tickets[h(sender,CommitHash)]= <br> {sender, n, vset.len(),N'.prevRandao,h(Bitfield)}
-    R->>L: CreateFinalBitfield(commitHash, Bitfield) 
-    L->>S: Fetches N'.prevrandao 
-    activate S
-    S->>L: from Tickets[h(sender,commitHash)]
-    deactivate S
-    Note over L: Compute _subsampBitfield with seed <br> as N'.prevRandao
-    L->>R: SubSample Bitfield (_subsampbitfield)
-    Note over R: gathers proofs [p1,..pk] corresponding to <br> requested _subsamplebitfield validators
-    R->>L: SubmitFinal(Commitment,Bitfield, [p1,..,pk])
-    Note over L: Verify Commitment, Verify Proofs <br> of subsampled validators
-    L->S: Mutate LatestBeefyBlock, LatestMMRRoothash
-    Note right of S: LatestBeefyBlock = Commitment.BlockNumber <br> LatestMMRRootHash= Commitment.payload.mmrroothash <br> delete Tickets[h(sender,commitHash)]
-```
+TODO: Section on using Aggregatable Signatures for efficient verification on light clients. 
+
