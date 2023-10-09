@@ -635,7 +635,7 @@ A **light client** is an abstract entity in a remote network such as Ethereum. I
 ###### Definition -def-num- Relayer {#defn-beefy-relayer}
 :::definition
 
-A **relayer** (or "prover") is an abstract entity which takes finality proofs from the Polkadot network and makes those available to the light clients. Inherently, the relayer tries to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates off-chain and can for example be a node or a collection of nodes.
+A **relayer** (or "prover") is an abstract entity which takes finality proofs from the Polkadot network and makes those available to the light clients. The relayer attempts to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates off-chain and can for example be a node or a collection of nodes.
 
 :::
 ### -sec-num- Voting on Statements {#id-voting-on-statements}
@@ -646,8 +646,6 @@ The Polkadot Host signs a statement ([Definition -def-num-ref-](sect-finality#de
 
 The relayer ([Definition -def-num-ref-](sect-finality#defn-beefy-relayer)) participates in the Polkadot network by collecting the gossiped votes ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)). Those votes are converted into the witness data structure ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)). The relayer saves the data on the chain of the remote network. The occurrence of saving witnesses on remote networks is undefined.
 
-TODO: confirm if the merkle root of claimed signatures needed or not in the witness. 
-
 ### -sec-num- Requesting Signed Commitments {#id-requesting-signed-commitments}
 
 A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the Signed Commitment Witness ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
@@ -655,7 +653,7 @@ A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client
 How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations. On Ethereum, for example, the light client can request the signed commitments in form of a transaction, which results in a response in form of a transaction.
 
 
-#### Consensus Mechanism
+### -sec-num- Consensus Mechanism {#id-consensus-mechanism-beefy-1}
 
 Role of various Actors in BEEFY:
 
@@ -681,16 +679,14 @@ Both kinds of actors are expected to fully participate in the protocol ONLY IF t
 
 **Round Selection**
 
-Every node (both regular nodes and validators) need to determine locally what they believe
+Every node (both regular nodes and validators) determines locally what they believe
 current round number is. The choice is based on their knowledge of:
 
 1. Best GRANDPA finalized block number (`best_grandpa`).
 1. Best BEEFY finalized block number (`best_beefy`).
 1. Starting block of current session (`session_start`).
 
-**Session** means a period of time (or rather number of blocks) where validator set (keys) do not change.
-See `pallet_session` for implementation details in `FRAME` context. Since we piggy-back on
-GRANDPA, session boundaries for BEEFY are exactly the same as the ones for GRANDPA.
+**Session** means a period of time (or rather number of blocks) where validator set (keys) do not change. Session are synonymous to epochs ([Definition -def-num-ref-](sect-block-production#defn-epoch-slot)). Since BEEFY authority set is the same as the GRANDPA authority set for any GRANDPA finalized block, the session boundaries for BEEFY are exactly the same as the ones for GRANDPA.
 
 We define two kinds of blocks from the perspective of BEEFY protocol:
 1. **Mandatory Blocks**
@@ -706,18 +702,20 @@ possible to enable lower latency for light clients and hence end users. Since GR
 considering session boundary blocks as mandatory as well, `session_start` block will always have
 both GRANDPA and BEEFY Justification.
 
-Therefore, to determine current round number nodes use a formula:
+
+###### Definition -def-num- BEEFY Round NUmber {#defn-beefy-round-number}
+:::definition
+The formula for determining the current round number is defined as:
 
 ```
 round_number =
       (1 - M) * session_start
    +        M * Minimum(next_session_start, (best_beefy + NEXT_POWER_OF_TWO((best_grandpa - best_beefy + 1) / 2)))
 ```
-
 where:
-
 - `M` is `1` if mandatory block in current session is already finalized and `0` otherwise.
 - `NEXT_POWER_OF_TWO(x)` returns the smallest number greater or equal to `x` that is a power of two.
+:::
 
 Intuitively, the next round number should be the oldest mandatory block without a justification,
 or the highest GRANDPA-finalized block, whose block number difference with `best_beefy` block is
@@ -738,15 +736,15 @@ session.
 While its useful to finalize non-mandatory block frequently, in good networking conditions BEEFY may end up finalizing each and every block GRANDPA finalized block. Practically, with short block times, it's going to be rare and might be excessive, so
 it's suggested for implementations to introduce a `min_delta` parameter which will limit the frequency with which new rounds are started. The affected component of the formula would be:
 `best_beefy + MAX(min_delta, NEXT_POWER_OF_TWO(...))`, so we start a new round only if the
-power-of-two component is greater than the min delta. Note that if `round_number > best_grandpa` the validators are not expected to start any round (TODO: is this precondition possible?).
+power-of-two component is greater than the min delta. Note that if `round_number > best_grandpa` the validators are not expected to start any round.
 
-#### BEEFY Light Client
+### -sec-num- BEEFY Light Client {#id-light-client-beefy-1}
 
 A light client following BEEFY could request $N/3 +1$ signatures to be checked, where $N$ is the number of validators on Polkadot. Assuming a maximum of $N/3$ malicious validators, the light client can be certain of the payloads finality if all the signatures it requested are valid. 
 
-#### Subsampling Based Light Client Protocol
+### -sec-num- Subsampling Light Client {#id-subsampling-light-client-beefy-1}
 
-It is an interactive protocol between the light-client (verifier) and the relayer (prover) to convince the Light Client with high probability that the payload sent by prover is signed by honest Polkadot validators. 
+It is an interactive protocol between the light-client (verifier) and the relayer (prover) to convince the Light Client with high probability that the payload sent by prover is signed by honest Polkadot validators. The protocol prioritizes efficiency, and tries to minimize the number ($<< N/3$) of signature checks (computationally expensive operations) on the light client side. 
 An instantiation of the random sampling protocol as a Bridge between Ethereum and Polkadot, where the light client is a smart contract running on Ethereum is described below as a message sequencing chart. It uses the RANDAO randomness beacon of Ethereum to randomly query signatures and convinces itself with high probability that the payload received is authentic.  
 
 
@@ -758,7 +756,7 @@ sequenceDiagram
     R->>L: SubmitInitial(Commitment, Bitfield, ValidatorProof)
     Note right of L: Block No. is N
     Note over L: Check 1s set in Bitfield > 2/3 validatorSet.len() 
-    Note over L: Check validatorProof signature matches <br> Sender's Publick Key on hash(commitment)
+    Note over L: Check validatorProof signature matches <br> Sender's Public Key on hash(commitment)
     L->>S: Mutate Tickets
     Note right of S: Tickets[h(sender,hash(Commitment))]= <br> {sender, N, vset.len(),0,h(Bitfield)}
     R->>L: CommitPrevRandao(commitHash)
