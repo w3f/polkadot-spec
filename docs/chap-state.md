@@ -171,6 +171,7 @@ $$
 $t = 4$ **Consensus Message**, contains scale-encoded message $m$ from the Runtime to the consensus engine. The receiving engine is determined by the *id* identifier:
 - *id* = BABE: a message to BABE engine ([Definition -def-num-ref-](sect-block-production#defn-consensus-message-babe))
 - *id* = FRNK: a message to GRANDPA engine ([Definition -def-num-ref-](sect-finality#defn-consensus-message-grandpa))
+- *id* = BEEF: a message to BEEFY engine ([Definition -def-num-ref-](sect-finality#defn-consensus-message-beefy))
 
 
 $t = 5$ **Seal**, is produced by the consensus engine and proves the authorship of the block producer. The engine used for this is provided through *id* (at the moment, `BABE`), while $m$ contains the scale-encoded signature ([Definition -def-num-ref-](sect-block-production#defn-block-signature)) of the block producer. In particular, the Seal digest item must be the last item in the digest array and must be stripped off by the Polkadot Host before the block is submitted to any Runtime function, including for validation. The Seal must be added back to the digest afterward.
