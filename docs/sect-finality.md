@@ -496,21 +496,21 @@ The BEEFY protocol specifications are Work-In-Progress. It is currently being te
 
 The BEEFY (Bridge Efficiency Enabling Finality Yielder) is a secondary protocol to GRANDPA to support efficient bridging between the Polkadot network (relay chain) and remote, segregated blockchains, such as Ethereum, which were not built with the Polkadot interchain operability in mind. BEEFY’s aim is to enable clients to efficiently follow a chain that has GRANDPA finality, a finality gadget created for Substrate/Polkadot ecosystem. This is useful for bridges (e.g., Polkadot->Ethereum), where a chain can follow another chain and light clients suitable for low storage devices such as mobile phones.
 
-The protocol allows participants of the remote network to verify finality proofs created by the Polkadot relay chain validators. In other words: clients in the target network (for e.g., Ethereum) can verify that the Polkadot network is at a specific state.
+The protocol allows participants of the remote network to verify finality proofs created by the Polkadot relay chain validators. In other words: clients in the target network (e.g., Ethereum) can verify that the Polkadot network is at a specific state.
 
 Storing all the information necessary to verify the state of the remote chain, such as the block headers, is too expensive. BEEFY stores the information in a space-efficient way, and clients can request additional information over the protocol.
 
-### -sec-num- Requirements {#id-motivation-beefy-1}
+### -sec-num- Motivation {#id-motivation-beefy-1}
 A client could just follow GRANDPA using GRANDPA justifications, sets of signatures from validators. This is used for some substrate-substrate bridges and in light clients such as the Substrate Connect browser extension. GRANDPA was designed for fast and secure finality. Certain design decisions, like validators voting for different blocks in a justification and using ED25519 signatures, allow fast finality. However, GRANDPA justifications are large and are expensive to verify on other chains like Ethereum that do not support some cryptographic signature schemes. Thus, BEEFY adds an extra layer of finality that allows lighter bridges and clients for Polkadot.
 
 To summarise, the goals of BEEFY are:
 - Allow customization of signature schemes to adapt to different target chains. 
-- Minimize the size of the finality proof, and the effort required by a light client to follow finality. 
+- Minimize the size of the finality proof and the effort required by a light client to follow finality. 
 - Unify data types and use backward-compatible versioning so that the protocol can be extended (additional payload, different signature schemes) without breaking existing light clients.
 
 ### -sec-num- Protocol Overview {#id-overview-beefy-1}
 Since BEEFY runs on top of GRANDPA, similarly to how GRANDPA is lagging behind the best produced (non-finalized) block, BEEFY finalized block lags behind the best GRANDPA (finalized) block. 
-- The BEEFY validator set is the same as GRANDPA's, however, they might be using different types of session keys to sign BEEFY messages. 
+- The BEEFY validator set is the same as GRANDPA's. However, they might be using different types of session keys to sign BEEFY messages. 
 - From a single validator perspective, BEEFY has at most one active voting round. 
 - Since GRANDPA validators are reaching finality, we assume they are online and well-connected and have a similar view of the state of the blockchain.
 
@@ -518,7 +518,7 @@ BEEFY consists of two components:
 
 a. **Consensus Extension** on GRANDPA finalization that is a voting round. 
 
-The consensus extension serves to have a smaller consensus justification than GRANDPA and alternative cryptography which helps the light client side of the BEEFY protocol described below. 
+The consensus extension serves to have a smaller consensus justification than GRANDPA and alternative cryptography, which helps the light client side of the BEEFY protocol described below. 
 
 b. **Light client** protocol for convincing the other chain/device efficiently about the finality vote.
 
