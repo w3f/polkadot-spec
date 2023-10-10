@@ -27,15 +27,15 @@ $$
 {\mathbb{{V}}}={\tt{grandpa\_authorities}}{\left({B}\right)}
 $$
 
-where ${\tt{grandpa\_authorities}}$ is a function entrypoint of the Runtime described in [Section -sec-num-ref-](chap-runtime-api#sect-rte-grandpa-auth). We refer to ${\mathbb{{V}}}_{{B}}$ as ${\mathbb{{V}}}$ when there is no chance of ambiguity.
+where ${\tt{grandpa\_authorities}}$ is a function entry point of the Runtime described in [Section -sec-num-ref-](chap-runtime-api#sect-rte-grandpa-auth). We refer to ${\mathbb{{V}}}_{{B}}$ as ${\mathbb{{V}}}$ when there is no chance of ambiguity.
 
-Analogously we say that a Polkadot node is a **non-voter node** for block ${B}$, if it does not own any of the key pairs in ${\mathbb{{V}}}_{{B}}$.
+Analogously, we say that a Polkadot node is a **non-voter node** for block ${B}$ if it does not own any of the key pairs in ${\mathbb{{V}}}_{{B}}$.
 
 :::
 ###### Definition -def-num- Authority Set Id {#defn-authority-set-id}
 :::definition
 
-The **authority set Id** ($\text{id}_{{{\mathbb{{V}}}}}$) is an incremental counter which tracks the amount of authority list changes that occurred ([Definition -def-num-ref-](sect-finality#defn-consensus-message-grandpa)). Starting with the value of zero at genesis, the Polkadot Host increments this value by one every time a **Scheduled Change** or a **Forced Change** occurs. The authority set Id is an unsigned 64-bit integer.
+The **authority set Id** ($\text{id}_{{{\mathbb{{V}}}}}$) is an incremental counter which tracks the amount of authority list changes that occurred ([Definition -def-num-ref-](sect-finality#defn-consensus-message-grandpa)). Starting with the value of zero at genesis, the Polkadot Host increments this value by one every time a **Scheduled Change** or a **Forced Change** occurs. The authority set ID is an unsigned 64-bit integer.
 
 :::
 ###### Definition -def-num- GRANDPA State {#defn-grandpa-state}
@@ -70,7 +70,7 @@ where ${H}_{{h}}{\left({B}\right)}$ and ${H}_{{i}}{\left({B}\right)}$ are the bl
 ###### Definition -def-num- Voting Rounds {#defn-voting-rounds}
 :::definition
 
-Voters engage in a maximum of two sub-rounds of voting for each round ${r}$. The first sub-round is called **pre-vote** and the second sub-round is called **pre-commit**. 
+Voters engage in a maximum of two sub-rounds of voting for each round ${r}$. The first sub-round is called **pre-vote**, and the second is called **pre-commit**. 
 
 By ${{V}_{{v}}^{{{r},\text{pv}}}}$ and ${{V}_{{v}}^{{{r},\text{pc}}}}$ we refer to the vote cast by voter ${v}$ in round ${r}$ (for block ${B}$) during the pre-vote and the pre-commit sub-round respectively.
 
@@ -111,7 +111,7 @@ ${B}'\ge{B}$
 
 or ${{V}_{{{v}_{{i}}}}^{{{r},\text{pc}}}}{\left({B}'\right)}$ is an equivocatory vote.
 
-In all cases, ${\text{Sign}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}{\left({B}'\right)}$ is the signature ([Definition -def-num-ref-](sect-finality#defn-sign-round-vote)) of voter ${v}_{{\text{id}}}\in{\mathbb{{V}}}_{{B}}$ broadcasted during a specific ${stage}$ (i.e., sub-round)([Definition -def-num-ref-](sect-finality#defn-voting-rounds)) of round r. A **valid justification** must only contain up-to-one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
+In all cases, ${\text{Sign}_{{{v}_{{i}}}}^{{{r},\text{stage}}}}{\left({B}'\right)}$ is the signature ([Definition -def-num-ref-](sect-finality#defn-sign-round-vote)) of voter ${v}_{{\text{id}}}\in{\mathbb{{V}}}_{{B}}$ broadcasted during a specific ${stage}$ (i.e., sub-round)([Definition -def-num-ref-](sect-finality#defn-voting-rounds)) of round r. A **valid justification** must only contain up to one valid vote from each voter and must not contain more than two equivocatory votes from each voter.
 
 :::
 ###### Definition -def-num- Finalizing Justification {#defn-finalizing-justification}
@@ -133,7 +133,7 @@ $$
 {\mathcal{{E}}}^{{{r},\text{stage}}}
 $$
 
-represents the set of all equivocators voters in sub-round *stage* of round ${r}$. When we want to refer to the number of equivocators whose equivocation has been observed by voter ${v}$ we refer to it by:
+represents the set of all equivocators voters in sub-round *stage* of round ${r}$. When we want to refer to the number of equivocators whose equivocation has been observed by voter ${v}$, we refer to it by:
 
 $$
 {{\mathcal{{E}}}_{{\text{obs}{\left({v}\right)}}}^{{{r},\text{stage}}}}
@@ -195,13 +195,13 @@ $$
 ###### Definition -def-num- Current Pre-Voted Block {#defn-grandpa-ghost}
 :::definition
 
-The current **pre-voted** block ${{B}_{{v}}^{{{r},\text{pv}}}}$ also know as GRANDPA GHOST is the block chosen by [GRANDPA-GHOST](sect-finality#algo-grandpa-ghost):
+The current **pre-voted** block ${{B}_{{v}}^{{{r},\text{pv}}}}$ also known as GRANDPA GHOST is the block chosen by [GRANDPA-GHOST](sect-finality#algo-grandpa-ghost):
 
 $$
 {{B}_{{v}}^{{{r},\text{pv}}}}\:=\text{GRANDPA-GHOST}{\left({r}\right)}
 $$
 
-Finally, we define when a voter ${v}$ sees a round as completable, that is when they are confident that ${{B}_{{v}}^{{{r},\text{pv}}}}$ is an upper bound for what is going to be finalized in this round.
+Finally, we define when a voter ${v}$ sees a round as completable, that is, when they are confident that ${{B}_{{v}}^{{{r},\text{pv}}}}$ is an upper bound for what is going to be finalized in this round.
 
 :::
 ###### Definition -def-num- Completable Round {#defn-grandpa-completable}
@@ -359,7 +359,7 @@ where $\#{{V}_{{\text{obv}{\left({v}\right)},{p}{o}{t}}}^{{{r},{p}{c}}}}$ is def
 where the condition for *completability* is defined in [Definition -def-num-ref-](sect-finality#defn-grandpa-completable).
 :::
 
-Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although [Play-Grandpa-Round](sect-finality#algo-grandpa-round) prevents us from moving to the round ${r}+{1}$ before finalizing the best final candidate of round ${r}-{1}$) The example in [Definition -def-num-ref-](sect-finality#defn-unfinalized-candidate) serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
+Note that we might not always succeed in finalizing our best candidate due to the possibility of equivocation. We might even not finalize anything in a round (although [Play-Grandpa-Round](sect-finality#algo-grandpa-round) prevents us from moving to the round ${r}+{1}$ before finalizing the best final candidate of round ${r}-{1}$) The example in [Definition -def-num-ref-](sect-finality#defn-unfinalized-candidate) serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
 
 ###### Definition -def-num- Unfinalized Candidate {#defn-unfinalized-candidate}
 :::definition
@@ -385,7 +385,7 @@ Both scenarios unblock [Play-Grandpa-Round](sect-finality#algo-grandpa-round), $
 :::
 ## -sec-num- Forced Authority Set Changes {#sect-finality-forced-changes}
 
-In a case of emergency where the Polkadot network is unable to finalize blocks, such as in an event of mass validator outage, the Polkadot governance mechanism must enact a forced change, which the Host must handle in a specific manner. Given that in such a case finality cannot be relied on, the Host must detect the forced change ([Definition -def-num-ref-](sect-finality#defn-consensus-message-grandpa)) in a (valid) block and apply it to all forks.
+In a case of emergency where the Polkadot network is unable to finalize blocks, such as in the event of a mass validator outage, the Polkadot governance mechanism must enact a forced change, which the Host must handle in a specific manner. Given that in such a case, finality cannot be relied on, the Host must detect the forced change ([Definition -def-num-ref-](sect-finality#defn-consensus-message-grandpa)) in a (valid) block and apply it to all forks.
 
 The ${m}\in{C}{M}_{{g}}$, which is specified by the governance mechanism, defines the starting block at which ${N}_{{\text{delay}}}$ is applied. This provides some degree of probabilistic consensus to the network with the assumption that the forced change was received by most participants and that finality can be continued.
 
@@ -402,13 +402,13 @@ The ${m}\in{C}{M}_{{g}}$, which is specified by the governance mechanism, define
 ###### Definition -def-num- Justified Block Header {#defn-justified-block-header}
 :::definition
 
-The Justified Block Header is provided by the consensus engine and presented to the Polkadot Host, for the block to be appended to the blockchain. It contains the following parts:
+The Justified Block Header is provided by the consensus engine and presented to the Polkadot Host for the block to be appended to the blockchain. It contains the following parts:
 
 - **block_header** the complete block header ([Definition -def-num-ref-](chap-state#defn-block-header)) and denoted by $\text{Head}{\left({B}\right)}$.
 
 - **justification**: as defined by the consensus specification indicated by $\text{Just}{\left({B}\right)}$ as defined in [Definition -def-num-ref-](sect-finality#defn-grandpa-justification).
 
-- **authority Ids**: This is the list of the Ids of authorities, which have voted for the block to be stored and is formally referred to as ${A}{\left({B}\right)}$. An authority Id is 256-bit.
+- **authority Ids**: This is the list of the IDs of authorities which have voted for the block to be stored and is formally referred to as ${A}{\left({B}\right)}$. An authority ID is 256-bit.
 
 :::
 ###### Definition -def-num- Finalized {#defn-finalized-block}
@@ -443,11 +443,11 @@ When a Polkadot voter node has the same authority list as a peer voter node who 
 
 - The peer node is a GRANDPA voter, and:
 
-- The last known finalized round for the Polkadot node is at least 2 rounds behind the finalized round for the peer.
+- The last known finalized round for the Polkadot node is at least two rounds behind the finalized round for the peer.
 
 #### -sec-num- Processing the catch-up requests {#id-processing-the-catch-up-requests}
 
-Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute [Process-Catchup-Request](sect-finality#algo-process-catchup-request). Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which [Play-Grandpa-Round](sect-finality#algo-grandpa-round) is not concluded.
+Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute [Process-Catchup-Request](sect-finality#algo-process-catchup-request). Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on. Those are the rounds for which [Play-Grandpa-Round](sect-finality#algo-grandpa-round) is not concluded.
 
 ###### Algorithm -algo-num- Process Catchup Request {#algo-process-catchup-request}
 :::algorithm
@@ -473,7 +473,7 @@ Only GRANDPA voter nodes are required to respond to the catch-up requests. Addit
 
 #### -sec-num- Processing catch-up responses {#id-processing-catch-up-responses}
 
-A Catch-up response message contains critical information for the requester node to update their view on the active rounds which are being voted on by GRANDPA voters. As such, the requester node should verify the content of the catch-up response message and subsequently updates its view of the state of the finality of the Relay chain according to [Process-Catchup-Response](sect-finality#algo-process-catchup-response).
+A Catch-up response message contains critical information for the requester node to update their view on the active rounds that are being voted on by GRANDPA voters. As such, the requester node should verify the content of the catch-up response message and subsequently updates its view of the state of the finality of the Relay chain according to [Process-Catchup-Response](sect-finality#algo-process-catchup-response).
 
 ###### Algorithm -algo-num- Process Catchup Response {#algo-process-catchup-response}
 :::algorithm
@@ -498,37 +498,37 @@ The BEEFY (Bridge Efficiency Enabling Finality Yielder) is a secondary protocol 
 
 The protocol allows participants of the remote network to verify finality proofs created by the Polkadot relay chain validators. In other words: clients in the target network (for e.g., Ethereum) can verify that the Polkadot network is at a specific state.
 
-Storing all the information necessary to verify the state of the remote chain, such as the block headers, is too expensive. BEEFY stores the information in a space-efficient way and clients can request additional information over the protocol.
+Storing all the information necessary to verify the state of the remote chain, such as the block headers, is too expensive. BEEFY stores the information in a space-efficient way, and clients can request additional information over the protocol.
 
 ### -sec-num- Motivation {#id-motivation-beefy-1}
-A client could just follow GRANDPA using GRANDPA justifications, sets of signatures from validators. This is used for some substrate-substrate bridge and in light clients such as the Substrate connect browser extension. GRANDPA was designed for fast and secure finality. Certain design decisions, like validators voting for different blocks in a justification adn using ED25519 signatures allow fast finality. However, GRANDPA justifications are large and are expensive to verify on other chains like Ethereum that do not support some cryptographic signature schemes. Thus, BEEFY adds an extra layer of finality that allows lighter bridges and clients for Polkadot.
+A client could just follow GRANDPA using GRANDPA justifications, sets of signatures from validators. This is used for some substrate-substrate bridges and in light clients such as the Substrate Connect browser extension. GRANDPA was designed for fast and secure finality. Certain design decisions, like validators voting for different blocks in a justification and using ED25519 signatures, allow fast finality. However, GRANDPA justifications are large and are expensive to verify on other chains like Ethereum that do not support some cryptographic signature schemes. Thus, BEEFY adds an extra layer of finality that allows lighter bridges and clients for Polkadot.
 
 To summarise, the goals of BEEFY are:
-- Allow customisation of signature schemes to adapt for different target chains. 
-- Minimize the size of the finality proof, and effort required by light client to follow finality. 
+- Allow customization of signature schemes to adapt to different target chains. 
+- Minimize the size of the finality proof, and the effort required by a light client to follow finality. 
 - Unify data types and use backward-compatible versioning so that the protocol can be extended (additional payload, different signature schemes) without breaking existing light clients.
 
 ### -sec-num- Protocol Overview {#id-overview-beefy-1}
-Since BEEFY runs on top of GRANDPA, similarly to how GRANDPA is lagging behind the best produced (non-finalized) block, BEEFY finalised block lags behind the best GRANDPA (finalised) block. 
-- BEEFY validator set is the same as GRANDPA's, however they might be using different type of session key to sign BEEFY messages. 
+Since BEEFY runs on top of GRANDPA, similarly to how GRANDPA is lagging behind the best produced (non-finalized) block, BEEFY finalized block lags behind the best GRANDPA (finalized) block. 
+- The BEEFY validator set is the same as GRANDPA's, however, they might be using different types of session keys to sign BEEFY messages. 
 - From a single validator perspective, BEEFY has at most one active voting round. 
 - Since GRANDPA validators are reaching finality, we assume they are online and well-connected and have a similar view of the state of the blockchain.
 
 BEEFY consists of two components:
 
-a. **Consensus Extension** on GRANDPA finalisation that is a voting round. 
+a. **Consensus Extension** on GRANDPA finalization that is a voting round. 
 
-The consensus extension serves to have smaller consensus justification than GRANDPA and alternative cryptography which helps the light client side of BEEFY protocol described below. 
+The consensus extension serves to have a smaller consensus justification than GRANDPA and alternative cryptography which helps the light client side of the BEEFY protocol described below. 
 
 b. **Light client** protocol for convincing the other chain/device efficiently about the finality vote.
 
-In the BEEFY light client, a prover, a full node or bridge relayer, wants to convince a verifier, a light client that may be a bridge implementation on the target chain, of the outcome of a BEEFY vote. The prover has access to all voting data from the BEEFY voting round. In the light client part, the prover may generate a proof and send it to the verifier or they may engage in an interactive protocol with several rounds of communication.
+In the BEEFY light client, a prover, a full node, or a bridge relayer, wants to convince a verifier, a light client that may be a bridge implementation on the target chain, of the outcome of a BEEFY vote. The prover has access to all voting data from the BEEFY voting round. In the light client part, the prover may generate a proof and send it to the verifier or they may engage in an interactive protocol with several rounds of communication.
 
 
 ### -sec-num- Preliminaries {#id-preliminaries-2}
 
 ###### Definition -def-num- BEEFY Session Keys {#defn-beefy-key}
-Validators use an `ECDSA` key scheme for signing Beefy messages. This is different from schemes like `sr25519` and `ed25519` which are commonly used in Substrate for other components like BABE, Grandpa. The most noticeable difference is that an `ecdsa`
+Validators use an `ECDSA` key scheme for signing Beefy messages. This is different from schemes like `sr25519` and `ed25519`, which are commonly used in Substrate for other components like BABE, and GRANDPA. The most noticeable difference is that an `ecdsa`
 public key is `33` bytes long, instead of `32` bytes for a `sr25519` based public key. As a consequence, the `AccountId` (32-bytes) matches the `PublicKey` for other session keys, but note that it's not the case for BEEFY.
 
 ### -sec-num- Block Authoring Session Key Pair {#id-block-authoring-session-key-pair}
@@ -563,10 +563,10 @@ A `MMR` structure can be seen as a list of perfectly balanced binary sub-trees i
 ###### Definition -def-num- Merkle Mountain Ranges root (MMR-root) {#defn-mmr-root}
 
 
-A `MMR` does not have a single `root` by design, as a conventional Merkle tree. Every sub-tree has a separate sub-root, which we refer to as the `peak` of the sub-tree. 
+An `MMR` does not have a single `root` by design, as a conventional Merkle tree. Every sub-tree has a separate sub-root, which we refer to as the `peak` of the sub-tree. 
 Bagging the peaks is the process used for hashing the peaks in order to compute the `MMR-root`. It is important to define the order in which the peaks are hashed to ensure that a given sub-set of peaks will always derive a unique `MMR-root`. Here we state that peaks are merged from right to left and bagged via $hash(right, left)$.
 
-Therefore, given a MMR tree with n peaks ordered in decreasing order of height the `MMR-root` of the tree is calculated as follows.
+Therefore, given an MMR tree with n peaks ordered in decreasing order of height, the `MMR-root` of the tree is calculated as follows.
 
 $$
 \texttt{MMR root} = hash (p_1 + hash( p_2 + hash( p_3 +... + hash ( p_n-1 + p_n ))))
@@ -591,7 +591,7 @@ Here are the basic operations we should be able to perform on the MMR:
 		  		  	  
 - Create MMR root (bagPeaks):
     - Signature: baggingPeaks(peaksIndexes: List[int]) -> str
-    - Description: creates the single MMR root based on the list of peaks, returns the hash string of the  MMR root corresponding to the current state of the tree. 
+    - Description: creates the single MMR root based on the list of peaks, and returns the hash string of the  MMR root corresponding to the current state of the tree. 
 
 - Verify Node (verifyProof):
     - Signature: verifyNode(nodeHash: str, requiredProofNodes: List[str], MMRroot: str) -> bool
@@ -602,10 +602,10 @@ Here are the basic operations we should be able to perform on the MMR:
 :::definition
 
 **Payload:** is the Merkle root of the MMR generated where the leaf data contains the following fields for each block:
-- _LeafVersion_: a byte indicating the current version number of the Leaf Format. The first 3 bits are for major versions and the last 5 bits for minor versions. 
-- _BeefyNextAuthoritySetInfo_: Its a tuple consisting of:
+- _LeafVersion_: a byte indicating the current version number of the Leaf Format. The first 3 bits are for major versions and the last 5 bits are for minor versions. 
+- _BeefyNextAuthoritySetInfo_: It is a tuple consisting of:
     - ValidatorSetID
-    - len (u32): length of the validator set
+    - Len (u32): length of the validator set
     - Merkle Root of the list of Next Beefy Authority Set (ECDSA public keys). The exact format depends on the implementation.  
 - Parent Block number and Parent Block Hash.
 - Extra Leaf Data: Currently the Merkle root of the list of (ParaID, ParaHeads)
@@ -616,14 +616,14 @@ Here are the basic operations we should be able to perform on the MMR:
 :::definition
 
 **Signed Commitment:**
-`commitment` is a tuple of `(payload, Block Number, ValidatorSetID)`. A `signed commitment` is a tuple `(commitment, signatures)`, where `signatures` is a list of optional signatures of the validator set on the SCALE encoded `commitment`. Note that the number of signatures in `signatures` maybe less than the length of Validator Set. 
+`commitment` is a tuple of `(payload, Block Number, ValidatorSetID)`. A `signed commitment` is a tuple `(commitment, signatures)`, where `signatures` is a list of optional signatures of the validator set on the SCALE encoded `commitment`. Note that the number of signatures in `signatures` may be less than the length of the Validator Set. 
 
 :::
 
 ###### Definition -def-num- Witness Data {#defn-beefy-witness-data}
 :::definition
 
-**Signed Commitment Witnesses** contains the commitment and an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves). The indicators of which validator voted for the statement are just claims and provide no proofs. It also contains signature of one validator on the commitment, which is used only by the subsampling based Light Clients. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
+**Signed Commitment Witnesses** contains the commitment and an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves). The indicators of which validator voted for the statement are just claims and provide no proof. It also contains the signature of one validator on the commitment, which is used only by the subsampling-based Light Clients. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
 
 :::
 ###### Definition -def-num- Light Client {#defn-beefy-light-client}
@@ -635,12 +635,12 @@ A **light client** is an abstract entity in a remote network such as Ethereum. I
 ###### Definition -def-num- Relayer {#defn-beefy-relayer}
 :::definition
 
-A **relayer** (or "prover") is an abstract entity which takes finality proofs from the Polkadot network and makes those available to the light clients. The relayer attempts to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates off-chain and can for example be a node or a collection of nodes.
+A **relayer** (or "prover") is an abstract entity that takes finality proofs from the Polkadot network and makes those available to the light clients. The relayer attempts to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates off-chain and can for example be a node or a collection of nodes.
 
 :::
 ### -sec-num- Voting on Statements {#id-voting-on-statements}
 
-The Polkadot Host signs a statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)) and gossips it as part of a vote ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)) to its peers on every new finalized block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum has better compatibility for it compared to SR25519 or ED25519.
+The Polkadot Host signs a statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)) and gossips it as part of a vote ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)) to its peers on every new finalized block. The Polkadot Host uses ECDSA for signing the statement since Ethereum has better compatibility for it compared to SR25519 or ED25519.
 
 ### -sec-num- Committing Witnesses {#sect-beefy-committing-witnesses}
 
@@ -650,7 +650,7 @@ The relayer ([Definition -def-num-ref-](sect-finality#defn-beefy-relayer)) parti
 
 A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the Signed Commitment Witness ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
 
-How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations. On Ethereum, for example, the light client can request the signed commitments in form of a transaction, which results in a response in form of a transaction.
+How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations. On Ethereum, for example, the light client can request the signed commitments in the form of a transaction, which results in a response in the form of a transaction.
 
 
 ### -sec-num- Consensus Mechanism {#id-consensus-mechanism-beefy-1}
@@ -671,7 +671,7 @@ A **round** is an attempt by BEEFY validators to produce a BEEFY Justification. 
 1. Either the node collects `2/3rd + 1` valid votes for that round.
 2. Or the node receives a BEEFY Justification for a block greater than the current best BEEFY block.
 
-In both cases the node proceeds to determining the new round number using "Round Selection"
+In both cases the node proceeds to determine the new round number using "Round Selection"
 procedure.
 
 
@@ -679,16 +679,16 @@ Both kinds of actors are expected to fully participate in the protocol ONLY IF t
 
 **Round Selection**
 
-Every node (both regular nodes and validators) determines locally what they believe
-current round number is. The choice is based on their knowledge of:
+Every node (both regular nodes and validators) determines locally what it believes
+the current round number is. The choice is based on their knowledge of:
 
 1. Best GRANDPA finalized block number (`best_grandpa`).
 1. Best BEEFY finalized block number (`best_beefy`).
-1. Starting block of current session (`session_start`).
+1. Starting block of the current session (`session_start`).
 
-**Session** means a period of time (or rather number of blocks) where validator set (keys) do not change. Session are synonymous to epochs ([Definition -def-num-ref-](sect-block-production#defn-epoch-slot)). Since BEEFY authority set is the same as the GRANDPA authority set for any GRANDPA finalized block, the session boundaries for BEEFY are exactly the same as the ones for GRANDPA.
+**Session** means a period of time (or rather a number of blocks) where the validator set (keys) does not change. Session are synonymous to epochs ([Definition -def-num-ref-](sect-block-production#defn-epoch-slot)). Since the BEEFY authority set is the same as the GRANDPA authority set for any GRANDPA finalized block, the session boundaries for BEEFY are exactly the same as the ones for GRANDPA.
 
-We define two kinds of blocks from the perspective of BEEFY protocol:
+We define two kinds of blocks from the perspective of the BEEFY protocol:
 1. **Mandatory Blocks**
 2. **Non-mandatory Blocks**
 
@@ -713,7 +713,7 @@ round_number =
    +        M * Minimum(next_session_start, (best_beefy + NEXT_POWER_OF_TWO((best_grandpa - best_beefy + 1) / 2)))
 ```
 where:
-- `M` is `1` if mandatory block in current session is already finalized and `0` otherwise.
+- `M` is `1` if the mandatory block in the current session is already finalized and `0` otherwise.
 - `NEXT_POWER_OF_TWO(x)` returns the smallest number greater or equal to `x` that is a power of two.
 :::
 
@@ -724,7 +724,7 @@ then to attempt to pick a block taking into account how fast BEEFY catches up wi
 In case GRANDPA makes progress, but BEEFY seems to be lagging behind, validators are changing
 rounds less often to increase the chance of concluding them.
 
-As mentioned earlier, every time the node picks a new `round_number` (and validator casts a vote)
+As mentioned earlier, every time the node picks a new `round_number` (and the validator casts a vote)
 it ends the previous one, no matter if finality was reached (i.e. the round concluded) or not.
 Votes for an inactive round should not be propagated.
 
@@ -733,10 +733,10 @@ Note that since BEEFY only votes for GRANDPA-finalized blocks, `session_start` h
 have already progressed, but BEEFY needs to first finalize the mandatory block of the older
 session.
 
-While its useful to finalize non-mandatory block frequently, in good networking conditions BEEFY may end up finalizing each and every block GRANDPA finalized block. Practically, with short block times, it's going to be rare and might be excessive, so
+While it is useful to finalize non-mandatory blocks frequently, in good networking conditions BEEFY may end up finalizing each and every block GRANDPA finalized block. Practically, with short block times, it's going to be rare and might be excessive, so
 it's suggested for implementations to introduce a `min_delta` parameter which will limit the frequency with which new rounds are started. The affected component of the formula would be:
 `best_beefy + MAX(min_delta, NEXT_POWER_OF_TWO(...))`, so we start a new round only if the
-power-of-two component is greater than the min delta. Note that if `round_number > best_grandpa` the validators are not expected to start any round.
+the power-of-two component is greater than the min delta. Note that if `round_number > best_grandpa` the validators are not expected to start any round.
 
 ### -sec-num- BEEFY Light Client {#id-light-client-beefy-1}
 
@@ -744,7 +744,7 @@ A light client following BEEFY could request $N/3 +1$ signatures to be checked, 
 
 ### -sec-num- Subsampling Light Client {#id-subsampling-light-client-beefy-1}
 
-It is an interactive protocol between the light-client (verifier) and the relayer (prover) to convince the Light Client with high probability that the payload sent by prover is signed by honest Polkadot validators. The protocol prioritizes efficiency, and tries to minimize the number ($<< N/3$) of signature checks (computationally expensive operations) on the light client side. 
+It is an interactive protocol between the light-client (verifier) and the relayer (prover) to convince the Light Client with a high probability that the payload sent by the prover is signed by honest Polkadot validators. The protocol prioritizes efficiency and tries to minimize the number ($<< N/3$) of signature checks (computationally expensive operations) on the light client side. 
 
 ### -sec-num- APK Proof based Light Clients {#id-APK-light-client-beefy-1}
 
