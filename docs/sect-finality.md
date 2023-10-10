@@ -500,7 +500,7 @@ The protocol allows participants of the remote network to verify finality proofs
 
 Storing all the information necessary to verify the state of the remote chain, such as the block headers, is too expensive. BEEFY stores the information in a space-efficient way, and clients can request additional information over the protocol.
 
-### -sec-num- Motivation {#id-motivation-beefy-1}
+### -sec-num- Requirements {#id-motivation-beefy-1}
 A client could just follow GRANDPA using GRANDPA justifications, sets of signatures from validators. This is used for some substrate-substrate bridges and in light clients such as the Substrate Connect browser extension. GRANDPA was designed for fast and secure finality. Certain design decisions, like validators voting for different blocks in a justification and using ED25519 signatures, allow fast finality. However, GRANDPA justifications are large and are expensive to verify on other chains like Ethereum that do not support some cryptographic signature schemes. Thus, BEEFY adds an extra layer of finality that allows lighter bridges and clients for Polkadot.
 
 To summarise, the goals of BEEFY are:
@@ -650,7 +650,7 @@ The relayer ([Definition -def-num-ref-](sect-finality#defn-beefy-relayer)) parti
 
 A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the Signed Commitment Witness ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
 
-How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations. On Ethereum, for example, the light client can request the signed commitments in the form of a transaction, which results in a response in the form of a transaction.
+How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations.
 
 
 ### -sec-num- Consensus Mechanism {#id-consensus-mechanism-beefy-1}
