@@ -612,7 +612,7 @@ Here are the basic operations we should be able to perform on the MMR:
 :::
 
 
-###### Definition -def-num- Commitment {#defn-beefy-Commitment}
+###### Definition -def-num- Signed Commitment {#defn-beefy-Commitment}
 :::definition
 
 **Signed Commitment:**
