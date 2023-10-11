@@ -531,13 +531,15 @@ In the BEEFY light client, a prover, a full node, or a bridge relayer, wants to 
 Validators use an `ECDSA` key scheme for signing Beefy messages. This is different from schemes like `sr25519` and `ed25519`, which are commonly used in Substrate for other components like BABE, and GRANDPA. The most noticeable difference is that an `ecdsa`
 public key is `33` bytes long, instead of `32` bytes for a `sr25519` based public key. As a consequence, the `AccountId` (32-bytes) matches the `PublicKey` for other session keys, but note that it's not the case for BEEFY.
 
-### -sec-num- Block Authoring Session Key Pair {#id-block-authoring-session-key-pair}
 
 :::definition
 
-**BEEFY session key pair** ${\left({s}{{k}_{{j}}^{B}},{p}{{k}_{{j}}^{B}}\right)}$ is a `secp256k1` key pair which the BEEFY authority node ${\mathcal{{P}}}_{{j}}$ uses to sign the BEEFY Justification messages.
+**BEEFY session key pair** ${\left({s}{{k}_{{j}}^{B}},{p}{{k}_{{j}}^{B}}\right)}$ is a `secp256k1` key pair which the BEEFY authority node ${\mathcal{{P}}}_{{j}}$ uses to sign the BEEFY signed commitments (justifications).
  
 :::
+
+### -sec-num- Merkle Mountain Ranges {#id-beefy-merkle-mountain-ranges}
+
 
 ###### Definition -def-num- Merkle Mountain Ranges {#defn-mmr}
 :::definition
@@ -558,6 +560,7 @@ A `MMR` structure can be seen as a list of perfectly balanced binary sub-trees i
  /   \   /   \     /   \   
 1     2 4     5   8     9    11
 ```
+:::
 
 ::::definition
 ###### Definition -def-num- Merkle Mountain Ranges root (MMR-root) {#defn-mmr-root}
@@ -623,7 +626,7 @@ Here are the basic operations we should be able to perform on the MMR:
 ###### Definition -def-num- Witness Data {#defn-beefy-witness-data}
 :::definition
 
-**Signed Commitment Witnesses** contains the commitment and an array indicating which validator of the Polkadot network voted for the statement (but not the signatures themselves). The indicators of which validator voted for the statement are just claims and provide no proof. It also contains the signature of one validator on the commitment, which is used only by the subsampling-based Light Clients. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
+**Signed Commitment Witnesses** contains the commitment and an array indicating which validator of the Polkadot network voted for the payload (but not the signatures themselves). The indicators of which validator voted for the payload are just claims and provide no proof. It also contains the signature of one validator on the commitment, which is used only by the subsampling-based Light Clients. The network message is defined in [Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment-witness) and the relayer saves it on the chain of the remote network.
 
 :::
 ###### Definition -def-num- Light Client {#defn-beefy-light-client}
@@ -638,9 +641,9 @@ A **light client** is an abstract entity in a remote network such as Ethereum. I
 A **relayer** (or "prover") is an abstract entity that takes finality proofs from the Polkadot network and makes those available to the light clients. The relayer attempts to convince the light clients that the finality proofs have been voted for by the Polkadot relay chain validators. The relayer operates off-chain and can for example be a node or a collection of nodes.
 
 :::
-### -sec-num- Voting on Statements {#id-voting-on-statements}
+### -sec-num- Voting on Payloads {#id-voting-on-payloads}
 
-The Polkadot Host signs a statement ([Definition -def-num-ref-](sect-finality#defn-beefy-statement)) and gossips it as part of a vote ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)) to its peers on every new finalized block. The Polkadot Host uses ECDSA for signing the statement since Ethereum has better compatibility for it compared to SR25519 or ED25519.
+The Polkadot Host signs the MMR payload ([Definition -def-num-ref-](sect-finality#defn-beefy-payload)) and gossips it as part of a vote ([Definition -def-num-ref-](chap-networking#defn-msg-beefy-gossip)) to its peers on every new finalized block. The Polkadot Host uses ECDSA for signing the payload since Ethereum has better compatibility for it compared to SR25519 or ED25519.
 
 ### -sec-num- Committing Witnesses {#sect-beefy-committing-witnesses}
 
@@ -648,17 +651,17 @@ The relayer ([Definition -def-num-ref-](sect-finality#defn-beefy-relayer)) parti
 
 ### -sec-num- Requesting Signed Commitments {#id-requesting-signed-commitments}
 
-A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the Signed Commitment Witness ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified statement, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
+A light client ([Definition -def-num-ref-](sect-finality#defn-beefy-light-client)) fetches the Signed Commitment Witness ([Definition -def-num-ref-](sect-finality#defn-beefy-witness-data)) from the chain. Once the light client knows which validators apparently voted for the specified payload, it needs to request the signatures from the relayer to verify whether the claims are actually true. This is achieved by requesting signed commitments ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
 
 How those signed commitments are requested by the light client and delivered by the relayer varies among networks or implementations.
 
-#### Definition -def-num- BEEFY Consensus Message {#defn-consensus-message-beefy}
+###### Definition -def-num- BEEFY Consensus Message {#defn-consensus-message-beefy}
 ::::definition
 
-$\text{CM}_{{y}}$, the consensus message for BEEFY, is of the following format:
+$\text{CM}_{{beefy}}$, the consensus message for BEEFY, is of the following format:
 
 $$
-\text{CM}_{{y}}={\left\lbrace\begin{matrix}{1}&{\left({V}_{{B}},{V}_{{i}}\right)}\\{2}&{A}_{{i}}\\{3}&{R}\end{matrix}\right.}
+\text{CM}_{{beefy}}={\left\lbrace\begin{matrix}{1}&{\left({V}_{{B}},{V}_{{i}}\right)}\\{2}&{A}_{{i}}\\{3}&{R}\end{matrix}\right.}
 $$
 
 **where**
