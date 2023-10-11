@@ -31,7 +31,7 @@ Complete specification of the Polkadot networking protocol relies on the followi
 ## -sec-num- Node Identities {#id-node-identities}
 
 Like any other distributed system, each Polkadot Host node has a unique global identifier. This identifier, called `PeerId`, serves as a singular reference to a particular node within the overall network.
-In Polkadot each node is required to maintain its own pair of ED25519 cryptographic keys from which the `PeerId` [is derived](https://pl-launchpad.io/curriculum/libp2p/connections/#peer-identity).  
+In Polkadot, each node is required to maintain its own pair of ED25519 cryptographic keys from which the `PeerId` [is derived](https://pl-launchpad.io/curriculum/libp2p/connections/#peer-identity).  
 
 The Polkadot node’s `PeerId` is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/) but does not fully conform to the specification. In particular, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519. The `PeerId` is built by hashing the [encoded public key](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys) with [multihash](https://github.com/multiformats/multihash) and represented as follows:
 
@@ -202,7 +202,7 @@ The prefixes on those substreams are known as protocol identifiers and are used 
   The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-grandpa-beefy).
 
 :::info
-  For backwards compatibility reasons, `/paritytech/beefy/1` is also a valid substream for those messages.
+  For backward compatibility reasons, `/paritytech/beefy/1` is also a valid substream for those messages.
 :::
 
 ## -sec-num- Network Messages {#sect-network-messages}
@@ -741,7 +741,7 @@ $$
 $$
 **where**  
 - ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
-- ${S}_{{n}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)) in ${C}$. Individual items are of the type *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) which can contain a signature of a validator which signed the same payload (${R}_{{h}}$ in ${C}$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
+- ${S}_{{n}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)) in ${C}$. Individual items are of the type *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)), which can contain a signature of a validator which signed the same payload (${R}_{{h}}$ in ${C}$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
   For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in ${S}_{{n}}$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
 :::
 ###### Definition -def-num- Signed Commitment Witness {#defn-grandpa-beefy-signed-commitment-witness}
