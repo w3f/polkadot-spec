@@ -655,11 +655,7 @@ How those signed commitments are requested by the light client and delivered by 
 #### Definition -def-num- BEEFY Consensus Message {#defn-consensus-message-beefy}
 ::::definition
 
-:::danger
-The BEEFY protocol is still under construction. The following part will be updated in the future and certain information will be clarified.
-:::
-
-$\text{CM}_{{y}}$, the consensus message for BEEFY ([Section -sec-num-ref-](sect-finality#sect-grandpa-beefy)), is of the following format:
+$\text{CM}_{{y}}$, the consensus message for BEEFY, is of the following format:
 
 $$
 \text{CM}_{{y}}={\left\lbrace\begin{matrix}{1}&{\left({V}_{{B}},{V}_{{i}}\right)}\\{2}&{A}_{{i}}\\{3}&{R}\end{matrix}\right.}
@@ -670,8 +666,8 @@ $$
 |  |  |
 |--|--|
 | 1   | implies that the remote **authorities have changed**. ${V}_{{B}}$ is the array of the new BEEFY authorities’s public keys and ${V}_{{i}}$ is the identifier of the remote validator set. |
-| 2   | implies **on disabled**: an index to the individual authorty in ${V}_{{B}}$ that should be immediately disabled until the next authority change.                                     |
-| 3   | implies **MMR root**: a 32-byte array containing the MMR root.                                                                                                                   |
+| 2   | implies **on disabled**: an index to the individual authority in ${V}_{{B}}$ that should be immediately disabled until the next authority change.                                     |
+| 3   | implies **MMR root**: a 32-byte array containing the MMR root payload.                                                                                                                        |
 
 ::::
 
