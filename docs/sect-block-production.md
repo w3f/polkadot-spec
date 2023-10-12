@@ -120,50 +120,7 @@ The numbers should be treated as 64-bit rational numbers.
 :::
 ### -sec-num- Primary Block Production Lottery {#id-primary-block-production-lottery}
 
-A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should run the $\text{Block-Production-Lottery}$ algorithm to identify the slots it is awarded. These are the slots during which the block producer is allowed to build a block. The session secret key, ${s}{k}$, is the block producer lottery secret key, and ${n}$ is the index of the epoch for whose slots the block producer is running the lottery.
-
-###### Algorithm -algo-num- Block Production Lottery {#algo-block-production-lottery}
-:::algorithm
-<Pseudocode
-    content={blockProductionLottery}
-    algID="blockProductionLottery"
-    options={{ "lineNumber": true }}
-/>
-
-where $\text{Epoch-Randomness}$ is defined in ([Definition -def-num-ref-](sect-block-production#defn-epoch-randomness)), ${s}{c}_{{n}}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-duration) , $\text{VRF}$ creates the BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)) and ${e}_{{i}}$ is the epoch index, retrieved from the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)). ${s}_{{k}}$ and ${p}_{{k}}$ is the secret key, respectively, the public key of the authority. For any slot ${s}$ in epoch ${n}$ where ${o}<{T}_{{{\mathcal{{E}}}_{{n}}}}$ ([Definition -def-num-ref-](sect-block-production#defn-winning-threshold)), the block producer is required to produce a block.
-:::
-
-:::info
-The secondary slots ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)) are running alongside the primary block production lottery and mainly serve as a fallback to in case no authority was selected in the primary lottery.
-:::
-
-###### Definition -def-num- Secondary Slots {#defn-babe-secondary-slots}
-:::definition
-
-**Secondary slots** work alongside primary slot to ensure consistent block production, as described in [Section -sec-num-ref-](sect-block-production#sect-block-production-lottery). The secondary assignee of a block is determined by calculating a specific value, ${i}_{{d}}$, which indicates the index in the authority set ([Definition -def-num-ref-](chap-sync#defn-authority-list)). The corresponding authority in that set has the right to author a secondary block. This calculation is done for every slot in the epoch, ${s}\in{s}{c}_{{n}}$ ([Definition -def-num-ref-](sect-block-production#defn-epoch-duration)).
-
-$$
-{p}\leftarrow{h}{\left(\text{Enc}_{\text{SC}}{\left({r},{s}\right)}\right)}
-$$
-$$
-{i}_{{d}}\leftarrow{p}\text{mod}{A}_{{l}}
-$$
-
-**where**  
-- ${r}$ is the Epoch randomness ([Definition -def-num-ref-](sect-block-production#defn-epoch-randomness)).
-
-- ${s}$ is the slot number ([Definition -def-num-ref-](sect-block-production#defn-epoch-slot)).
-
-- $\text{Enc}_{\text{SC}}{\left(\ldots\right)}$ encodes its inner value to the corresponding SCALE value.
-
-- ${h}{\left(\ldots\right)}$ creates a 256-bit Blake2 hash from its inner value.
-
-- ${A}_{{l}}$ is the lengths of the authority list ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
-
-If ${i}_{{d}}$ points to the authority, that authority must claim the secondary slot by creating a BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)). The resulting values ${o}$ and ${p}$ are then used in the Pre-Digest item ([Definition -def-num-ref-](sect-block-production#defn-babe-header)). In the case of secondary slots with plain outputs, respectively the Pre-Digest being of value *2*, the transcript respectively the VRF is skipped.
-
-:::
-###### Definition -def-num- BABE Slot VRF transcript {#defn-babe-vrf-transcript}
+###### Definition -def-num- BABE Slot VRF transcript, output, and proof  {#defn-babe-vrf-transcript}
 :::definition
 
 The BABE block production lottery requires a specific transcript structure ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-transcript)). That structure is used by both primary slots ([Block-Production-Lottery](sect-block-production#algo-block-production-lottery)) and secondary slots ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)).
@@ -193,13 +150,56 @@ $$
 {h}\leftarrow\text{prf}{\left({t}_{{7}},\text{False}\right)}
 $$
 $$
-{o}={s}_{{k}}\cdot{h}
+{d}={s}_{{k}}\cdot{h}
 $$
 $$
-{p}\leftarrow\text{dleq\_prove}{\left({t}_{{7}},{h}\right)}
+{\pi}\leftarrow\text{dleq\_prove}{\left({t}_{{7}},{h}\right)}
 $$
 
-The operators are defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-strobe-operations), $\text{dleq\_prove}$ in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove). The computed outputs, ${o}$ and ${p}$, are included in the block Pre-Digest ([Definition -def-num-ref-](sect-block-production#defn-babe-header)).
+The operators are defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-strobe-operations), $\text{dleq\_prove}$ in [Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-dleq-prove). The computed outputs, ${d}$ and ${\pi}$, are included in the block Pre-Digest ([Definition -def-num-ref-](sect-block-production#defn-babe-header)).
+
+:::
+
+A block producer aiming to produce a block during ${\mathcal{{E}}}_{{n}}$ should run the $\text{Block-Production-Lottery}$ algorithm to identify the slots it is awarded. These are the slots during which the block producer is allowed to build a block. The session secret key, ${s}{k}$, is the block producer lottery secret key, and ${n}$ is the index of the epoch for whose slots the block producer is running the lottery.
+
+###### Algorithm -algo-num- Block Production Lottery {#algo-block-production-lottery}
+:::algorithm
+<Pseudocode
+    content={blockProductionLottery}
+    algID="blockProductionLottery"
+    options={{ "lineNumber": true }}
+/>
+
+where $\text{Epoch-Randomness}$ is defined in ([Definition -def-num-ref-](sect-block-production#defn-epoch-randomness)), ${s}{c}_{{n}}$ is defined in [Definition -def-num-ref-](sect-block-production#defn-epoch-duration) , $\text{VRF}$ creates the BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)) and ${e}_{{i}}$ is the epoch index, retrieved from the Runtime ([Section -sec-num-ref-](chap-runtime-api#sect-rte-babeapi-epoch)). ${s}_{{k}}$ and ${p}_{{k}}$ is the secret key, respectively, the public key of the authority. For any slot ${s}$ in epoch ${n}$ where ${o}<{T}_{{{\mathcal{{E}}}_{{n}}}}$ ([Definition -def-num-ref-](sect-block-production#defn-winning-threshold)), the block producer is required to produce a block.
+:::
+
+:::info
+The secondary slots ([Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)) are running alongside the primary block production lottery and mainly serve as a fallback to in case no authority was selected in the primary lottery.
+:::
+###### Definition -def-num- Secondary Slots {#defn-babe-secondary-slots}
+:::definition
+
+**Secondary slots** work alongside primary slot to ensure consistent block production, as described in [Section -sec-num-ref-](sect-block-production#sect-block-production-lottery). The secondary assignee of a block is determined by calculating a specific value, ${i}_{{d}}$, which indicates the index in the authority set ([Definition -def-num-ref-](chap-sync#defn-authority-list)). The corresponding authority in that set has the right to author a secondary block. This calculation is done for every slot in the epoch, ${s}\in{s}{c}_{{n}}$ ([Definition -def-num-ref-](sect-block-production#defn-epoch-duration)).
+
+$$
+{p}\leftarrow{h}{\left(\text{Enc}_{\text{SC}}{\left({r},{s}\right)}\right)}
+$$
+$$
+{i}_{{d}}\leftarrow{p}\text{mod}{A}_{{l}}
+$$
+
+**where**  
+- ${r}$ is the Epoch randomness ([Definition -def-num-ref-](sect-block-production#defn-epoch-randomness)).
+
+- ${s}$ is the slot number ([Definition -def-num-ref-](sect-block-production#defn-epoch-slot)).
+
+- $\text{Enc}_{\text{SC}}{\left(\ldots\right)}$ encodes its inner value to the corresponding SCALE value.
+
+- ${h}{\left(\ldots\right)}$ creates a 256-bit Blake2 hash from its inner value.
+
+- ${A}_{{l}}$ is the lengths of the authority list ([Definition -def-num-ref-](chap-sync#defn-authority-list)).
+
+If ${i}_{{d}}$ points to the authority, that authority must claim the secondary slot by creating a BABE VRF transcript ([Definition -def-num-ref-](sect-block-production#defn-babe-vrf-transcript)). The resulting values ${d}$ and ${\pi}$ are then used in the Pre-Digest item ([Definition -def-num-ref-](sect-block-production#defn-babe-header)). In the case of secondary slots with plain outputs, respectively the Pre-Digest being of value *2*, the transcript respectively the VRF is skipped.
 
 :::
 ## -sec-num- Slot Number Calculation {#sect-slot-number-calculation}
@@ -299,7 +299,7 @@ Throughout each epoch, each block producer should run [Invoke-Block-Authoring](s
 The **Pre-Digest**, or BABE header, ${P}$, is a varying datatype of the following format:
 
 $$
-{P}={\left\lbrace\begin{matrix}{1}&\rightarrow&{\left({a}_{\text{id}},{s},{o},{p}\right)}\\{2}&\rightarrow&{\left({a}_{\text{id}},{s}\right)}\\{3}&\rightarrow&{\left({a}_{\text{id}},{s},{o},{p}\right)}\end{matrix}\right.}
+{P}={\left\lbrace\begin{matrix}{1}&\rightarrow&{\left({a}_{\text{id}},{s},{d},{\pi}\right)}\\{2}&\rightarrow&{\left({a}_{\text{id}},{s}\right)}\\{3}&\rightarrow&{\left({a}_{\text{id}},{s},{d},{\pi}\right)}\end{matrix}\right.}
 $$
 
 **where**  
@@ -309,9 +309,9 @@ $$
 
 - ${s}$ is the slot number ([Definition -def-num-ref-](sect-block-production#defn-epoch-slot)).
 
-- ${o}$ is VRF output ([Block-Production-Lottery](sect-block-production#algo-block-production-lottery) respectively [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)).
+- ${d}$ is VRF output ([Block-Production-Lottery](sect-block-production#algo-block-production-lottery) respectively [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)).
 
-- ${p}$ is VRF proof ([Block-Production-Lottery](sect-block-production#algo-block-production-lottery) respectively [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)).
+- ${\pi}$ is VRF proof ([Block-Production-Lottery](sect-block-production#algo-block-production-lottery) respectively [Definition -def-num-ref-](sect-block-production#defn-babe-secondary-slots)).
 
 The Pre-Digest must be included as a digest item of Pre-Runtime type in the header digest ([Definition -def-num-ref-](chap-state#defn-digest)) ${H}_{{d}}{\left({B}\right)}$.
 :::
