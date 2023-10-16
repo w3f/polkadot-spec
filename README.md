@@ -1,6 +1,6 @@
 # Polkadot Protocol Specification
 
-- [Introduction](#intorduction)
+- [Introduction](#introduction)
 - [Process](#process)
 - [Local Development](#local-development)
 - [Formatting](#formatting)
@@ -16,7 +16,7 @@
   - [Broken Links](#broken-links)
 - [License](#license) 
 
-## Intorduction 
+## Introduction 
 
 This repository contains the official specification for the [Polkadot Protocol](https://polkadot.network/). The latest releases of the *Polkadot Protocol Specification* can be found on [spec.polkadot.network](https://spec.polkadot.network) or our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
 
