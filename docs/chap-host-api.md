@@ -1395,7 +1395,7 @@ Remove a key and its associated value from the Offchain DB.
 
 #### -sec-num- Version 1 - Prototype {#id-version-1-prototype-Offchain_index_clear}
 
-    (func $ext_offchain_index_set_version_1
+    (func $ext_offchain_index_clear_version_1
         (param $key i64))
 
 **Arguments**  
