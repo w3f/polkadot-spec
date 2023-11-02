@@ -32,7 +32,6 @@ Web3 Foundation
 - [Bhargav Bhatt](https://github.com/bhargavbh)
 - [David Hawig](https://github.com/Noc2)
 - [Seyed Lavasani](https://github.com/drskalman)
-- [Heverson B. Ribeiro](https://github.com/heversonbr)
 
 Quadrivium
 - [Kamil Salakhiev](https://github.com/kamilsa)
