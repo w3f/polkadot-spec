@@ -22,7 +22,7 @@ TBH
 
 ### -sec-num- VRF {#sect-vrf}
 
-A Verifiable Random Function (VRF) is a mathematical operation that takes some input and produces a random number using a secret key along with a proof of authenticity that this random number was generated using the submitter’s secret key and the given input. The proof can be verified by any challenger to ensure the random number generation is valid and has not been tampered with (for example to the benfit of submitter).
+A Verifiable Random Function (VRF) is a mathematical operation that takes some input and produces a random number using a secret key along with a proof of authenticity that this random number was generated using the submitter’s secret key and the given input. Any challenger can verify the proof to ensure the random number generation is valid and has not been tampered with (for example, to the benefit of the submitter).
 
 In Polkadot, VRFs are used for the BABE block production lottery by [Block-Production-Lottery](sect-block-production#algo-block-production-lottery) and the parachain approval voting mechanism ([Section -sec-num-ref-](chapter-anv#sect-approval-voting)). The VRF uses a mechanism similar to algorithms introduced in the following papers:
 
@@ -183,7 +183,7 @@ $$
 
 **where**
 
-- The duplex state, $\text{st}$, is a 200-byte array created by the [keccak-f1600 sponge function](https://keccak.team/keccak_specs_summary) on the [initial STROBE state](https://strobe.sourceforge.io/specs/#object.initial). Specifically, `R` is of value `166` and `X.Y.Z` is of value `1.0.2`.
+- The duplex state, $\text{st}$, is a 200-byte array created by the [keccak-f1600 sponge function](https://keccak.team/keccak_specs_summary) on the [initial STROBE state](https://strobe.sourceforge.io/specs/#object.initial). Specifically, `R` is of value `166`, and `X.Y.Z` is of value `1.0.2`.
 
 - $\text{pos}$ has the initial value of `0`.
 
@@ -213,7 +213,7 @@ STROBE operations are described in the [STROBE specification](https://strobe.sou
 :::
 ##### -sec-num- Messages {#sect-vrf-appending-messages}
 
-Appending messages, or "data", to the transcript ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-transcript)) first requires `meta-AD` operations for a given label of the messages, including the size of the message, followed by an `AD` operation on the message itself. The size of the message is a 4-byte, little-endian encoded integer.
+Appending messages, or "data," to the transcript ([Definition -def-num-ref-](id-cryptography-encoding#defn-vrf-transcript)) first requires `meta-AD` operations for a given label of the messages, including the size of the message, followed by an `AD` operation on the message itself. The size of the message is a 4-byte, little-endian encoded integer.
 
 $$
 {T}_{{0}}=\text{meta-AD}{\left({T},{l},\text{False}\right)}
@@ -282,6 +282,7 @@ The **Controller key** is a type of account key that acts on behalf of the Stash
 | BABE       | SR25519    |
 | I’m Online | SR25519    |
 | Parachain  | SR25519    |
+| BEEFY      | secp256k1  |
 
 Session keys must be accessible by certain Polkadot Host APIs defined in [Appendix -chap-num-ref-](chap-host-api). Session keys are *not* meant to control the majority of the users’ funds and should only be used for their intended purpose.
 :::
@@ -297,8 +298,6 @@ TBH
 :::info
 TBH
 :::
-
-
 
 
 
@@ -375,7 +374,7 @@ $$
 ###### Definition -def-num- UINT32 {#defn-uint32}
 :::definition
 
-By **UINT32** we refer to a non-negative integer stored in a byte array of length ${4}$ using little-endian encoding format.
+By **UINT32**, we refer to a non-negative integer stored in a byte array of length ${4}$ using little-endian encoding format.
 
 :::
 ### -sec-num- SCALE Codec {#sect-scale-codec}
@@ -387,7 +386,7 @@ The Polkadot Host uses *Simple Concatenated Aggregate Little-Endian” (SCALE) c
 
 $\text{Dec}_{{\text{SC}}}{\left({d}\right)}$ refers to the decoding of a blob of data. Since the SCALE codec is not self-describing, it’s up to the decoder to validate whether the blob of data can be deserialized into the given type or data structure.
 
-It’s accepted behavior for the decoder to partially decode the blob of data. Meaning, any additional data that does not fit into a data structure can be ignored.
+It’s accepted behavior for the decoder to partially decode the blob of data. This means any additional data that does not fit into a data structure can be ignored.
 
 :::caution
 Considering that the decoded data is never larger than the encoded message, this information can serve as a way to validate values that can vary in size, such as sequences ([Definition -def-num-ref-](id-cryptography-encoding#defn-scale-list)). The decoder should strictly use the size of the encoded data as an upper bound when decoding in order to prevent denial of service attacks.
@@ -423,7 +422,7 @@ $$
 
 A value ${A}$ of varying data type is a pair ${\left({A}_{{\text{Type}}},{A}_{{\text{Value}}}\right)}$ where ${A}_{{\text{Type}}}={T}_{{i}}$ for some ${T}_{{i}}\in{\mathcal{{T}}}$ and ${A}_{{\text{Value}}}$ is its value of type ${T}_{{i}}$, which can be empty. We define $\text{idx}{\left({T}_{{i}}\right)}={i}-{1}$, unless it is explicitly defined as another value in the definition of a particular varying data type.
 
-In particular, we define two specific varying data which are frequently used in various part of Polkadot protocol: *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) and *Result* ([Definition -def-num-ref-](id-cryptography-encoding#defn-result-type)).
+In particular, we define two specific varying data which are frequently used in various parts of the Polkadot protocol: *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)) and *Result* ([Definition -def-num-ref-](id-cryptography-encoding#defn-result-type)).
 
 :::
 ###### Definition -def-num- Encoding of Varying Data Type {#defn-scale-variable-type}
@@ -435,7 +434,7 @@ $$
 \text{Enc}_{{\text{SC}}}{\left({A}\right)}\:=\text{Enc}_{{\text{SC}}}{\left(\text{idx}{\left({A}_{{\text{Type}}}\right)}\text{||}\text{Enc}_{{\text{SC}}}{\left({A}_{{\text{Value}}}\right)}\right)}
 $$
 
-Where $\text{idx}$ is a 8-bit integer determining the type of ${A}$. In particular, for the optional type defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type), we have:
+Where $\text{idx}$ is an 8-bit integer determining the type of ${A}$. In particular, for the optional type defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-varrying-data-type), we have:
 
 $$
 \text{Enc}_{{\text{SC}}}{\left(\text{None},\phi\right)}\:={0}_{{{\mathbb{{B}}}_{{1}}}}
@@ -453,7 +452,7 @@ The **Option** type is a varying data type of ${\left\lbrace\text{None},{T}_{{2}
 ###### Definition -def-num- Result Type {#defn-result-type}
 :::definition
 
-The **Result** type is a varying data type of ${\left\lbrace{T}_{{1}},{T}_{{2}}\right\rbrace}$ which is used to indicate if a certain operation or function was executed successfully (referred to as "ok" state) or not (referred to as "error" state). ${T}_{{1}}$ implies success, ${T}_{{2}}$ implies failure. Both types can either contain additional data or are defined as empty type otherwise.
+The **Result** type is a varying data type of ${\left\lbrace{T}_{{1}},{T}_{{2}}\right\rbrace}$ which is used to indicate if a certain operation or function was executed successfully (referred to as "ok" state) or not (referred to as "error" state). ${T}_{{1}}$ implies success, ${T}_{{2}}$ implies failure. Both types can either contain additional data or are defined as empty types otherwise.
 
 :::
 ###### Definition -def-num- Sequence {#defn-scale-list}
@@ -485,7 +484,7 @@ $$
 {D}\:={\left\lbrace{\left({k}_{{1}},{v}_{{1}}\right)},\ldots{\left({k}_{{n}},{v}_{{n}}\right)}\right\rbrace}
 $$
 
-is defined the SCALE codec of ${D}$ as a sequence of key value pairs (as tuples):
+is defined as the SCALE codec of ${D}$ as a sequence of key-value pairs (as tuples):
 
 $$
 \text{Enc}_{{\text{SC}}}{\left({D}\right)}\:={\text{Enc}_{{\text{SC}}}^{{\text{Size}}}}{\left({\left|{{D}}\right|}\right)}\text{||}\text{Enc}_{{\text{SC}}}{\left({k}_{{1}},{v}_{{1}}\right)}\text{||}\ldots\text{||}\text{Enc}_{{\text{SC}}}{\left({k}_{{n}},{v}_{{n}}\right)}
@@ -516,18 +515,18 @@ The SCALE codec for a **string value** is an encoded sequence ([Definition -def-
 ###### Definition -def-num- Fixed Length {#defn-scale-fixed-length}
 :::definition
 
-The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for other types such as fixed length integers not defined here otherwise, is equal to little endian encoding of those values defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-little-endian).
+The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for other types such as fixed length integers not defined here otherwise, is equal to little-endian encoding of those values defined in [Definition -def-num-ref-](id-cryptography-encoding#defn-little-endian).
 
 :::
 ###### Definition -def-num- Empty {#defn-scale-empty}
 :::definition
 
-The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for an empty type is defined to a byte array of zero length and depicted as $\phi$.
+The SCALE codec, $\text{Enc}_{{\text{SC}}}$, for an empty type, is defined as a byte array of zero length and depicted as $\phi$.
 
 :::
 #### -sec-num- Length and Compact Encoding {#sect-sc-length-and-compact-encoding}
 
-SCALE Length encoding is used to encode integer numbers of variying sizes prominently in an encoding length of arrays:
+SCALE Length encoding is used to encode integer numbers of varying sizes prominently in an encoding length of arrays:
 
 ###### Definition -def-num- Length Encoding {#defn-sc-len-encoding}
 :::definition
@@ -568,7 +567,7 @@ $$
 {{k}_{{1}}^{{7}}}\ldots{{k}_{{1}}^{{3}}}{{k}_{{1}}^{{2}}}\:={m}-{4}
 $$
 
-Note that ${m}$ denotes the length of the original integer being encoded and does not include the extra-byte describing the length. The encoding can be used for integers up to $$2^{(63+4)8} -1 = 2^{536} -1$$.
+Note that ${m}$ denotes the length of the original integer being encoded and does not include the extra byte describing the length. The encoding can be used for integers up to $$2^{(63+4)8} -1 = 2^{536} -1$$.
 
 
 :::
@@ -587,7 +586,7 @@ $$
 
 :::
 ## -sec-num- Chain Specification {#chapter-chainspec}
-Chain Specification (chainspec) is a collection of information that describes the blockchain network. It includes information required for a host to connect and sync with the Polakdot network, for example, the initial nodes to communicate with, protocol identifier, initial state that the hosts agree, etc. There are a set of core fields required by the Host and a set of extensions which are used by optionally implemented features of the Host. The fields of chain specification are categorised in three parts:
+Chain Specification (chainspec) is a collection of information that describes the blockchain network. It includes information required for a host to connect and sync with the Polakdot network, for example, the initial nodes to communicate with, protocol identifier, initial state that the hosts agree, etc. There are a set of core fields required by the Host and a set of extensions that are used by optionally implemented features of the Host. The fields of chain specification are categorized in three parts:
 1. [ChainSpec](#sec-num--chain-spec-section-chainspec)
 2. [ChainSpec Extensions](#sec-num--chain-spec-extensions-section-chain-spec-extensions)
 3. [Genesis State](#sec-num--genesis-state-section-genesis) which is the only mandatory part of the chainspec. 
@@ -598,9 +597,9 @@ Chain specification contains information used by the Host to communicate with ne
 
 :::definition
 
-The **client specification** contains the fields below. The values for Polkadot chain are specified:
+The **client specification** contains the fields below. The values for the Polkadot chain are specified:
 
-- _name_: The human readable name of the chain.
+- _name_: The human-readable name of the chain.
   ```
   "name": "Polkadot"
   ```
@@ -625,7 +624,7 @@ The list of boot nodes for Polkadot can be found [here](https://raw.githubuserco
 "forkId": {}
 ```
 
-- _properties_: Optional additional properties of the chain as subfields including token symbol, token decimals and address formats.
+- _properties_: Optional additional properties of the chain as subfields including token symbol, token decimals, and address formats.
 
 ```
   "properties": {
@@ -639,13 +638,13 @@ The list of boot nodes for Polkadot can be found [here](https://raw.githubuserco
 
 
 ### -sec-num- Chain Spec Extensions {#section-chain-spec-extensions}
-ChainSpec Extensions are additional parameters customisable from the chainspec and correspond to optional features implemented in the Host. 
+ChainSpec Extensions are additional parameters customizable from the chainspec and correspond to optional features implemented in the Host. 
 
 ###### Definition -def-num- Bad Blocks Header {#defn-bad-blocks}
 
 :::definition
 
-**BadBlocks** describes a list of block header hashes that are known a priori to be bad (not belonging to canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
+**BadBlocks** describes a list of block header hashes that are known a priori to be bad (not belonging to the canonical chain) by the host, so that the host can explicitly avoid importing them. These block headers are always considered invalid and filtered out before importing the block:
 
 $$
 {badBlocks}={\left({b}_{{0}},\ldots{b}_{{n}}\right)}
@@ -659,7 +658,7 @@ where ${b_i}$ is a known invalid [block header hash](#definition--def-num--block
 
 :::definition
 
-**ForkBlocks** describes a list of expected block header hashes at certain block heights. They are used to set trusted checkpoints, i.e., the host will refuse to import a block with a different hash at the given height. Forkblocks are useful mechanism to guide the Host to the right fork in instances where the chain is bricked (possibly due to issues in runtime upgrades).
+**ForkBlocks** describes a list of expected block header hashes at certain block heights. They are used to set trusted checkpoints, i.e., the host will refuse to import a block with a different hash at the given height. Forkblocks are useful mechanisms to guide the Host to the right fork in instances where the chain is bricked (possibly due to issues in runtime upgrades).
 $$
 {forkBlocks}={\left(<{b}_{{0}},{H}_{{0}}>,\ldots<{b}_{{n}},{H}_{{n}} >\right)}
 $$
@@ -677,9 +676,9 @@ where ${b_i}$ is an apriori known valid [block header hash](#definition--def-num
 
 ### -sec-num- Genesis State {#section-genesis}
 
-The genesis state is a set of key-value pairs representing the initial state of the Polkadot state storage. It can be retrieved from [the Polkadot repository](https://github.com/paritytech/polkadot/tree/master/node/service/chain-specs). While each of those key-value pairs offers important identifiable information to the Runtime, to the Polkadot Host they are a transparent set of arbitrary chain- and network-dependent keys and values. The only exception to this are the `:code` ([Section -sec-num-ref-](chap-state#sect-loading-runtime-code)) and `:heappages` ([Section -sec-num-ref-](chap-state#sect-memory-management)) keys, which are used by the Polkadot Host to initialize the WASM environment and its Runtime. The other keys and values are unspecified and solely depend on the chain and respectively its corresponding Runtime. On initialization the data should be inserted into the state storage with the Host API ([Section -sec-num-ref-](chap-host-api#sect-storage-set)).
+The genesis state is a set of key-value pairs representing the initial state of the Polkadot state storage. It can be retrieved from [the Polkadot repository](https://github.com/paritytech/polkadot/tree/master/node/service/chain-specs). While each of those key-value pairs offers important identifiable information to the Runtime, to the Polkadot Host they are a transparent set of arbitrary chain- and network-dependent keys and values. The only exception to this are the `:code` ([Section -sec-num-ref-](chap-state#sect-loading-runtime-code)) and `:heappages` ([Section -sec-num-ref-](chap-state#sect-memory-management)) keys, which are used by the Polkadot Host to initialize the WASM environment and its Runtime. The other keys and values are unspecified and solely depend on the chain and respectively its corresponding Runtime. On initialization, the data should be inserted into the state storage with the Host API ([Section -sec-num-ref-](chap-host-api#sect-storage-set)).
 
-As such, Polkadot does not define a formal genesis block. Nonetheless for the compatibility reasons in several algorithms, the Polkadot Host defines the *genesis header* ([Definition -def-num-ref-](id-cryptography-encoding#defn-genesis-header)). By the abuse of terminology, "genesis block" refers to the hypothetical parent of block number *1* which holds genesis header as its header.
+As such, Polkadot does not define a formal genesis block. Nonetheless, for compatibility reasons in several algorithms, the Polkadot Host defines the *genesis header* ([Definition -def-num-ref-](id-cryptography-encoding#defn-genesis-header)). By the abuse of terminology, "genesis block" refers to the hypothetical parent of block number *1* which holds the genesis header as its header.
 
 ###### Definition -def-num- Genesis Header {#defn-genesis-header}
 :::definition
@@ -702,7 +701,7 @@ The Polkadot genesis header is a data structure conforming to block header forma
 
 :::definition
 
-**Code Substitutes** is a list of pairs of block number and `wasm_code`. The given WASM code will be used to substitute the on-chain wasm code starting with the given block number until the [`spec_version`](chap-runtime-api#defn-rt-core-version) on-chain changes. The substitute code should be as close as possible to the on-chain wasm code. A substitute should be used to fix a bug that can not be fixed with a runtime upgrade, if for example the runtime is constantly panicking. Introducing new runtime apis isn't supported, because the node will read the runtime version from the on-chain wasm code. Use this functionality only when there is no other way around and to only patch the problematic bug, the rest should be done with a on-chain runtime upgrade.
+**Code Substitutes** is a list of pairs of the block numbers and `wasm_code`. The given WASM code will be used to substitute the on-chain WASM code starting with the given block number until the [`spec_version`](chap-runtime-api#defn-rt-core-version) on-chain changes. The substitute code should be as close as possible to the on-chain wasm code. A substitute should be used to fix a bug that can not be fixed with a runtime upgrade if, for example, the runtime is constantly panicking. Introducing new runtime apis isn't supported, because the node will read the runtime version from the on-chain wasm code. Use this functionality only when there is no other way around and to only patch the problematic bug, the rest should be done with an on-chain runtime upgrade.
 
 :::
 

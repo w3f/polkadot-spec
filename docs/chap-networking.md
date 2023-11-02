@@ -31,7 +31,7 @@ Complete specification of the Polkadot networking protocol relies on the followi
 ## -sec-num- Node Identities {#id-node-identities}
 
 Like any other distributed system, each Polkadot Host node has a unique global identifier. This identifier, called `PeerId`, serves as a singular reference to a particular node within the overall network.
-In Polkadot each node is required to maintain its own pair of ED25519 cryptographic keys from which the `PeerId` [is derived](https://pl-launchpad.io/curriculum/libp2p/connections/#peer-identity).  
+In Polkadot, each node is required to maintain its own pair of ED25519 cryptographic keys from which the `PeerId` [is derived](https://pl-launchpad.io/curriculum/libp2p/connections/#peer-identity).  
 
 The Polkadot node’s `PeerId` is structured based on the [libp2p specification](https://docs.libp2p.io/concepts/peer-id/) but does not fully conform to the specification. In particular, it does not support [CID](https://github.com/multiformats/cid) and the only supported key type is ED25519. The `PeerId` is built by hashing the [encoded public key](https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys) with [multihash](https://github.com/multiformats/multihash) and represented as follows:
 
@@ -197,6 +197,13 @@ The prefixes on those substreams are known as protocol identifiers and are used 
   For backward compatibility reasons, `/paritytech/grandpa/1` is also a valid substream for those messages.
 :::
 
+- `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/beefy/1` - a substream/notification protocol which sends signed BEEFY payloads, as described in [Section -sec-num-ref-](sect-finality#sect-grandpa-beefy), to connected peers. This is a *Notification* substream.
+
+  The messages are specified in [Section -sec-num-ref-](chap-networking#sect-msg-grandpa-beefy).
+
+:::info
+  For backward compatibility reasons, `/paritytech/beefy/1` is also a valid substream for those messages.
+:::
 
 ## -sec-num- Network Messages {#sect-network-messages}
 
@@ -698,3 +705,54 @@ This message is the sub-component of the GRANDPA Gossip message ([Definition -de
 
 
 :::
+### -sec-num- GRANDPA BEEFY {#sect-msg-grandpa-beefy}
+
+This section defines the messages required for the BEEFY protocol ([Section -sec-num-ref-](sect-finality#sect-grandpa-beefy)). Those messages are sent over the `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/beefy/1` substream.
+###### Definition -def-num- Commitment {#defn-grandpa-beefy-commitment}
+:::definition
+A **commitment**, ${C}$, contains the information extracted from the finalized block at height ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ as specified in the message body and a datastructure of the following format:
+$$
+{C}={\left({R}_{{h}},{H}_{{i}}{\left({B}_{{\text{last}}}\right)},\text{id}_{{{\mathbb{{V}}}}}\right)}
+$$
+**where**  
+- ${R}_{{h}}$ is the MMR root of all the block header hashes leading up to the latest, finalized block.
+- ${H}_{{i}}{\left({B}_{{\text{last}}}\right)}$ is the block number this commitment is for. Namely the latest, finalized block.
+- $\text{id}_{{{\mathbb{{V}}}}}$ is the current authority set Id ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)).
+:::
+###### Definition -def-num- Vote Message {#defn-msg-beefy-gossip}
+:::definition
+A **vote message**, ${M}_{{v}}$, is direct vote created by the Polkadot Host on every BEEFY round and is gossiped to its peers. The message is a datastructure of the following format:
+$$
+{M}_{{v}}=\text{Enc}_{{\text{SC}}}{\left({C},{{A}_{{\text{id}}}^{{\text{bfy}}}},{A}_{{\text{sig}}}\right)}
+$$
+**where**  
+- ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
+- ${{A}_{{\text{id}}}^{{\text{bfy}}}}$ is the ECDSA public key of the Polkadot Host.
+- ${A}_{{\text{sig}}}$ is the signature created with ${{A}_{{\text{id}}}^{{\text{bfy}}}}$ by signing the payload ${R}_{{h}}$ in ${C}$.
+:::
+###### Definition -def-num- Signed Commitment {#defn-grandpa-beefy-signed-commitment}
+:::definition
+A **signed commitment**, ${M}_{{\text{sc}}}$, is a datastructure of the following format:
+$$
+{M}_{{\text{SC}}}=\text{Enc}_{{\text{SC}}}{\left({C},{S}_{{n}}\right)}
+$$
+$$
+{S}_{{n}}={\left({{A}_{{0}}^{{\text{sig}}}},\ldots{{A}_{{n}}^{{\text{sig}}}}\right)}
+$$
+**where**  
+- ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
+- ${S}_{{n}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ ([Definition -def-num-ref-](sect-finality#defn-authority-set-id)) in ${C}$. Individual items are of the type *Option* ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)), which can contain a signature of a validator which signed the same payload (${R}_{{h}}$ in ${C}$) and is active in the current authority set. It’s critical that the signatures are sorted based on their corresponding public key entry in the authority set.
+  For example, the signature of the validator at index 3 in the authority set must be placed at index *3* in ${S}_{{n}}$. If not signature is available for that validator, then the *Option* variant is *None* inserted ([Definition -def-num-ref-](id-cryptography-encoding#defn-option-type)). This sorting allows clients to map public keys to their corresponding signatures.
+:::
+###### Definition -def-num- Signed Commitment Witness {#defn-grandpa-beefy-signed-commitment-witness}
+:::definition
+A **signed commitment witness**, ${{M}_{{\text{SC}}}^{{w}}}$, is a light version of the signed BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)). Instead of containing the entire list of signatures, it only claims which validator signed the payload.
+The message is a datastructure of the following format:
+$$
+{{M}_{{\text{SC}}}^{{w}}}=\text{Enc}_{{\text{SC}}}{\left({C},{V}_{{{0},\ldots{n}}},{R}_{{\text{sig}}}\right)}
+$$
+**where**  
+- ${C}$ is the BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-commitment)).
+- ${V}_{{{0},\ldots{n}}}$ is an array where its exact size matches the number of validators in the current authority set as specified by $\text{id}_{{{\mathbb{{V}}}}}$ in ${C}$. Individual items are booleans which indicate whether the validator has signed the payload (*true*) or not (*false*). It’s critical that the boolean indicators are sorted based on their corresponding public key entry in the authority set.
+  For example, the boolean indicator of the validator at index 3 in the authority set must be placed at index *3* in ${V}_{{n}}$. This sorting allows clients to map public keys to their corresponding boolean indicators.
+- ${R}_{{\text{sig}}}$ is the MMR root of the signatures in the original signed BEEFY commitment ([Definition -def-num-ref-](chap-networking#defn-grandpa-beefy-signed-commitment)).
