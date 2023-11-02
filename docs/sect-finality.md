@@ -599,7 +599,7 @@ Here are the basic operations we should be able to perform on the MMR:
 - Verify Node (verifyProof):
     - Signature: verifyNode(nodeHash: str, requiredProofNodes: List[str], MMRroot: str) -> bool
     - Description: verifies if the given node hash can be proved based on the list of required proof nodes and the MMR root hash.
-:::
+::::
 
 ###### Definition -def-num- Payload {#defn-beefy-payload}
 :::definition
