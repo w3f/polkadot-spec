@@ -15,7 +15,7 @@ Warp sync ([Section -sec-num-ref-](chap-networking#sect-msg-warp-sync)) only dow
 
 ## -sec-num- Fast Sync {#sect-sync-fast}
 
-Fast sync works by downloading the block header history and validating the authority set changes ([Section -sec-num-ref-](chap-sync#sect-authority-set)) in order to arrive at a specific (usually the most recent) header. After the desired header has been reached and verified, the state can be downloaded and imported ([Section -sec-num-ref-](chap-networking#sect-msg-state-request)). Once this process has been completed, the node can proceed with a full sync.
+Fast sync works by downloading the block header history and validating the authority set changes ([Section -sec-num-ref-](chap-sync#sect-authority-set)) in order to arrive at a specific (usually the most recent) header. After the desired header has been reached and verified, the state can be downloaded and imported ([Section -sec-num-ref-](chap-networking#sect-msg-state-request)). Once this process has been completed, the node will automatically switch to a full sync.
 
 ## -sec-num- Full Sync {#id-full-sync}
 
