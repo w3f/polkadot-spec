@@ -489,11 +489,6 @@ where ${{M}_{{{v},{i}}}^{{\text{Cat}-{s}}}}{\left(\text{id}_{{{\mathbb{{V}}}}},{
 
 ## -sec-num- Bridge design (BEEFY) {#sect-grandpa-beefy}
 
-:::caution
-The BEEFY protocol specifications are Work-In-Progress. It is currently being tested on test-nets like Rococco and has not yet been deployed on Polkadot. 
-
-:::
-
 The BEEFY (Bridge Efficiency Enabling Finality Yielder) is a secondary protocol to GRANDPA to support efficient bridging between the Polkadot network (relay chain) and remote, segregated blockchains, such as Ethereum, which were not built with the Polkadot interchain operability in mind. BEEFY’s aim is to enable clients to efficiently follow a chain that has GRANDPA finality, a finality gadget created for Substrate/Polkadot ecosystem. This is useful for bridges (e.g., Polkadot->Ethereum), where a chain can follow another chain and light clients suitable for low storage devices such as mobile phones.
 
 The protocol allows participants of the remote network to verify finality proofs created by the Polkadot relay chain validators. In other words: clients in the target network (e.g., Ethereum) can verify that the Polkadot network is at a specific state.
