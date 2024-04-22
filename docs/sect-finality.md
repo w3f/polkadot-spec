@@ -515,9 +515,9 @@ a. **Consensus Extension** on GRANDPA finalization that is a voting round.
 
 The consensus extension serves to have a smaller consensus justification than GRANDPA and alternative cryptography, which helps the light client side of the BEEFY protocol described below. 
 
-b. **Light client** protocol for convincing the other chain/device efficiently about the finality vote.
+b. An efficient **protocol** for convincing on-chain/ off-chain light clients about the finality vote.
 
-In the BEEFY light client, a prover, a full node, or a bridge relayer, wants to convince a verifier, a light client that may be a bridge implementation on the target chain, of the outcome of a BEEFY vote. The prover has access to all voting data from the BEEFY voting round. In the light client part, the prover may generate a proof and send it to the verifier or they may engage in an interactive protocol with several rounds of communication.
+In the BEEFY light-client protocol, a full node or bridge relayer (prover) wants to convince a light client (verifier, e.g., a smart contract implemented on the target chain)  of the outcome of BEEFY votes. The prover has access to all voting data from the BEEFY voting round. The prover may generate a single-shot proof (for e.g. using SNARKS)  and send it to the verifier or they may engage in an interactive protocol with several rounds of communication.
 
 
 ### -sec-num- Preliminaries {#id-preliminaries-2}
