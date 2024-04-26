@@ -145,7 +145,7 @@ The prefixes on those substreams are known as protocol identifiers and are used 
 
   Further specification and reference implementations are available in the [libp2p documentation](https://docs.libp2p.io/concepts/protocols/#identify).
 
-- `/dot/kad` - Open a standardized substream for Kademlia `FIND_NODE` requests. This is a *Request-Response substream*, as defined by the *libp2p* standard.
+- `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/kad` - Open a standardized substream for Kademlia `FIND_NODE` requests. This is a *Request-Response substream*, as defined by the *libp2p* standard.
 
   Further specification and reference implementation are available on [Wikipedia](https://en.wikipedia.org/wiki/Kademlia) respectively the [golang Github repository](https://github.com/libp2p/go-libp2p-kad-dht).
 
