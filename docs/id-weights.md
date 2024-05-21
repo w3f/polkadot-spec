@@ -552,7 +552,7 @@ The benchmarking implementation for the Polkadot Runtime function ${transfer}$ i
   Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
 :::
 
-### -sec-num- Practical Example \#4: `withdraw_unbounded` {#id-practical-example-4-withdraw_unbounded}
+### -sec-num- Practical Example \#4: `withdraw_unbonded` {#id-practical-example-4-withdraw_unbonded}
 
 The `withdraw_unbonded` function of the `staking` module is designed to move any unlocked funds from the staking management system to be ready for transfer. It contains some operations which have some I/O overhead.
 
