@@ -722,7 +722,7 @@ The Polkadot Runtime defines the following values:
 
 - Weight to fee conversion:
 
-  ${weight}$ fee = weight \times (100${u}{D}{O}{T}{s}\div{\left({10}\times{10}'{000}\right)}{)}$
+  ${weight}$ fee = $weight/1.26 * (10^{-8})$ where $weight$ is in nS.
 
   A weight of 126’000 nS is mapped to 1 mDOT. This fee will never exceed the max size of an unsigned 128 bit integer.
 
