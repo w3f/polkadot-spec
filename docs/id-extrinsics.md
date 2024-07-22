@@ -43,7 +43,7 @@ $$
 $$
 
 **where**  
-- ${A}_{{i}}$: the 32-byte address of the sender ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-address)).
+- ${A}_{{i}}$ is the multi-address of the sender defined in [Definition -def-num-ref-](id-extrinsics#defn-extrinsic-address).
 
 - ${Sig}$: the signature of the sender ([Definition -def-num-ref-](id-extrinsics#defn-extrinsic-signature)).
 
