@@ -716,7 +716,7 @@ $$
 
 The Polkadot Runtime defines the following values:
 
-- Base fee: 100 uDOTs
+- Base fee: 1 mDOTs $(10^{-3}DOT)$. Base Fee is defined as the fee for a No-op extrinsic (for e.g., an empty System::Remark call, currently with a weight of 126 micro Seconds).   
 
 - Length fee: 0.1 uDOTs
 
@@ -724,7 +724,7 @@ The Polkadot Runtime defines the following values:
 
   ${weight}$ fee = weight \times (100${u}{D}{O}{T}{s}\div{\left({10}\times{10}'{000}\right)}{)}$
 
-  A weight of 10’000 (the smallest non-zero weight) is mapped to ${\frac{{{1}}}{{{10}}}}$ of 100 uDOT. This fee will never exceed the max size of an unsigned 128 bit integer.
+  A weight of 126’000 nS is mapped to 1 mDOT. This fee will never exceed the max size of an unsigned 128 bit integer.
 
 ### -sec-num- Fee Multiplier {#id-fee-multiplier}
 
