@@ -1,5 +1,5 @@
 > [!NOTE]
-> The Polkadot Protocol Specifications are not actively maintained by the Web3 Foundation as of 02 October 2024.
+> The Polkadot Protocol Specifications are not actively maintained by the Web3 Foundation as of 02 October 2024. Please follow the [RFC process](https://github.com/polkadot-fellows/RFCs) for information on latest protocol updates. 
 
 # Polkadot Protocol Specification
 
