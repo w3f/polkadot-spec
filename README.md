@@ -1,3 +1,6 @@
+> [!NOTE]
+> The Polkadot Protocol Specifications are not actively maintained by the Web3 Foundation as of 02 October 2024.
+
 # Polkadot Protocol Specification
 
 - [Introduction](#introduction)
