@@ -108,7 +108,7 @@ Because every block in the blockchain contains a reference to its parent, it is 
 ###### Definition -def-num- Descendant and Ancestor {#defn-descendant-ancestor}
 :::definition
 
-We say ${B}$ is **descendant** of ${B}'$, formally noted as ${B}>{B}'$, if ${\left({\left|{B}\right|}>{\left|{B}'\right|}\right)}\in{C}$. Respectively, we say that ${B}'$ is an **ancestor** of ${B}$, formally noted as ${B}<{B}'$, if ${\left({\left|{B}\right|}<{\left|{B}'\right|}\right)}\in{C}$.
+We say ${B}$ is **descendant** of ${B}'$, formally noted as ${B}>{B}'$, if ${\left({\left|{B}\right|}>{\left|{B}'\right|}\right)}\in{C}$. Respectively, we say that ${B}$ is an **ancestor** of ${B}'$, formally noted as ${B}<{B}'$, if ${\left({\left|{B}\right|}<{\left|{B}'\right|}\right)}\in{C}$.
 
 :::
 ## -sec-num- State Replication {#sect-state-replication}
