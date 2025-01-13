@@ -338,7 +338,7 @@ where $\#{{V}_{{\text{obv}{\left({v}\right)},{p}{o}{t}}}^{{{r},{p}{c}}}}$ is def
     options={{ "lineNumber": true }}
 />
 
-where $\text{Best-Chain-Safe-Head}$ function is provided by the block production algorithm.
+where $\text{Best-Chain-Safe-Head}$ function is provided by the block production algorithm to choose a preferred head of the best sub-chain which must contain block $N$ provided to it..
 :::
 
 ###### Algorithm -algo-num- Attempt To Finalize At Round {#algo-attempt-to–finalize}
