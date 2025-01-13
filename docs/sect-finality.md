@@ -337,6 +337,8 @@ where $\#{{V}_{{\text{obv}{\left({v}\right)},{p}{o}{t}}}^{{{r},{p}{c}}}}$ is def
     algID="bestPrevoteCandidate"
     options={{ "lineNumber": true }}
 />
+
+where $\text{Best-Chain-Safe-Head}$ function is provided by the block production algorithm.
 :::
 
 ###### Algorithm -algo-num- Attempt To Finalize At Round {#algo-attempt-to–finalize}
