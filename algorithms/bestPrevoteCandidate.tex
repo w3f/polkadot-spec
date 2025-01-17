@@ -2,11 +2,12 @@
 \caption{Best-PreVote-Candidate}
 \begin{algorithmic}
     \input $r$
-    \state $B^{r, pv}_v \leftarrow$ \call{GRANDPA-GHOST}{$r$}
-    \if{\call{Received}{$M_{v_{primary}}^{r, prim}(B))$ \and $B^{r, pv}_v \geqslant B > L$}}
+    \state $B^{r-1, pv}_v \leftarrow$ \call{GRANDPA-GHOST}{$r-1$}
+    \if{\call{Received}{$M_{v_{primary}}^{r, prim}(B))$ \and $B^{r-1, pv}_v \geqslant B > L$}}
         \state $N \leftarrow B$
     \else
-        \state $N \leftarrow B^{r, pv}_v$
+        \state $N \leftarrow B^{r-1, pv}_v$
     \endif
+    \return \call{Best-Chain-Safe-Head}{N}
 \end{algorithmic}
 \end{algorithm}
