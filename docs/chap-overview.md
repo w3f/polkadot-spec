@@ -42,4 +42,4 @@ The authoring node covers all the features of the full node, but instead of just
 
 ## -sec-num- Relaying Node {#sect-node-relaying}
 
-The relaying node covers all the features of the authoring node but also participants in the availability and validity process to process new parachain blocks as described in [Chapter -chap-num-ref-](chapter-anv).
+The relaying node covers all the features of the authoring node but also participates in the availability and validity process to produce new parachain blocks as described in [Chapter -chap-num-ref-](chapter-anv).
